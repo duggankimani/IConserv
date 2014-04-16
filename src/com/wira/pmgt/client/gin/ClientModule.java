@@ -9,8 +9,8 @@ import com.wira.pmgt.client.place.NameTokens;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.MainPagePresenter;
 import com.wira.pmgt.client.ui.MainPageView;
-import com.wira.pmgt.client.ui.activityfeed.ActivitiesPresenter;
-import com.wira.pmgt.client.ui.activityfeed.ActivitiesView;
+import com.wira.pmgt.client.ui.activities.ActivitiesPresenter;
+import com.wira.pmgt.client.ui.activities.ActivitiesView;
 import com.wira.pmgt.client.ui.addDoc.DocumentPopupPresenter;
 import com.wira.pmgt.client.ui.addDoc.DocumentPopupView;
 import com.wira.pmgt.client.ui.addDoc.doctypeitem.DocTypeItemPresenter;
@@ -73,6 +73,8 @@ import com.wira.pmgt.client.ui.home.HomePresenter;
 import com.wira.pmgt.client.ui.home.HomeView;
 import com.wira.pmgt.client.ui.login.LoginPresenter;
 import com.wira.pmgt.client.ui.login.LoginView;
+import com.wira.pmgt.client.ui.newsfeed.NewsFeedPresenter;
+import com.wira.pmgt.client.ui.newsfeed.NewsFeedView;
 import com.wira.pmgt.client.ui.notifications.NotificationsPresenter;
 import com.wira.pmgt.client.ui.notifications.NotificationsView;
 import com.wira.pmgt.client.ui.notifications.note.NotePresenter;
@@ -178,8 +180,8 @@ public class ClientModule extends AbstractPresenterModule {
 		bindPresenterWidget(NotePresenter.class,
 				NotePresenter.MyView.class, NoteView.class);
 
-		bindPresenterWidget(ActivitiesPresenter.class,
-				ActivitiesPresenter.MyView.class, ActivitiesView.class);
+		bindPresenterWidget(NewsFeedPresenter.class,
+				NewsFeedPresenter.MyView.class, NewsFeedView.class);
 
 		bindPresenterWidget(CommentPresenter.class,
 				CommentPresenter.ICommentView.class, CommentView.class);
@@ -265,6 +267,10 @@ public class ClientModule extends AbstractPresenterModule {
 
 		bindPresenterWidget(ProfilePresenter.class, ProfilePresenter.IProfileView.class,
 				ProfileView.class);
+		
+		bindPresenterWidget(ActivitiesPresenter.class, ActivitiesPresenter.IActivitiesView.class,
+				ActivitiesView.class);
+		
 		
 		bindPresenterWidget(PieChartPresenter.class, PieChartPresenter.IPieChartView.class,
 				PieChartView.class);

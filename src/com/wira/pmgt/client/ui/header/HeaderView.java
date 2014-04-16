@@ -5,7 +5,6 @@ import java.util.Date;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.SpanElement;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ErrorEvent;
 import com.google.gwt.event.dom.client.ErrorHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
@@ -21,7 +20,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.util.DateUtils;
-import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.HTUser;
 
 public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView {

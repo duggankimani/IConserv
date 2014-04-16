@@ -576,7 +576,7 @@ public class GenericDocumentPresenter extends
 			@Override
 			public void processResult(CreateDocPresenter result) {
 				if(mode.equals(MODE.EDIT)){
-					result.setDocumentId(documentId);
+					//result.setDocumentId(documentId);
 				}
 				
 				addToPopupSlot(result, true);				

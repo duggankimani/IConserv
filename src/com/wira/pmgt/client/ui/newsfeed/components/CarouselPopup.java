@@ -1,4 +1,4 @@
-package com.wira.pmgt.client.ui.activityfeed.components;
+package com.wira.pmgt.client.ui.newsfeed.components;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;

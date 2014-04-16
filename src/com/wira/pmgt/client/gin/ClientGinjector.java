@@ -7,6 +7,7 @@ import com.google.gwt.inject.client.Ginjector;
 import com.gwtplatform.dispatch.client.gin.DispatchAsyncModule;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.wira.pmgt.client.ui.MainPagePresenter;
+import com.wira.pmgt.client.ui.activities.ActivitiesPresenter;
 import com.wira.pmgt.client.ui.admin.AdminHomePresenter;
 import com.wira.pmgt.client.ui.admin.settings.SettingsPresenter;
 import com.wira.pmgt.client.ui.error.ErrorPagePresenter;
@@ -35,6 +36,8 @@ public interface ClientGinjector extends Ginjector {
 	AsyncProvider<ErrorPagePresenter> getErrorPagePresenter();
 
 	AsyncProvider<LoginPresenter> getLoginPresenter();
+	
+	AsyncProvider<ActivitiesPresenter> getActivitiesPresenter();
 	
 	LoginGateKeeper getLoggedInGateKeeper();
 	
