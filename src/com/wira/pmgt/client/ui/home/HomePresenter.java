@@ -385,7 +385,6 @@ public class HomePresenter extends
 				}
 			});
 		}
-					
 		
 	}	
 

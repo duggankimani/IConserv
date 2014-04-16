@@ -1,23 +1,17 @@
 package com.wira.jbpm.humantask;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.jbpm.task.AccessType;
 import org.jbpm.task.Deadline;
 import org.jbpm.task.Deadlines;
-import org.jbpm.task.Group;
 import org.jbpm.task.I18NText;
-import org.jbpm.task.OnParentAbortAllSubTasksEndStrategy;
 import org.jbpm.task.OrganizationalEntity;
 import org.jbpm.task.PeopleAssignments;
-import org.jbpm.task.SubTasksStrategy;
-import org.jbpm.task.SubTasksStrategyFactory;
 import org.jbpm.task.Task;
 import org.jbpm.task.TaskData;
 import org.jbpm.task.User;
