@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
+import com.wira.pmgt.client.ui.component.grid.AggregationGridRow;
 
 public class TableView extends Composite {
 
@@ -78,6 +79,12 @@ public class TableView extends Composite {
 			row.add(getTd(widget));
 		}
 		panelBody.add(row);
+	}
+	
+	public void addRow(AggregationGridRow rowWidget){
+		rowWidget.setAutoNumber(isAutoNumber());
+		rowWidget.setRowNumber(++count);
+		panelBody.add(rowWidget);		
 	}
 
 	private Widget getTd(Widget widget) {

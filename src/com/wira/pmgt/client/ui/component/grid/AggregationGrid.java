@@ -60,21 +60,12 @@ public class AggregationGrid extends Composite {
 	}
 	
 	public void addRowData(DataModel data){
-		List<Widget> widgets = new ArrayList<Widget>();
-				
-		for(ColumnConfig config: columnConfigs){
-			Widget widget = config.createWidget(data.get(config.getKey()));
-			if(config.isAggregationColumn()){
-				addValueChangeHandler(config, widget);
-			}
-			widgets.add(widget);
-		}
-		
-		tblView.addRow(widgets);
+		AggregationGridRow row = new AggregationGridRow(this, data, columnConfigs);	
+		tblView.addRow(row);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void addValueChangeHandler(ColumnConfig config, Widget widget) {
+	public void addValueChangeHandler(ColumnConfig config, Widget widget) {
 		Object value = ((HasValue)widget).getValue();
 		Number initial= 0.0;
 		if(value!=null){
@@ -132,5 +123,5 @@ public class AggregationGrid extends Composite {
 	public void setAutoNumber(boolean enable){
 		tblView.setAutoNumber(enable);
 	}
-
+	
 }
