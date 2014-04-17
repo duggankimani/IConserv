@@ -46,7 +46,6 @@ public class CreateDocView extends PopupViewImpl implements
 		
 		int[] position=AppManager.calculatePosition(5, 50);
 		popupView.setPopupPosition(position[1],position[0]);
-		
 	}
 
 	@Override
@@ -73,7 +72,6 @@ public class CreateDocView extends PopupViewImpl implements
 
 	@Override
 	public HasClickHandlers getCancel() {
-
 		return btnCancel;
 	}
 

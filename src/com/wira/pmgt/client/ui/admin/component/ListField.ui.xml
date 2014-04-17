@@ -13,7 +13,6 @@
 				</div>	
 			</div>
 			</g:HTMLPanel>
-			
 		</g:FocusPanel>
 
 	     <g:FocusPanel styleName="select2-drop select2-drop-multi select2-drop-active hide" ui:field="sltDrop">
