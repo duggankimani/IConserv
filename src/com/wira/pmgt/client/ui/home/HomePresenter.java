@@ -8,16 +8,11 @@ import java.util.List;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.gwtplatform.common.client.IndirectProvider;
@@ -40,32 +35,33 @@ import com.wira.pmgt.client.place.NameTokens;
 import com.wira.pmgt.client.service.ServiceCallback;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.MainPagePresenter;
-import com.wira.pmgt.client.ui.activityfeed.ActivitiesPresenter;
+import com.wira.pmgt.client.ui.activities.ActivitiesPresenter;
 import com.wira.pmgt.client.ui.addDoc.DocumentPopupPresenter;
 import com.wira.pmgt.client.ui.document.GenericDocumentPresenter;
 import com.wira.pmgt.client.ui.events.ActivitiesSelectedEvent;
+import com.wira.pmgt.client.ui.events.ActivitiesSelectedEvent.ActivitiesSelectedHandler;
 import com.wira.pmgt.client.ui.events.AfterSaveEvent;
+import com.wira.pmgt.client.ui.events.AfterSaveEvent.AfterSaveHandler;
 import com.wira.pmgt.client.ui.events.AfterSearchEvent;
 import com.wira.pmgt.client.ui.events.AlertLoadEvent;
+import com.wira.pmgt.client.ui.events.AlertLoadEvent.AlertLoadHandler;
 import com.wira.pmgt.client.ui.events.CreateDocumentEvent;
+import com.wira.pmgt.client.ui.events.CreateDocumentEvent.CreateDocumentHandler;
 import com.wira.pmgt.client.ui.events.DocumentSelectionEvent;
+import com.wira.pmgt.client.ui.events.DocumentSelectionEvent.DocumentSelectionHandler;
 import com.wira.pmgt.client.ui.events.LoadAlertsEvent;
 import com.wira.pmgt.client.ui.events.PresentTaskEvent;
 import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent;
-import com.wira.pmgt.client.ui.events.ProcessingEvent;
-import com.wira.pmgt.client.ui.events.ReloadEvent;
-import com.wira.pmgt.client.ui.events.SearchEvent;
-import com.wira.pmgt.client.ui.events.ActivitiesSelectedEvent.ActivitiesSelectedHandler;
-import com.wira.pmgt.client.ui.events.AfterSaveEvent.AfterSaveHandler;
-import com.wira.pmgt.client.ui.events.AlertLoadEvent.AlertLoadHandler;
-import com.wira.pmgt.client.ui.events.CreateDocumentEvent.CreateDocumentHandler;
-import com.wira.pmgt.client.ui.events.DocumentSelectionEvent.DocumentSelectionHandler;
 import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent.ProcessingCompletedHandler;
+import com.wira.pmgt.client.ui.events.ProcessingEvent;
 import com.wira.pmgt.client.ui.events.ProcessingEvent.ProcessingHandler;
+import com.wira.pmgt.client.ui.events.ReloadEvent;
 import com.wira.pmgt.client.ui.events.ReloadEvent.ReloadHandler;
+import com.wira.pmgt.client.ui.events.SearchEvent;
 import com.wira.pmgt.client.ui.events.SearchEvent.SearchHandler;
 import com.wira.pmgt.client.ui.filter.FilterPresenter;
 import com.wira.pmgt.client.ui.login.LoginGateKeeper;
+import com.wira.pmgt.client.ui.newsfeed.NewsFeedPresenter;
 import com.wira.pmgt.client.ui.profile.ProfilePresenter;
 import com.wira.pmgt.client.ui.save.CreateDocPresenter;
 import com.wira.pmgt.client.ui.save.form.GenericFormPresenter;
@@ -88,25 +84,16 @@ public class HomePresenter extends
 		ProcessingHandler, ProcessingCompletedHandler, SearchHandler,CreateDocumentHandler{
 
 	public interface MyView extends View {
-		HasClickHandlers getAddButton();	
-		void setHeading(String heading);
+		void showmask(boolean mask);
+
+		void setHasItems(boolean b);
+
+		void setHeading(String string);
+
 		void bindAlerts(HashMap<TaskType, Integer> alerts);
-		HasClickHandlers getRefreshButton();
-		public void setHasItems(boolean hasItems);
-		void setTaskType(TaskType currentTaskType);
-		void showActivitiesPanel(boolean b);
-		public Anchor getaDrafts();
-		public Anchor getaProgress();
-		public Anchor getaApproved();
-		public Anchor getaRejected();
-		public Anchor getaNewReq();
-		public Anchor getaRecentApprovals();
-		public Anchor getaFlagged();
-		public Anchor getaRefresh() ;
-		TextBox getSearchBox();
-		public void hideFilterDialog();
-		public void setSearchBox(String text);
-		void showmask(boolean b);
+
+		HasClickHandlers getAddButton();
+
 	}
 
 	@ProxyCodeSplit
@@ -135,6 +122,7 @@ public class HomePresenter extends
 	private IndirectProvider<GenericFormPresenter> genericFormProvider;
 	private IndirectProvider<GenericDocumentPresenter> docViewFactory;
 	private IndirectProvider<DateGroupPresenter> dateGroupFactory;
+	private IndirectProvider<NewsFeedPresenter> newsFeedFactory;
 	private IndirectProvider<ActivitiesPresenter> activitiesFactory;
 	private IndirectProvider<ProfilePresenter> profileFactory;
 	
@@ -172,16 +160,18 @@ public class HomePresenter extends
 			Provider<GenericFormPresenter> formProvider,
 			Provider<GenericDocumentPresenter> docViewProvider,
 			Provider<DateGroupPresenter> dateGroupProvider,
-			Provider<ActivitiesPresenter> activitiesProvider,
-			Provider<ProfilePresenter> profileProvider) {
+			Provider<NewsFeedPresenter> newsfeedProvider,
+			Provider<ProfilePresenter> profileProvider,
+			Provider<ActivitiesPresenter> activitiesProvider)	{
 		super(eventBus, view, proxy);
 		
 		createDocProvider = new StandardProvider<CreateDocPresenter>(docProvider);
 		docViewFactory  = new StandardProvider<GenericDocumentPresenter>(docViewProvider);
 		dateGroupFactory = new StandardProvider<DateGroupPresenter>(dateGroupProvider);
 		genericFormProvider = new StandardProvider<GenericFormPresenter>(formProvider);
-		activitiesFactory = new StandardProvider<ActivitiesPresenter>(activitiesProvider);
+		newsFeedFactory = new StandardProvider<NewsFeedPresenter>(newsfeedProvider);
 		profileFactory = new StandardProvider<ProfilePresenter>(profileProvider);
+		activitiesFactory = new StandardProvider<ActivitiesPresenter>(activitiesProvider);
 	}
 
 	protected void search() {
@@ -240,90 +230,14 @@ public class HomePresenter extends
 		addRegisteredHandler(SearchEvent.TYPE, this);
 		addRegisteredHandler(CreateDocumentEvent.TYPE, this);
 		
-		getView().getSearchBox().addKeyUpHandler(new KeyUpHandler() {
-			
-			@Override
-			public void onKeyUp(KeyUpEvent event) {
-				String txt = getView().getSearchBox().getValue().trim();
-				
-				if(!txt.equals(searchTerm) || event.getNativeKeyCode()==KeyCodes.KEY_ENTER){
-					searchTerm = txt;
-					timer.cancel();
-					timer.schedule(400);
-				}
-				
-			}
-		});
+	
 		
-		/*getView().getAddButton().addClickHandler(new ClickHandler() {
+		getView().getAddButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				//showEditForm(MODE.CREATE);
-				//showEditForm();
-				
-				
-				getView().setDocPopupVisible();
+				showEditForm(MODE.CREATE);
 			}
 			
-		});*/
-		
-		getView().getRefreshButton().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {				
-				loadTasks();
-			}
-		});
-		
-		
-		getView().getaDrafts().addClickHandler(new ClickHandler() {		
-			@Override
-			public void onClick(ClickEvent event) {
-				History.newItem("home;type=drafts");
-			}
-		});
-		
-
-		getView().getaProgress().addClickHandler(new ClickHandler() {		
-			@Override
-			public void onClick(ClickEvent event) {
-				History.newItem("home;type=inprog");
-			}
-		});
-		
-		getView().getaApproved().addClickHandler(new ClickHandler() {		
-			@Override
-			public void onClick(ClickEvent event) {
-				History.newItem("home;type=approved");
-			}
-		});
-		
-		getView().getaRejected().addClickHandler(new ClickHandler() {		
-			@Override
-			public void onClick(ClickEvent event) {
-				History.newItem("home;type=rejected");
-			}
-		});
-		
-		getView().getaNewReq().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				History.newItem("home;type=appreqnew");
-			}
-		});
-		
-		
-		getView().getaRecentApprovals().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {				
-				History.newItem("home;type=appredone");
-			}
-		});
-		
-		getView().getaFlagged().addClickHandler(new ClickHandler() {		
-			@Override
-			public void onClick(ClickEvent event) {
-				History.newItem("home;type=flagged");				
-			}
 		});
 	}
 
@@ -339,7 +253,6 @@ public class HomePresenter extends
 		processInstanceId=null;
 		documentId=null;
 		
-		//String name = request.getParameter("type", TaskType.DRAFT.getURL());
 		String name = request.getParameter("type", null);
 		String processInstID = request.getParameter("pid", null);
 		String documentSearchID = request.getParameter("did", null);
@@ -354,7 +267,6 @@ public class HomePresenter extends
 		
 
 		if(page!=null && page.equals("profile")){
-			getView().setTaskType(null);
 			Window.setTitle("Profile");
 			profileFactory.get(new ServiceCallback<ProfilePresenter>() {
 				@Override
@@ -364,28 +276,25 @@ public class HomePresenter extends
 			});
 			
 			
-		}else if(name!=null){
-
-			TaskType type = TaskType.getTaskType(name);
-			this.currentTaskType=type;
-			
-			getView().setTaskType(currentTaskType);
-			loadTasks(type);
-
-		}else{
-			//Task Type Name
-			getView().setTaskType(null);
-			Window.setTitle("Home");
+		}else if(page!=null && page.equals("activities")){
+			Window.setTitle("Activities");
 			activitiesFactory.get(new ServiceCallback<ActivitiesPresenter>() {
 				@Override
-				public void processResult(ActivitiesPresenter presenter) {
+				public void processResult(ActivitiesPresenter aResponse) {
+					setInSlot(ACTIVITIES_SLOT, aResponse);
+				}
+			});
+		}else{
+			Window.setTitle("Home");
+			newsFeedFactory.get(new ServiceCallback<NewsFeedPresenter>() {
+				@Override
+				public void processResult(NewsFeedPresenter presenter) {
 
 					setInSlot(ACTIVITIES_SLOT, presenter);
 					presenter.loadActivities();
 				}
 			});
 		}
-					
 		
 	}	
 
@@ -498,7 +407,7 @@ public class HomePresenter extends
 			@Override
 			public void processResult(CreateDocPresenter result) {
 				if(mode.equals(MODE.EDIT) && selectedDocumentId!=null){
-					result.setDocumentId(selectedDocumentId);
+					//result.setDocumentId(selectedDocumentId);
 				}
 					
 				addToPopupSlot(result, false);
@@ -568,7 +477,7 @@ public class HomePresenter extends
 
 	@Override
 	public void onActivitiesSelected(ActivitiesSelectedEvent event) {
-		getView().showActivitiesPanel(true);
+		
 	}
 
 	@Override

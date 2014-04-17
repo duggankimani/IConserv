@@ -1,4 +1,4 @@
-package com.wira.pmgt.client.ui.activityfeed.components;
+package com.wira.pmgt.client.ui.newsfeed.components;
 
 import static com.wira.pmgt.client.ui.util.DateUtils.getTimeDifferenceAsString;
 

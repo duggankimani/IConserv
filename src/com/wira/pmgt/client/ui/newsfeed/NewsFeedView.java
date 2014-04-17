@@ -1,12 +1,10 @@
-package com.wira.pmgt.client.ui.activityfeed;
+package com.wira.pmgt.client.ui.newsfeed;
 
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.LIElement;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -23,24 +21,22 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.AppManager;
-import com.wira.pmgt.client.ui.activityfeed.components.CarouselPopup;
 import com.wira.pmgt.client.ui.events.CloseCarouselEvent;
+import com.wira.pmgt.client.ui.newsfeed.components.CarouselPopup;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.client.util.Definitions;
 
-public class ActivitiesView extends ViewImpl implements
-		ActivitiesPresenter.MyView {
+public class NewsFeedView extends ViewImpl implements
+		NewsFeedPresenter.MyView {
 
 	private final Widget widget;
 
 	private Timer timer;
 	final int timerSeconds = 600;
 
-	public interface Binder extends UiBinder<Widget, ActivitiesView> {
+	public interface Binder extends UiBinder<Widget, NewsFeedView> {
 	}
 
-	@UiField
-	ComplexPanel panelActivity;
 	@UiField
 	Anchor aCreate;
 	@UiField
@@ -71,7 +67,7 @@ public class ActivitiesView extends ViewImpl implements
 	protected boolean hasElapsed = false;
 
 	@Inject
-	public ActivitiesView(final Binder binder) {
+	public NewsFeedView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
 
 	}
@@ -82,10 +78,6 @@ public class ActivitiesView extends ViewImpl implements
 		return widget;
 	}
 
-	@Override
-	public HasWidgets getPanelActivity() {
-		return panelActivity;
-	}
 
 
 	@Override

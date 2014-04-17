@@ -16,7 +16,7 @@
 
 				<!--Button Add Document -->
 				<div class="add-doc">
-					<g:Anchor ui:field="btnAdd" styleName="btn-danger btn-large dropdown-toggle">Add Document</g:Anchor>
+					<g:Anchor ui:field="btnAdd" styleName="btn-danger btn-large">Create Program</g:Anchor>
 
 					<!-- Document Pop-up -->
 					<g:HTMLPanel ui:field="divDocPopup" styleName="dropdown-menu document-drop">
@@ -24,82 +24,35 @@
 
 				</div>
 
+				<!-- 	
 				<ul id="dashboard-menu">
 					<li class="active">
 						<a class="dropdown-toggle" href="#home;type=drafts">
 							<i class="icon-book"></i>
-							<span>My Documents</span>
-							<i class="icon-chevron-up hidden-tablet"></i>
+							<span>Activities</span>
 						</a>
-						<ul class="submenu">
-							<li ui:field="liDrafts" class="active">
-								<g:Anchor ui:field="aDrafts" styleName="hand" text="Drafts"></g:Anchor>
-							</li>
-							<li ui:field="liProgress">
-								<g:Anchor ui:field="aProgress" text="In Progress"
-									styleName="hand"></g:Anchor>
-							</li>
-							<li ui:field="liApproved">
-								<g:Anchor ui:field="aApproved" styleName="hand" text="Approved"></g:Anchor>
-							</li>
-							<li ui:field="liRejected">
-								<g:Anchor ui:field="aRejected" styleName="hand" text="Rejected"></g:Anchor>
-							</li>
-						</ul>
 					</li>
 
 					<li class="active">
 						<a class="dropdown-toggle" href="#home;type=appreqnew">
-							<i class="icon-tasks"></i>
-							<span>My Tasks</span>
-							<i class="icon-chevron-up hidden-tablet"></i>
+							<i class="icon-bar-chart"></i>
+							<span>Reports</span>
 						</a>
-						<ul class="submenu second-menu">
-							<li ui:field="liNewReq">
-								<g:Anchor ui:field="aNewReq" styleName="hand" text="New Tasks"></g:Anchor>
-							</li>
-							<li ui:field="liRecentApprovals">
-								<g:Anchor ui:field="aRecentApprovals" styleName="hand"
-									text="Completed"></g:Anchor>
-							</li>
-							<li ui:field="liFlagged">
-								<g:Anchor ui:field="aFlagged" styleName="hand" text="Flagged"></g:Anchor>
-							</li>
-						</ul>
+					</li>
+				</ul>
+ 				-->
+
+				<ul class="nav nav-tabs nav-stacked" id="dashboard-menu">
+					<li>
+						<g:Anchor href='#home;page=activities' ui:field='aActivities'>Activities</g:Anchor>
+						<!-- <i class="icon-chevron-right"></i> -->
+					</li>
+					<li>
+						<a href='#reports'>Reports</a>
+						<!-- <i class="icon-chevron-right"></i> -->
 					</li>
 				</ul>
 			</div>
-
-			<g:HTMLPanel ui:field="wholeContainer" styleName="hide content-right span10">
-				<!--middle navigation -->
-				<div class="span2" id="middle-box">
-					<div id="nav-top">
-						<i class="icon-tag"></i>
-						<h5 ui:field="hCategory">Completed</h5>
-						<br />
-						<div class="search">
-							<g:TextBox styleName="search-box" ui:field="txtSearch" />
-							<g:Anchor styleName="icon-caret-down" ui:field="iFilterdropdown"></g:Anchor>
-						</div>
-						<g:Anchor ui:field="aRefresh" styleName="icon-refresh icon-large hand"></g:Anchor>
-						<g:HTMLPanel ui:field="filterDialog" styleName="hidden"></g:HTMLPanel>
-					</div>
-
-					<div ui:field="divDocListing">
-						<div class="content-nav row-fluid">
-							<d:BulletListPanel ui:field="ulTaskGroups">
-							</d:BulletListPanel>
-							<g:InlineLabel ui:field="spnNoItems"></g:InlineLabel>
-						</div>
-					</div>
-				</div>
-
-				<!--Detailed Info Description -->
-				<div ui:field="divDocView" class="span10">
-					<g:HTMLPanel ui:field="docContainer" styleName="full-page">
-					</g:HTMLPanel>
-				</div>
-			</g:HTMLPanel>
 
 			<g:HTMLPanel ui:field="activityContainer" styleName="overflow-y content-right span10">
 			</g:HTMLPanel>

@@ -27,15 +27,11 @@ public class FilterView extends ViewImpl implements FilterPresenter.MyView {
 
 	private final Widget widget;
 	@UiField FocusPanel filterDialog;
-	@UiField DateBox dateInput1;
-	@UiField DateBox dateInput2;
 	@UiField TextBox txtSubject;
 	@UiField TextBox txtPhrase;
 	@UiField Button btnSearch;
 	@UiField Anchor aClose;
 	@UiField DropDownList<DocumentType> lstDocType;
-	@UiField InlineLabel spnCalendar1;
-	@UiField InlineLabel spnCalendar2;
 	
 	
 	public interface Binder extends UiBinder<Widget, FilterView> {
@@ -44,26 +40,7 @@ public class FilterView extends ViewImpl implements FilterPresenter.MyView {
 	@Inject
 	public FilterView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
-		dateInput1.getElement().setAttribute("Placeholder", "Start Date");	
-		dateInput1.setFormat(new DateBox.DefaultFormat(DATEFORMAT));
-		dateInput2.setFormat(new DateBox.DefaultFormat(DATEFORMAT));
-		dateInput2.getElement().setAttribute("Placeholder", "End Date");
-		spnCalendar1.getElement().setInnerHTML("<i class='icon-calendar'/>");
-		spnCalendar2.getElement().setInnerHTML("<i class='icon-calendar'/>");
-		spnCalendar1.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				dateInput1.showDatePicker();
-				
-			}
-		});
 		
-		spnCalendar2.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				dateInput2.showDatePicker();
-			}
-		});
 	}
 
 	@Override
@@ -81,8 +58,8 @@ public class FilterView extends ViewImpl implements FilterPresenter.MyView {
 		SearchFilter filter = new SearchFilter();
 		filter.setSubject(txtSubject.getValue());
 		filter.setPhrase(txtPhrase.getValue());
-		filter.setStartDate(dateInput1.getValue());
-		filter.setEndDate(dateInput2.getValue());
+		//filter.setStartDate(dateInput1.getValue());
+		//filter.setEndDate(dateInput2.getValue());
 		filter.setDocType(lstDocType.getValue());
 		return filter;
 	}
