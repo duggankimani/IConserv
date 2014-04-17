@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import com.wira.pmgt.server.dao.model.PO;
 
@@ -25,7 +26,7 @@ public class Fund extends PO {
 	private String name; //Donor Name
 	private String description; // Any other details 
 	
-	@ManyToMany(fetch=FetchType.LAZY)
+	@OneToMany(fetch=FetchType.LAZY,mappedBy="fund")	
 	private Set<ProgramFund> programFunds = new HashSet<>(); //Allocation to a program/objective/outcome/activity etc
 
 	public Fund() {

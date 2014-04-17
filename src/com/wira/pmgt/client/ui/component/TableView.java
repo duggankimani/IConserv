@@ -22,7 +22,8 @@ public class TableView extends Composite {
 	
 	@UiField HTMLPanel panelHeader;
 	@UiField HTMLPanel panelBody;
-
+	@UiField HTMLPanel panelFooter;
+	
 	private boolean isAutoNumber=true;
 	private int count=0;
 	
@@ -32,12 +33,7 @@ public class TableView extends Composite {
 	
 	public void setHeaders(List<String> names){
 		List<Widget>widgets = new ArrayList<Widget>();
-		
-		if(isAutoNumber){
-			InlineLabel label = new InlineLabel("#");
-			widgets.add(label);
-		}
-		
+				
 		for(String name: names){
 			InlineLabel label = new InlineLabel(name);
 			widgets.add(label);
@@ -52,6 +48,12 @@ public class TableView extends Composite {
 	}
 
 	public void setHeaderWidgets(List<Widget> widgets) {
+
+		if(isAutoNumber){
+			InlineLabel label = new InlineLabel("#");
+			widgets.add(0, label);
+		}
+		
 		for(Widget widget: widgets){
 			HTMLPanel th = new HTMLPanel("");
 			th.setStyleName("th");
@@ -87,5 +89,28 @@ public class TableView extends Composite {
 
 	public void clearRows() {
 		panelBody.clear();
+	}
+
+	public boolean isAutoNumber() {
+		return isAutoNumber;
+	}
+
+	public void setAutoNumber(boolean isAutoNumber) {
+		this.isAutoNumber = isAutoNumber;
+	}
+	
+	public void setFooter(List<Widget> widgets){
+		panelFooter.clear();
+		HTMLPanel row = new HTMLPanel("");
+		row.addStyleName("tr");
+			
+		if(isAutoNumber){
+			row.add(getTd(new InlineLabel()));
+		}
+		
+		for(Widget widget: widgets){
+			row.add(getTd(widget));
+		}
+		panelFooter.add(row);
 	}
 }

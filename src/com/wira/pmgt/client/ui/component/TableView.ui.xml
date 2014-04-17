@@ -37,6 +37,10 @@
 					</div>
 				</div-->
 			</g:HTMLPanel>
+			
+			<g:HTMLPanel ui:field="panelFooter" styleName='tbody'>
+			    				
+			</g:HTMLPanel>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

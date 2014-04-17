@@ -2,6 +2,7 @@ package com.wira.pmgt.client.ui.save;
 
 import static com.wira.pmgt.client.ui.save.CreateDocPresenter.UPLOAD_SLOT;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +16,11 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.PopupViewImpl;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.admin.component.ListField;
+import com.wira.pmgt.client.ui.component.TableView;
+import com.wira.pmgt.client.ui.component.grid.AggregationGrid;
+import com.wira.pmgt.client.ui.component.grid.ColumnConfig;
+import com.wira.pmgt.client.ui.component.grid.DataModel;
+import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.Document;
 import com.wira.pmgt.shared.model.DocumentType;
 import com.wira.pmgt.shared.model.Priority;
@@ -37,6 +43,8 @@ public class CreateDocView extends PopupViewImpl implements
 	HasClickHandlers btnCancel;
 
 	@UiField ListField<UserGroup> lstUsers;
+	
+	@UiField AggregationGrid gridView;
 		
 	@Inject
 	public CreateDocView(final EventBus eventBus, final Binder binder) {
@@ -46,7 +54,36 @@ public class CreateDocView extends PopupViewImpl implements
 		
 		int[] position=AppManager.calculatePosition(5, 50);
 		popupView.setPopupPosition(position[1],position[0]);
+
+		loadGrid();
+	}
+
+	private void loadGrid() {
+		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
+		ColumnConfig config = new ColumnConfig("donor", "Donor Name", DataType.STRING);
+		configs.add(config);
 		
+		config = new ColumnConfig("amount", "Amount", DataType.DOUBLE);
+		config.setAggregationColumn(true);
+		configs.add(config);
+		
+		gridView.setColumnConfigs(configs);
+				
+		List<DataModel> models = new ArrayList<DataModel>();
+		DataModel model = new DataModel();
+		model.setId(null);
+		model.set("donor", "USAID");
+		model.set("amount", new Double(6000000));
+		models.add(model);
+		
+		model = new DataModel();
+		model.setId(null);
+		model.set("donor", "EKM");
+		model.set("amount", new Double(4000000));
+		models.add(model);
+		
+		gridView.setAutoNumber(true);
+		gridView.setData(models);
 	}
 
 	@Override

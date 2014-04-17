@@ -1,9 +1,12 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:dt='urn:import:com.google.gwt.user.datepicker.client'
-	xmlns:d='urn:import:com.wira.pmgt.client.ui.component' xmlns:v='urn:import:com.wira.pmgt.client.ui.component'
-	xmlns:up='urn:import:com.wira.pmgt.client.ui.upload.custom' xmlns:c='urn:import:com.wira.pmgt.client.ui.admin.component'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' 
+	xmlns:dt='urn:import:com.google.gwt.user.datepicker.client'
+	xmlns:d='urn:import:com.wira.pmgt.client.ui.component'
+	xmlns:grid='urn:import:com.wira.pmgt.client.ui.component.grid'
+	xmlns:up='urn:import:com.wira.pmgt.client.ui.upload.custom' 
+	xmlns:c='urn:import:com.wira.pmgt.client.ui.admin.component'
 	ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
 	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
 	ui:generateLocales='default'>
@@ -11,8 +14,8 @@
 	<g:DialogBox text="Create Program" styleName="modal modal-document"
 		modal="true" glassEnabled="true" ui:field="popupView">
 		<g:HTMLPanel>
-			<v:IssuesPanel ui:field="issues">
-			</v:IssuesPanel>
+			<d:IssuesPanel ui:field="issues">
+			</d:IssuesPanel>
 
 			<g:HTMLPanel ui:field="panelBody" styleName="modal-body">
 				<fieldset>
@@ -28,14 +31,14 @@
 						<div class="control-group">
 							<div class="control-label">Date Range:</div>
 							<div class="controls">
-								<v:DateRangeWidget></v:DateRangeWidget>
+								<d:DateRangeWidget></d:DateRangeWidget>
 							</div>
 						</div>
 
 						<div class="control-group">
 							<div class="control-label">Donors:</div>
 							<div class="controls">
-								Grid Here
+								<grid:AggregationGrid ui:field="gridView"></grid:AggregationGrid>
 							</div>
 						</div>
 
