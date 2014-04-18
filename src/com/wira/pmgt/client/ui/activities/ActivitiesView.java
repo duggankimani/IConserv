@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.HeadingElement;
+import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
@@ -23,10 +26,17 @@ public class ActivitiesView extends ViewImpl implements
 
 	public @UiField
 	HTMLPanel divContent;
-	public @UiField
+	@UiField
 	HTMLPanel divNoContent;
 	@UiField
 	TableView tblView;
+	@UiField
+	SpanElement spnBudget;
+	@UiField
+	Anchor aNewOutcome;
+	
+	@UiField
+	Anchor aNewActivity;
 	
 	@UiField HeadingElement spnTitle;
 	@UiField BulletListPanel crumbContainer;
@@ -75,6 +85,20 @@ public class ActivitiesView extends ViewImpl implements
 		}
 	}
 
+	public void setBudget(String number) {
+		if(number!=null){
+			spnBudget.setInnerHTML(number);
+		}
+	}
+	
+	public HasClickHandlers getaNewOutcome() {
+		return aNewOutcome;
+	} 
+	
+	public HasClickHandlers getaNewActivity() {
+		return aNewActivity;
+	}
+	
 	@Override
 	public void showContent(boolean status) {
 		if (status) {

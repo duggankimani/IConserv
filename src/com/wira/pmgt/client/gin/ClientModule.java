@@ -109,6 +109,10 @@ import com.wira.pmgt.client.ui.user.UserSelectionPresenter;
 import com.wira.pmgt.client.ui.user.UserSelectionView;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.client.util.Definitions;
+import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
+import com.wira.pmgt.client.ui.outcome.CreateOutcomeView;
+import com.wira.pmgt.client.ui.detailedActivity.CreateActivityPresenter;
+import com.wira.pmgt.client.ui.detailedActivity.CreateActivityView;
 
 public class ClientModule extends AbstractPresenterModule {
 
@@ -284,5 +288,11 @@ public class ClientModule extends AbstractPresenterModule {
 		bindPresenterWidget(TableDataPresenter.class, TableDataPresenter.ITableDataView.class,
 				TableDataView.class);
 
+
+		bindPresenterWidget(CreateOutcomePresenter.class,
+				CreateOutcomePresenter.MyView.class, CreateOutcomeView.class);
+
+		bindPresenterWidget(CreateActivityPresenter.class,
+				CreateActivityPresenter.MyView.class, CreateActivityView.class);
 	}
 }

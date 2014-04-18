@@ -9,6 +9,7 @@
 	<g:HTMLPanel styleName="activities-page">
 		<div class="row-fluid">
 			<h4 ui:field="spnTitle">Program &amp; Activities</h4>
+			<span class="pull-right muted" ui:field="spnBudget">$10,0000</span>
 			<hr />
 			<g:HTMLPanel ui:field="divNoContent">
 				<i class="icon-warning-sign helper-font-16"></i>
@@ -22,17 +23,28 @@
 			<div class="row-fluid">
 				<g:HTMLPanel ui:field="divContent" styleName="tabbable tabs-below hidden">
 					<!-- BreadCrump -->
-					<d:BulletListPanel styleName="breadcrumb" ui:field="crumbContainer">
+					<d:BulletListPanel styleName="breadcrumb"
+						ui:field="crumbContainer">
 					</d:BulletListPanel>
-					
-					
+
+
 					<!--Action Buttons -->
-					<div class="action-buttons">
-						<g:Anchor ui:field="aNewUser" styleName="btn btn-primary"
-							title="Add a New User">
-							<i class="icon-plus"></i>
-							Add Outcome
-						</g:Anchor>
+					<div class="action-buttons row-fluid">
+
+						<div class="span3">
+							<g:Anchor ui:field="aNewOutcome" styleName="btn btn-primary"
+								title="Add a New User">
+								<i class="icon-plus"></i>
+								Add Outcome
+							</g:Anchor>
+						</div>
+						<div class="span3">
+							<g:Anchor ui:field="aNewActivity" styleName="btn btn-primary"
+								title="Add a New User">
+								<i class="icon-plus"></i>
+								Add Activity
+							</g:Anchor>
+						</div>
 					</div>
 
 					<div id="usercontent" class="tab-content">

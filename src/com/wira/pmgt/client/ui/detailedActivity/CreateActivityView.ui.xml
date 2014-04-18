@@ -1,0 +1,80 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:c='urn:import:com.wira.pmgt.client.ui.admin.component' xmlns:d='urn:import:com.wira.pmgt.client.ui.component'
+	xmlns:grid='urn:import:com.wira.pmgt.client.ui.component.grid' xmlns:g='urn:import:com.google.gwt.user.client.ui'
+	ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
+	ui:generateLocales='default'>
+
+	<g:HTMLPanel>
+		<fieldset>
+			<div class="control-group">
+				<div class="control-label" ui:field="tdDocType">Activity Name:</div>
+				<div class="controls">
+					<g:TextBox ui:field="txtSubject" />
+					<span class="mandatory" title="Required Field">*</span>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<div class="control-label">Date Range:</div>
+				<div class="controls">
+					<d:DateRangeWidget></d:DateRangeWidget>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<div class="control-label">Budget:</div>
+				<div class="controls">
+					<grid:AggregationGrid ui:field="gridView"></grid:AggregationGrid>
+				</div>
+			</div>
+
+
+			<div class="control-group">
+				<div class="control-label">Allocated To:</div>
+				<div class="controls">
+					<c:ListField ui:field="lstUsers" />
+				</div>
+			</div>
+
+
+			<div class="control-group">
+				<div class="control-label">Status:</div>
+				<div class="controls">
+					<div class="btn-group">
+						<button class="btn active">Opened</button>
+						<button class="btn">In-Progress</button>
+						<button class="btn">Closed</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<div class="control-label" ui:field="tdDocType2">Target:</div>
+				<div class="controls">
+					<g:TextBox ui:field="txtSubject2" />
+					<span class="mandatory" title="Required Field">*</span>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<div class="control-label" ui:field="tdDocType3">Indicators:</div>
+				<div class="controls">
+					<g:TextBox ui:field="txtSubject3" />
+					<span class="mandatory" title="Required Field">*</span>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<div class="control-label" ui:field="tdDocType4">Output:</div>
+				<div class="controls">
+					<g:TextBox ui:field="txtSubject4" />
+					<span class="mandatory" title="Required Field">*</span>
+				</div>
+			</div>
+
+		</fieldset>
+	</g:HTMLPanel>
+</ui:UiBinder>

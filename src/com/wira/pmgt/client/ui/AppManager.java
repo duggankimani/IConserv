@@ -39,6 +39,7 @@ public class AppManager {
 
 		popupPresenter.getView().setInSlot(GenericPopupPresenter.BODY_SLOT,
 				widget);
+		
 		for (final String text : buttons) {
 			Anchor aLnk = new Anchor();
 			if (text.equals("Cancel")) {
