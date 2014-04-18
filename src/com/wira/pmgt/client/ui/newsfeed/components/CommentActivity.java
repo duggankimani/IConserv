@@ -6,7 +6,6 @@ import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ErrorEvent;
 import com.google.gwt.event.dom.client.ErrorHandler;
@@ -78,13 +77,7 @@ public class CommentActivity extends Composite {
 		aDocument.setText(docType+" "+subject);
 		aDocument.setHref("#home;type=search;did="+documentId);
 		
-		String moduleUrl = GWT.getModuleBaseURL().replace("/gwtht", "");
-		if(moduleUrl.endsWith("/")){
-			moduleUrl = moduleUrl.substring(0, moduleUrl.length()-1);
-		}
-		String url = moduleUrl.replace("/", "");
-		moduleUrl =moduleUrl+"/getreport?ACTION=GetUser&userId="+createdBy.getUserId();
-		img.setUrl(moduleUrl);
+		img.setUrl(AppContext.getUserImageUrl(createdBy));
 		
 		setComment(comment);
 	}

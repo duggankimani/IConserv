@@ -161,12 +161,6 @@ public class CommentView extends ViewImpl implements CommentPresenter.ICommentVi
 	}
 
 	private void setImage(HTUser user) {
-		String moduleUrl = GWT.getModuleBaseURL().replace("/gwtht", "");
-		if(moduleUrl.endsWith("/")){
-			moduleUrl = moduleUrl.substring(0, moduleUrl.length()-1);
-		}
-		//moduleUrl =moduleUrl+"/getreport?ACTION=GetUser&width=40&height=70&userId="+user.getUserId();
-		moduleUrl =moduleUrl+"/getreport?ACTION=GetUser&userId="+user.getUserId();
-		img.setUrl(moduleUrl);
+		img.setUrl(AppContext.getUserImageUrl(user));
 	}
 }

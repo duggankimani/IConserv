@@ -148,8 +148,6 @@ implements AfterSaveHandler, AdminPageLoadHandler, ContextLoadedHandler, LoadAle
 	protected void onReset() {		
 		super.onReset();
 		setInSlot(NOTIFICATIONS_SLOT, notifications);
-//		loadAlertCount();
-//		AppContext.reloadContext();
 	}
 	
 	protected void loadAlertCount() {

@@ -42,9 +42,11 @@ public class ColumnConfig {
 		HasValue widget = null;
 		if(type==DataType.DOUBLE){
 			 DoubleField field= new DoubleField();
+			 //field.setStyleName("input-medium");
 			 widget = field;
 		}else{
 			widget = new TextField();
+			
 		}
 		
 		widget.setValue(value);		

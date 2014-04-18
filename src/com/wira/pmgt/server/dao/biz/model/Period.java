@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 import com.wira.pmgt.server.dao.model.PO;
@@ -24,6 +26,10 @@ import com.wira.pmgt.server.dao.model.PO;
  *
  */
 @Entity
+@NamedQueries({
+	@NamedQuery(name="Period.findActive", query="FROM Period p where p.isActive=:isActive"),
+	@NamedQuery(name="Period.findAll", query="FROM Period p")
+	})
 public class Period extends PO{
 
 	private static final long serialVersionUID = -5038433776061027590L;

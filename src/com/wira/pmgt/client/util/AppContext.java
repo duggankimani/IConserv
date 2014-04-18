@@ -2,6 +2,7 @@ package com.wira.pmgt.client.util;
 
 import java.util.Date;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.Cookies;
@@ -175,5 +176,28 @@ public class AppContext {
 
 	public static String getOrganizationName() {
 		return organizationName;
+	}
+	
+	public static String getUserImageUrl(){
+		return getUserImageUrl(user);
+	}
+	
+	public static String getUserImageUrl(HTUser htUser){
+		String moduleUrl = GWT.getModuleBaseURL().replace("/iconserv", "");
+		if (moduleUrl.endsWith("/")) {
+			moduleUrl = moduleUrl.substring(0, moduleUrl.length() - 1);
+		}
+		String url = moduleUrl
+				+ "/getreport?ACTION=GetUser&userId="
+				+ htUser.getUserId();
+		return url;
+	}
+	
+	public static String getUserImageUrl(HTUser htUser,double width){
+		return getUserImageUrl(htUser)+"&width="+width;
+	}
+	
+	public static String getUserImageUrl(HTUser htUser, double width, double height){
+		return getUserImageUrl(htUser)+"&width="+width+"&height="+height;
 	}
 }

@@ -86,6 +86,17 @@ public class TableView extends Composite {
 		rowWidget.setRowNumber(++count);
 		panelBody.add(rowWidget);		
 	}
+	
+	public int getRowCount(){
+		return panelBody.getWidgetCount();
+	}
+	
+	public Widget getRow(int row){
+		if(panelBody.getWidgetCount()>row)
+			return panelBody.getWidget(row);
+		
+		return null;
+	}
 
 	private Widget getTd(Widget widget) {
 		HTMLPanel td = new HTMLPanel("");

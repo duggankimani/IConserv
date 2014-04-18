@@ -15,6 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 import com.wira.pmgt.server.dao.model.PO;
@@ -28,6 +30,10 @@ import com.wira.pmgt.shared.model.ProgramDetailType;
  *
  */
 @Entity
+@NamedQueries({
+	@NamedQuery(name="ProgramDetail.findByType", query="FROM ProgramDetail p where p.isActive=:isActive and p.type=:type and p.period=:period"), 
+	@NamedQuery(name="ProgramDetail.findAll", query="FROM ProgramDetail p where p.isActive=:isActive")
+})
 public class ProgramDetail extends PO {
 
 	@Id

@@ -1,10 +1,9 @@
 package com.wira.pmgt.client.ui.profile;
 
-import java.util.List;
-
 import gwtupload.client.IUploader;
 
-import com.google.gwt.core.client.GWT;
+import java.util.List;
+
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -35,9 +34,8 @@ import com.wira.pmgt.client.model.UploadContext.UPLOADACTION;
 import com.wira.pmgt.client.ui.component.IssuesPanel;
 import com.wira.pmgt.client.ui.component.PasswordField;
 import com.wira.pmgt.client.ui.component.TextField;
-import com.wira.pmgt.client.ui.events.ContextLoadedEvent.ContextLoadedHandler;
-import com.wira.pmgt.client.ui.images.ImageResources;
 import com.wira.pmgt.client.ui.upload.custom.Uploader;
+import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.UserGroup;
 
@@ -160,7 +158,8 @@ public class ProfileView extends ViewImpl implements ProfilePresenter.IProfileVi
 			
 			@Override
 			public void onFinish(IUploader uploaderRef) {
-				String url = imgUser.getUrl();
+				setImage(AppContext.getContextUser());
+				String url = imgUser.getUrl();				
 				imgUser.setUrl(url+"&version="+Random.nextInt());
 			}
 		});
@@ -273,14 +272,7 @@ public class ProfileView extends ViewImpl implements ProfilePresenter.IProfileVi
 	}
 	
 	public void setImage(HTUser user) {
-		String moduleUrl = GWT.getModuleBaseURL().replace("/gwtht", "");
-		if (moduleUrl.endsWith("/")) {
-			moduleUrl = moduleUrl.substring(0, moduleUrl.length() - 1);
-		}
-		String url = moduleUrl
-				+ "/getreport?ACTION=GetUser&width=179.0&userId="
-				+ user.getUserId();
-		imgUser.setUrl(url);
+		imgUser.setUrl(AppContext.getUserImageUrl(user,179.0));
 	}
 
 	@Override
