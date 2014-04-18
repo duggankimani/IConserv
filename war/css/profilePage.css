@@ -1,9 +1,22 @@
+/*Profile Page Styles*/
+.main-container .activities-page{
+	padding:30px;
+}
+.main-container .activities-page .tab-content{
+    min-height: 300px;
+    overflow-x: hidden;
+}
+
+.action-buttons{
+	margin-bottom:15px;
+}
+
+
+/*Profile Page Styles*/
 .main-container .profile-page{
 	padding: 45px;
 }
-
-.profile-page img{
-	
+.profile-page img{	
 }
 .profile-page .custom-file-input{
 	height: 45px;

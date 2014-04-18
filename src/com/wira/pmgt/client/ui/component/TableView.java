@@ -115,6 +115,14 @@ public class TableView extends Composite {
 		}
 	}
 	
+	public void setBordered(Boolean status) {
+		if(status){
+			tblContainer.addStyleName("table-bordered");
+		}else{
+			tblContainer.removeStyleName("table-bordered");
+		}
+	}
+	
 	public void setIsGrid(Boolean status){
 		if(status){
 			overalContainer.getElement().setAttribute("id", "grid");

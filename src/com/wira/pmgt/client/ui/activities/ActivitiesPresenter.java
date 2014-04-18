@@ -9,17 +9,21 @@ import com.wira.pmgt.client.ui.events.ContextLoadedEvent;
 import com.wira.pmgt.client.ui.events.ContextLoadedEvent.ContextLoadedHandler;
 
 public class ActivitiesPresenter extends
-		PresenterWidget<ActivitiesPresenter.IActivitiesView> implements ContextLoadedHandler {
+		PresenterWidget<ActivitiesPresenter.IActivitiesView> implements
+		ContextLoadedHandler {
 
 	public interface IActivitiesView extends View {
-	
-	}
-	
-	@Inject DispatchAsync requestHelper;
 
-	
+		void showContent(boolean b);
+
+	}
+
 	@Inject
-	public ActivitiesPresenter(final EventBus eventBus, final IActivitiesView view) {
+	DispatchAsync requestHelper;
+
+	@Inject
+	public ActivitiesPresenter(final EventBus eventBus,
+			final IActivitiesView view) {
 		super(eventBus, view);
 	}
 
@@ -27,15 +31,23 @@ public class ActivitiesPresenter extends
 	protected void onBind() {
 		super.onBind();
 	}
-	
+
 	@Override
 	protected void onReset() {
 		super.onReset();
-	
+
 	}
-	
+
 	@Override
 	public void onContextLoaded(ContextLoadedEvent event) {
-	
+
+	}
+
+	public void showContent(Boolean status) {
+		if (status) {
+			getView().showContent(true);
+		} else {
+			getView().showContent(false);
+		}
 	}
 }

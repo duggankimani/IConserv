@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.gwt.user.client.History;
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.PopupView;
@@ -18,22 +19,19 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.RevealContentHandler;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.events.AfterSaveEvent;
-import com.wira.pmgt.shared.model.DocStatus;
 import com.wira.pmgt.shared.model.Document;
 import com.wira.pmgt.shared.model.DocumentType;
 import com.wira.pmgt.shared.model.Priority;
 import com.wira.pmgt.shared.model.UserGroup;
-import com.wira.pmgt.shared.requests.CreateDocumentRequest;
 import com.wira.pmgt.shared.requests.GetDocumentRequest;
 import com.wira.pmgt.shared.requests.GetDocumentTypesRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
-import com.wira.pmgt.shared.responses.CreateDocumentResult;
 import com.wira.pmgt.shared.responses.GetDocumentResult;
 import com.wira.pmgt.shared.responses.GetDocumentTypesResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
-public class CreateDocPresenter extends
-		PresenterWidget<CreateDocPresenter.ICreateDocView> {
+public class CreateProgramPresenter extends
+		PresenterWidget<CreateProgramPresenter.ICreateDocView> {
 
 	public interface ICreateDocView extends PopupView {
 
@@ -66,7 +64,7 @@ public class CreateDocPresenter extends
 	PlaceManager placeManager;
 
 	@Inject
-	public CreateDocPresenter(final EventBus eventBus, final ICreateDocView view) {
+	public CreateProgramPresenter(final EventBus eventBus, final ICreateDocView view) {
 		super(eventBus, view);
 	}
 
@@ -116,7 +114,6 @@ public class CreateDocPresenter extends
 		super.onBind();
 
 		getView().getCancel().addClickHandler(new ClickHandler() {
-
 			@Override
 			public void onClick(ClickEvent event) {
 				getView().hide();
@@ -124,10 +121,9 @@ public class CreateDocPresenter extends
 		});
 
 		getView().getSave().addClickHandler(new ClickHandler() {
-
 			@Override
 			public void onClick(ClickEvent event) {
-				Document document = getView().getDocument();
+			/*	Document document = getView().getDocument();
 				document.setStatus(DocStatus.DRAFTED);
 				document.setId(Id);
 
@@ -136,16 +132,19 @@ public class CreateDocPresenter extends
 					requestHelper.execute(new CreateDocumentRequest(document),
 							new TaskServiceCallback<CreateDocumentResult>() {
 								@Override
-								public void processResult(
-										CreateDocumentResult result) {
+								public void processResult(CreateDocumentResult result) {
 
 									Document saved = result.getDocument();
 									assert saved.getId() != null;
 									fireEvent(new AfterSaveEvent());
-									getView().hide();
 								}
 							});
 				}
+			*/
+			// Temporary method to fire method
+			//	
+				getView().hide();
+				History.newItem("home;page=activities;type=listing");
 			}
 		});
 	}

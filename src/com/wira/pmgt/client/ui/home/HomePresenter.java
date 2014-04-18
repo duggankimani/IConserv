@@ -63,7 +63,7 @@ import com.wira.pmgt.client.ui.filter.FilterPresenter;
 import com.wira.pmgt.client.ui.login.LoginGateKeeper;
 import com.wira.pmgt.client.ui.newsfeed.NewsFeedPresenter;
 import com.wira.pmgt.client.ui.profile.ProfilePresenter;
-import com.wira.pmgt.client.ui.save.CreateDocPresenter;
+import com.wira.pmgt.client.ui.save.CreateProgramPresenter;
 import com.wira.pmgt.client.ui.save.form.GenericFormPresenter;
 import com.wira.pmgt.client.ui.tasklistitem.DateGroupPresenter;
 import com.wira.pmgt.client.ui.util.DateUtils;
@@ -118,7 +118,7 @@ public class HomePresenter extends
 	@Inject PlaceManager placeManager;
 	@Inject DocumentPopupPresenter docPopup;
 		
-	private IndirectProvider<CreateDocPresenter> createDocProvider;
+	private IndirectProvider<CreateProgramPresenter> createDocProvider;
 	private IndirectProvider<GenericFormPresenter> genericFormProvider;
 	private IndirectProvider<GenericDocumentPresenter> docViewFactory;
 	private IndirectProvider<DateGroupPresenter> dateGroupFactory;
@@ -156,7 +156,7 @@ public class HomePresenter extends
 	@Inject
 	public HomePresenter(final EventBus eventBus, final MyView view,
 			final MyProxy proxy,
-			Provider<CreateDocPresenter> docProvider,
+			Provider<CreateProgramPresenter> docProvider,
 			Provider<GenericFormPresenter> formProvider,
 			Provider<GenericDocumentPresenter> docViewProvider,
 			Provider<DateGroupPresenter> dateGroupProvider,
@@ -165,7 +165,7 @@ public class HomePresenter extends
 			Provider<ActivitiesPresenter> activitiesProvider)	{
 		super(eventBus, view, proxy);
 		
-		createDocProvider = new StandardProvider<CreateDocPresenter>(docProvider);
+		createDocProvider = new StandardProvider<CreateProgramPresenter>(docProvider);
 		docViewFactory  = new StandardProvider<GenericDocumentPresenter>(docViewProvider);
 		dateGroupFactory = new StandardProvider<DateGroupPresenter>(dateGroupProvider);
 		genericFormProvider = new StandardProvider<GenericFormPresenter>(formProvider);
@@ -253,7 +253,7 @@ public class HomePresenter extends
 		processInstanceId=null;
 		documentId=null;
 		
-		String name = request.getParameter("type", null);
+		final String name = request.getParameter("type", null);
 		String processInstID = request.getParameter("pid", null);
 		String documentSearchID = request.getParameter("did", null);
 		if(processInstID!=null){
@@ -282,6 +282,10 @@ public class HomePresenter extends
 				@Override
 				public void processResult(ActivitiesPresenter aResponse) {
 					setInSlot(ACTIVITIES_SLOT, aResponse);
+					
+					if(name!=null&&name.equals("listing")){
+						aResponse.showContent(true);
+					}
 				}
 			});
 		}else{
@@ -403,9 +407,9 @@ public class HomePresenter extends
 	}
 	
 	protected void showEditForm(final MODE mode) {
-		createDocProvider.get(new ServiceCallback<CreateDocPresenter>() {
+		createDocProvider.get(new ServiceCallback<CreateProgramPresenter>() {
 			@Override
-			public void processResult(CreateDocPresenter result) {
+			public void processResult(CreateProgramPresenter result) {
 				if(mode.equals(MODE.EDIT) && selectedDocumentId!=null){
 					//result.setDocumentId(selectedDocumentId);
 				}

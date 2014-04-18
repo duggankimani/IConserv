@@ -1,6 +1,6 @@
 package com.wira.pmgt.client.ui.save;
 
-import static com.wira.pmgt.client.ui.save.CreateDocPresenter.UPLOAD_SLOT;
+import static com.wira.pmgt.client.ui.save.CreateProgramPresenter.UPLOAD_SLOT;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,12 +25,12 @@ import com.wira.pmgt.shared.model.DocumentType;
 import com.wira.pmgt.shared.model.Priority;
 import com.wira.pmgt.shared.model.UserGroup;
 
-public class CreateDocView extends PopupViewImpl implements
-		CreateDocPresenter.ICreateDocView {
+public class CreateProgramView extends PopupViewImpl implements
+		CreateProgramPresenter.ICreateDocView {
 
 	private final Widget widget;
 
-	public interface Binder extends UiBinder<Widget, CreateDocView> {
+	public interface Binder extends UiBinder<Widget, CreateProgramView> {
 	}
 	@UiField
 	DialogBox popupView;
@@ -46,7 +46,7 @@ public class CreateDocView extends PopupViewImpl implements
 	@UiField AggregationGrid gridView;
 		
 	@Inject
-	public CreateDocView(final EventBus eventBus, final Binder binder) {
+	public CreateProgramView(final EventBus eventBus, final Binder binder) {
 		super(eventBus);
 		widget = binder.createAndBindUi(this);
 		
@@ -118,7 +118,6 @@ public class CreateDocView extends PopupViewImpl implements
 		// txtDescription.getValue();
 
 		boolean isValid = true;
-
 		return isValid;
 	}
 
@@ -133,7 +132,7 @@ public class CreateDocView extends PopupViewImpl implements
 
 	}
 
-	private void setPriority(Priority priority) {
+	public void setPriority(Priority priority) {
 		
 	}
 
@@ -141,7 +140,7 @@ public class CreateDocView extends PopupViewImpl implements
 		return null;
 	}
 
-	private void setDocumentType(DocumentType docType) {
+	public void setDocumentType(DocumentType docType) {
 	}
 
 	@Override

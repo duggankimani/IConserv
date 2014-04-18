@@ -83,8 +83,8 @@ import com.wira.pmgt.client.ui.popup.GenericPopupPresenter;
 import com.wira.pmgt.client.ui.popup.GenericPopupView;
 import com.wira.pmgt.client.ui.profile.ProfilePresenter;
 import com.wira.pmgt.client.ui.profile.ProfileView;
-import com.wira.pmgt.client.ui.save.CreateDocPresenter;
-import com.wira.pmgt.client.ui.save.CreateDocView;
+import com.wira.pmgt.client.ui.save.CreateProgramPresenter;
+import com.wira.pmgt.client.ui.save.CreateProgramView;
 import com.wira.pmgt.client.ui.save.form.GenericFormPresenter;
 import com.wira.pmgt.client.ui.save.form.GenericFormView;
 import com.wira.pmgt.client.ui.task.perfomancereview.PersonnelReviewPresenter;
@@ -148,8 +148,8 @@ public class ClientModule extends AbstractPresenterModule {
 		bindPresenterWidget(ToolbarPresenter.class,
 				ToolbarPresenter.MyView.class, ToolbarView.class);
 
-		bindPresenterWidget(CreateDocPresenter.class,
-				CreateDocPresenter.ICreateDocView.class, CreateDocView.class);
+		bindPresenterWidget(CreateProgramPresenter.class,
+				CreateProgramPresenter.ICreateDocView.class, CreateProgramView.class);
 		
 		bindPresenter(ErrorPagePresenter.class,
 				ErrorPagePresenter.MyView.class, ErrorPageView.class,

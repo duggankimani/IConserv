@@ -1,29 +1,61 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-	xmlns:g='urn:import:com.google.gwt.user.client.ui'
-	ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
-	xmlns:d='urn:import:com.wira.pmgt.client.ui.component'
-	xmlns:up='urn:import:com.wira.pmgt.client.ui.upload.custom'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+	xmlns:d='urn:import:com.wira.pmgt.client.ui.component' xmlns:up='urn:import:com.wira.pmgt.client.ui.upload.custom'
 	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
 	ui:generateLocales='default'>
 
-	<g:HTMLPanel styleName="profile-page">
+	<g:HTMLPanel styleName="activities-page">
 		<div class="row-fluid">
-			<h4>Program &amp; Activities</h4>
+			<h4 ui:field="spnTitle">Program &amp; Activities</h4>
 			<hr />
-			
-			<div ui:field="errormessage">
+			<g:HTMLPanel ui:field="divNoContent">
 				<i class="icon-warning-sign helper-font-16"></i>
 				<span class="helper-font-16">
-				No Programs Added. Click <a>Create Program</a> to get started
+					No Programs Added. Click
+					<a>Create Program</a>
+					to get started
 				</span>
+			</g:HTMLPanel>
+
+			<div class="row-fluid">
+				<g:HTMLPanel ui:field="divContent" styleName="tabbable tabs-below hidden">
+					<!-- BreadCrump -->
+					<d:BulletListPanel styleName="breadcrumb" ui:field="crumbContainer">
+					</d:BulletListPanel>
+					
+					
+					<!--Action Buttons -->
+					<div class="action-buttons">
+						<g:Anchor ui:field="aNewUser" styleName="btn btn-primary"
+							title="Add a New User">
+							<i class="icon-plus"></i>
+							Add Outcome
+						</g:Anchor>
+					</div>
+
+					<div id="usercontent" class="tab-content">
+						<div ui:field="divTab1Content" class="tab-pane fade in active">
+							<d:TableView ui:field="tblView" striped="false"
+								isGrid="false" bordered="false"></d:TableView>
+						</div>
+
+						<div ui:field="divTab2Content" class="tab-pane fade in">
+							Content2 Comes in here
+						</div>
+					</div>
+
+					<ul id="mytab" class="nav nav-tabs">
+						<li class="active" ui:field="liUser">
+							<g:Anchor href="#user" ui:field="aUserstab">Wildlife Management</g:Anchor>
+						</li>
+						<li ui:field="liGroup">
+							<g:Anchor href="#groups" ui:field="aGroupstab">Rivers &amp; Wetlands</g:Anchor>
+						</li>
+					</ul>
+				</g:HTMLPanel>
 			</div>
-			
-			<div>
-			</div>
-		</div>
-		<div class="row-fluid">
 
 		</div>
 	</g:HTMLPanel>

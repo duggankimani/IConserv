@@ -15,7 +15,6 @@
 	    	</d:IssuesPanel>
 			 
 			<g:HTMLPanel ui:field="panelBody" styleName="modal-body">
-			    
 			</g:HTMLPanel>
 			
 			<g:HTMLPanel styleName="form-actions">

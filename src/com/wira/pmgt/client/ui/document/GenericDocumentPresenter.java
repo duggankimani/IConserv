@@ -55,7 +55,7 @@ import com.wira.pmgt.client.ui.events.ReloadAttachmentsEvent.ReloadAttachmentsHa
 import com.wira.pmgt.client.ui.events.ReloadDocumentEvent.ReloadDocumentHandler;
 import com.wira.pmgt.client.ui.notifications.note.NotePresenter;
 import com.wira.pmgt.client.ui.popup.GenericPopupPresenter;
-import com.wira.pmgt.client.ui.save.CreateDocPresenter;
+import com.wira.pmgt.client.ui.save.CreateProgramPresenter;
 import com.wira.pmgt.client.ui.upload.UploadDocumentPresenter;
 import com.wira.pmgt.client.ui.upload.attachment.AttachmentPresenter;
 import com.wira.pmgt.client.ui.upload.custom.Uploader;
@@ -176,7 +176,7 @@ public class GenericDocumentPresenter extends
 	
 	@Inject PlaceManager placeManager;
 	
-	private IndirectProvider<CreateDocPresenter> createDocProvider;
+	private IndirectProvider<CreateProgramPresenter> createDocProvider;
 	private IndirectProvider<CommentPresenter> commentPresenterFactory;
 	private IndirectProvider<AttachmentPresenter> attachmentPresenterFactory;
 	private IndirectProvider<NotePresenter> notePresenterFactory;
@@ -190,13 +190,13 @@ public class GenericDocumentPresenter extends
 	
 	@Inject
 	public GenericDocumentPresenter(final EventBus eventBus, final MyView view,
-			Provider<CreateDocPresenter> docProvider,
+			Provider<CreateProgramPresenter> docProvider,
 			Provider<CommentPresenter> commentProvider,
 			Provider<AttachmentPresenter> attachmentProvider,
 			Provider<NotePresenter> noteProvider,
 			Provider<UploadDocumentPresenter> uploaderProvider) {
 		super(eventBus, view);		
-		createDocProvider = new StandardProvider<CreateDocPresenter>(docProvider);
+		createDocProvider = new StandardProvider<CreateProgramPresenter>(docProvider);
 		commentPresenterFactory = new StandardProvider<CommentPresenter>(commentProvider);
 		attachmentPresenterFactory = new StandardProvider<AttachmentPresenter>(attachmentProvider);
 		notePresenterFactory = new StandardProvider<NotePresenter>(noteProvider);
@@ -572,9 +572,9 @@ public class GenericDocumentPresenter extends
 
 	protected void showEditForm(final MODE mode) {
 		
-		createDocProvider.get(new ServiceCallback<CreateDocPresenter>() {
+		createDocProvider.get(new ServiceCallback<CreateProgramPresenter>() {
 			@Override
-			public void processResult(CreateDocPresenter result) {
+			public void processResult(CreateProgramPresenter result) {
 				if(mode.equals(MODE.EDIT)){
 					//result.setDocumentId(documentId);
 				}
