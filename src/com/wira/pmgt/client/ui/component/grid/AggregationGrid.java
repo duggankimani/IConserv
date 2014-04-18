@@ -9,6 +9,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -52,13 +53,19 @@ public class AggregationGrid extends Composite {
 			widgets.add(config.createHeaderWidget());
 		}	
 		tblView.setHeaderWidgets(widgets);
+		setData(new ArrayList<DataModel>());
 		createFooter();
 	}
 
 	public void setData(List<DataModel> models){
+		tblView.clearRows();
+		
+		if(models!=null)
 		for(DataModel row: models){
 			addRowData(row);
 		}
+		
+		addRowData(new DataModel());
 		createFooter();
 	}
 	
@@ -76,7 +83,46 @@ public class AggregationGrid extends Composite {
 		}
 		HasValueChangeHandlers hasValueChangeHandlers = (HasValueChangeHandlers)widget;
 		hasValueChangeHandlers.addValueChangeHandler(
-				new OnAggregationFieldChangedHandler(this,config,initial));
+				new OnAggregationFieldChangedHandler(this,config,initial){
+					@Override
+					public void onValueChange(ValueChangeEvent<Number> event) {
+						super.onValueChange(event);
+						//check need change
+						createRowLast();
+					}
+				});
+	}
+	
+	
+
+	protected void createRowLast() {
+				
+		int count = tblView.getRowCount();
+		if(count==0){
+			addRowData(new DataModel());
+		}else{
+			//addRowData(new DataModel());
+			Widget w = tblView.getRow(count-1);
+			DataModel lastRowData=null;
+			
+			assert w!=null;
+			
+			if(w instanceof AggregationGridRow){
+				AggregationGridRow row = (AggregationGridRow)w;
+				lastRowData = row.getData();
+			}
+			
+			if(lastRowData!=null && columnConfigs!=null && !columnConfigs.isEmpty()){
+				ColumnConfig config = columnConfigs.get(columnConfigs.size()-1);
+				assert config!=null;
+				assert config.getKey()!=null; 
+				
+				if(lastRowData.get(config.getKey())!=null){
+					addRowData(new DataModel());
+				}
+			}
+			
+		}
 	}
 
 	public void aggregate(ColumnConfig column, Number previous, Number newValue) {

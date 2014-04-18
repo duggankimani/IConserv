@@ -126,7 +126,7 @@ public class AggregationGridRow extends Composite {
 			model.set(key, columnWigetMap.get(column).getValue());
 		}
 		
-		return getData();
+		return model;
 	}
 
 	public boolean isChanged() {
