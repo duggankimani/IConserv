@@ -106,15 +106,15 @@ body .alert a {
 	
 }
 
-.modal-admin .modal-body .select2-container {
-	min-width: 43%;
+.modal .modal-body .select2-container {
+	min-width: 72%;
 }
 
-.modal-admin .modal-body  .select2-drop {
+.modal .modal-body  .select2-drop {
 	width: 200px;
 }
 
-.modal-admin .modal-body  .select2-drop:focus {
+.modal .modal-body  .select2-drop:focus {
 	border: 1px solid #aaa;
 	border-top: 0;
 }
@@ -173,9 +173,23 @@ body .dateBoxPopup {
 }
 
 .modal-document {
-	/* width: auto; */
-	/* display: inline-table; */
+	width: 40%;
+	display: inline-table;
+	margin-left: -25%;
 }
+
+.modal-document .form-control{
+	width: 90%;
+}
+
+.modal-document .form-horizontal .control-label{
+	width: 27%;
+}
+
+.modal-document .form-horizontal .controls{
+	margin-left: 150px;}
+
+
 
 /* Custom navbar stuff */
 .navbar {
@@ -1221,63 +1235,64 @@ body .dateBoxPopup {
 
 
 /*Grid Styles*/ 
-#grid .generic-row .td input {
+#grid .td input {
 	font-size: 12px;
 	border: none;
 	width: auto;
 }
 
-#grid .generic-row .td select{
+#grid .td select{
 	border: none;
 }
 
-#grid .generic-row .td input:hover,
-#grid .generic-row .td input:focus,
-#grid .generic-row .td select:hover,
-#grid .generic-row .td select:focus
+#grid .td input:hover,
+#grid .td input:focus,
+#grid .td select:hover,
+#grid .td select:focus
 {
 	outline: none;
 	box-shadow:none;
 }
 
-#grid .generic-row .td .gwt-InlineLabel {
+#grid .td .gwt-InlineLabel {
 	padding: 1px 8px;
 	font-size: 12px;
 }
 
-#grid .generic-row .controls {
+#grid .controls {
 	margin-left: 0px;
 }
 
-#grid .generic-row .input-group-addon {
+#grid .input-group-addon {
  background-color: #fff;
  border: none;
  padding-top: 0px;
 }
 
-#grid .generic-row  .td{
+#grid  .td{
 	background-color: #ffffff;
 	text-align:center;
 }
 
-#grid .generic-row .td {
+#grid .td {
 	padding: 0px;
 }
 
-#grid .tr .generic-header {
+#grid .tr{
 	text-align: center;
 }
 
-#grid .generic-row .td {
+#grid .td {
 	border: 1px solid #E0E0E0;
 	border-top:none;
 	border-left:none;
 }
 
-#grid .generic-row .th {
+#grid .th {
 	border: 1px solid #E0E0E0;
 	border-top:none;
 	border-left:none;
+	text-align: center;
 }
 /*-- End of Grid --*/
 

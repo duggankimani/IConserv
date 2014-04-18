@@ -8,7 +8,7 @@
 			    <div ui:field="divName"></div>			    			     	
 			</g:Anchor>
 			
-			<g:Anchor styleName="hide select2-search-choice-close" ui:field="aUnselect">
+			<g:Anchor styleName="select2-search-choice-close" ui:field="aUnselect">
 			 </g:Anchor>
 			 <div ui:field="divUnselectName"></div>	       
 	    </g:HTMLPanel>

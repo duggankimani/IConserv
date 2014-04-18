@@ -87,6 +87,7 @@ public class TestJbpmHumanTask {
 		//task.setSubTaskStrategies(subTaskStrategies);
 		
 		TaskData taskData = new TaskData();
+		
 		taskData.setActivationTime(new Date());
 		//taskData.setActualOwner(actualOwner);
 		//taskData.setAttachments(attachments);
@@ -105,7 +106,6 @@ public class TestJbpmHumanTask {
 		taskData.setProcessSessionId(0);
 		task.setTaskData(taskData);
 
-		
 		ContentData contentData = new ContentData();
 		contentData.setContent(content);
 		contentData.setType("java.util.HashMap");

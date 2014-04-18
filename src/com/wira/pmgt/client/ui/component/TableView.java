@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
+import com.wira.pmgt.client.ui.component.grid.AggregationGridRow;
 
 public class TableView extends Composite {
 
@@ -20,9 +21,12 @@ public class TableView extends Composite {
 	interface TableViewUiBinder extends UiBinder<Widget, TableView> {
 	}
 	
+	@UiField HTMLPanel overalContainer;
+	@UiField HTMLPanel tblContainer;
 	@UiField HTMLPanel panelHeader;
 	@UiField HTMLPanel panelBody;
-
+	@UiField HTMLPanel panelFooter;
+	
 	private boolean isAutoNumber=true;
 	private int count=0;
 	
@@ -32,12 +36,7 @@ public class TableView extends Composite {
 	
 	public void setHeaders(List<String> names){
 		List<Widget>widgets = new ArrayList<Widget>();
-		
-		if(isAutoNumber){
-			InlineLabel label = new InlineLabel("#");
-			widgets.add(label);
-		}
-		
+				
 		for(String name: names){
 			InlineLabel label = new InlineLabel(name);
 			widgets.add(label);
@@ -52,6 +51,12 @@ public class TableView extends Composite {
 	}
 
 	public void setHeaderWidgets(List<Widget> widgets) {
+
+		if(isAutoNumber){
+			InlineLabel label = new InlineLabel("#");
+			widgets.add(0, label);
+		}
+		
 		for(Widget widget: widgets){
 			HTMLPanel th = new HTMLPanel("");
 			th.setStyleName("th");
@@ -77,6 +82,12 @@ public class TableView extends Composite {
 		}
 		panelBody.add(row);
 	}
+	
+	public void addRow(AggregationGridRow rowWidget){
+		rowWidget.setAutoNumber(isAutoNumber());
+		rowWidget.setRowNumber(++count);
+		panelBody.add(rowWidget);		
+	}
 
 	private Widget getTd(Widget widget) {
 		HTMLPanel td = new HTMLPanel("");
@@ -84,8 +95,47 @@ public class TableView extends Composite {
 		td.add(widget);				
 		return td;
 	}
+	
+	public void setStriped(Boolean status) {
+		if(status){
+			tblContainer.addStyleName("table-striped");
+		}else{
+			tblContainer.removeStyleName("table-striped");
+		}
+	}
+	
+	public void setIsGrid(Boolean status){
+		if(status){
+			overalContainer.getElement().setAttribute("id", "grid");
+		}else{
+			overalContainer.getElement().removeAttribute("id");
+		}
+	}
 
 	public void clearRows() {
 		panelBody.clear();
+	}
+
+	public boolean isAutoNumber() {
+		return isAutoNumber;
+	}
+
+	public void setAutoNumber(boolean isAutoNumber) {
+		this.isAutoNumber = isAutoNumber;
+	}
+	
+	public void setFooter(List<Widget> widgets){
+		panelFooter.clear();
+		HTMLPanel row = new HTMLPanel("");
+		row.addStyleName("tr");
+			
+		if(isAutoNumber){
+			row.add(getTd(new InlineLabel()));
+		}
+		
+		for(Widget widget: widgets){
+			row.add(getTd(widget));
+		}
+		panelFooter.add(row);
 	}
 }

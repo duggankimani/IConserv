@@ -15,4 +15,5 @@ public class DoubleField extends DoubleBox{
 	public void setType(String type){
 		getElement().setAttribute("type", type);
 	}
+	
 }
