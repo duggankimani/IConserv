@@ -9,6 +9,10 @@ public class OnAggregationFieldChangedHandler implements ValueChangeHandler<Numb
 	private ColumnConfig config;
 	
 	public OnAggregationFieldChangedHandler(AggregationGrid grid, ColumnConfig column, Number initial){
+		if(initial==null){
+			initial=0.0;
+		}
+		
 		this.previousValue= initial;
 		this.grid = grid;
 		this.config = column;
