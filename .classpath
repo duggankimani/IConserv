@@ -155,7 +155,7 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/invoicing.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gxt-chart-3.0.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gxt-legacy-3.0.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/gxt-3.0.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gxt-3.0.1.jar" sourcepath="/home/duggan/.m2/repository/com/sencha/gxt/gxt/3.0.1/gxt-3.0.1-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/sqljdbc4.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/sqljdbc.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
