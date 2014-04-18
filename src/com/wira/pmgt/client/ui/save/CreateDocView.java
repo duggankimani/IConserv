@@ -16,7 +16,6 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.PopupViewImpl;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.admin.component.ListField;
-import com.wira.pmgt.client.ui.component.TableView;
 import com.wira.pmgt.client.ui.component.grid.AggregationGrid;
 import com.wira.pmgt.client.ui.component.grid.ColumnConfig;
 import com.wira.pmgt.client.ui.component.grid.DataModel;
@@ -54,7 +53,6 @@ public class CreateDocView extends PopupViewImpl implements
 		
 		int[] position=AppManager.calculatePosition(5, 50);
 		popupView.setPopupPosition(position[1],position[0]);
-
 		loadGrid();
 	}
 
@@ -110,7 +108,6 @@ public class CreateDocView extends PopupViewImpl implements
 
 	@Override
 	public HasClickHandlers getCancel() {
-
 		return btnCancel;
 	}
 

@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:d="urn:import:com.wira.pmgt.client.ui.component">
 	<g:HTMLPanel>
-		<d:TableView ui:field="tblView"></d:TableView>
+		<d:TableView ui:field="tblView" striped="false" isGrid="true"></d:TableView>
 		<span ui:field="spnAggregate"></span>
 	</g:HTMLPanel>
 </ui:UiBinder> 

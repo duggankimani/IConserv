@@ -22,7 +22,7 @@
 					<g:HTMLPanel ui:field="panelFields" styleName="form-horizontal">
 
 						<div class="control-group">
-							<div class="control-label" ui:field="tdDocType">Name:</div>
+							<div class="control-label" ui:field="tdDocType">Program Name:</div>
 							<div class="controls">
 								<g:TextBox ui:field="txtSubject" />
 							</div>

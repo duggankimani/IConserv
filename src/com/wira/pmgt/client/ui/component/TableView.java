@@ -21,6 +21,8 @@ public class TableView extends Composite {
 	interface TableViewUiBinder extends UiBinder<Widget, TableView> {
 	}
 	
+	@UiField HTMLPanel overalContainer;
+	@UiField HTMLPanel tblContainer;
 	@UiField HTMLPanel panelHeader;
 	@UiField HTMLPanel panelBody;
 	@UiField HTMLPanel panelFooter;
@@ -103,6 +105,22 @@ public class TableView extends Composite {
 		td.addStyleName("td");
 		td.add(widget);				
 		return td;
+	}
+	
+	public void setStriped(Boolean status) {
+		if(status){
+			tblContainer.addStyleName("table-striped");
+		}else{
+			tblContainer.removeStyleName("table-striped");
+		}
+	}
+	
+	public void setIsGrid(Boolean status){
+		if(status){
+			overalContainer.getElement().setAttribute("id", "grid");
+		}else{
+			overalContainer.getElement().removeAttribute("id");
+		}
 	}
 
 	public void clearRows() {
