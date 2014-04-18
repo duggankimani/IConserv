@@ -119,11 +119,6 @@ public class UserDisplay extends Composite implements UserSelectedHandler {
 	}
 	
 	private void setImage(HTUser user) {
-		String moduleUrl = GWT.getModuleBaseURL().replace("/gwtht", "");
-		if(moduleUrl.endsWith("/")){
-			moduleUrl = moduleUrl.substring(0, moduleUrl.length()-1);
-		}
-		moduleUrl =moduleUrl+"/getreport?ACTION=GetUser&width=50&userId="+user.getUserId();
-		img.setUrl(moduleUrl);
+		img.setUrl(AppContext.getUserImageUrl(user, 50.0));
 	}
 }

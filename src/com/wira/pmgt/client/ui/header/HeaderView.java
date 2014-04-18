@@ -2,7 +2,6 @@ package com.wira.pmgt.client.ui.header;
 
 import java.util.Date;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ErrorEvent;
@@ -20,6 +19,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.util.DateUtils;
+import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.HTUser;
 
 public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView {
@@ -78,9 +78,6 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 				imgSmall.setUrl("img/blueman(small).png");
 			}
 		});
-		
-		// imgSmall.getElement().getStyle().setWidth(30.0, Unit.PX);
-		// imgSmall.getElement().getStyle().setHeight(50.0, Unit.PX);
 
 		img.addErrorHandler(new ErrorHandler() {
 			@Override
@@ -89,9 +86,6 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 			}
 		});
 		
-		
-		// img.getElement().getStyle().setWidth(70.0, Unit.PX);
-		// img.getElement().getStyle().setHeight(90.0, Unit.PX);
 	}
 
 	@Override
@@ -202,20 +196,7 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 	}
 
 	public void setImage(HTUser user) {
-		String moduleUrl = GWT.getModuleBaseURL().replace("/gwtht", "");
-		if (moduleUrl.endsWith("/")) {
-			moduleUrl = moduleUrl.substring(0, moduleUrl.length() - 1);
-		}
-		// moduleUrl
-		// =moduleUrl+"/getreport?ACTION=GetUser&width=40&height=70&userId="+user.getUserId();
-		String url1 = moduleUrl
-				+ "/getreport?ACTION=GetUser&width=48.0&height=48.0&userId="
-				+ user.getUserId();
-		imgSmall.setUrl(url1);
-
-		String url2 = moduleUrl
-				+ "/getreport?ACTION=GetUser&width=70.0&height=70.0&userId="
-				+ user.getUserId();
-		img.setUrl(url2);
+		imgSmall.setUrl(AppContext.getUserImageUrl(user, 48.0, 48.0));
+		img.setUrl(AppContext.getUserImageUrl(user, 70.0, 70.0));
 	}
 }

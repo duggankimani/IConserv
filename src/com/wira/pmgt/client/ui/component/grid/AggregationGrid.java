@@ -7,10 +7,13 @@ import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
@@ -96,7 +99,7 @@ public class AggregationGrid extends Composite {
 			if(config.isAggregationColumn()){
 				
 				Number value = summaries.get(config.getKey());
-				widgets.add(new InlineLabel(value==null? null: value.toString()));
+				widgets.add(new SummaryRenderer(value));
 				
 			}else{
 				widgets.add(new InlineLabel());
@@ -122,6 +125,42 @@ public class AggregationGrid extends Composite {
 	
 	public void setAutoNumber(boolean enable){
 		tblView.setAutoNumber(enable);
+	}
+	
+	public List<DataModel> getData(){
+		List<DataModel> models = new ArrayList<DataModel>();
+		int rows = tblView.getRowCount();
+		if(rows>0){
+			for(int row=0; row<rows; row++){
+				Widget rowWidget = tblView.getRow(row);
+				if(rowWidget instanceof AggregationGridRow){
+					AggregationGridRow r = (AggregationGridRow)rowWidget;
+					models.add(r.getData());	
+				}
+			}
+		}
+		
+		return models;
+	}
+	
+	class SummaryRenderer extends HTMLPanel{
+
+		InlineLabel label = new InlineLabel();
+		public SummaryRenderer(Object value) {
+			super("");
+			this.add(label);
+			
+			String text = "";
+			if(value instanceof Number){
+				text = NumberFormat.getCurrencyFormat().format((Number) value);
+			}else if(value!=null){
+				text = value.toString();
+			}
+			
+			label.setText(text);
+			this.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
+		}
+				
 	}
 	
 }

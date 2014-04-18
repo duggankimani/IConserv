@@ -37,7 +37,6 @@ public class ProgramFund implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="programid", referencedColumnName="id", nullable=true)
 	private ProgramDetail programDetail;
-	
 
 	public ProgramFund() {
 	}
