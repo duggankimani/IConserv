@@ -8,8 +8,10 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.InlineLabel;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+import com.gwtplatform.mvp.client.PopupView;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.admin.formbuilder.propertypanel.PropertyPanelPresenter;
@@ -55,8 +57,13 @@ public class AppManager {
 
 				@Override
 				public void onClick(ClickEvent event) {
-					popupPresenter.getView().hide();
-					onOptionSelected.onSelect(text);
+					if(onOptionSelected instanceof OptionControl){
+						((OptionControl)onOptionSelected).setPopupView((PopupView)(popupPresenter.getView()));
+						onOptionSelected.onSelect(text);
+					}else{
+						popupPresenter.getView().hide();
+						onOptionSelected.onSelect(text);	
+					}					
 				}
 			});
 			popupPresenter.getView().addToSlot(

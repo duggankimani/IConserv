@@ -24,6 +24,7 @@ import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.admin.component.ListField;
 import com.wira.pmgt.client.ui.component.IssuesPanel;
 import com.wira.pmgt.client.ui.component.TextField;
+import com.wira.pmgt.client.ui.component.autocomplete.AutoCompleteField;
 import com.wira.pmgt.client.ui.upload.custom.Uploader;
 import com.wira.pmgt.shared.model.Attachment;
 import com.wira.pmgt.shared.model.DocumentType;
@@ -45,7 +46,7 @@ public class ProcessSaveView extends PopupViewImpl implements
 	@UiField TextField txtProcess;
 	@UiField Uploader uploader;
 	@UiField TextArea txtDescription;
-	@UiField ListField<DocumentType> lstDocTypes;
+	@UiField AutoCompleteField<DocumentType> lstDocTypes;
 	@UiField VerticalPanel currentAttachmentsPanel;
 	@UiField InlineLabel lblWarning;
 

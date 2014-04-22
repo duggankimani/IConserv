@@ -2,9 +2,12 @@ package com.wira.pmgt.client.ui.component;
 
 import static com.wira.pmgt.client.ui.util.DateUtils.DATEFORMAT;
 
+import java.util.Date;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
@@ -56,5 +59,18 @@ public class DateRangeWidget extends Composite {
 		});
 		
 	}
-
+	
+	public Date getStartDate(){
+		return dateInput1.getValue();
+	}
+	
+	public Date getEndDate(){
+		return dateInput2.getValue();
+	}
+	
+	public void addValueChangeHandler(ValueChangeHandler<Date> valueChangeHandler){
+		dateInput1.addValueChangeHandler(valueChangeHandler);
+		dateInput2.addValueChangeHandler(valueChangeHandler);
+	}
+ 
 }

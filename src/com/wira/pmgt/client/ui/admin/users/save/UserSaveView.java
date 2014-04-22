@@ -27,6 +27,7 @@ import com.wira.pmgt.client.ui.component.IssuesPanel;
 import com.wira.pmgt.client.ui.component.PasswordField;
 import com.wira.pmgt.client.ui.component.TextArea;
 import com.wira.pmgt.client.ui.component.TextField;
+import com.wira.pmgt.client.ui.component.autocomplete.AutoCompleteField;
 import com.wira.pmgt.client.ui.upload.custom.Uploader;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.UserGroup;
@@ -59,7 +60,7 @@ public class UserSaveView extends PopupViewImpl implements
 	
 	@UiField DivElement divUserSave;
 	@UiField Uploader uploader;
-	@UiField ListField<UserGroup> lstGroups;
+	@UiField AutoCompleteField<UserGroup> lstGroups;
 	
 	TYPE type;
 	

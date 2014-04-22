@@ -55,7 +55,7 @@ import com.wira.pmgt.client.ui.events.ReloadAttachmentsEvent.ReloadAttachmentsHa
 import com.wira.pmgt.client.ui.events.ReloadDocumentEvent.ReloadDocumentHandler;
 import com.wira.pmgt.client.ui.notifications.note.NotePresenter;
 import com.wira.pmgt.client.ui.popup.GenericPopupPresenter;
-import com.wira.pmgt.client.ui.save.CreateProgramPresenter;
+import com.wira.pmgt.client.ui.program.save.CreateProgramPresenter;
 import com.wira.pmgt.client.ui.upload.UploadDocumentPresenter;
 import com.wira.pmgt.client.ui.upload.attachment.AttachmentPresenter;
 import com.wira.pmgt.client.ui.upload.custom.Uploader;

@@ -30,6 +30,7 @@ import com.wira.pmgt.server.dao.ErrorDaoImpl;
 import com.wira.pmgt.server.dao.FormDaoImpl;
 import com.wira.pmgt.server.dao.NotificationDaoImpl;
 import com.wira.pmgt.server.dao.ProcessDaoImpl;
+import com.wira.pmgt.server.dao.ProgramDaoImpl;
 import com.wira.pmgt.server.dao.SettingsDaoImpl;
 import com.wira.pmgt.server.dao.UserGroupDaoImpl;
 import com.wira.pmgt.server.dao.helper.CommentDaoHelper;
@@ -356,4 +357,9 @@ public class DB{
 	public static SettingsDaoImpl getSettingsDao() {
 		return factory().getSettingsDaoImpl(getEntityManager());
 	}
+
+	public static ProgramDaoImpl getProgramDaoImpl() {
+		return factory().getProgramDao(getEntityManager());
+	}
+
 }

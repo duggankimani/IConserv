@@ -11,6 +11,7 @@ import com.wira.pmgt.server.dao.ErrorDaoImpl;
 import com.wira.pmgt.server.dao.FormDaoImpl;
 import com.wira.pmgt.server.dao.NotificationDaoImpl;
 import com.wira.pmgt.server.dao.ProcessDaoImpl;
+import com.wira.pmgt.server.dao.ProgramDaoImpl;
 import com.wira.pmgt.server.dao.SettingsDaoImpl;
 import com.wira.pmgt.server.dao.UserGroupDaoImpl;
 
@@ -27,6 +28,7 @@ class DaoFactory {
 	DSConfigDaoImpl dsDao;
 	DashboardDaoImpl dashDao;
 	SettingsDaoImpl settingsDao;
+	ProgramDaoImpl programDao;
 	
 	DocumentDaoImpl getDocumentDao(EntityManager em) {
 		if (documentDao == null) {
@@ -162,6 +164,18 @@ class DaoFactory {
 		}
 		
 		return settingsDao;
+	}
+
+	public ProgramDaoImpl getProgramDao(EntityManager entityManager) {
+		if(programDao==null){
+			synchronized (DaoFactory.class) {
+				if(programDao==null){
+					programDao = new ProgramDaoImpl(entityManager);
+				}
+			}
+		}
+		
+		return programDao;
 	}
 
 }

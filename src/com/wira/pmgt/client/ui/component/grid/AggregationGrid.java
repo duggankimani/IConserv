@@ -59,6 +59,7 @@ public class AggregationGrid extends Composite {
 
 	public void setData(List<DataModel> models){
 		tblView.clearRows();
+		summaries.clear();
 		
 		if(models!=null)
 		for(DataModel row: models){
@@ -187,6 +188,24 @@ public class AggregationGrid extends Composite {
 		}
 		
 		return models;
+	}
+	
+	public <T> List<T> getData(DataMapper mapper){
+		List<T> vals = new ArrayList<T>();		
+		
+		int rows = tblView.getRowCount();
+		if(rows>0){
+			for(int row=0; row<rows; row++){
+				Widget rowWidget = tblView.getRow(row);
+				if(rowWidget instanceof AggregationGridRow){
+					AggregationGridRow r = (AggregationGridRow)rowWidget;
+					T value = mapper.getData(r.getData()); 
+					vals.add(value);	
+				}
+			}
+		}
+				
+		return vals;
 	}
 	
 	class SummaryRenderer extends HTMLPanel{

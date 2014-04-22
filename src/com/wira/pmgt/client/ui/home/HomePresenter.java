@@ -63,7 +63,7 @@ import com.wira.pmgt.client.ui.filter.FilterPresenter;
 import com.wira.pmgt.client.ui.login.LoginGateKeeper;
 import com.wira.pmgt.client.ui.newsfeed.NewsFeedPresenter;
 import com.wira.pmgt.client.ui.profile.ProfilePresenter;
-import com.wira.pmgt.client.ui.save.CreateProgramPresenter;
+import com.wira.pmgt.client.ui.program.save.CreateProgramPresenter;
 import com.wira.pmgt.client.ui.save.form.GenericFormPresenter;
 import com.wira.pmgt.client.ui.tasklistitem.DateGroupPresenter;
 import com.wira.pmgt.client.ui.util.DateUtils;

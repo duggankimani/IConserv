@@ -4,6 +4,7 @@
 	xmlns:up='urn:import:com.wira.pmgt.client.ui.upload.custom' 
 	xmlns:g='urn:import:com.google.gwt.user.client.ui'
 	xmlns:d='urn:import:com.wira.pmgt.client.ui.component'
+	xmlns:a='urn:import:com.wira.pmgt.client.ui.component.autocomplete'
 	xmlns:admin='urn:import:com.wira.pmgt.client.ui.admin.component'
 	ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
 	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
@@ -37,7 +38,7 @@
 						  </div>
 						  <div class="form-group">
 						  	<label for="ProcessName">Document Types:</label>
-							  <admin:ListField ui:field="lstDocTypes"></admin:ListField>
+							  <a:AutoCompleteField ui:field="lstDocTypes"></a:AutoCompleteField>
 						  </div>
 					</g:HTMLPanel>
 			</g:HTMLPanel>

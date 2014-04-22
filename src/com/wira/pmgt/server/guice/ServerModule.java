@@ -110,6 +110,10 @@ import com.wira.pmgt.shared.requests.SearchDocumentRequest;
 import com.wira.pmgt.shared.requests.StartAllProcessesRequest;
 import com.wira.pmgt.shared.requests.UpdateNotificationRequest;
 import com.wira.pmgt.shared.requests.UpdatePasswordRequest;
+import com.wira.pmgt.shared.requests.CreatePeriodRequest;
+import com.wira.pmgt.server.actionhandlers.CreatePeriodRequestHandler;
+import com.wira.pmgt.shared.requests.GetPeriodsRequest;
+import com.wira.pmgt.server.actionhandlers.GetPeriodsRequestHandler;
 
 
 
@@ -290,5 +294,11 @@ public class ServerModule extends HandlerModule {
 
 		bindHandler(SaveSettingsRequest.class,
 				SaveSettingsRequestActionHandler.class, SessionValidator.class);
+
+		bindHandler(CreatePeriodRequest.class,
+				CreatePeriodRequestHandler.class, SessionValidator.class);
+
+		bindHandler(GetPeriodsRequest.class,
+				GetPeriodsRequestHandler.class, SessionValidator.class);
 	}
 }

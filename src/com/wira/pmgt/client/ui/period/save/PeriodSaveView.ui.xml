@@ -1,0 +1,29 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" 
+    xmlns:g="urn:import:com.google.gwt.user.client.ui"
+    xmlns:dt='urn:import:com.google.gwt.user.datepicker.client'
+	xmlns:d='urn:import:com.wira.pmgt.client.ui.component'>
+	<g:HTMLPanel>
+		<d:IssuesPanel ui:field="issues">
+		</d:IssuesPanel>
+	
+		<g:HTMLPanel ui:field="panelBody" styleName="modal-body">
+			<fieldset>
+				<g:HTMLPanel ui:field="panelFields" styleName="form-horizontal">
+				    <div class="control-group">
+						<div class="control-label">Date Range:</div>
+						<div class="controls">
+							<d:DateRangeWidget ui:field="dtRange"></d:DateRangeWidget>
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="control-label">Description:</div>
+						<div class="controls">
+							<g:TextArea ui:field="txtDescription" />
+						</div>
+					</div>
+				</g:HTMLPanel>
+			</fieldset>
+		</g:HTMLPanel>
+	</g:HTMLPanel>
+</ui:UiBinder>

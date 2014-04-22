@@ -28,4 +28,9 @@ public class BulletListPanel extends ComplexPanel {
         // ComplexPanel requires the two-arg add() method
         super.add(w, getElement());
     }
+    
+	public void insert(Widget w, int beforeIndex) {
+		super.insert(w, getElement(), beforeIndex, true);
+	}
+	
 }

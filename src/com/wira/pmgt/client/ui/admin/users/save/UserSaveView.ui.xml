@@ -1,8 +1,10 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:d='urn:import:com.wira.pmgt.client.ui.component'
-	xmlns:c='urn:import:com.wira.pmgt.client.ui.admin.component'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' 
+	xmlns:d='urn:import:com.wira.pmgt.client.ui.component'
+	xmlns:a='urn:import:com.wira.pmgt.client.ui.component.autocomplete'
+	xmlns:c='urn:import:com.wira.pmgt.client.ui.admin.component'	
 	xmlns:up='urn:import:com.wira.pmgt.client.ui.upload.custom'
 	ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
 	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
@@ -85,7 +87,7 @@
 						<label class="control-label">
 							<b>Group:</b>
 						</label>
-						<c:ListField ui:field="lstGroups" />
+						<a:AutoCompleteField ui:field="lstGroups" />
 					</div>
 				</g:HTMLPanel>
 			</g:HTMLPanel>

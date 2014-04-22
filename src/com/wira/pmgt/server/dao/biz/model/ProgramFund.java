@@ -26,8 +26,6 @@ public class ProgramFund implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	private Long fundId;
-	private Long programId;
 	private Double amount;
 	
 	@ManyToOne
@@ -45,28 +43,12 @@ public class ProgramFund implements Serializable {
 		this.id = id;
 	}
 
-	public void setFundId(Long fundId) {
-		this.fundId = fundId;
-	}
-
-	public void setProgramId(Long programId) {
-		this.programId = programId;
-	}
-
 	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
 	public Long getId() {
 		return id;
-	}
-
-	public Long getFundId() {
-		return fundId;
-	}
-
-	public Long getProgramId() {
-		return programId;
 	}
 
 	public Double getAmount() {

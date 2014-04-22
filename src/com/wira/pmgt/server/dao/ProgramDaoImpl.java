@@ -56,6 +56,11 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 				.setParameter("isActive", 1);
 		return getResultList(query);
 	}
+
+	public Period getPeriod(Long id) {
+		Query query = em.createNamedQuery("Period.findById").setParameter(1, id);
+		return getSingleResultOrNull(query);
+	}
 	
 	
 }

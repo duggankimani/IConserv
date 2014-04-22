@@ -133,6 +133,7 @@ public class TableView extends Composite {
 
 	public void clearRows() {
 		panelBody.clear();
+		resetCount();
 	}
 
 	public boolean isAutoNumber() {
@@ -156,5 +157,9 @@ public class TableView extends Composite {
 			row.add(getTd(widget));
 		}
 		panelFooter.add(row);
+	}
+	
+	public void resetCount(){
+		count=0;
 	}
 }

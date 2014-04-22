@@ -4,6 +4,7 @@
 	xmlns:g='urn:import:com.google.gwt.user.client.ui' 
 	xmlns:dt='urn:import:com.google.gwt.user.datepicker.client'
 	xmlns:d='urn:import:com.wira.pmgt.client.ui.component'
+	xmlns:a='urn:import:com.wira.pmgt.client.ui.component.autocomplete'
 	xmlns:grid='urn:import:com.wira.pmgt.client.ui.component.grid'
 	xmlns:up='urn:import:com.wira.pmgt.client.ui.upload.custom' 
 	xmlns:c='urn:import:com.wira.pmgt.client.ui.admin.component'
@@ -29,12 +30,21 @@
 						</div>
 
 						<div class="control-group">
-							<div class="control-label">Date Range:</div>
+							<div class="control-label">Description:</div>
 							<div class="controls">
-								<d:DateRangeWidget></d:DateRangeWidget>
+								<g:TextArea ui:field="txtDescription" />
 							</div>
 						</div>
-
+						
+						<div class="control-group">
+							<div class="control-label">Period:</div>
+							<div class="controls">
+								<d:DropDownList ui:field="lstPeriod">
+								</d:DropDownList>
+								<g:Image ui:field="imgAdd" styleName="gwt-Anchor"></g:Image>
+							</div>
+						</div>
+						
 						<div class="control-group">
 							<div class="control-label">Donors:</div>
 							<div class="controls">
@@ -45,10 +55,17 @@
 						<div class="control-group">
 							<div class="control-label">Allocated To:</div>
 							<div class="controls">
-								<c:ListField ui:field="lstUsers" />
+								<a:AutoCompleteField ui:field="autoComplete"/>
 							</div>
 						</div>
-
+						
+						<!-- div class="control-group">
+							<div class="control-label">Allocated To:</div>
+							<div class="controls">
+								<a:AutoCompleteField/>
+							</div>
+						</div -->
+						
 					</g:HTMLPanel>
 				</fieldset>
 			</g:HTMLPanel>
