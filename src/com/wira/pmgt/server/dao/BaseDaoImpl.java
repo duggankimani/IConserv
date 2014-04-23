@@ -42,4 +42,9 @@ public class BaseDaoImpl {
 		values = query.getResultList();
 		return values;
 	}
+	
+	public <T> T getById(Class<T> clazz, long id){
+		
+		return em.find(clazz, id);
+	}
 }

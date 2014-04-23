@@ -10,9 +10,9 @@
 	<g:HTMLPanel>
 		<fieldset>
 			<div class="control-group">
-				<div class="control-label" ui:field="tdDocType">Outcome Name:</div>
+				<div class="control-label">Outcome Name:</div>
 				<div class="controls">
-					<g:TextBox ui:field="txtSubject" />
+					<g:TextArea ui:field="txtOutcome" />
 					<span class="mandatory" title="Required Field">*</span>
 				</div>
 			</div>
@@ -20,7 +20,7 @@
 			<div class="control-group">
 				<div class="control-label">Date Range:</div>
 				<div class="controls">
-					<d:DateRangeWidget></d:DateRangeWidget>
+					<d:DateRangeWidget ui:field="dtRange"></d:DateRangeWidget>
 				</div>
 			</div>
 

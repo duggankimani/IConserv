@@ -87,10 +87,6 @@ import com.wira.pmgt.client.ui.program.save.CreateProgramPresenter;
 import com.wira.pmgt.client.ui.program.save.CreateProgramView;
 import com.wira.pmgt.client.ui.save.form.GenericFormPresenter;
 import com.wira.pmgt.client.ui.save.form.GenericFormView;
-import com.wira.pmgt.client.ui.task.perfomancereview.PersonnelReviewPresenter;
-import com.wira.pmgt.client.ui.task.perfomancereview.PersonnelReviewView;
-import com.wira.pmgt.client.ui.task.personalreview.PersonalReviewPresenter;
-import com.wira.pmgt.client.ui.task.personalreview.PersonalReviewView;
 import com.wira.pmgt.client.ui.tasklist.tabs.TabsPresenter;
 import com.wira.pmgt.client.ui.tasklist.tabs.TabsView;
 import com.wira.pmgt.client.ui.tasklistitem.DateGroupPresenter;
@@ -139,15 +135,6 @@ public class ClientModule extends AbstractPresenterModule {
 
 		bindPresenterWidget(TabsPresenter.class, TabsPresenter.MyView.class,
 				TabsView.class);
-
-		bindPresenter(PersonalReviewPresenter.class,
-				PersonalReviewPresenter.MyView.class, PersonalReviewView.class,
-				PersonalReviewPresenter.MyProxy.class);
-
-		bindPresenter(PersonnelReviewPresenter.class,
-				PersonnelReviewPresenter.MyView.class,
-				PersonnelReviewView.class,
-				PersonnelReviewPresenter.MyProxy.class);
 		
 		bindPresenterWidget(ToolbarPresenter.class,
 				ToolbarPresenter.MyView.class, ToolbarView.class);

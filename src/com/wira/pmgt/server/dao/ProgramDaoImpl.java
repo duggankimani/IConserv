@@ -58,7 +58,12 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 	}
 
 	public Period getPeriod(Long id) {
-		Query query = em.createNamedQuery("Period.findById").setParameter(1, id);
+		Query query = em.createNamedQuery("Period.findById").setParameter("id", id);
+		return getSingleResultOrNull(query);
+	}
+
+	public ProgramDetail getProgramDetail(Long id) {
+		Query query = em.createNamedQuery("ProgramDetail.findById").setParameter("id", id);
 		return getSingleResultOrNull(query);
 	}
 	

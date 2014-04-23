@@ -114,6 +114,14 @@ import com.wira.pmgt.shared.requests.CreatePeriodRequest;
 import com.wira.pmgt.server.actionhandlers.CreatePeriodRequestHandler;
 import com.wira.pmgt.shared.requests.GetPeriodsRequest;
 import com.wira.pmgt.server.actionhandlers.GetPeriodsRequestHandler;
+import com.wira.pmgt.shared.requests.CreateProgramRequest;
+import com.wira.pmgt.server.actionhandlers.CreateProgramRequestHandler;
+import com.wira.pmgt.shared.requests.GetProgramsRequest;
+import com.wira.pmgt.server.actionhandlers.GetProgramsRequestHandler;
+import com.wira.pmgt.shared.requests.GetFundsRequest;
+import com.wira.pmgt.server.actionhandlers.GetFundsRequestHandler;
+import com.wira.pmgt.shared.requests.GetPeriodRequest;
+import com.wira.pmgt.server.actionhandlers.GetPeriodRequestHandler;
 
 
 
@@ -300,5 +308,17 @@ public class ServerModule extends HandlerModule {
 
 		bindHandler(GetPeriodsRequest.class,
 				GetPeriodsRequestHandler.class, SessionValidator.class);
+
+		bindHandler(CreateProgramRequest.class,
+				CreateProgramRequestHandler.class, SessionValidator.class);
+
+		bindHandler(GetProgramsRequest.class,
+				GetProgramsRequestHandler.class, SessionValidator.class);
+
+		bindHandler(GetFundsRequest.class, GetFundsRequestHandler.class,
+				SessionValidator.class);
+
+		bindHandler(GetPeriodRequest.class,
+				GetPeriodRequestHandler.class, SessionValidator.class);
 	}
 }

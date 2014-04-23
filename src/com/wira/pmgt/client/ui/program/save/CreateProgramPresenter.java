@@ -17,12 +17,18 @@ import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.OptionControl;
 import com.wira.pmgt.client.ui.period.save.PeriodSaveView;
 import com.wira.pmgt.shared.model.UserGroup;
+import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
+import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.requests.CreatePeriodRequest;
+import com.wira.pmgt.shared.requests.CreateProgramRequest;
+import com.wira.pmgt.shared.requests.GetFundsRequest;
 import com.wira.pmgt.shared.requests.GetGroupsRequest;
 import com.wira.pmgt.shared.requests.GetPeriodsRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
 import com.wira.pmgt.shared.responses.CreatePeriodResponse;
+import com.wira.pmgt.shared.responses.CreateProgramResponse;
+import com.wira.pmgt.shared.responses.GetFundsResponse;
 import com.wira.pmgt.shared.responses.GetGroupsResponse;
 import com.wira.pmgt.shared.responses.GetPeriodsResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
@@ -38,13 +44,11 @@ public class CreateProgramPresenter extends
 		boolean isValid();
 		void setPeriods(List<PeriodDTO> periods);
 		void setGroups(List<UserGroup> groups);
+		ProgramDTO getProgram();
+		void setFunds(List<FundDTO> funds);
 	}
 
-	@Inject
-	DispatchAsync requestHelper;
-
-	@Inject
-	PlaceManager placeManager;
+	@Inject DispatchAsync requestHelper;
 
 	@Inject
 	public CreateProgramPresenter(final EventBus eventBus, final ICreateDocView view) {
@@ -98,8 +102,18 @@ public class CreateProgramPresenter extends
 		getView().getSave().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				getView().hide();
-				History.newItem("home;page=activities;type=listing");
+				if(getView().isValid()){
+					requestHelper.execute(new CreateProgramRequest(getView().getProgram()),
+							new TaskServiceCallback<CreateProgramResponse>() {
+							@Override
+							public void processResult(
+									CreateProgramResponse aResponse) {
+								getView().hide();
+								History.newItem("home;page=activities;type=listing");
+							}
+						});
+				}
+				
 			}
 		});
 	}
@@ -117,16 +131,21 @@ public class CreateProgramPresenter extends
 	private void loadList() {
 		
 		MultiRequestAction action = new MultiRequestAction();
+		action.addRequest(new GetFundsRequest());
 		action.addRequest(new GetGroupsRequest());
 		action.addRequest(new GetPeriodsRequest());
+		
 		
 		requestHelper.execute(action, new TaskServiceCallback<MultiRequestActionResult>() {
 			@Override
 			public void processResult(MultiRequestActionResult aResponse) {
-				GetGroupsResponse getGroups = (GetGroupsResponse)aResponse.get(0);
+				GetFundsResponse getFunds = (GetFundsResponse)aResponse.get(0);
+				getView().setFunds(getFunds.getFunds());
+				
+				GetGroupsResponse getGroups = (GetGroupsResponse)aResponse.get(1);
 				getView().setGroups(getGroups.getGroups());
 				
-				GetPeriodsResponse getPeriods = (GetPeriodsResponse)aResponse.get(1);
+				GetPeriodsResponse getPeriods = (GetPeriodsResponse)aResponse.get(2);
 				getView().setPeriods(getPeriods.getPeriods());
 			}
 		});

@@ -43,5 +43,9 @@ public class BreadCrumbItem extends Composite {
 			spnDivider.removeClassName("hidden");
 		}
 	}
+	
+	public void setHref(String href){
+		aLink.setHref(href);
+	}
 
 }

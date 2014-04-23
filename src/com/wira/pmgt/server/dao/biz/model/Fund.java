@@ -4,6 +4,8 @@ import java.lang.String;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -26,18 +28,16 @@ public class Fund extends PO {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	private String code; //Code - front end presentation
+	
+	@Column(unique=true,nullable=false)
 	private String name; //Donor Name
+	
 	private String description; // Any other details 
 	
-	@OneToMany(fetch=FetchType.LAZY,mappedBy="fund")	
+	@OneToMany(fetch=FetchType.LAZY,mappedBy="fund",cascade={CascadeType.PERSIST,CascadeType.PERSIST, CascadeType.REMOVE} )	
 	private Set<ProgramFund> programFunds = new HashSet<>(); //Allocation to a program/objective/outcome/activity etc
 
 	public Fund() {
-	}
-
-	public void setCode(String code) {
-		this.code = code;
 	}
 
 	public void setName(String name) {
@@ -46,10 +46,6 @@ public class Fund extends PO {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public String getCode() {
-		return code;
 	}
 
 	public String getName() {

@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -32,7 +33,8 @@ import com.wira.pmgt.shared.model.ProgramDetailType;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="ProgramDetail.findByType", query="FROM ProgramDetail p where p.isActive=:isActive and p.type=:type and p.period=:period"), 
-	@NamedQuery(name="ProgramDetail.findAll", query="FROM ProgramDetail p where p.isActive=:isActive")
+	@NamedQuery(name="ProgramDetail.findAll", query="FROM ProgramDetail p where p.isActive=:isActive"),
+	@NamedQuery(name="ProgramDetail.findById", query="FROM ProgramDetail p where p.id=:id")
 })
 public class ProgramDetail extends PO {
 
@@ -42,7 +44,9 @@ public class ProgramDetail extends PO {
 
 	private static final long serialVersionUID = 6975295488889785294L;
 	
+	@Column(unique=true, nullable=false)
 	private String name;
+	
 	private String description;
 	
 	@Enumerated(EnumType.STRING)
@@ -52,7 +56,7 @@ public class ProgramDetail extends PO {
 	private String indicator;//indicator
 	private String actual;//outputs/deliverable
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="")
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="programDetail")
 	private Set<TargetAndOutcome> targets = new HashSet<>();
 	
 	@ManyToOne
@@ -67,6 +71,12 @@ public class ProgramDetail extends PO {
 	
 	private Date startDate; //For Activities & tasks - Start Date (Programs run for a whole year)
 	private Date endDate; //For Activities & tasks - End Date
+	
+	@JoinColumn(name="parentid", referencedColumnName="id", nullable=true)
+	private ProgramDetail parent;
+	
+	@OneToMany(mappedBy="parent", cascade=CascadeType.ALL)
+	private Set<ProgramDetail> children = new HashSet<>();
 	
 	public ProgramDetail() {
 	}
@@ -180,6 +190,31 @@ public class ProgramDetail extends PO {
 	}
 
 	public void setSourceOfFunds(Set<ProgramFund> sourceOfFunds) {
-		this.sourceOfFunds = sourceOfFunds;
+		this.sourceOfFunds.clear();
+		for(ProgramFund fund: sourceOfFunds){
+			fund.setProgramDetail(this);
+			this.sourceOfFunds.add(fund);
+		}
 	}
+
+	public ProgramDetail getParent() {
+		return parent;
+	}
+
+	public void setParent(ProgramDetail parent) {
+		this.parent = parent;
+	}
+
+	public Set<ProgramDetail> getChildren() {
+		return children;
+	}
+
+	public void setChildren(Set<ProgramDetail> children) {
+		this.children.clear();
+		for(ProgramDetail child: children){
+			this.children.add(child);
+			child.setParent(this);
+		}
+	}
+
 }

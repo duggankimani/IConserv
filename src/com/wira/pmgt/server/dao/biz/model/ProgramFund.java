@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.Long;
 import java.lang.Double;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,11 +29,11 @@ public class ProgramFund implements Serializable {
 	private Long id;
 	private Double amount;
 	
-	@ManyToOne
+	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name="fundid", referencedColumnName="id", nullable=true)
 	private Fund fund;
 	
-	@ManyToOne
+	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name="programid", referencedColumnName="id", nullable=true)
 	private ProgramDetail programDetail;
 
@@ -53,5 +54,21 @@ public class ProgramFund implements Serializable {
 
 	public Double getAmount() {
 		return amount;
+	}
+
+	public Fund getFund() {
+		return fund;
+	}
+
+	public void setFund(Fund fund) {
+		this.fund = fund;
+	}
+
+	public ProgramDetail getProgramDetail() {
+		return programDetail;
+	}
+
+	public void setProgramDetail(ProgramDetail programDetail) {
+		this.programDetail = programDetail;
 	}
 }

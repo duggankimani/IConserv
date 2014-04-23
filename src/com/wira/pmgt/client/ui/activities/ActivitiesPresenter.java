@@ -1,5 +1,7 @@
 package com.wira.pmgt.client.ui.activities;
 
+import java.util.List;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -8,32 +10,29 @@ import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
+import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.detailedActivity.CreateActivityPresenter;
-import com.wira.pmgt.client.ui.events.ContextLoadedEvent;
-import com.wira.pmgt.client.ui.events.ContextLoadedEvent.ContextLoadedHandler;
 import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
+import com.wira.pmgt.shared.model.ProgramDetailType;
+import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.requests.GetProgramsRequest;
+import com.wira.pmgt.shared.responses.GetProgramsResponse;
 
 public class ActivitiesPresenter extends
-		PresenterWidget<ActivitiesPresenter.IActivitiesView> implements
-		ContextLoadedHandler {
+		PresenterWidget<ActivitiesPresenter.IActivitiesView> {
 
 	public interface IActivitiesView extends View {
 		void showContent(boolean b);
-
 		HasClickHandlers getaNewOutcome();
-
 		HasClickHandlers getaNewActivity();
+		void setActivities(List<IsProgramActivity> programs);
+		void setPrograms(List<IsProgramActivity> programs);
 	}
 
-	@Inject
-	DispatchAsync requestHelper;
-
-	@Inject
-	CreateOutcomePresenter createOutcome;
-
-	@Inject
-	CreateActivityPresenter createActivity;
+	@Inject DispatchAsync requestHelper;
+	@Inject CreateOutcomePresenter createOutcome;
+	@Inject CreateActivityPresenter createActivity;
 
 	@Inject
 	public ActivitiesPresenter(final EventBus eventBus,
@@ -64,20 +63,24 @@ public class ActivitiesPresenter extends
 
 	}
 
-	@Override
-	protected void onReset() {
-		super.onReset();
-	}
-
-	@Override
-	public void onContextLoaded(ContextLoadedEvent event) {
-	}
-
 	public void showContent(Boolean status) {
 		if (status) {
 			getView().showContent(true);
 		} else {
 			getView().showContent(false);
 		}
+		loadData();
 	}
+
+	private void loadData() {
+		requestHelper.execute(new GetProgramsRequest(ProgramDetailType.PROGRAM, false), new TaskServiceCallback<GetProgramsResponse>() {
+			@Override
+			public void processResult(GetProgramsResponse aResponse) {
+				getView().setPrograms(aResponse.getPrograms());
+			}
+		});
+	}
+	
+	
+	
 }

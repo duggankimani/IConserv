@@ -200,7 +200,9 @@ public class AggregationGrid extends Composite {
 				if(rowWidget instanceof AggregationGridRow){
 					AggregationGridRow r = (AggregationGridRow)rowWidget;
 					T value = mapper.getData(r.getData()); 
-					vals.add(value);	
+					
+					if(value!=null)
+						vals.add(value);	
 				}
 			}
 		}
@@ -226,6 +228,12 @@ public class AggregationGrid extends Composite {
 			this.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
 		}
 				
+	}
+
+	public void refresh() {
+		setColumnConfigs(columnConfigs);
+		tblView.clearRows();
+		setData(new ArrayList<DataModel>());
 	}
 	
 }

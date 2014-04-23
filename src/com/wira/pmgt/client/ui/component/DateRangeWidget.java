@@ -72,5 +72,10 @@ public class DateRangeWidget extends Composite {
 		dateInput1.addValueChangeHandler(valueChangeHandler);
 		dateInput2.addValueChangeHandler(valueChangeHandler);
 	}
+	
+	public void setDates(Date startDate, Date endDate){
+		dateInput1.setValue(startDate);
+		dateInput2.setValue(endDate);
+	}
  
 }

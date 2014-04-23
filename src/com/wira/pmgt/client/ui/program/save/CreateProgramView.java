@@ -23,8 +23,10 @@ import com.wira.pmgt.client.ui.component.grid.DataMapper;
 import com.wira.pmgt.client.ui.component.grid.DataModel;
 import com.wira.pmgt.client.ui.images.ImageResources;
 import com.wira.pmgt.shared.model.DataType;
+import com.wira.pmgt.shared.model.Listable;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
+import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
@@ -37,7 +39,7 @@ public class CreateProgramView extends PopupViewImpl implements
 	public interface Binder extends UiBinder<Widget, CreateProgramView> {
 	}
 	
-	@UiField TextBox txtSubject;
+	@UiField TextBox txtName;
 	@UiField TextArea txtDescription;	
 	@UiField DialogBox popupView;
 	@UiField HasClickHandlers btnSave;
@@ -46,6 +48,8 @@ public class CreateProgramView extends PopupViewImpl implements
 	@UiField AutoCompleteField<UserGroup> autoComplete;
 	@UiField AggregationGrid gridView;
 	@UiField Image imgAdd;
+	List<Listable> donors = new ArrayList<Listable>();
+	ColumnConfig donorField = new ColumnConfig("donor", "Donor Name", DataType.SELECTBASIC);
 	
 	@Inject
 	public CreateProgramView(final EventBus eventBus, final Binder binder) {
@@ -58,32 +62,17 @@ public class CreateProgramView extends PopupViewImpl implements
 		loadGrid();
 	}
 
-	private void loadGrid() {
+	private void loadGrid() {				
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
-		ColumnConfig config = new ColumnConfig("donor", "Donor Name", DataType.STRING);
-		configs.add(config);
+		donorField.setDropDownItems(donors);
+		configs.add(donorField);
 		
-		config = new ColumnConfig("amount", "Amount", DataType.DOUBLE);
+		ColumnConfig config = new ColumnConfig("amount", "Amount", DataType.DOUBLE);
 		config.setAggregationColumn(true);
 		configs.add(config);
 		
 		gridView.setColumnConfigs(configs);
-				
-		List<DataModel> models = new ArrayList<DataModel>();
-		DataModel model = new DataModel();
-		model.setId(null);
-		model.set("donor", "USAID");
-		model.set("amount", new Double(6000000));
-		models.add(model);
-		
-		model = new DataModel();
-		model.setId(null);
-		model.set("donor", "EKM");
-		model.set("amount", new Double(4000000));
-		models.add(model);
-		
 		gridView.setAutoNumber(true);
-		gridView.setData(models);
 	}
 
 	@Override
@@ -103,12 +92,9 @@ public class CreateProgramView extends PopupViewImpl implements
 	
 	public ProgramDTO getProgram(){
 		ProgramDTO program = new ProgramDTO();
-//		program.setActualAmount(actualAmount);
-//		program.setBudgetAmount(budgetAmount);
 		program.setDescription(txtDescription.getValue());
-		//program.setFunding(funding);
 		program.setId(null);
-		program.setName(txtSubject.getName());
+		program.setName(txtName.getValue());
 		program.setParentId(null);
 		PeriodDTO period = lstPeriod.getValue();
 		program.setPeriod(lstPeriod.getValue());
@@ -120,7 +106,14 @@ public class CreateProgramView extends PopupViewImpl implements
 		//program.setTargetsAndOutcomes(targetsAndOutcomes);
 		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
 		program.setFunding(funding);
-		
+		Double totalAmount=0.0;
+		for(ProgramFundDTO programFund: funding){
+			Double val = programFund.getAmount();
+			if(val!=null){
+				totalAmount+=val;
+			}
+		}
+		program.setBudgetAmount(totalAmount);
 		return program;
 		
 	}
@@ -158,12 +151,26 @@ public class CreateProgramView extends PopupViewImpl implements
 		public ProgramFundDTO getData(DataModel model) {
 			
 			ProgramFundDTO fund = new ProgramFundDTO();
-			model.get("donor");
-			model.get("amount");
-			model.getId();
+			if(model.get("donor")==null){
+				return null;
+			}
 			
+			fund.setFund(model.get("donor")==null? null: (FundDTO)model.get("donor"));
+			fund.setAmount(model.get("amount")==null? null: (Double)model.get("amount"));
+			fund.setId(model.getId());
 			return fund;
 		}
-	}; 
+	};
+
+	@Override
+	public void setFunds(List<FundDTO> funds) {
+		if(funds!=null){
+			for(FundDTO dto: funds){
+				donors.add(dto);
+			}
+		}
+		donorField.setDropDownItems(donors);
+		gridView.refresh();
+	} 
 
 }

@@ -25,7 +25,7 @@
 						<div class="control-group">
 							<div class="control-label" ui:field="tdDocType">Program Name:</div>
 							<div class="controls">
-								<g:TextBox ui:field="txtSubject" />
+								<g:TextBox ui:field="txtName" />
 							</div>
 						</div>
 

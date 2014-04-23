@@ -25,6 +25,8 @@ public abstract class IsProgramActivity implements Serializable{
 	private List<TargetAndOutcomeDTO> targetsAndOutcomes;
 	private PeriodDTO period;
 	private Long parentId; //Parent Activity or Task
+	private List<IsProgramActivity> children;
+	
 	
 	public IsProgramActivity() {
 	}
@@ -123,5 +125,13 @@ public abstract class IsProgramActivity implements Serializable{
 
 	public void setParentId(Long parentId) {
 		this.parentId = parentId;
+	}
+
+	public List<IsProgramActivity> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<IsProgramActivity> children) {
+		this.children = children;
 	}
 }

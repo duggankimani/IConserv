@@ -1,11 +1,16 @@
 package com.wira.pmgt.client.ui.component.grid;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.DoubleField;
+import com.wira.pmgt.client.ui.component.DropDownList;
 import com.wira.pmgt.client.ui.component.TextField;
 import com.wira.pmgt.shared.model.DataType;
+import com.wira.pmgt.shared.model.Listable;
 
 public class ColumnConfig {
 
@@ -13,6 +18,7 @@ public class ColumnConfig {
 	private String displayName;
 	private boolean isAggregationColumn;
 	private DataType type;
+	private List<Listable> dropDownItems = new ArrayList<Listable>();
 	
 	public ColumnConfig(String key, String displayName, DataType type){
 		this.key = key;
@@ -44,13 +50,22 @@ public class ColumnConfig {
 			 DoubleField field= new DoubleField();
 			 //field.setStyleName("input-medium");
 			 widget = field;
-		}else{
+		}else if(type==DataType.SELECTBASIC){
+			DropDownList dropDown = new DropDownList();
+			dropDown.setItems(dropDownItems);
+			widget=dropDown;
+		}
+		else{
 			widget = new TextField();
 			
 		}
 		
 		widget.setValue(value);		
 		return (Widget)widget;
+	}
+	
+	public void setDropDownItems(List<Listable> items){
+		this.dropDownItems.addAll(items);
 	}
 
 	public Widget createHeaderWidget() {		

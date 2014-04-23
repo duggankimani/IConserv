@@ -15,8 +15,6 @@ import com.wira.pmgt.client.ui.error.NotfoundPresenter;
 import com.wira.pmgt.client.ui.home.HomePresenter;
 import com.wira.pmgt.client.ui.login.LoginGateKeeper;
 import com.wira.pmgt.client.ui.login.LoginPresenter;
-import com.wira.pmgt.client.ui.task.perfomancereview.PersonnelReviewPresenter;
-import com.wira.pmgt.client.ui.task.personalreview.PersonalReviewPresenter;
 
 @GinModules({ DispatchAsyncModule.class, ClientModule.class })
 public interface ClientGinjector extends Ginjector {
@@ -29,10 +27,6 @@ public interface ClientGinjector extends Ginjector {
 
 	AsyncProvider<HomePresenter> getTaskListUIPresenter();
 
-	AsyncProvider<PersonalReviewPresenter> getPersonalReviewPresenter();
-
-	AsyncProvider<PersonnelReviewPresenter> getPersonnelReviewPresenter();
-	
 	AsyncProvider<ErrorPagePresenter> getErrorPagePresenter();
 
 	AsyncProvider<LoginPresenter> getLoginPresenter();
