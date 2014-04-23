@@ -12,7 +12,9 @@ import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.AppManager;
+import com.wira.pmgt.client.ui.OnOptionSelected;
 import com.wira.pmgt.client.ui.detailedActivity.CreateActivityPresenter;
+import com.wira.pmgt.client.ui.objective.CreateObjectivePresenter;
 import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.IsProgramActivity;
@@ -28,6 +30,7 @@ public class ActivitiesPresenter extends
 		void showContent(boolean b);
 		HasClickHandlers getaNewOutcome();
 		HasClickHandlers getaNewActivity();
+		HasClickHandlers getNewObjectiveLink();
 		void setActivities(List<IsProgramActivity> programs);
 		void setPrograms(List<IsProgramActivity> programs);
 		void setActivity(IsProgramActivity singleResult);
@@ -36,7 +39,10 @@ public class ActivitiesPresenter extends
 	@Inject DispatchAsync requestHelper;
 	@Inject CreateOutcomePresenter createOutcome;
 	@Inject CreateActivityPresenter createActivity;
+	@Inject CreateObjectivePresenter objectivePresenter;
 
+	Long activityId;
+	
 	@Inject
 	public ActivitiesPresenter(final EventBus eventBus,
 			final IActivitiesView view) {
@@ -63,6 +69,21 @@ public class ActivitiesPresenter extends
 						createActivity.getWidget(), null, "Save", "Cancel");
 			}
 		});
+		
+		getView().getNewObjectiveLink().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				AppManager.showPopUp("Add Objective", objectivePresenter.getWidget(), new OnOptionSelected() {
+					
+					@Override
+					public void onSelect(String name) {
+						
+					}
+				}, "Save", "Cancel");
+			}
+		});
 
 	}
 
@@ -72,6 +93,7 @@ public class ActivitiesPresenter extends
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetProgramsRequest(ProgramDetailType.PROGRAM, false));
 		if(hasActivityId){
+			this.activityId = activityId;
 			action.addRequest(new GetProgramsRequest(activityId, true));
 		}
 		
@@ -97,7 +119,7 @@ public class ActivitiesPresenter extends
 	}
 
 	protected void loadProgram(Long id) {
-		
+		this.activityId = id;
 		GetProgramsRequest request = new GetProgramsRequest(id,true);
 		
 		requestHelper.execute(request, new TaskServiceCallback<GetProgramsResponse>() {

@@ -31,6 +31,9 @@ public class ActivitiesView extends ViewImpl implements
 	@UiField SpanElement spnBudget;
 	@UiField Anchor aNewOutcome;
 	@UiField Anchor aNewActivity;
+	@UiField Anchor aNewObjective;
+	@UiField Anchor aNewTask;
+	
 	@UiField BulletListPanel listPanel;
 	
 	@UiField HeadingElement spnTitle;
@@ -44,11 +47,6 @@ public class ActivitiesView extends ViewImpl implements
 	public ActivitiesView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
 		listPanel.setId("mytab");
-		/*BreadCrumb Samples*/
-//		createCrumb("Home", false);
-//		createCrumb("WildLife Management", false);
-//		createCrumb("Increased Understanding ...", true);
-		
 	}
 
 	@Override
@@ -129,13 +127,35 @@ public class ActivitiesView extends ViewImpl implements
 		}
 	}
 
+	/**
+	 * Sets Parent Activity
+	 */
 	@Override
 	public void setActivity(IsProgramActivity singleResult) {
+		show(aNewOutcome,false);
+		show(aNewObjective,false);
+		show(aNewActivity,false);
+		show(aNewTask,false);
+		
 		if(singleResult.getType()==ProgramDetailType.PROGRAM){
 			//select tab
 			selectTab(singleResult.getId());
 			setBudget(singleResult.getBudgetAmount());
+			setTitle(singleResult.getName());
+			show(aNewOutcome,true);
+			show(aNewObjective,true);
+		}else if(singleResult.getType()==ProgramDetailType.OBJECTIVE){
+			show(aNewActivity,true);
+		}else if(singleResult.getType()==ProgramDetailType.OUTCOME){
+			show(aNewActivity,true);
+			show(aNewObjective,true);
+		}else if(singleResult.getType()==ProgramDetailType.ACTIVITY){
+			show(aNewActivity,true);
+			show(aNewTask,true);
+		}else{
+			show(aNewTask,true);
 		}
+		
 		List<ProgramSummary> summaries = singleResult.getProgramSummary();
 		for(int i=summaries.size()-1; i>-1; i--){
 			ProgramSummary summary = summaries.get(i);
@@ -143,6 +163,14 @@ public class ActivitiesView extends ViewImpl implements
 		}
 		
 		setActivities(singleResult.getChildren());
+	}
+
+	private void show(Anchor aAnchor, boolean show) {
+		if(show){
+			aAnchor.getElement().getParentElement().removeClassName("hide");
+		}else{
+			aAnchor.getElement().getParentElement().addClassName("hide");
+		}
 	}
 
 	private void selectTab(Long id) {
@@ -160,6 +188,12 @@ public class ActivitiesView extends ViewImpl implements
 				li.removeStyleName("active");
 			}
 		}
+	}
+
+	@Override
+	public HasClickHandlers getNewObjectiveLink() {
+
+		return aNewObjective;
 	}
 
 }

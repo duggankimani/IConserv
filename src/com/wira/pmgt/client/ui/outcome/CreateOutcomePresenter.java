@@ -49,7 +49,6 @@ public class CreateOutcomePresenter extends
 		action.addRequest(new GetFundsRequest());
 		action.addRequest(new GetPeriodRequest());
 		
-		
 		requestHelper.execute(action, new TaskServiceCallback<MultiRequestActionResult>() {
 			@Override
 			public void processResult(MultiRequestActionResult aResponse) {

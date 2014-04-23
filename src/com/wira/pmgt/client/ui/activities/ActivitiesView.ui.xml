@@ -29,16 +29,30 @@
 
 						<div class="span3 hide">
 							<g:Anchor ui:field="aNewOutcome" styleName="btn btn-primary"
-								title="Add a New User">
+								title="Add an outcome">
 								<i class="icon-plus"></i>
 								Add Outcome
 							</g:Anchor>
 						</div>
-						<div class="span3">
+						<div class="span3 hide">
+							<g:Anchor ui:field="aNewObjective" styleName="btn btn-primary"
+								title="Add an objective">
+								<i class="icon-plus"></i>
+								Add Objective
+							</g:Anchor>
+						</div>						
+						<div class="span3 hide">
 							<g:Anchor ui:field="aNewActivity" styleName="btn btn-primary"
-								title="Add a New User">
+								title="Add an activity">
 								<i class="icon-plus"></i>
 								Add Activity
+							</g:Anchor>
+						</div>
+						<div class="span3 hide">
+							<g:Anchor ui:field="aNewTask" styleName="btn btn-primary"
+								title="Add Task">
+								<i class="icon-plus"></i>
+								Add Task
 							</g:Anchor>
 						</div>
 					</div>
