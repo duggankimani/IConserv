@@ -117,7 +117,7 @@ public class ActivitiesView extends ViewImpl implements
 	public void setPrograms(List<IsProgramActivity> programs) {
 		showContent(!(programs==null || programs.isEmpty()));
 		this.programs = programs;
-		
+		listPanel.clear();
 		if(programs==null){
 			return;
 		}

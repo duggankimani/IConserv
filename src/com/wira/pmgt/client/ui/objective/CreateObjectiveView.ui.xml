@@ -9,16 +9,16 @@
 
 	<g:HTMLPanel>
 		<fieldset>
-			<div class="control-group">
-				<div class="control-label">Program</div>
-				<div class="controls">
-					<span>Wildlife Program</span>
-				</div>
-			</div>
+		    
+		    <!-- BreadCrump -->
+			<d:BulletListPanel styleName="breadcrumb"
+				ui:field="crumbContainer">
+			</d:BulletListPanel>
+			
 			<div class="control-group">
 				<div class="control-label">Period</div>
 				<div class="controls">
-					<span>Jan 1 - Dec 31 2014</span>
+					<g:InlineLabel ui:field="spnPeriod">Jan 1 - Dec 31 2014</g:InlineLabel>
 				</div>
 			</div>
 		    <div class="control-group">

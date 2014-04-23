@@ -146,6 +146,11 @@ public class ProgramDaoHelper {
 		if(programDTO.getId()!=null){
 			detail = dao.getProgramDetail(programDTO.getId());
 		}
+		
+		if(programDTO.getParentId()!=null){
+			detail.setParent(dao.getProgramDetail(programDTO.getParentId()));
+		}
+		
 		//detail.setActual(String);
 		detail.setActualAmount(programDTO.getActualAmount());
 		detail.setBudgetAmount(programDTO.getBudgetAmount());
@@ -164,8 +169,10 @@ public class ProgramDaoHelper {
 	}
 
 	private static Set<ProgramFund> get(List<ProgramFundDTO> fundingDtos) {
+		
 		Set<ProgramFund> funding = new HashSet<>();
 		
+		if(fundingDtos!=null)
 		for(ProgramFundDTO dto: fundingDtos){
 			ProgramFund fund = get(dto);
 			funding.add(fund);

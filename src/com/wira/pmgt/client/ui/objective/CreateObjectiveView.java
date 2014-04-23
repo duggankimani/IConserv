@@ -1,19 +1,26 @@
 package com.wira.pmgt.client.ui.objective;
 
+import java.util.List;
+
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
+import com.wira.pmgt.client.ui.component.BreadCrumbItem;
+import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.grid.DataMapper;
 import com.wira.pmgt.client.ui.component.grid.DataModel;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
+import com.wira.pmgt.shared.model.program.IsProgramActivity;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
+import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class CreateObjectiveView extends ViewImpl implements
 		CreateObjectivePresenter.ICreateObjectiveView {
@@ -25,6 +32,9 @@ public class CreateObjectiveView extends ViewImpl implements
 	
 	@UiField TextBox txtObjectiveRef;
 	@UiField TextArea txtObjective;
+	@UiField BulletListPanel crumbContainer;
+	@UiField InlineLabel spnPeriod;
+	PeriodDTO period;
 	
 	@Inject
 	public CreateObjectiveView(final Binder binder) {
@@ -38,12 +48,14 @@ public class CreateObjectiveView extends ViewImpl implements
 	}
 	
 	public ProgramDTO getProgram(){
+		assert period!=null;
 		ProgramDTO program = new ProgramDTO();
 		program.setDescription(txtObjective.getValue());
 		program.setId(null);
 		program.setName(txtObjectiveRef.getValue());
 		program.setParentId(null); //Program ID
-		program.setType(ProgramDetailType.OUTCOME);
+		program.setType(ProgramDetailType.OBJECTIVE);
+		program.setPeriod(period);
 		//program.setTargetsAndOutcomes(targetsAndOutcomes);
 //		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
 //		program.setFunding(funding);
@@ -61,7 +73,8 @@ public class CreateObjectiveView extends ViewImpl implements
 	
 	@Override
 	public void setPeriod(PeriodDTO period) {
-		
+		this.period = period;
+		spnPeriod.setText(period.getDescription());
 	} 
 	
 	DataMapper programFundMapper = new DataMapper() {
@@ -80,5 +93,33 @@ public class CreateObjectiveView extends ViewImpl implements
 			return fund;
 		}
 	};
+	
+	public void createCrumb(String text,Long id, Boolean isActive){
+		BreadCrumbItem crumb = new BreadCrumbItem();
+		crumb.setActive(isActive);
+		crumb.setLinkText(text);
+		crumb.setHref("#home;page=activities;activity="+id);
+		crumbContainer.add(crumb);
+	}
+
+	@Override
+	public void setBreadCrumbs(List<ProgramSummary> summaries) {
+		for(int i=summaries.size()-1; i>-1; i--){
+			ProgramSummary summary = summaries.get(i);
+			createCrumb(summary.getName(), summary.getId(), i==0);
+		}
+		
+	}
+
+	@Override
+	public void setObjective(IsProgramActivity singleResult) {
+		
+	}
+
+	@Override
+	public boolean isValid() {
+		
+		return true;
+	}
 
 }

@@ -29,6 +29,7 @@ public class ActivitiesTable extends Composite {
 	}
 
 	public void setData(List<IsProgramActivity> programActivities) {
+		tblView.clearRows();
 		for(IsProgramActivity activity: programActivities){
 			tblView.addRow(new CheckBox(), new InlineLabel(activity.getName()),new InlineLabel("CREATED"),
 					new InlineLabel("0%"), new InlineLabel("N/A"), new InlineLabel(activity.getBudgetAmount()==null? null: activity.getBudgetAmount()+""));
