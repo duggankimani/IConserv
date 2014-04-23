@@ -18,6 +18,7 @@ import com.wira.pmgt.shared.model.program.IsProgramActivity;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
+import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class ProgramDaoHelper {
 
@@ -201,7 +202,34 @@ public class ProgramDaoHelper {
 	public static IsProgramActivity getProgramById(Long id, boolean loadChildren) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		ProgramDetail detail = dao.getById(ProgramDetail.class, id);
-		return get(detail, loadChildren);
+		IsProgramActivity activity = get(detail, loadChildren);
+		activity.setProgramSummary(getProgramSummary(detail));
+		
+		return activity;
+	}
+
+	/**
+	 * List of parent details to be used generate the breadcrumb display 
+	 * 
+	 * @param detail
+	 * @return
+	 */
+	private static List<ProgramSummary> getProgramSummary(ProgramDetail detail) {
+		List<ProgramSummary> summaries = new ArrayList<>();
+		getSummary(summaries, detail);
+		return summaries;
+	}
+
+	private static void getSummary(List<ProgramSummary> summaries,ProgramDetail detail) {
+		ProgramSummary summary = new ProgramSummary();
+		summary.setId(detail.getId());
+		summary.setName(detail.getName());
+		summary.setDescription(detail.getDescription());
+		summaries.add(summary);
+		
+		if(detail.getParent()!=null){
+			getSummary(summaries,detail.getParent());
+		}
 	}
 
 	public static List<IsProgramActivity> getPrograms(boolean loadChildren) {

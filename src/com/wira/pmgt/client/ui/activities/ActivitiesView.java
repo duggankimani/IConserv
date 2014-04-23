@@ -1,25 +1,24 @@
 package com.wira.pmgt.client.ui.activities;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
-import com.wira.pmgt.client.ui.component.TableView;
+import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class ActivitiesView extends ViewImpl implements
 		ActivitiesPresenter.IActivitiesView {
@@ -28,7 +27,7 @@ public class ActivitiesView extends ViewImpl implements
 
 	@UiField HTMLPanel divContent;
 	@UiField HTMLPanel divNoContent;
-	@UiField TableView tblView;
+	@UiField ActivitiesTable tblView;
 	@UiField SpanElement spnBudget;
 	@UiField Anchor aNewOutcome;
 	@UiField Anchor aNewActivity;
@@ -37,6 +36,7 @@ public class ActivitiesView extends ViewImpl implements
 	@UiField HeadingElement spnTitle;
 	@UiField BulletListPanel crumbContainer;
 
+	List<IsProgramActivity> programs=null;
 	public interface Binder extends UiBinder<Widget, ActivitiesView> {
 	}
 
@@ -45,9 +45,9 @@ public class ActivitiesView extends ViewImpl implements
 		widget = binder.createAndBindUi(this);
 		listPanel.setId("mytab");
 		/*BreadCrumb Samples*/
-		createCrumb("Home", false);
-		createCrumb("WildLife Management", false);
-		createCrumb("Increased Understanding ...", true);
+//		createCrumb("Home", false);
+//		createCrumb("WildLife Management", false);
+//		createCrumb("Increased Understanding ...", true);
 		
 	}
 
@@ -64,9 +64,9 @@ public class ActivitiesView extends ViewImpl implements
 		}
 	}
 
-	public void setBudget(String number) {
+	public void setBudget(Double number) {
 		if(number!=null){
-			spnBudget.setInnerHTML(number);
+			spnBudget.setInnerHTML(NumberFormat.getCurrencyFormat().format(number));
 		}
 	}
 	
@@ -89,17 +89,18 @@ public class ActivitiesView extends ViewImpl implements
 		}
 	}
 	
-	public void createCrumb(String text, Boolean isActive){
+	public void createCrumb(String text,Long id, Boolean isActive){
 		BreadCrumbItem crumb = new BreadCrumbItem();
 		crumb.setActive(isActive);
 		crumb.setLinkText(text);
+		crumb.setHref("#home;page=activities;activity="+id);
 		crumbContainer.add(crumb);
 	}
 	
-	public void createTab(String text, boolean active){
+	public void createTab(String text, long id,boolean active){
 		BulletPanel li = new BulletPanel();
 		Anchor a = new Anchor(text);
-		a.setHref("#...");
+		a.setHref("#home;page=activities;activity="+id);
 		li.add(a);
 		if(active){
 			li.addStyleName("active");
@@ -111,31 +112,53 @@ public class ActivitiesView extends ViewImpl implements
 
 	@Override
 	public void setActivities(List<IsProgramActivity> programs) {
-		/*Table samples */
-		tblView.clearRows();
-		tblView.setAutoNumber(false);
-		List<String> names = new ArrayList<String>();
-		names.add("Checkbox");
-		names.add("TITLE");
-		names.add("STATUS");
-		names.add("PROGRESS");
-		names.add("RATING");
-		names.add("BUDGET");
-		tblView.setHeaders(names);
-
-		for(IsProgramActivity activity: programs){
-			tblView.addRow(new CheckBox(), new InlineLabel(activity.getName()),new InlineLabel("CREATED"),
-					new InlineLabel("0%"), new InlineLabel("N/A"), new InlineLabel(activity.getBudgetAmount()==null? null: activity.getBudgetAmount()+""));
-		}
+		tblView.setData(programs);
 	}
 
 	@Override
 	public void setPrograms(List<IsProgramActivity> programs) {
+		showContent(!(programs==null || programs.isEmpty()));
+		this.programs = programs;
+		
 		if(programs==null){
 			return;
 		}
 		for(IsProgramActivity activity: programs){
-			createTab(activity.getName(), programs.indexOf(activity)==0);
+			boolean first = programs.indexOf(activity)==0;
+			createTab(activity.getName(),activity.getId(), first);
+		}
+	}
+
+	@Override
+	public void setActivity(IsProgramActivity singleResult) {
+		if(singleResult.getType()==ProgramDetailType.PROGRAM){
+			//select tab
+			selectTab(singleResult.getId());
+			setBudget(singleResult.getBudgetAmount());
+		}
+		List<ProgramSummary> summaries = singleResult.getProgramSummary();
+		for(int i=summaries.size()-1; i>-1; i--){
+			ProgramSummary summary = summaries.get(i);
+			createCrumb(summary.getName(), summary.getId(), i==0);
+		}
+		
+		setActivities(singleResult.getChildren());
+	}
+
+	private void selectTab(Long id) {
+		int size = listPanel.getWidgetCount();
+		for(int i=0; i<size; i++){
+			BulletPanel li = (BulletPanel)listPanel.getWidget(i);
+			
+			Anchor a = (Anchor)li.getWidget(0);
+			String href = "#home;page=activities;activity="+id;
+			boolean active = a.getHref().endsWith(href);
+			
+			if(active){
+				li.addStyleName("active");
+			}else{
+				li.removeStyleName("active");
+			}
 		}
 	}
 

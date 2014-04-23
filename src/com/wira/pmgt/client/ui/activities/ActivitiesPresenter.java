@@ -17,7 +17,9 @@ import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.IsProgramActivity;
 import com.wira.pmgt.shared.requests.GetProgramsRequest;
+import com.wira.pmgt.shared.requests.MultiRequestAction;
 import com.wira.pmgt.shared.responses.GetProgramsResponse;
+import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
 public class ActivitiesPresenter extends
 		PresenterWidget<ActivitiesPresenter.IActivitiesView> {
@@ -28,6 +30,7 @@ public class ActivitiesPresenter extends
 		HasClickHandlers getaNewActivity();
 		void setActivities(List<IsProgramActivity> programs);
 		void setPrograms(List<IsProgramActivity> programs);
+		void setActivity(IsProgramActivity singleResult);
 	}
 
 	@Inject DispatchAsync requestHelper;
@@ -63,22 +66,48 @@ public class ActivitiesPresenter extends
 
 	}
 
-	public void showContent(Boolean status) {
-		if (status) {
-			getView().showContent(true);
-		} else {
-			getView().showContent(false);
+	public void loadData(final Long activityId) {
+		final boolean hasActivityId =activityId!=null && activityId!=0L;
+		
+		MultiRequestAction action = new MultiRequestAction();
+		action.addRequest(new GetProgramsRequest(ProgramDetailType.PROGRAM, false));
+		if(hasActivityId){
+			action.addRequest(new GetProgramsRequest(activityId, true));
 		}
-		loadData();
-	}
-
-	private void loadData() {
-		requestHelper.execute(new GetProgramsRequest(ProgramDetailType.PROGRAM, false), new TaskServiceCallback<GetProgramsResponse>() {
+		
+		requestHelper.execute(action, new TaskServiceCallback<MultiRequestActionResult>() {
 			@Override
-			public void processResult(GetProgramsResponse aResponse) {
-				getView().setPrograms(aResponse.getPrograms());
+			public void processResult(MultiRequestActionResult aResponse) {
+				GetProgramsResponse response = (GetProgramsResponse)aResponse.get(0);
+				getView().setPrograms(response.getPrograms());
+				
+				//activities under a program
+				if(hasActivityId){
+					GetProgramsResponse response2 = (GetProgramsResponse)aResponse.get(1);
+					getView().setActivity(response2.getSingleResult());
+					
+				}else{
+					//load activities under default program
+					if(response.getPrograms()!=null && !response.getPrograms().isEmpty()){
+						loadProgram(response.getPrograms().get(0).getId());
+					}
+				}
 			}
 		});
+	}
+
+	protected void loadProgram(Long id) {
+		
+		GetProgramsRequest request = new GetProgramsRequest(id,true);
+		
+		requestHelper.execute(request, new TaskServiceCallback<GetProgramsResponse>() {
+			@Override
+			public void processResult(GetProgramsResponse aResponse) {
+				GetProgramsResponse response = (GetProgramsResponse)aResponse;
+				getView().setActivity(response.getSingleResult());
+			}
+		});
+		
 	}
 	
 	

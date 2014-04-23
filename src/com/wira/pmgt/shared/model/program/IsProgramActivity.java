@@ -1,21 +1,17 @@
 package com.wira.pmgt.shared.model.program;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 import com.wira.pmgt.shared.model.ProgramDetailType;
 
-public abstract class IsProgramActivity implements Serializable{
+public abstract class IsProgramActivity extends ProgramSummary{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private Long id;
-	private String name;
-	private String description;
 	private ProgramDetailType type;
 	private Double budgetAmount; //Total budget amount (accumulation of source of funds)
 	private Double actualAmount; //Actual amount spent
@@ -26,33 +22,9 @@ public abstract class IsProgramActivity implements Serializable{
 	private PeriodDTO period;
 	private Long parentId; //Parent Activity or Task
 	private List<IsProgramActivity> children;
-	
+	private List<ProgramSummary> programSummary; //Used to build breadcrumb 
 	
 	public IsProgramActivity() {
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public ProgramDetailType getType() {
@@ -133,5 +105,13 @@ public abstract class IsProgramActivity implements Serializable{
 
 	public void setChildren(List<IsProgramActivity> children) {
 		this.children = children;
+	}
+
+	public List<ProgramSummary> getProgramSummary() {
+		return programSummary;
+	}
+
+	public void setProgramSummary(List<ProgramSummary> programSummary) {
+		this.programSummary = programSummary;
 	}
 }
