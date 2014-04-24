@@ -2,7 +2,9 @@
 
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui' ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
-	xmlns:d='urn:import:com.wira.pmgt.client.ui.component' xmlns:up='urn:import:com.wira.pmgt.client.ui.upload.custom'
+	xmlns:d='urn:import:com.wira.pmgt.client.ui.component' 
+	xmlns:up='urn:import:com.wira.pmgt.client.ui.upload.custom'
+	xmlns:activities='urn:import:com.wira.pmgt.client.ui.activities'
 	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
 	ui:generateLocales='default'>
 
@@ -25,41 +27,49 @@
 					<!--Action Buttons -->
 					<div class="action-buttons row-fluid">
 
-						<div class="span3">
+						<div class="span3 hide">
 							<g:Anchor ui:field="aNewOutcome" styleName="btn btn-primary"
-								title="Add a New User">
+								title="Add an outcome">
 								<i class="icon-plus"></i>
 								Add Outcome
 							</g:Anchor>
 						</div>
-						<div class="span3">
+						<div class="span3 hide">
+							<g:Anchor ui:field="aNewObjective" styleName="btn btn-primary"
+								title="Add an objective">
+								<i class="icon-plus"></i>
+								Add Objective
+							</g:Anchor>
+						</div>						
+						<div class="span3 hide">
 							<g:Anchor ui:field="aNewActivity" styleName="btn btn-primary"
-								title="Add a New User">
+								title="Add an activity">
 								<i class="icon-plus"></i>
 								Add Activity
 							</g:Anchor>
 						</div>
+						<div class="span3 hide">
+							<g:Anchor ui:field="aNewTask" styleName="btn btn-primary"
+								title="Add Task">
+								<i class="icon-plus"></i>
+								Add Task
+							</g:Anchor>
+						</div>
 					</div>
+					<!-- BreadCrump -->
+					<d:BulletListPanel styleName="breadcrumb"
+						ui:field="crumbContainer">
+					</d:BulletListPanel>
+					
 
 					<div id="usercontent" class="tab-content">
 						<div ui:field="divTab1Content" class="tab-pane fade in active">
-							<d:TableView ui:field="tblView" striped="false"
-								isGrid="false" bordered="false"></d:TableView>
-						</div>
-
-						<div ui:field="divTab2Content" class="tab-pane fade in">
-							Content2 Comes in here
+							<activities:ActivitiesTable ui:field="tblView"></activities:ActivitiesTable>
 						</div>
 					</div>
 
 					<d:BulletListPanel ui:field="listPanel" styleName="nav nav-tabs">
 					</d:BulletListPanel>
-						<!-- li class="active" ui:field="liUser">
-							<g:Anchor href="#user" ui:field="aUserstab">Wildlife Management</g:Anchor>
-						</li>
-						<li ui:field="liGroup">
-							<g:Anchor href="#groups" ui:field="aGroupstab">Rivers &amp; Wetlands</g:Anchor>
-						</li-->
 				</g:HTMLPanel>
 			</div>
 

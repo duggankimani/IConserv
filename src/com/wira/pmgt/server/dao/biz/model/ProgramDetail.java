@@ -72,6 +72,7 @@ public class ProgramDetail extends PO {
 	private Date startDate; //For Activities & tasks - Start Date (Programs run for a whole year)
 	private Date endDate; //For Activities & tasks - End Date
 	
+	@ManyToOne
 	@JoinColumn(name="parentid", referencedColumnName="id", nullable=true)
 	private ProgramDetail parent;
 	

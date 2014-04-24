@@ -69,7 +69,6 @@ public class UserGroup implements Serializable, Listable{
 	
 	@Override
 	public String toString() {
-		
 		return name;
 	}
 

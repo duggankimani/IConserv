@@ -19,6 +19,7 @@ import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.Listable;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
+import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 
@@ -100,8 +101,8 @@ public class CreateOutcomeView extends ViewImpl implements
 	}
 
 	
-	public void setObjectives(List<objectives> objs) {
-	}
+//	public void setObjectives(List<objectives> objs) {
+//	}
 	
 	public void createCrumb(String text, Boolean isActive){
 		BreadCrumbItem crumb = new BreadCrumbItem();
@@ -131,5 +132,11 @@ public class CreateOutcomeView extends ViewImpl implements
 			return fund;
 		}
 	};
+
+	@Override
+	public void setPeriod(PeriodDTO period) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
