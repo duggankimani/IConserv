@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
+import com.wira.pmgt.client.ui.component.IssuesPanel;
 import com.wira.pmgt.client.ui.component.autocomplete.AutoCompleteField;
 import com.wira.pmgt.client.ui.component.grid.AggregationGrid;
 import com.wira.pmgt.client.ui.component.grid.ColumnConfig;
@@ -35,6 +36,7 @@ public class CreateOutcomeView extends ViewImpl implements
 	public interface Binder extends UiBinder<Widget, CreateOutcomeView> {
 	}
 	
+	@UiField IssuesPanel issues;
 	@UiField TextArea txtOutcome;
 	@UiField AggregationGrid gridView;
 	@UiField BulletListPanel crumbContainer;
@@ -71,28 +73,6 @@ public class CreateOutcomeView extends ViewImpl implements
 		gridView.setAutoNumber(true);
 	}
 	
-	public ProgramDTO getProgram(){
-		ProgramDTO program = new ProgramDTO();
-		program.setDescription(txtOutcome.getValue());
-		program.setId(null);
-		program.setName(txtOutcome.getValue());
-		program.setParentId(null); //Program ID
-		program.setType(ProgramDetailType.OUTCOME);
-		//program.setTargetsAndOutcomes(targetsAndOutcomes);
-		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
-		program.setFunding(funding);
-		Double totalAmount=0.0;
-		for(ProgramFundDTO programFund: funding){
-			Double val = programFund.getAmount();
-			if(val!=null){
-				totalAmount+=val;
-			}
-		}
-		program.setBudgetAmount(totalAmount);
-		return program;
-		
-	}
-
 	@Override
 	public void setFunds(List<FundDTO> funds) {
 		if(funds!=null){
@@ -112,7 +92,6 @@ public class CreateOutcomeView extends ViewImpl implements
 		crumbContainer.add(crumb);
 	}
 
-	@Override
 	public void setPeriod(String period) {
 		if(period!=null){
 			spnPeriod.getElement().setInnerText(period);
@@ -164,5 +143,46 @@ public class CreateOutcomeView extends ViewImpl implements
 	public void setProgram(IsProgramActivity isProgramActivity) {
 		setBreadCrumbs(isProgramActivity.getProgramSummary());
 	}
+	
+	boolean isNullOrEmpty(String value) {
+		return value == null || value.trim().length() == 0;
+	}
+
+	@Override
+	public boolean isValid() {
+		boolean isValid = true;
+		issues.clear();
+
+		if(isNullOrEmpty(txtOutcome.getValue())){
+			isValid = false;
+			issues.addError("Outcome is mandatory");
+		}
+		
+		return isValid;
+	}
+
+	@Override
+	public IsProgramActivity getOutcome() {
+		ProgramDTO program = new ProgramDTO();
+		program.setDescription(txtOutcome.getValue());
+		program.setId(null);
+		program.setName(txtOutcome.getValue());
+		program.setParentId(null); //Program ID
+		program.setType(ProgramDetailType.OUTCOME);
+		//program.setTargetsAndOutcomes(targetsAndOutcomes);
+		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
+		program.setFunding(funding);
+		Double totalAmount=0.0;
+		for(ProgramFundDTO programFund: funding){
+			Double val = programFund.getAmount();
+			if(val!=null){
+				totalAmount+=val;
+			}
+		}
+		program.setBudgetAmount(totalAmount);
+		return program;
+		
+	}
+
 
 }

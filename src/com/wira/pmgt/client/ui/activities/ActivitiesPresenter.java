@@ -13,6 +13,7 @@ import com.gwtplatform.mvp.client.View;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.OnOptionSelected;
+import com.wira.pmgt.client.ui.OptionControl;
 import com.wira.pmgt.client.ui.detailedActivity.CreateActivityPresenter;
 import com.wira.pmgt.client.ui.objective.CreateObjectivePresenter;
 import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
@@ -54,16 +55,25 @@ public class ActivitiesPresenter extends
 	@Override
 	protected void onBind() {
 		super.onBind();
-
+		
 		getView().getaNewOutcome().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				createOutcome.loadList(activityId);
 				AppManager.showPopUp("Create Outcome",
-						createOutcome.getWidget(), new OnOptionSelected() {
+						createOutcome.getWidget(), new OptionControl() {
 							
 							@Override
 							public void onSelect(String name) {
+								
+								if(name.equals("Save")){
+									if(createOutcome.getView().isValid()){
+										save(createOutcome.getView().getOutcome());
+										hide();
+									}
+								}else{
+									hide();
+								}
 								
 							}}, "Save", "Cancel");
 			}
@@ -74,10 +84,19 @@ public class ActivitiesPresenter extends
 			@Override
 			public void onClick(ClickEvent event) {
 				AppManager.showPopUp("Create Activity",
-						createActivity.getWidget(), new OnOptionSelected() {
+						createActivity.getWidget(), new OptionControl() {
 							
 							@Override
 							public void onSelect(String name) {
+								
+								if(name.equals("Save")){
+									if(createActivity.getView().isValid()){
+										save(createActivity.getView().getActivity());
+										hide();
+									}
+								}else{
+									hide();
+								}
 								
 							}}, "Save", "Cancel");
 			}
@@ -88,15 +107,16 @@ public class ActivitiesPresenter extends
 			@Override
 			public void onClick(ClickEvent event) {
 				objectivePresenter.loadList(activityId, null);
-				AppManager.showPopUp("Add Objective", objectivePresenter.getWidget(), new OnOptionSelected() {
+				AppManager.showPopUp("Add Objective", objectivePresenter.getWidget(), new OptionControl() {
 					
 					@Override
 					public void onSelect(String name) {
 						if(name.equals("Save")){
 							if(objectivePresenter.getView().isValid()){
 								save(objectivePresenter.getView().getProgram());
+								hide();
 							}
-						}
+						}else{hide();}
 					}
 
 				}, "Save", "Cancel");

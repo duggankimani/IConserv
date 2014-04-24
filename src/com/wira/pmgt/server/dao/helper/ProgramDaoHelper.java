@@ -45,6 +45,9 @@ public class ProgramDaoHelper {
 	}
 
 	private static Period get(PeriodDTO periodDTO) {
+		if(periodDTO==null){
+			return null;
+		}
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		Period period = new Period();
 		if(periodDTO.getId()!=null){

@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
+import com.wira.pmgt.client.ui.component.IssuesPanel;
 import com.wira.pmgt.client.ui.component.grid.DataMapper;
 import com.wira.pmgt.client.ui.component.grid.DataModel;
 import com.wira.pmgt.shared.model.ProgramDetailType;
@@ -30,6 +31,7 @@ public class CreateObjectiveView extends ViewImpl implements
 	public interface Binder extends UiBinder<Widget, CreateObjectiveView> {
 	}
 	
+	@UiField IssuesPanel issues;
 	@UiField TextBox txtObjectiveRef;
 	@UiField TextArea txtObjective;
 	@UiField BulletListPanel crumbContainer;
@@ -119,8 +121,24 @@ public class CreateObjectiveView extends ViewImpl implements
 
 	@Override
 	public boolean isValid() {
+		boolean isValid = true;
+		issues.clear();
+
+		if(isNullOrEmpty(txtObjectiveRef.getValue())){
+			isValid = false;
+			issues.addError("Program reference is mandatory");
+		}
 		
-		return true;
+		if(isNullOrEmpty(txtObjective.getValue())){
+			isValid = false;
+			issues.addError("Program Description is mandatory");
+		}
+				
+		return isValid;
+	}
+
+	boolean isNullOrEmpty(String value) {
+		return value == null || value.trim().length() == 0;
 	}
 
 }

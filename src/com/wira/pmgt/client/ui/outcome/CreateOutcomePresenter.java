@@ -29,11 +29,13 @@ public class CreateOutcomePresenter extends
 
 		void setPeriod(PeriodDTO period);
 
-		void setPeriod(String period);
-
 		void setObjectives(List<IsProgramActivity> objectives);
 
 		void setProgram(IsProgramActivity isProgramActivity);
+
+		boolean isValid();
+
+		IsProgramActivity getOutcome();
 	}
 
 	@Inject
