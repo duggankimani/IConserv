@@ -169,6 +169,7 @@ public class CreateOutcomeView extends ViewImpl implements
 		program.setName(txtOutcome.getValue());
 		program.setParentId(null); //Program ID
 		program.setType(ProgramDetailType.OUTCOME);
+		program.setObjectives(autoComplete.getSelectedItems());
 		//program.setTargetsAndOutcomes(targetsAndOutcomes);
 		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
 		program.setFunding(funding);

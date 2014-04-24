@@ -81,6 +81,10 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 			)
 	private Set<ProgramDetail> objectives = new HashSet<>();
 	
+	@ManyToMany(mappedBy="objectives")
+	private Set<ProgramDetail> outcomes = new HashSet<>();
+	
+	
 	public ProgramDetail() {
 	}
 
@@ -200,8 +204,16 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 		return objectives;
 	}
 
-	public void setObjectives(Set<ProgramDetail> objectives) {
-		this.objectives = objectives;
+	public void setObjectives(Set<ProgramDetail> objs) {
+		objectives.clear();
+		outcomes.remove(this);
+		
+		if(objs!=null){
+			for(ProgramDetail detail: objs){
+				objectives.add(detail);
+				outcomes.add(this);
+			}
+		}
 	}
 
 }
