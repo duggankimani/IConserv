@@ -9,7 +9,7 @@
 	ui:generateLocales='default'>
 
 	<g:HTMLPanel styleName="activities-page">
-		<div class="row-fluid">
+		<div class="full-page">
 			<h4 ui:field="spnTitle">Program &amp; Activities</h4>
 			<span class="pull-right muted" ui:field="spnBudget">$10,0000</span>
 			<hr />
@@ -27,28 +27,28 @@
 					<!--Action Buttons -->
 					<div class="action-buttons row-fluid">
 						<div class="span3 hide">
-							<g:Anchor ui:field="aNewOutcome" styleName="btn btn-primary"
+							<g:Anchor ui:field="aNewOutcome" styleName="btn btn-default"
 								title="Add an outcome">
 								<i class="icon-plus"></i>
 								Add Outcome
 							</g:Anchor>
 						</div>
 						<div class="span3 hide">
-							<g:Anchor ui:field="aNewObjective" styleName="btn btn-primary"
+							<g:Anchor ui:field="aNewObjective" styleName="btn btn-default"
 								title="Add an objective">
 								<i class="icon-plus"></i>
 								Add Objective
 							</g:Anchor>
 						</div>						
 						<div class="span3 hide">
-							<g:Anchor ui:field="aNewActivity" styleName="btn btn-primary"
+							<g:Anchor ui:field="aNewActivity" styleName="btn btn-default"
 								title="Add an activity">
 								<i class="icon-plus"></i>
 								Add Activity
 							</g:Anchor>
 						</div>
 						<div class="span3 hide">
-							<g:Anchor ui:field="aNewTask" styleName="btn btn-primary"
+							<g:Anchor ui:field="aNewTask" styleName="btn btn-default"
 								title="Add Task">
 								<i class="icon-plus"></i>
 								Add Task

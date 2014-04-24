@@ -10,6 +10,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -89,8 +90,10 @@ public class ActivitiesView extends ViewImpl implements
 	public void createTab(String text, long id,boolean active){
 		BulletPanel li = new BulletPanel();
 		Anchor a = new Anchor(text);
+		HTMLPanel opt = new HTMLPanel("<span class='icon-caret-down pull-right'></span>");
 		a.setHref("#home;page=activities;activity="+id);
 		li.add(a);
+		li.add(opt);
 		if(active){
 			li.addStyleName("active");
 		}else{
