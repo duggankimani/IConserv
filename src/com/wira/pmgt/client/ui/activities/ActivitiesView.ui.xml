@@ -22,12 +22,6 @@
 
 			<div class="row-fluid">
 				<g:HTMLPanel ui:field="divContent" styleName="tabbable tabs-below hidden">
-					<!-- BreadCrump -->
-					<d:BulletListPanel styleName="breadcrumb"
-						ui:field="crumbContainer">
-					</d:BulletListPanel>
-
-
 					<!--Action Buttons -->
 					<div class="action-buttons row-fluid">
 

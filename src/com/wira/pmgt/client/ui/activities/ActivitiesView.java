@@ -35,7 +35,6 @@ public class ActivitiesView extends ViewImpl implements
 	@UiField BulletListPanel listPanel;
 	
 	@UiField HeadingElement spnTitle;
-	@UiField BulletListPanel crumbContainer;
 
 	public interface Binder extends UiBinder<Widget, ActivitiesView> {
 	}
@@ -44,11 +43,6 @@ public class ActivitiesView extends ViewImpl implements
 	public ActivitiesView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
 		listPanel.setId("mytab");
-		/*BreadCrumb Samples*/
-		createCrumb("Home", false);
-		createCrumb("WildLife Management", false);
-		createCrumb("Increased Understanding ...", true);
-		
 	}
 
 	@Override
@@ -87,13 +81,6 @@ public class ActivitiesView extends ViewImpl implements
 			divContent.addStyleName("hidden");
 			divNoContent.removeStyleName("hidden");
 		}
-	}
-	
-	public void createCrumb(String text, Boolean isActive){
-		BreadCrumbItem crumb = new BreadCrumbItem();
-		crumb.setActive(isActive);
-		crumb.setLinkText(text);
-		crumbContainer.add(crumb);
 	}
 	
 	public void createTab(String text, boolean active){

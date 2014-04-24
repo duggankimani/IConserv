@@ -46,11 +46,11 @@ public class AppManager {
 			Anchor aLnk = new Anchor();
 			if (text.equals("Cancel")) {
 				aLnk.setHTML("&nbsp;<i class=\"icon-remove\"></i>" + text);
-				aLnk.setStyleName("btn btn-danger pull-left");
+				aLnk.setStyleName("btn btn-danger pull-right");
 			} else {
 				aLnk.setHTML(text
 						+ "&nbsp;<i class=\"icon-double-angle-right\"></i>");
-				aLnk.setStyleName("btn btn-primary pull-right");
+				aLnk.setStyleName("btn btn-primary pull-left");
 			}
 
 			aLnk.addClickHandler(new ClickHandler() {

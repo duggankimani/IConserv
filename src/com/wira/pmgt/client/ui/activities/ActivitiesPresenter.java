@@ -48,7 +48,7 @@ public class ActivitiesPresenter extends
 			@Override
 			public void onClick(ClickEvent event) {
 				AppManager.showPopUp("Create Outcome",
-						createOutcome.getWidget(), null, "Save", "Cancel");
+						createOutcome.getWidget(), null, "Save");
 			}
 		});
 
@@ -57,7 +57,7 @@ public class ActivitiesPresenter extends
 			@Override
 			public void onClick(ClickEvent event) {
 				AppManager.showPopUp("Create Activity",
-						createActivity.getWidget(), null, "Save", "Cancel");
+						createActivity.getWidget(), null, "Save");
 			}
 		});
 

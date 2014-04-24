@@ -3,13 +3,14 @@ package com.wira.pmgt.client.ui.outcome;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gwtplatform.mvp.client.ViewImpl;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
-import com.wira.pmgt.client.ui.component.DateRangeWidget;
+import com.gwtplatform.mvp.client.ViewImpl;
+import com.wira.pmgt.client.ui.component.BreadCrumbItem;
+import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.grid.AggregationGrid;
 import com.wira.pmgt.client.ui.component.grid.ColumnConfig;
 import com.wira.pmgt.client.ui.component.grid.DataMapper;
@@ -18,7 +19,6 @@ import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.Listable;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
-import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 
@@ -31,16 +31,21 @@ public class CreateOutcomeView extends ViewImpl implements
 	}
 	
 	@UiField TextArea txtOutcome;
-	@UiField DateRangeWidget dtRange;
 	@UiField AggregationGrid gridView;
+	@UiField BulletListPanel crumbContainer;
 
 	List<Listable> donors = new ArrayList<Listable>();
-	ColumnConfig donorField = new ColumnConfig("donor", "Donor Name", DataType.SELECTBASIC);
+	ColumnConfig itemName = new ColumnConfig("itemName", "Item Name", DataType.STRING);
 	
 	@Inject
 	public CreateOutcomeView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
+		createGrid();
 		
+		/*BreadCrumb Samples*/
+		createCrumb("Home", false);
+		createCrumb("WildLife Management", false);
+		createCrumb("Increased Understanding ...", true);
 	}
 
 	@Override
@@ -48,10 +53,11 @@ public class CreateOutcomeView extends ViewImpl implements
 		return widget;
 	}
 	
+	
 	public void createGrid(){
+		gridView.refresh();
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
-		donorField.setDropDownItems(donors);
-		configs.add(donorField);
+		configs.add(itemName);
 		
 		ColumnConfig config = new ColumnConfig("amount", "Amount", DataType.DOUBLE);
 		config.setAggregationColumn(true);
@@ -83,7 +89,6 @@ public class CreateOutcomeView extends ViewImpl implements
 		
 	}
 
-	
 	@Override
 	public void setFunds(List<FundDTO> funds) {
 		if(funds!=null){
@@ -91,22 +96,30 @@ public class CreateOutcomeView extends ViewImpl implements
 				donors.add(dto);
 			}
 		}
-		donorField.setDropDownItems(donors);
 		gridView.refresh();
 	}
 
-	@Override
-	public void setPeriod(PeriodDTO period) {
-		if(period!=null){
-			dtRange.setDates(period.getStartDate(), period.getEndDate());
-		}
-	} 
+	
+	public void setObjectives(List<objectives> objs) {
+	}
+	
+	public void createCrumb(String text, Boolean isActive){
+		BreadCrumbItem crumb = new BreadCrumbItem();
+		crumb.setActive(isActive);
+		crumb.setLinkText(text);
+		crumbContainer.add(crumb);
+	}
+
+//	@Override
+//	public void setPeriod(PeriodDTO period) {
+//		if(period!=null){
+//			dtRange.setDates(period.getStartDate(), period.getEndDate());
+//		}
+//	} 
 	
 	DataMapper programFundMapper = new DataMapper() {
-		
 		@Override
 		public ProgramFundDTO getData(DataModel model) {
-			
 			ProgramFundDTO fund = new ProgramFundDTO();
 			if(model.get("donor")==null){
 				return null;
@@ -118,4 +131,5 @@ public class CreateOutcomeView extends ViewImpl implements
 			return fund;
 		}
 	};
+
 }
