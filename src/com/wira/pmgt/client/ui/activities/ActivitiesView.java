@@ -37,7 +37,6 @@ public class ActivitiesView extends ViewImpl implements
 	@UiField BulletListPanel listPanel;
 	
 	@UiField HeadingElement spnTitle;
-	@UiField BulletListPanel crumbContainer;
 
 	List<IsProgramActivity> programs=null;
 	public interface Binder extends UiBinder<Widget, ActivitiesView> {
@@ -85,14 +84,6 @@ public class ActivitiesView extends ViewImpl implements
 			divContent.addStyleName("hidden");
 			divNoContent.removeStyleName("hidden");
 		}
-	}
-	
-	public void createCrumb(String text,Long id, Boolean isActive){
-		BreadCrumbItem crumb = new BreadCrumbItem();
-		crumb.setActive(isActive);
-		crumb.setLinkText(text);
-		crumb.setHref("#home;page=activities;activity="+id);
-		crumbContainer.add(crumb);
 	}
 	
 	public void createTab(String text, long id,boolean active){
@@ -156,11 +147,11 @@ public class ActivitiesView extends ViewImpl implements
 			show(aNewTask,true);
 		}
 		
-		List<ProgramSummary> summaries = singleResult.getProgramSummary();
-		for(int i=summaries.size()-1; i>-1; i--){
-			ProgramSummary summary = summaries.get(i);
-			createCrumb(summary.getName(), summary.getId(), i==0);
-		}
+//		List<ProgramSummary> summaries = singleResult.getProgramSummary();
+//		for(int i=summaries.size()-1; i>-1; i--){
+//			ProgramSummary summary = summaries.get(i);
+//			createCrumb(summary.getName(), summary.getId(), i==0);
+//		}
 		
 		setActivities(singleResult.getChildren());
 	}
