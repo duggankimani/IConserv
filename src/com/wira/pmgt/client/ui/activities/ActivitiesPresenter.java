@@ -58,6 +58,7 @@ public class ActivitiesPresenter extends
 		getView().getaNewOutcome().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				createOutcome.loadList(activityId);
 				AppManager.showPopUp("Create Outcome",
 						createOutcome.getWidget(), new OnOptionSelected() {
 							

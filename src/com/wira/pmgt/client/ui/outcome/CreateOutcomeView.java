@@ -19,12 +19,13 @@ import com.wira.pmgt.client.ui.component.grid.DataMapper;
 import com.wira.pmgt.client.ui.component.grid.DataModel;
 import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.Listable;
-import com.wira.pmgt.shared.model.Objective;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
+import com.wira.pmgt.shared.model.program.IsProgramActivity;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
+import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class CreateOutcomeView extends ViewImpl implements
 		CreateOutcomePresenter.MyView {
@@ -38,10 +39,10 @@ public class CreateOutcomeView extends ViewImpl implements
 	@UiField AggregationGrid gridView;
 	@UiField BulletListPanel crumbContainer;
 	@UiField InlineLabel spnPeriod;
-	@UiField AutoCompleteField<Objective> autoComplete;
+	@UiField AutoCompleteField<IsProgramActivity> autoComplete;
 
 	List<Listable> donors = new ArrayList<Listable>();
-	ColumnConfig itemName = new ColumnConfig("itemName", "Item Name", DataType.STRING);
+	ColumnConfig donorField = new ColumnConfig("donor", "Donor Name", DataType.SELECTBASIC);
 	
 	@Inject
 	public CreateOutcomeView(final Binder binder) {
@@ -49,11 +50,6 @@ public class CreateOutcomeView extends ViewImpl implements
 		createGrid();
 		
 		txtOutcome.getElement().setAttribute("rows", "3");
-		
-		/*BreadCrumb Samples*/
-		createCrumb("Home", false);
-		createCrumb("WildLife Management", false);
-		createCrumb("Increased Understanding ...", true);
 	}
 
 	@Override
@@ -65,7 +61,7 @@ public class CreateOutcomeView extends ViewImpl implements
 	public void createGrid(){
 		gridView.refresh();
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
-		configs.add(itemName);
+		configs.add(donorField);
 		
 		ColumnConfig config = new ColumnConfig("amount", "Amount", DataType.DOUBLE);
 		config.setAggregationColumn(true);
@@ -104,13 +100,11 @@ public class CreateOutcomeView extends ViewImpl implements
 				donors.add(dto);
 			}
 		}
+		donorField.setDropDownItems(donors);
 		gridView.refresh();
-	}
+	} 
 
-	
-//	public void setObjectives(List<objectives> objs) {
-//	}
-	
+
 	public void createCrumb(String text, Boolean isActive){
 		BreadCrumbItem crumb = new BreadCrumbItem();
 		crumb.setActive(isActive);
@@ -142,10 +136,33 @@ public class CreateOutcomeView extends ViewImpl implements
 
 	@Override
 	public void setPeriod(PeriodDTO period) {
+		
 	}
 	
 	@Override
-	public void setObjectives(List<Objective> objectives) {
+	public void setObjectives(List<IsProgramActivity> objectives) {
 		autoComplete.setValues(objectives);
 	}
+
+	public void createCrumb(String text,Long id, Boolean isActive){
+		BreadCrumbItem crumb = new BreadCrumbItem();
+		crumb.setActive(isActive);
+		crumb.setLinkText(text);
+		crumb.setHref("#home;page=activities;activity="+id);
+		crumbContainer.add(crumb);
+	}
+
+	public void setBreadCrumbs(List<ProgramSummary> summaries) {
+		for(int i=summaries.size()-1; i>-1; i--){
+			ProgramSummary summary = summaries.get(i);
+			createCrumb(summary.getName(), summary.getId(), i==0);
+		}
+		
+	}
+	
+	@Override
+	public void setProgram(IsProgramActivity isProgramActivity) {
+		setBreadCrumbs(isProgramActivity.getProgramSummary());
+	}
+
 }

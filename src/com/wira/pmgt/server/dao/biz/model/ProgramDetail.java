@@ -1,26 +1,21 @@
 package com.wira.pmgt.server.dao.biz.model;
 
-import java.lang.String;
-import java.lang.Long;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
-import com.wira.pmgt.server.dao.model.PO;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 
 /**
@@ -36,19 +31,13 @@ import com.wira.pmgt.shared.model.ProgramDetailType;
 	@NamedQuery(name="ProgramDetail.findAll", query="FROM ProgramDetail p where p.isActive=:isActive order by id"),
 	@NamedQuery(name="ProgramDetail.findById", query="FROM ProgramDetail p where p.id=:id")
 })
-public class ProgramDetail extends PO {
+public class ProgramDetail 	extends ProgramBasicDetail{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
-
-	private static final long serialVersionUID = 6975295488889785294L;
-	
-	@Column(unique=true, nullable=false)
-	private String name;
-	
-	private String description;
-	
 	@Enumerated(EnumType.STRING)
 	private ProgramDetailType type;
 	
@@ -72,6 +61,7 @@ public class ProgramDetail extends PO {
 	private Date startDate; //For Activities & tasks - Start Date (Programs run for a whole year)
 	private Date endDate; //For Activities & tasks - End Date
 	
+	//An activity may have other activities
 	@ManyToOne
 	@JoinColumn(name="parentid", referencedColumnName="id", nullable=true)
 	private ProgramDetail parent;
@@ -79,31 +69,19 @@ public class ProgramDetail extends PO {
 	@OneToMany(mappedBy="parent", cascade=CascadeType.ALL)
 	private Set<ProgramDetail> children = new HashSet<>();
 	
+	/**
+	 * Objectives and Outcomes have a many to Many Relationship
+	 * 
+	 * Also Objectives belong to a single Program
+	 */
+	@ManyToMany
+	@JoinTable(name="programobjective",
+			joinColumns=@JoinColumn(name="programdetailid"),
+			inverseJoinColumns=@JoinColumn(name="objectiveId")
+			)
+	private Set<ProgramDetail> objectives = new HashSet<>();
+	
 	public ProgramDetail() {
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 	public ProgramDetailType getType() {
@@ -216,6 +194,14 @@ public class ProgramDetail extends PO {
 			this.children.add(child);
 			child.setParent(this);
 		}
+	}
+
+	public Set<ProgramDetail> getObjectives() {
+		return objectives;
+	}
+
+	public void setObjectives(Set<ProgramDetail> objectives) {
+		this.objectives = objectives;
 	}
 
 }
