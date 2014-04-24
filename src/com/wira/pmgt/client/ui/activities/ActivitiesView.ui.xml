@@ -11,7 +11,7 @@
 	<g:HTMLPanel styleName="activities-page">
 		<div class="full-page">
 			<h4 ui:field="spnTitle">Program &amp; Activities</h4>
-			<span class="pull-right muted" ui:field="spnBudget">$10,0000</span>
+			<span class="pull-right muted" ui:field="spnBudget"></span>
 			<hr />
 			<g:HTMLPanel ui:field="divNoContent">
 				<i class="icon-warning-sign helper-font-16"></i>

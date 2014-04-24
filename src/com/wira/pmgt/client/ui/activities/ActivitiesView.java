@@ -150,11 +150,11 @@ public class ActivitiesView extends ViewImpl implements
 			show(aNewTask,true);
 		}
 		
-		List<ProgramSummary> summaries = singleResult.getProgramSummary();
-		for(int i=summaries.size()-1; i>-1; i--){
-			ProgramSummary summary = summaries.get(i);
-			createCrumb(summary.getName(), summary.getId(), i==0);
-		}
+//		List<ProgramSummary> summaries = singleResult.getProgramSummary();
+//		for(int i=summaries.size()-1; i>-1; i--){
+//			ProgramSummary summary = summaries.get(i);
+//			createCrumb(summary.getName(), summary.getId(), i==0);
+//		}
 		
 		setActivities(singleResult.getChildren());
 	}

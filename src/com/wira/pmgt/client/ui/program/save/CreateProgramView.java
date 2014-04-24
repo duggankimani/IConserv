@@ -16,6 +16,7 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.PopupViewImpl;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.component.DropDownList;
+import com.wira.pmgt.client.ui.component.IssuesPanel;
 import com.wira.pmgt.client.ui.component.autocomplete.AutoCompleteField;
 import com.wira.pmgt.client.ui.component.grid.AggregationGrid;
 import com.wira.pmgt.client.ui.component.grid.ColumnConfig;
@@ -39,6 +40,7 @@ public class CreateProgramView extends PopupViewImpl implements
 	public interface Binder extends UiBinder<Widget, CreateProgramView> {
 	}
 	
+	@UiField IssuesPanel issues;
 	@UiField TextBox txtName;
 	@UiField TextArea txtDescription;	
 	@UiField DialogBox popupView;
@@ -120,9 +122,24 @@ public class CreateProgramView extends PopupViewImpl implements
 
 	@Override
 	public boolean isValid() {
-		// txtDescription.getValue();
-
 		boolean isValid = true;
+		issues.clear();
+
+		if(isNullOrEmpty(txtName.getValue())){
+			isValid = false;
+			issues.addError("Program Name is mandatory");
+		}
+		
+		if(isNullOrEmpty(txtDescription.getValue())){
+			isValid = false;
+			issues.addError("Program Description is mandatory");
+		}
+		
+		if(lstPeriod.getValue()==null){
+			isValid = false;
+			issues.addError("Program period is mandatory");
+		}
+		
 		return isValid;
 	}
 

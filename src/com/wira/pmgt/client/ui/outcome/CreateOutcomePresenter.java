@@ -1,6 +1,5 @@
 package com.wira.pmgt.client.ui.outcome;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.event.shared.EventBus;
@@ -9,14 +8,17 @@ import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.wira.pmgt.client.service.TaskServiceCallback;
-import com.wira.pmgt.shared.model.Objective;
+import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
+import com.wira.pmgt.shared.model.program.IsProgramActivity;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.requests.GetFundsRequest;
 import com.wira.pmgt.shared.requests.GetPeriodRequest;
+import com.wira.pmgt.shared.requests.GetProgramsRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
 import com.wira.pmgt.shared.responses.GetFundsResponse;
 import com.wira.pmgt.shared.responses.GetPeriodResponse;
+import com.wira.pmgt.shared.responses.GetProgramsResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
 public class CreateOutcomePresenter extends
@@ -27,9 +29,13 @@ public class CreateOutcomePresenter extends
 
 		void setPeriod(PeriodDTO period);
 
-		void setPeriod(String period);
+		void setObjectives(List<IsProgramActivity> objectives);
 
-		void setObjectives(List<Objective> objectives);
+		void setProgram(IsProgramActivity isProgramActivity);
+
+		boolean isValid();
+
+		IsProgramActivity getOutcome();
 	}
 
 	@Inject
@@ -44,37 +50,16 @@ public class CreateOutcomePresenter extends
 	protected void onBind() {
 		super.onBind();
 		
-		List<Objective> objList = new ArrayList<Objective>();
-		
-		Objective obj1 = new Objective();
-		obj1.setObjName("Increase Understanding in value of wildlife");
-		obj1.setObjRef("Obj 2.1");
-		objList.add(obj1);
-		
-		Objective obj2 = new Objective();
-		obj2.setObjName("Increase Understanding in value of Forest");
-		obj2.setObjRef("Obj 2.2");
-		objList.add(obj2);
-		
-		Objective obj3 = new Objective();
-		obj1.setObjName("Increase Understanding in value of education");
-		obj1.setObjRef("Obj 2.3");
-		objList.add(obj3);
-		
-		getView().setObjectives(objList);
 	}
 
-	@Override
-	protected void onReveal() {
-		super.onReveal();
-		loadList();
-	}
-
-	private void loadList() {
+	public void loadList(Long parentId) {
+		assert parentId!=null;
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetFundsRequest());
 		action.addRequest(new GetPeriodRequest());
-		
+		action.addRequest(new GetProgramsRequest(ProgramDetailType.OBJECTIVE, false));
+		action.addRequest(new GetProgramsRequest(parentId, false));
+				
 		requestHelper.execute(action, new TaskServiceCallback<MultiRequestActionResult>() {
 			@Override
 			public void processResult(MultiRequestActionResult aResponse) {
@@ -83,6 +68,12 @@ public class CreateOutcomePresenter extends
 				
 				GetPeriodResponse getPeriod = (GetPeriodResponse)aResponse.get(1);
 				getView().setPeriod(getPeriod.getPeriod());
+			
+				GetProgramsResponse getPrograms = (GetProgramsResponse)aResponse.get(2);
+				getView().setObjectives(getPrograms.getPrograms());
+				
+				GetProgramsResponse getProgram = (GetProgramsResponse)aResponse.get(3);
+				getView().setProgram(getProgram.getSingleResult());
 			}
 		});
 	}

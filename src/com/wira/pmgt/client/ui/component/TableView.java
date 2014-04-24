@@ -52,6 +52,7 @@ public class TableView extends Composite {
 
 	public void setHeaderWidgets(List<Widget> widgets) {
 
+		panelHeader.clear();
 		if(isAutoNumber){
 			InlineLabel label = new InlineLabel("#");
 			widgets.add(0, label);

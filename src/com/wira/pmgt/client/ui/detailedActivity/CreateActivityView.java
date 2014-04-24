@@ -4,6 +4,7 @@ import com.gwtplatform.mvp.client.ViewImpl;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+import com.wira.pmgt.shared.model.program.IsProgramActivity;
 
 public class CreateActivityView extends ViewImpl implements
 		CreateActivityPresenter.MyView {
@@ -21,5 +22,17 @@ public class CreateActivityView extends ViewImpl implements
 	@Override
 	public Widget asWidget() {
 		return widget;
+	}
+
+	@Override
+	public boolean isValid() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public IsProgramActivity getActivity() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

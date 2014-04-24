@@ -3,9 +3,10 @@ package com.wira.pmgt.shared.model.program;
 import java.util.Date;
 import java.util.List;
 
+import com.wira.pmgt.shared.model.Listable;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 
-public abstract class IsProgramActivity extends ProgramSummary{
+public abstract class IsProgramActivity extends ProgramSummary implements Listable{
 	
 	/**
 	 * 
@@ -22,6 +23,7 @@ public abstract class IsProgramActivity extends ProgramSummary{
 	private PeriodDTO period;
 	private Long parentId; //Parent Activity or Task
 	private List<IsProgramActivity> children;
+	private List<IsProgramActivity> objectives; //Objectives of an outcome
 	private List<ProgramSummary> programSummary; //Used to build breadcrumb 
 	
 	public IsProgramActivity() {
@@ -113,5 +115,19 @@ public abstract class IsProgramActivity extends ProgramSummary{
 
 	public void setProgramSummary(List<ProgramSummary> programSummary) {
 		this.programSummary = programSummary;
+	}
+
+	public List<IsProgramActivity> getObjectives() {
+		return objectives;
+	}
+
+	public void setObjectives(List<IsProgramActivity> objectives) {
+		this.objectives = objectives;
+	}
+	
+	@Override
+	public String getDisplayName() {
+		
+		return getName();
 	}
 }

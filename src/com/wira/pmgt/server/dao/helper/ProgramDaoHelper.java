@@ -45,6 +45,9 @@ public class ProgramDaoHelper {
 	}
 
 	private static Period get(PeriodDTO periodDTO) {
+		if(periodDTO==null){
+			return null;
+		}
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		Period period = new Period();
 		if(periodDTO.getId()!=null){
@@ -97,6 +100,7 @@ public class ProgramDaoHelper {
 		
 		if(loadChildren){
 			dto.setChildren(getActivity(program.getChildren(),loadChildren));
+			dto.setObjectives(getActivity(program.getObjectives(), false));
 		}
 		
 		return dto;
@@ -139,8 +143,11 @@ public class ProgramDaoHelper {
 		
 		return dto;
 	}
-
-	private static ProgramDetail get(IsProgramActivity programDTO) {
+	private static ProgramDetail get(IsProgramActivity programDTO){
+		return get(programDTO, true);
+	}
+	
+	private static ProgramDetail get(IsProgramActivity programDTO,boolean childrentoo) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		ProgramDetail detail = new ProgramDetail();
 		if(programDTO.getId()!=null){
@@ -161,11 +168,32 @@ public class ProgramDaoHelper {
 		detail.setPeriod(get(programDTO.getPeriod()));
 		detail.setSourceOfFunds(get(programDTO.getFunding()));
 		detail.setStartDate(programDTO.getStartDate());
+		
+		if(childrentoo)
+		detail.setObjectives(getProgramChildren(programDTO.getObjectives()));
+		
 		//detail.setTarget(String);
 		//detail.setTargets(Set<TargetAndOutcome>);
 		detail.setType(programDTO.getType());
 		
+		
 		return detail;
+	}
+
+	private static Set<ProgramDetail> getProgramChildren(
+			List<IsProgramActivity> objectives) {
+		
+		if(objectives==null){
+			return new HashSet<>();
+		}
+		
+		Set<ProgramDetail> details = new HashSet<>();
+		for(IsProgramActivity activity: objectives){
+			ProgramDetail detail = get(activity, false);
+			details.add(detail);
+		}
+		
+		return details;
 	}
 
 	private static Set<ProgramFund> get(List<ProgramFundDTO> fundingDtos) {

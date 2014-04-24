@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
+import com.wira.pmgt.client.ui.component.IssuesPanel;
 import com.wira.pmgt.client.ui.component.autocomplete.AutoCompleteField;
 import com.wira.pmgt.client.ui.component.grid.AggregationGrid;
 import com.wira.pmgt.client.ui.component.grid.ColumnConfig;
@@ -19,12 +20,13 @@ import com.wira.pmgt.client.ui.component.grid.DataMapper;
 import com.wira.pmgt.client.ui.component.grid.DataModel;
 import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.Listable;
-import com.wira.pmgt.shared.model.Objective;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
+import com.wira.pmgt.shared.model.program.IsProgramActivity;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
+import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class CreateOutcomeView extends ViewImpl implements
 		CreateOutcomePresenter.MyView {
@@ -34,14 +36,15 @@ public class CreateOutcomeView extends ViewImpl implements
 	public interface Binder extends UiBinder<Widget, CreateOutcomeView> {
 	}
 	
+	@UiField IssuesPanel issues;
 	@UiField TextArea txtOutcome;
 	@UiField AggregationGrid gridView;
 	@UiField BulletListPanel crumbContainer;
 	@UiField InlineLabel spnPeriod;
-	@UiField AutoCompleteField<Objective> autoComplete;
+	@UiField AutoCompleteField<IsProgramActivity> autoComplete;
 
 	List<Listable> donors = new ArrayList<Listable>();
-	ColumnConfig itemName = new ColumnConfig("itemName", "Item Name", DataType.STRING);
+	ColumnConfig donorField = new ColumnConfig("donor", "Donor Name", DataType.SELECTBASIC);
 	
 	@Inject
 	public CreateOutcomeView(final Binder binder) {
@@ -49,11 +52,6 @@ public class CreateOutcomeView extends ViewImpl implements
 		createGrid();
 		
 		txtOutcome.getElement().setAttribute("rows", "3");
-		
-		/*BreadCrumb Samples*/
-		createCrumb("Home", false);
-		createCrumb("WildLife Management", false);
-		createCrumb("Increased Understanding ...", true);
 	}
 
 	@Override
@@ -65,7 +63,7 @@ public class CreateOutcomeView extends ViewImpl implements
 	public void createGrid(){
 		gridView.refresh();
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
-		configs.add(itemName);
+		configs.add(donorField);
 		
 		ColumnConfig config = new ColumnConfig("amount", "Amount", DataType.DOUBLE);
 		config.setAggregationColumn(true);
@@ -75,28 +73,6 @@ public class CreateOutcomeView extends ViewImpl implements
 		gridView.setAutoNumber(true);
 	}
 	
-	public ProgramDTO getProgram(){
-		ProgramDTO program = new ProgramDTO();
-		program.setDescription(txtOutcome.getValue());
-		program.setId(null);
-		program.setName(txtOutcome.getValue());
-		program.setParentId(null); //Program ID
-		program.setType(ProgramDetailType.OUTCOME);
-		//program.setTargetsAndOutcomes(targetsAndOutcomes);
-		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
-		program.setFunding(funding);
-		Double totalAmount=0.0;
-		for(ProgramFundDTO programFund: funding){
-			Double val = programFund.getAmount();
-			if(val!=null){
-				totalAmount+=val;
-			}
-		}
-		program.setBudgetAmount(totalAmount);
-		return program;
-		
-	}
-
 	@Override
 	public void setFunds(List<FundDTO> funds) {
 		if(funds!=null){
@@ -104,13 +80,11 @@ public class CreateOutcomeView extends ViewImpl implements
 				donors.add(dto);
 			}
 		}
+		donorField.setDropDownItems(donors);
 		gridView.refresh();
-	}
+	} 
 
-	
-//	public void setObjectives(List<objectives> objs) {
-//	}
-	
+
 	public void createCrumb(String text, Boolean isActive){
 		BreadCrumbItem crumb = new BreadCrumbItem();
 		crumb.setActive(isActive);
@@ -118,7 +92,6 @@ public class CreateOutcomeView extends ViewImpl implements
 		crumbContainer.add(crumb);
 	}
 
-	@Override
 	public void setPeriod(String period) {
 		if(period!=null){
 			spnPeriod.getElement().setInnerText(period);
@@ -142,10 +115,74 @@ public class CreateOutcomeView extends ViewImpl implements
 
 	@Override
 	public void setPeriod(PeriodDTO period) {
+		
 	}
 	
 	@Override
-	public void setObjectives(List<Objective> objectives) {
+	public void setObjectives(List<IsProgramActivity> objectives) {
 		autoComplete.setValues(objectives);
 	}
+
+	public void createCrumb(String text,Long id, Boolean isActive){
+		BreadCrumbItem crumb = new BreadCrumbItem();
+		crumb.setActive(isActive);
+		crumb.setLinkText(text);
+		crumb.setHref("#home;page=activities;activity="+id);
+		crumbContainer.add(crumb);
+	}
+
+	public void setBreadCrumbs(List<ProgramSummary> summaries) {
+		for(int i=summaries.size()-1; i>-1; i--){
+			ProgramSummary summary = summaries.get(i);
+			createCrumb(summary.getName(), summary.getId(), i==0);
+		}
+		
+	}
+	
+	@Override
+	public void setProgram(IsProgramActivity isProgramActivity) {
+		setBreadCrumbs(isProgramActivity.getProgramSummary());
+	}
+	
+	boolean isNullOrEmpty(String value) {
+		return value == null || value.trim().length() == 0;
+	}
+
+	@Override
+	public boolean isValid() {
+		boolean isValid = true;
+		issues.clear();
+
+		if(isNullOrEmpty(txtOutcome.getValue())){
+			isValid = false;
+			issues.addError("Outcome is mandatory");
+		}
+		
+		return isValid;
+	}
+
+	@Override
+	public IsProgramActivity getOutcome() {
+		ProgramDTO program = new ProgramDTO();
+		program.setDescription(txtOutcome.getValue());
+		program.setId(null);
+		program.setName(txtOutcome.getValue());
+		program.setParentId(null); //Program ID
+		program.setType(ProgramDetailType.OUTCOME);
+		//program.setTargetsAndOutcomes(targetsAndOutcomes);
+		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
+		program.setFunding(funding);
+		Double totalAmount=0.0;
+		for(ProgramFundDTO programFund: funding){
+			Double val = programFund.getAmount();
+			if(val!=null){
+				totalAmount+=val;
+			}
+		}
+		program.setBudgetAmount(totalAmount);
+		return program;
+		
+	}
+
+
 }
