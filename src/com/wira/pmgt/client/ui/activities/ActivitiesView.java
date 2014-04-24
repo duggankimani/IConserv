@@ -10,16 +10,13 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
-import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.IsProgramActivity;
-import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class ActivitiesView extends ViewImpl implements
 		ActivitiesPresenter.IActivitiesView {
@@ -93,7 +90,7 @@ public class ActivitiesView extends ViewImpl implements
 		HTMLPanel opt = new HTMLPanel("<span class='icon-caret-down pull-right'></span>");
 		a.setHref("#home;page=activities;activity="+id);
 		li.add(a);
-		li.add(opt);
+		//li.add(opt);
 		if(active){
 			li.addStyleName("active");
 		}else{

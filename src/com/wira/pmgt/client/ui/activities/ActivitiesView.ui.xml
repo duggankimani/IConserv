@@ -2,28 +2,29 @@
 
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui' ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
-	xmlns:d='urn:import:com.wira.pmgt.client.ui.component' 
-	xmlns:up='urn:import:com.wira.pmgt.client.ui.upload.custom'
+	xmlns:d='urn:import:com.wira.pmgt.client.ui.component' xmlns:up='urn:import:com.wira.pmgt.client.ui.upload.custom'
 	xmlns:activities='urn:import:com.wira.pmgt.client.ui.activities'
 	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
 	ui:generateLocales='default'>
 
 	<g:HTMLPanel styleName="activities-page">
 		<div class="full-page">
-			<h4 ui:field="spnTitle">Program &amp; Activities</h4>
-			<span class="pull-right muted" ui:field="spnBudget"></span>
-			<hr />
-			<g:HTMLPanel ui:field="divNoContent">
-				<i class="icon-warning-sign helper-font-16"></i>
-				<span class="helper-font-16">
-					No Programs Added. Click
-					<a>Create Program</a>
-					to get started
-				</span>
-			</g:HTMLPanel>
 
-			<div class="row-fluid">
-				<g:HTMLPanel ui:field="divContent" styleName="tabbable tabs-below hidden">
+			<div class="content-top">
+				<h4 ui:field="spnTitle">Programs Management</h4>
+				<span class="muted pull-right budget" ui:field="spnBudget"></span>
+				<g:HTMLPanel ui:field="divNoContent">
+					<i class="icon-warning-sign helper-font-16"></i>
+					<span class="helper-font-16">
+						No Programs Added. Click
+						<a>Create Program</a>
+						to get started
+					</span>
+				</g:HTMLPanel>
+			</div>
+			
+			<div class="row-fluid full-page">
+				<g:HTMLPanel ui:field="divContent" styleName="tabbable tabs-below hidden full-page no-overflow-x">
 					<!--Action Buttons -->
 					<div class="action-buttons row-fluid">
 						<div class="span3 hide">
@@ -39,7 +40,7 @@
 								<i class="icon-plus"></i>
 								Add Objective
 							</g:Anchor>
-						</div>						
+						</div>
 						<div class="span3 hide">
 							<g:Anchor ui:field="aNewActivity" styleName="btn btn-default"
 								title="Add an activity">
@@ -62,7 +63,8 @@
 						</div>
 					</div>
 
-					<d:BulletListPanel ui:field="listPanel" styleName="nav nav-tabs">
+					<d:BulletListPanel ui:field="listPanel"
+						styleName="nav nav-tabs">
 					</d:BulletListPanel>
 				</g:HTMLPanel>
 			</div>

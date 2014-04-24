@@ -6,26 +6,52 @@
 }
 
 .main-container .activities-page{
-	padding: 30px 0px;
+	padding: 0px 0px;
+	height: 100%;
 }
 .main-container .activities-page .tab-content{
-    min-height: 400px;
+    margin: 20px;
+    height: 70%;
     overflow-x: hidden;
 }
+
+.activities-page .content-top{
+	margin: 17px;
+	border-bottom: 1px solid #E6E6E6;
+	padding-bottom: 10px;
+}
+
+.activities-page .content-top .budget{
+	position:absolute;
+	right:2%;
+	top: 4%;
+}
+
+.activities-page .action-buttons{
+	margin-left: 20px;
+}
+
+.activities-page .user-content{
+	margin: 20px;
+}
+
 
 .activities-page .tabs-below > .nav-tabs{
 	background-color: #eeeeee;
 	border-top: 1px solid #aaa;
+	margin-bottom: 0px;
+	padding-bottom: 2%;
 }
 
 .activities-page .nav-tabs > .active{
-	margin-left:10px
+	margin-left: 22px;
 }
 
 .main-container .activities-page .nav-tabs > .active > a, 
-.nav-tabs > .active > a:hover, 
-.nav-tabs > .active > a:focus{
+.main-container .activities-page .nav-tabs > .active > a:hover, 
+.main-container .activities-page .nav-tabs > .active > a:focus{
 	border-color: transparent #aaa #aaa #aaa;
+	cursor:pointer;
 }
 
 

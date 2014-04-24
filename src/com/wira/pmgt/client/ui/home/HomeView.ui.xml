@@ -5,7 +5,7 @@
 	xmlns:d='urn:import:com.wira.pmgt.client.ui.component'
 	ui:generateLocales='default'>
 
-	<g:HTMLPanel styleName="row-fluid main-container">
+	<g:HTMLPanel styleName="row-fluid main-container no-overflow-x">
 		<g:HTMLPanel ui:field="mainContainer" styleName="full-page">
 			<div id="sidebar-nav" class="span2 hidden-phone">
 				<!-- g:HTMLPanel styleName="navbar" ui:field="divNavbar"> <div class="navbar-inner"> 
@@ -54,7 +54,7 @@
 				</ul>
 			</div>
 
-			<g:HTMLPanel ui:field="activityContainer" styleName="overflow-y content-right span10">
+			<g:HTMLPanel ui:field="activityContainer" styleName="content-right span10 no-overflow-y">
 			</g:HTMLPanel>
 
 		</g:HTMLPanel>
