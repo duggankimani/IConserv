@@ -156,6 +156,11 @@ public class ActivitiesView extends ViewImpl implements
 		setActivities(singleResult.getChildren());
 	}
 
+	private void createCrumb(String name, Long id, boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private void show(Anchor aAnchor, boolean show) {
 		if(show){
 			aAnchor.getElement().getParentElement().removeClassName("hide");

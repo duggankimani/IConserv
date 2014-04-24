@@ -32,7 +32,9 @@ public class BreadCrumbItem extends Composite {
 	}
 	
 	/*
-	 * The last Item in the breadCrumb
+	 * The last Item in the breadCrumb;
+	 * if true - Link not clickable
+	 * false - Link clickable
 	 */
 	public void setActive(Boolean status){
 		if(status){

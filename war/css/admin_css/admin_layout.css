@@ -308,6 +308,12 @@
 	margin-bottom: 15px;
 }
 
+body .action-buttons .span3{
+	margin-right: 20px;
+	width: initial;
+	margin-left: 0px;
+}
+
 /*--content-body||Settings--*/
 #main-content .content .settings{
 	padding: 35px;

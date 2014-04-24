@@ -149,7 +149,6 @@ public class CreateProgramView extends PopupViewImpl implements
 		
 		@Override
 		public ProgramFundDTO getData(DataModel model) {
-			
 			ProgramFundDTO fund = new ProgramFundDTO();
 			if(model.get("donor")==null){
 				return null;
