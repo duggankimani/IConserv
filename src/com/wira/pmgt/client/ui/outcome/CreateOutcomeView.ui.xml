@@ -2,22 +2,28 @@
 
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:d='urn:import:com.wira.pmgt.client.ui.component' xmlns:g='urn:import:com.google.gwt.user.client.ui'
-	xmlns:grid='urn:import:com.wira.pmgt.client.ui.component.grid'
-	xmlns:a='urn:import:com.wira.pmgt.client.ui.component.autocomplete'
+	xmlns:grid='urn:import:com.wira.pmgt.client.ui.component.grid' xmlns:a='urn:import:com.wira.pmgt.client.ui.component.autocomplete'
 	ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
 	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
 	ui:generateLocales='default'>
 
-	<g:HTMLPanel styleName="form-horizontal">
+	<g:HTMLPanel>
 		<!-- BreadCrump -->
 		<d:BulletListPanel styleName="breadcrumb" ui:field="crumbContainer">
 		</d:BulletListPanel>
 
 		<fieldset>
 			<div class="control-group">
+				<div class="controls">
+					<g:InlineLabel ui:field="spnPeriod" styleName="muted">Jan 1 -
+						Dec 31 2014</g:InlineLabel>
+				</div>
+			</div>
+			
+			<div class="control-group">
 				<div class="control-label">Outcome Name:</div>
 				<div class="controls">
-					<g:TextArea ui:field="txtOutcome" />
+					<g:TextArea ui:field="txtOutcome" width="90%"/>
 					<span class="mandatory" title="Required Field">*</span>
 				</div>
 			</div>

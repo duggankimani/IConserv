@@ -26,7 +26,6 @@
 				<g:HTMLPanel ui:field="divContent" styleName="tabbable tabs-below hidden">
 					<!--Action Buttons -->
 					<div class="action-buttons row-fluid">
-
 						<div class="span3 hide">
 							<g:Anchor ui:field="aNewOutcome" styleName="btn btn-primary"
 								title="Add an outcome">
@@ -56,11 +55,6 @@
 							</g:Anchor>
 						</div>
 					</div>
-					<!-- BreadCrump -->
-					<d:BulletListPanel styleName="breadcrumb"
-						ui:field="crumbContainer">
-					</d:BulletListPanel>
-					
 
 					<div id="usercontent" class="tab-content">
 						<div ui:field="divTab1Content" class="tab-pane fade in active">

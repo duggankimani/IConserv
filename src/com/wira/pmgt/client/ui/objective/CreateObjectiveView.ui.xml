@@ -16,13 +16,12 @@
 			</d:BulletListPanel>
 			
 			<div class="control-group">
-				<div class="control-label">Period</div>
 				<div class="controls">
-					<g:InlineLabel ui:field="spnPeriod">Jan 1 - Dec 31 2014</g:InlineLabel>
+					<g:InlineLabel ui:field="spnPeriod" styleName="muted">Jan 1 - Dec 31 2014</g:InlineLabel>
 				</div>
 			</div>
 		    <div class="control-group">
-				<div class="control-label">Objective Ref</div>
+				<div class="control-label">Objective Ref:</div>
 				<div class="controls">
 					<g:TextBox ui:field="txtObjectiveRef"/>
 					<span class="mandatory" title="Required Field">*</span>
@@ -30,9 +29,9 @@
 			</div>
 			
 			<div class="control-group">
-				<div class="control-label">Objective</div>
+				<div class="control-label">Objective Name:</div>
 				<div class="controls">
-					<g:TextArea ui:field="txtObjective" />
+					<g:TextArea ui:field="txtObjective" width="90%" />
 					<span class="mandatory" title="Required Field">*</span>
 				</div>
 			</div>

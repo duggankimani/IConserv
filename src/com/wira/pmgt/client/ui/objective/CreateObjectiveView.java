@@ -40,6 +40,7 @@ public class CreateObjectiveView extends ViewImpl implements
 	public CreateObjectiveView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
 		
+		txtObjective.getElement().setAttribute("rows", "5");
 	}
 
 	@Override

@@ -5,18 +5,21 @@ import java.util.List;
 
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
+import com.wira.pmgt.client.ui.component.autocomplete.AutoCompleteField;
 import com.wira.pmgt.client.ui.component.grid.AggregationGrid;
 import com.wira.pmgt.client.ui.component.grid.ColumnConfig;
 import com.wira.pmgt.client.ui.component.grid.DataMapper;
 import com.wira.pmgt.client.ui.component.grid.DataModel;
 import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.Listable;
+import com.wira.pmgt.shared.model.Objective;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
@@ -34,6 +37,8 @@ public class CreateOutcomeView extends ViewImpl implements
 	@UiField TextArea txtOutcome;
 	@UiField AggregationGrid gridView;
 	@UiField BulletListPanel crumbContainer;
+	@UiField InlineLabel spnPeriod;
+	@UiField AutoCompleteField<Objective> autoComplete;
 
 	List<Listable> donors = new ArrayList<Listable>();
 	ColumnConfig itemName = new ColumnConfig("itemName", "Item Name", DataType.STRING);
@@ -42,6 +47,8 @@ public class CreateOutcomeView extends ViewImpl implements
 	public CreateOutcomeView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
 		createGrid();
+		
+		txtOutcome.getElement().setAttribute("rows", "3");
 		
 		/*BreadCrumb Samples*/
 		createCrumb("Home", false);
@@ -111,12 +118,12 @@ public class CreateOutcomeView extends ViewImpl implements
 		crumbContainer.add(crumb);
 	}
 
-//	@Override
-//	public void setPeriod(PeriodDTO period) {
-//		if(period!=null){
-//			dtRange.setDates(period.getStartDate(), period.getEndDate());
-//		}
-//	} 
+	@Override
+	public void setPeriod(String period) {
+		if(period!=null){
+			spnPeriod.getElement().setInnerText(period);
+		}
+	} 
 	
 	DataMapper programFundMapper = new DataMapper() {
 		@Override
@@ -135,8 +142,10 @@ public class CreateOutcomeView extends ViewImpl implements
 
 	@Override
 	public void setPeriod(PeriodDTO period) {
-		// TODO Auto-generated method stub
-		
 	}
-
+	
+	@Override
+	public void setObjectives(List<Objective> objectives) {
+		autoComplete.setValues(objectives);
+	}
 }
