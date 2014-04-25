@@ -7,13 +7,13 @@
 			<span class="caret"></span>
 		</button>
 
-		<d:BulletListPanel class="dropdown-menu" role="menu" ui:field="ulMenu">
+		<d:BulletListPanel styleName="dropdown-menu" ui:field="ulMenu">
 			<!-- <li>
 				<d:ActionLink ui:field="aRevoke" styleName="" title="Revoke this task so that its re-assignable to other users in your group">
 					<i class="icon-minus"></i>
 					Revoke
 				</d:ActionLink>
-			</li> -->
+			</li> -->	
 		</d:BulletListPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 

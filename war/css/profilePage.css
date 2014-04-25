@@ -10,7 +10,7 @@
 	height: 100%;
 }
 .main-container .activities-page .tab-content{
-    margin: 20px;
+    margin: 10px 20px;
     height: 70%;
     overflow-x: hidden;
 }
@@ -18,7 +18,16 @@
 .activities-page .content-top{
 	margin: 17px;
 	border-bottom: 1px solid #E6E6E6;
-	padding-bottom: 10px;
+	padding-bottom: 0px;
+	width: 96%;
+}
+.activities-page .content-top .title{
+	width:auto;
+	display: inline-block;
+}
+.activities-page .content-top .edit{
+	margin-left: 2%;
+	display: inline;
 }
 
 .activities-page .content-top .budget{
@@ -28,7 +37,8 @@
 }
 
 .activities-page .action-buttons{
-	margin-left: 20px;
+	margin: 0px 20px;
+	width: 96%;
 }
 
 .activities-page .user-content{

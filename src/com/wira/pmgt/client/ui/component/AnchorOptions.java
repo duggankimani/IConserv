@@ -18,6 +18,7 @@ public class AnchorOptions extends Composite {
 
 	public AnchorOptions() {
 		initWidget(uiBinder.createAndBindUi(this));
+		ulMenu.getElement().setAttribute("role", "menu"); 
 	}
 
 	public void createMenu(String text) {
