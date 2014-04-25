@@ -45,8 +45,8 @@ import com.wira.pmgt.client.ui.events.AfterSaveEvent.AfterSaveHandler;
 import com.wira.pmgt.client.ui.events.AfterSearchEvent;
 import com.wira.pmgt.client.ui.events.AlertLoadEvent;
 import com.wira.pmgt.client.ui.events.AlertLoadEvent.AlertLoadHandler;
-import com.wira.pmgt.client.ui.events.CreateDocumentEvent;
-import com.wira.pmgt.client.ui.events.CreateDocumentEvent.CreateDocumentHandler;
+import com.wira.pmgt.client.ui.events.CreateProgramEvent;
+import com.wira.pmgt.client.ui.events.CreateProgramEvent.CreateDocumentHandler;
 import com.wira.pmgt.client.ui.events.DocumentSelectionEvent;
 import com.wira.pmgt.client.ui.events.DocumentSelectionEvent.DocumentSelectionHandler;
 import com.wira.pmgt.client.ui.events.LoadAlertsEvent;
@@ -72,7 +72,6 @@ import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.Doc;
 import com.wira.pmgt.shared.model.DocStatus;
 import com.wira.pmgt.shared.model.Document;
-import com.wira.pmgt.shared.model.DocumentType;
 import com.wira.pmgt.shared.model.HTSummary;
 import com.wira.pmgt.shared.model.SearchFilter;
 import com.wira.pmgt.shared.requests.GetTaskList;
@@ -228,7 +227,7 @@ public class HomePresenter extends
 		addRegisteredHandler(ProcessingEvent.TYPE, this);
 		addRegisteredHandler(ProcessingCompletedEvent.TYPE, this);
 		addRegisteredHandler(SearchEvent.TYPE, this);
-		addRegisteredHandler(CreateDocumentEvent.TYPE, this);
+		addRegisteredHandler(CreateProgramEvent.TYPE, this);
 		
 	
 		
@@ -418,11 +417,11 @@ public class HomePresenter extends
 		});
 	}
 	
-	protected void showEditForm(final DocumentType type){
+	protected void showEditForm(final Long programId){
 		genericFormProvider.get(new ServiceCallback<GenericFormPresenter>() {
 			@Override
 			public void processResult(GenericFormPresenter result) {
-				result.setDocumentType(type);
+				//result.setDocumentType(type);
 				addToPopupSlot(result, false);
 			}
 		});
@@ -501,11 +500,12 @@ public class HomePresenter extends
 	}
 
 	@Override
-	public void onCreateDocument(CreateDocumentEvent event) {
-		DocumentType type = event.getDocType();	
+	public void onCreateDocument(CreateProgramEvent event) {
+		Long programId = event.getProgramId();	
 		
-		if(type.getFormId()!=null){
-			showEditForm(type);
+		if(programId!=null){
+			showEditForm(MODE.CREATE);
+			//showEditForm(programId);
 		}else{
 			showEditForm(MODE.CREATE);
 		}

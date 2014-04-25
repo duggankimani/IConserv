@@ -117,7 +117,6 @@ public class CreateProgramView extends PopupViewImpl implements
 		}
 		program.setBudgetAmount(totalAmount);
 		return program;
-		
 	}
 
 	@Override

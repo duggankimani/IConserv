@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
-import com.wira.pmgt.client.ui.events.CreateDocumentEvent;
+import com.wira.pmgt.client.ui.events.CreateProgramEvent;
 import com.wira.pmgt.shared.model.DocumentType;
 
 public class DocTypeItemPresenter extends
@@ -31,7 +31,7 @@ public class DocTypeItemPresenter extends
 		getView().getaDocAnchor().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				fireEvent(new CreateDocumentEvent(type));			
+//				fireEvent(new CreateProgramEvent(type));			
 				}
 		});
 	}

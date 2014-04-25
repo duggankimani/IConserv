@@ -1,27 +1,23 @@
 package com.wira.pmgt.client.ui.events;
 
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
-import com.wira.pmgt.shared.model.DocumentType;
 
-public class CreateDocumentEvent extends
-		GwtEvent<CreateDocumentEvent.CreateDocumentHandler> {
+public class CreateProgramEvent extends
+		GwtEvent<CreateProgramEvent.CreateDocumentHandler> {
 
 	public static Type<CreateDocumentHandler> TYPE = new Type<CreateDocumentHandler>();
-	private DocumentType docType;
+	private Long programId;
 
 	public interface CreateDocumentHandler extends EventHandler {
-		void onCreateDocument(CreateDocumentEvent event);
+		void onCreateDocument(CreateProgramEvent event);
 	}
 
-	public CreateDocumentEvent(DocumentType docType) {
-		this.docType = docType;
+	public CreateProgramEvent(Long progId) {
+		this.setProgramId(progId);
 	}
 
-	public DocumentType getDocType() {
-		return docType;
-	}
 
 	@Override
 	protected void dispatch(CreateDocumentHandler handler) {
@@ -37,7 +33,17 @@ public class CreateDocumentEvent extends
 		return TYPE;
 	}
 
-	public static void fire(HasHandlers source, DocumentType docType) {
-		source.fireEvent(new CreateDocumentEvent(docType));
+	public static void fire(HasHandlers source, Long progId) {
+		source.fireEvent(new CreateProgramEvent(progId));
+	}
+
+
+	public Long getProgramId() {
+		return programId;
+	}
+
+
+	public void setProgramId(Long programId) {
+		this.programId = programId;
 	}
 }
