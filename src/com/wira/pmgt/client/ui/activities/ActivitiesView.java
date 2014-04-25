@@ -78,6 +78,7 @@ public class ActivitiesView extends ViewImpl implements
 		if (status) {
 			divContent.removeStyleName("hidden");
 			divNoContent.addStyleName("hidden");
+			spnTitle.setInnerText("Programs Management");
 		} else {
 			divContent.addStyleName("hidden");
 			divNoContent.removeStyleName("hidden");
