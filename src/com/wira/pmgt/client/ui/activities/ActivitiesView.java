@@ -187,4 +187,10 @@ public class ActivitiesView extends ViewImpl implements
 		}
 	}
 
+	@Override
+	public HasClickHandlers getEditLink() {
+		
+		return aEdit;
+	}
+
 }

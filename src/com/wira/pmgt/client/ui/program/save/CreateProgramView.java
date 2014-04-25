@@ -176,6 +176,21 @@ public class CreateProgramView extends PopupViewImpl implements
 			fund.setId(model.getId());
 			return fund;
 		}
+		
+		@Override
+		public List<DataModel> getDataModels(List<Object> funding) {
+			List<DataModel> models = new ArrayList<DataModel>();
+			for(Object obj: funding){
+				ProgramFundDTO fund = (ProgramFundDTO)obj;
+				DataModel model = new DataModel();
+				model.set("donor", fund.getFund());
+				model.setId(fund.getId());
+				model.set("amount", fund.getAmount());
+				models.add(model);
+			}
+			
+			return models;
+		}
 	};
 
 	@Override

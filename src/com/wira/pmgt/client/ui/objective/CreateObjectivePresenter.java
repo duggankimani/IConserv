@@ -21,61 +21,54 @@ public class CreateObjectivePresenter extends
 
 	public interface ICreateObjectiveView extends View {
 		void setPeriod(PeriodDTO period);
-
 		void setBreadCrumbs(List<ProgramSummary> programSummary);
-
-		void setObjective(IsProgramActivity singleResult);
-		
-		IsProgramActivity getProgram();
-
+		void setObjective(IsProgramActivity objective);
+		IsProgramActivity getObjective();
 		boolean isValid();
+		void clear();
 	}
 	
 	@Inject DispatchAsync requestHelper;
-
-	IsProgramActivity parent=null;
-	Long objectiveId=null;
+	IsProgramActivity objective;
 	
 	@Inject
 	public CreateObjectivePresenter(final EventBus eventBus, final ICreateObjectiveView view) {
 		super(eventBus, view);
 	}
 
-	@Override
-	protected void onBind() {
-		super.onBind();
-	}
-	
-	@Override
-	protected void onReveal() {
-		super.onReveal();
+	public IsProgramActivity getObjective(){
+		IsProgramActivity viewObjective = getView().getObjective();
+		if(objective!=null){
+			objective.setDescription(viewObjective.getDescription());
+			objective.setName(viewObjective.getName());
+			return objective;
+		}else{
+			return viewObjective;
+		}
 	}
 
-	public void loadList(Long parentId, final Long objectiveId) {
-		this.objectiveId = objectiveId;
+	public void load(Long parentId) {
 		
 		assert parentId!=null;
 		
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetProgramsRequest(parentId, false));
-		if(objectiveId!=null){
-			action.addRequest(new GetProgramsRequest(parentId, false));
-		}
-		
 		requestHelper.execute(action, new TaskServiceCallback<MultiRequestActionResult>() {
 			@Override
 			public void processResult(MultiRequestActionResult aResponse) {				
 				
 				GetProgramsResponse response = (GetProgramsResponse)aResponse.get(0);
-				parent = response.getSingleResult();
+				IsProgramActivity parent = response.getSingleResult();
 				getView().setPeriod(parent.getPeriod());
 				getView().setBreadCrumbs(parent.getProgramSummary());
-				
-				if(objectiveId!=null){
-					GetProgramsResponse response2 = (GetProgramsResponse)aResponse.get(1);
-					getView().setObjective(response2.getSingleResult());
-				}
+				getView().setObjective(objective);
 			}
 		});
 	}
+
+	public void setObjective(IsProgramActivity selected) {
+		this.objective = selected;
+		getView().clear();
+	}
+
 }
