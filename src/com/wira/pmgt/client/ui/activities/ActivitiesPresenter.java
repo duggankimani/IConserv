@@ -36,13 +36,15 @@ public class ActivitiesPresenter extends
 		ActivitySelectionChangedHandler {
 
 	public interface IActivitiesView extends View {
-		void showContent(boolean b);
+		void showContent(boolean show);
 
-		HasClickHandlers getaNewOutcome();
+		HasClickHandlers getNewOutcome();
 
-		HasClickHandlers getaNewActivity();
+		HasClickHandlers getNewActivityLink();
 
 		HasClickHandlers getNewObjectiveLink();
+		
+		HasClickHandlers getEditLink();
 
 		void setActivities(List<IsProgramActivity> programs);
 
@@ -54,7 +56,7 @@ public class ActivitiesPresenter extends
 
 		void setPeriods(List<PeriodDTO> periods);
 
-		HasClickHandlers getaProgramEdit();
+		HasClickHandlers getProgramEdit();
 	}
 
 	@Inject
@@ -80,7 +82,7 @@ public class ActivitiesPresenter extends
 		super.onBind();
 		addRegisteredHandler(ActivitySelectionChangedEvent.TYPE, this);
 		
-		getView().getaProgramEdit().addClickHandler(new ClickHandler() {
+		getView().getProgramEdit().addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -89,53 +91,18 @@ public class ActivitiesPresenter extends
 		});
 		
 		
-		getView().getaNewOutcome().addClickHandler(new ClickHandler() {
+		getView().getNewOutcome().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				createOutcome.loadList(programId);
-				AppManager.showPopUp("Create Outcome",
-						createOutcome.getWidget(), new OptionControl() {
-
-							@Override
-							public void onSelect(String name) {
-
-								if (name.equals("Save")) {
-									if (createOutcome.getView().isValid()) {
-										save(createOutcome.getView()
-												.getOutcome());
-										hide();
-									}
-								} else {
-									hide();
-								}
-
-							}
-						}, "Save", "Cancel");
+				showEditPopup(ProgramDetailType.OUTCOME);
 			}
 		});
 
-		getView().getaNewActivity().addClickHandler(new ClickHandler() {
+		getView().getNewActivityLink().addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				AppManager.showPopUp("Create Activity",
-						createActivity.getWidget(), new OptionControl() {
-
-							@Override
-							public void onSelect(String name) {
-
-								if (name.equals("Save")) {
-									if (createActivity.getView().isValid()) {
-										save(createActivity.getView()
-												.getActivity());
-										hide();
-									}
-								} else {
-									hide();
-								}
-
-							}
-						}, "Save", "Cancel");
+				showEditPopup(ProgramDetailType.ACTIVITY);
 			}
 		});
 
@@ -143,27 +110,94 @@ public class ActivitiesPresenter extends
 
 			@Override
 			public void onClick(ClickEvent event) {
-				objectivePresenter.loadList(programId, null);
-				AppManager.showPopUp("Add Objective",
-						objectivePresenter.getWidget(), new OptionControl() {
-
-							@Override
-							public void onSelect(String name) {
-								if (name.equals("Save")) {
-									if (objectivePresenter.getView().isValid()) {
-										save(objectivePresenter.getView()
-												.getProgram());
-										hide();
-									}
-								} else {
-									hide();
-								}
-							}
-
-						}, "Save", "Cancel");
+				showEditPopup(ProgramDetailType.OBJECTIVE);
+			}
+		});
+		
+		getView().getEditLink().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				showEditPopup(selected.getType(), true);
 			}
 		});
 
+	}
+	
+	protected void showEditPopup(ProgramDetailType type){
+		showEditPopup(type, false);
+	}
+	
+	protected void showEditPopup(ProgramDetailType type, boolean edit){
+		
+		switch (type) {
+		case ACTIVITY:
+			//Use selected an outcome
+			createActivity.setActivity(edit?selected:null);
+			AppManager.showPopUp("Create Activity",
+					createActivity.getWidget(), new OptionControl() {
+						
+						@Override
+						public void onSelect(String name) {
+							
+							if(name.equals("Save")){
+								if(createActivity.getView().isValid()){
+									save(createActivity.getView().getActivity());
+									hide();
+								}
+							}else{
+								hide();
+							}
+							
+						}}, "Save", "Cancel");
+			break;
+	
+		case OBJECTIVE:
+			objectivePresenter.setObjective(edit?selected:null);
+			objectivePresenter.load(programId);//Parent Id Passed here
+			AppManager.showPopUp("Add Objective", objectivePresenter.getWidget(), new OptionControl() {
+				
+				@Override
+				public void onSelect(String name) {
+					if(name.equals("Save")){
+						if(objectivePresenter.getView().isValid()){
+							save(objectivePresenter.getObjective());
+							hide();
+						}
+					}else{hide();}
+				}
+
+			}, "Save", "Cancel");
+			
+			break;
+			
+		case OUTCOME:
+			createOutcome.setOutcome(edit?selected:null);
+			createOutcome.load(programId);
+			AppManager.showPopUp("Create Outcome",
+					createOutcome.getWidget(), new OptionControl() {
+						
+						@Override
+						public void onSelect(String name) {
+							
+							if(name.equals("Save")){
+								if(createOutcome.getView().isValid()){
+									save(createOutcome.getOutcome());
+									hide();
+								}
+							}else{
+								hide();
+							}
+							
+						}}, "Save", "Cancel");
+			break;
+			
+		case TASK:
+			
+			break;
+		default:
+			break;
+		}
 	}
 
 	private void save(IsProgramActivity program) {

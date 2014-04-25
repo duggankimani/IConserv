@@ -17,6 +17,7 @@ import com.wira.pmgt.client.ui.OptionControl;
 import com.wira.pmgt.client.ui.period.save.PeriodSaveView;
 import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.program.FundDTO;
+import com.wira.pmgt.shared.model.program.IsProgramActivity;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.requests.CreatePeriodRequest;
@@ -24,12 +25,14 @@ import com.wira.pmgt.shared.requests.CreateProgramRequest;
 import com.wira.pmgt.shared.requests.GetFundsRequest;
 import com.wira.pmgt.shared.requests.GetGroupsRequest;
 import com.wira.pmgt.shared.requests.GetPeriodsRequest;
+import com.wira.pmgt.shared.requests.GetProgramsRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
 import com.wira.pmgt.shared.responses.CreatePeriodResponse;
 import com.wira.pmgt.shared.responses.CreateProgramResponse;
 import com.wira.pmgt.shared.responses.GetFundsResponse;
 import com.wira.pmgt.shared.responses.GetGroupsResponse;
 import com.wira.pmgt.shared.responses.GetPeriodsResponse;
+import com.wira.pmgt.shared.responses.GetProgramsResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
 public class CreateProgramPresenter extends
@@ -45,10 +48,13 @@ public class CreateProgramPresenter extends
 		void setGroups(List<UserGroup> groups);
 		ProgramDTO getProgram();
 		void setFunds(List<FundDTO> funds);
+		void setProgram(IsProgramActivity program);
 	}
 
 	@Inject DispatchAsync requestHelper;
-
+	private Long programId;
+	private IsProgramActivity program;
+	
 	@Inject
 	public CreateProgramPresenter(final EventBus eventBus, final ICreateDocView view) {
 		super(eventBus, view);
@@ -102,7 +108,9 @@ public class CreateProgramPresenter extends
 			@Override
 			public void onClick(ClickEvent event) {
 				if(getView().isValid()){
-					requestHelper.execute(new CreateProgramRequest(getView().getProgram()),
+					IsProgramActivity newProgram = getView().getProgram();
+					newProgram.setId(programId);					
+					requestHelper.execute(new CreateProgramRequest(newProgram),
 							new TaskServiceCallback<CreateProgramResponse>() {
 							@Override
 							public void processResult(
@@ -133,6 +141,9 @@ public class CreateProgramPresenter extends
 		action.addRequest(new GetFundsRequest());
 		action.addRequest(new GetGroupsRequest());
 		action.addRequest(new GetPeriodsRequest());
+		if(programId!=null){
+			action.addRequest(new GetProgramsRequest(programId, false));
+		}
 		
 		
 		requestHelper.execute(action, new TaskServiceCallback<MultiRequestActionResult>() {
@@ -146,7 +157,18 @@ public class CreateProgramPresenter extends
 				
 				GetPeriodsResponse getPeriods = (GetPeriodsResponse)aResponse.get(2);
 				getView().setPeriods(getPeriods.getPeriods());
+				
+				if(programId!=null){
+					GetProgramsResponse getProgram = (GetProgramsResponse)aResponse.get(3);
+					program = getProgram.getSingleResult();
+					getView().setProgram(program);
+				}
+				
 			}
 		});
+	}
+
+	public void setProgramId(Long programId) {
+		this.programId=programId;
 	}
 }

@@ -113,11 +113,11 @@ public class ActivitiesView extends ViewImpl implements
 		}
 	}
 
-	public HasClickHandlers getaNewOutcome() {
+	public HasClickHandlers getNewOutcome() {
 		return aNewOutcome;
 	}
 
-	public HasClickHandlers getaNewActivity() {
+	public HasClickHandlers getNewActivityLink() {
 		return aNewActivity;
 	}
 
@@ -239,12 +239,16 @@ public class ActivitiesView extends ViewImpl implements
 	}
 
 	@Override
+	public HasClickHandlers getEditLink() {
+		return aEdit;
+	}
+	
 	public void setPeriods(List<PeriodDTO> periods) {
 		lstPeriod.setItems(periods);
 	}
 
 	@Override
-	public HasClickHandlers getaProgramEdit() {
+	public HasClickHandlers getProgramEdit() {
 		return aProgramEdit;
 	}
 

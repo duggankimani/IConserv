@@ -1,5 +1,6 @@
 package com.wira.pmgt.client.ui.objective;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.uibinder.client.UiBinder;
@@ -50,13 +51,23 @@ public class CreateObjectiveView extends ViewImpl implements
 		return widget;
 	}
 	
-	public ProgramDTO getProgram(){
+	@Override
+	public void setObjective(IsProgramActivity objective) {
+		if(objective==null){
+			return;
+		}
+		
+		txtObjective.setValue(objective.getDescription());
+		txtObjectiveRef.setValue(objective.getName());
+		setPeriod(period);
+		
+	}
+	
+	public ProgramDTO getObjective(){
 		assert period!=null;
 		ProgramDTO program = new ProgramDTO();
 		program.setDescription(txtObjective.getValue());
-		program.setId(null);
 		program.setName(txtObjectiveRef.getValue());
-		program.setParentId(null); //Program ID
 		program.setType(ProgramDetailType.OBJECTIVE);
 		program.setPeriod(period);
 		//program.setTargetsAndOutcomes(targetsAndOutcomes);
@@ -95,6 +106,21 @@ public class CreateObjectiveView extends ViewImpl implements
 			fund.setId(model.getId());
 			return fund;
 		}
+		
+		@Override
+		public List<DataModel> getDataModels(List<Object> funding) {
+			List<DataModel> models = new ArrayList<DataModel>();
+			for(Object obj: funding){
+				ProgramFundDTO fund = (ProgramFundDTO)obj;
+				DataModel model = new DataModel();
+				model.set("donor", fund.getFund());
+				model.setId(fund.getId());
+				model.set("amount", fund.getAmount());
+				models.add(model);
+			}
+			
+			return models;
+		}
 	};
 	
 	public void createCrumb(String text,Long id, Boolean isActive){
@@ -111,11 +137,6 @@ public class CreateObjectiveView extends ViewImpl implements
 			ProgramSummary summary = summaries.get(i);
 			createCrumb(summary.getName(), summary.getId(), i==0);
 		}
-		
-	}
-
-	@Override
-	public void setObjective(IsProgramActivity singleResult) {
 		
 	}
 
@@ -139,6 +160,14 @@ public class CreateObjectiveView extends ViewImpl implements
 
 	boolean isNullOrEmpty(String value) {
 		return value == null || value.trim().length() == 0;
+	}
+
+	@Override
+	public void clear() {
+		txtObjective.setValue("");
+		txtObjectiveRef.setValue("");
+		crumbContainer.clear();
+		spnPeriod.setText("");
 	}
 
 }

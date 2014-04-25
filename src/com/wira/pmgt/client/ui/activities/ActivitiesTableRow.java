@@ -1,6 +1,7 @@
 package com.wira.pmgt.client.ui.activities;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -54,6 +55,8 @@ public class ActivitiesTableRow extends RowWidget{
 				AppContext.fireEvent(new ActivitySelectionChangedEvent(ActivitiesTableRow.this.activity, event.getValue()));
 			}
 		});
+		
+		divBudget.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
 	}
 	
 	public IsProgramActivity getActivity() {

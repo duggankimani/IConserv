@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
 import com.wira.pmgt.shared.model.Listable;
+import com.wira.pmgt.shared.model.program.IsProgramActivity;
 
 public class AutoCompleteField<T extends Listable> extends Composite {
 
@@ -39,11 +40,23 @@ public class AutoCompleteField<T extends Listable> extends Composite {
 	
 	List<String> itemsSelected = new ArrayList<String>();
 	Map<String,T> valuesMap = new HashMap<String, T>(); 
-	
+	DataOracle<T> oracle = new DataOracle<T>();
+	SuggestBox box=null;
 	public AutoCompleteField() {	
 		initWidget(uiBinder.createAndBindUi(this));
 		itemBox.getElement().setAttribute("style", "outline-color: -moz-use-text-color; outline-style: none; outline-width: medium;");
 		container.getElement().setAttribute("onclick", "document.getElementById('suggestion_box').focus()");
+		box = new SuggestBox(oracle, itemBox);
+		box.getElement().setId("suggestion_box");
+		box.setAnimationEnabled(true);		
+		liPanel.add(box);
+		box.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
+            public void onSelection(SelectionEvent selectionEvent) {
+                deselectItem(itemBox, ulPanel);
+            }
+        });
+		
+		box.setFocus(true);
 	}
 
 	public void setValues(List<T> values){
@@ -55,23 +68,9 @@ public class AutoCompleteField<T extends Listable> extends Composite {
 		for(T t: values){
 			valuesMap.put(t.getDisplayName(), t);
 		}
+	
+		oracle.setValues(values);	
 		
-		DataOracle<T> oracle = new DataOracle<T>();
-		oracle.setValues(values);
-		
-		SuggestBox box = new SuggestBox(oracle, itemBox);
-		box.getElement().setId("suggestion_box");
-		box.setAnimationEnabled(true);
-		liPanel.clear();
-		liPanel.add(box);
-		
-		box.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
-            public void onSelection(SelectionEvent selectionEvent) {
-                deselectItem(itemBox, ulPanel);
-            }
-        });
-		
-		box.setFocus(true);
 	}
 	
 	@Override
@@ -199,6 +198,7 @@ public class AutoCompleteField<T extends Listable> extends Composite {
 	}
 	
 	public void select(List<T> items){
+		clearSelection();
 		//others
 		if(items!=null)
 		for(T item: items){			
@@ -213,6 +213,17 @@ public class AutoCompleteField<T extends Listable> extends Composite {
 			selectedVals.add(valuesMap.get(s));
 		}
 		return selectedVals;
+	}
+	
+	public void clearSelection(){
+		itemsSelected.clear();
+		int count = ulPanel.getWidgetCount();
+		for(int i=count-1; i>=0; i--){
+			Widget w = ulPanel.getWidget(i);
+			if(w instanceof BulletPanel && !(liPanel.equals(w))){
+				removeBulletPanel((BulletPanel)w,ulPanel);
+			}
+		}
 	}
 
 }

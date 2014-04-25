@@ -26,33 +26,36 @@ public class CreateOutcomePresenter extends
 
 	public interface MyView extends View {
 		void setFunds(List<FundDTO> funds);
-
 		void setPeriod(PeriodDTO period);
-
 		void setObjectives(List<IsProgramActivity> objectives);
-
-		void setProgram(IsProgramActivity isProgramActivity);
-
+		void setParentProgram(IsProgramActivity isProgramActivity);
 		boolean isValid();
-
 		IsProgramActivity getOutcome();
+		void setOutcome(IsProgramActivity outcome);
+		void clear();
 	}
 
 	@Inject
 	DispatchAsync requestHelper;
+	IsProgramActivity outcome;
 
 	@Inject
 	public CreateOutcomePresenter(final EventBus eventBus, final MyView view) {
 		super(eventBus, view);
 	}
 
-	@Override
-	protected void onBind() {
-		super.onBind();
+	public IsProgramActivity getOutcome(){
+		IsProgramActivity viewoutcome= getView().getOutcome();
+		if(outcome!=null){
+			viewoutcome.setId(outcome.getId());
+			viewoutcome.setParentId(outcome.getParentId());
+			viewoutcome.setPeriod(outcome.getPeriod());
+		}
 		
+		return viewoutcome;
 	}
 
-	public void loadList(Long parentId) {
+	public void load(Long parentId) {
 		assert parentId!=null;
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetFundsRequest());
@@ -73,9 +76,15 @@ public class CreateOutcomePresenter extends
 				getView().setObjectives(getPrograms.getPrograms());
 				
 				GetProgramsResponse getProgram = (GetProgramsResponse)aResponse.get(3);
-				getView().setProgram(getProgram.getSingleResult());
+				getView().setParentProgram(getProgram.getSingleResult());
+				getView().setOutcome(outcome);
 			}
 		});
+	}
+
+	public void setOutcome(IsProgramActivity selected) {
+		this.outcome = selected;	
+		getView().clear();
 	}
 	
 }

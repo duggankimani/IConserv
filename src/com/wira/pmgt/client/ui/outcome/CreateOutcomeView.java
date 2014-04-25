@@ -111,6 +111,21 @@ public class CreateOutcomeView extends ViewImpl implements
 			fund.setId(model.getId());
 			return fund;
 		}
+
+		@Override
+		public List<DataModel> getDataModels(List<Object> funding) {
+			List<DataModel> models = new ArrayList<DataModel>();
+			for(Object obj: funding){
+				ProgramFundDTO fund = (ProgramFundDTO)obj;
+				DataModel model = new DataModel();
+				model.set("donor", fund.getFund());
+				model.setId(fund.getId());
+				model.set("amount", fund.getAmount());
+				models.add(model);
+			}
+			
+			return models;
+		}
 	};
 
 	@Override
@@ -120,7 +135,9 @@ public class CreateOutcomeView extends ViewImpl implements
 	
 	@Override
 	public void setObjectives(List<IsProgramActivity> objectives) {
-		autoComplete.setValues(objectives);
+		if(objectives!=null){
+			autoComplete.setValues(objectives);
+		}
 	}
 
 	public void createCrumb(String text,Long id, Boolean isActive){
@@ -140,7 +157,7 @@ public class CreateOutcomeView extends ViewImpl implements
 	}
 	
 	@Override
-	public void setProgram(IsProgramActivity isProgramActivity) {
+	public void setParentProgram(IsProgramActivity isProgramActivity) {
 		setBreadCrumbs(isProgramActivity.getProgramSummary());
 	}
 	
@@ -165,9 +182,7 @@ public class CreateOutcomeView extends ViewImpl implements
 	public IsProgramActivity getOutcome() {
 		ProgramDTO program = new ProgramDTO();
 		program.setDescription(txtOutcome.getValue());
-		program.setId(null);
 		program.setName(txtOutcome.getValue());
-		program.setParentId(null); //Program ID
 		program.setType(ProgramDetailType.OUTCOME);
 		program.setObjectives(autoComplete.getSelectedItems());
 		//program.setTargetsAndOutcomes(targetsAndOutcomes);
@@ -183,6 +198,34 @@ public class CreateOutcomeView extends ViewImpl implements
 		program.setBudgetAmount(totalAmount);
 		return program;
 		
+	}
+
+	@Override
+	public void setOutcome(IsProgramActivity outcome) {
+		if(outcome==null){
+			return;		
+		}
+		
+		txtOutcome.setValue(outcome.getDescription());
+		autoComplete.select(outcome.getObjectives());
+		
+		//program.setTargetsAndOutcomes(targetsAndOutcomes);
+		List<Object> lst = new ArrayList<Object>();
+		for(ProgramFundDTO dto: outcome.getFunding()){
+			lst.add(dto);
+		}		
+		
+		List<DataModel> models = programFundMapper.getDataModels(lst); 
+		gridView.setData(models);
+	}
+
+	@Override
+	public void clear() {
+		gridView.setData(new ArrayList<DataModel>());
+		txtOutcome.setValue(null);
+		crumbContainer.clear();
+		spnPeriod.setText(null);
+		autoComplete.clearSelection();
 	}
 
 

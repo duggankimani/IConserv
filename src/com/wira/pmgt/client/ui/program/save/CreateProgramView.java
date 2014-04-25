@@ -28,6 +28,7 @@ import com.wira.pmgt.shared.model.Listable;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.program.FundDTO;
+import com.wira.pmgt.shared.model.program.IsProgramActivity;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
@@ -107,6 +108,7 @@ public class CreateProgramView extends PopupViewImpl implements
 		program.setType(ProgramDetailType.PROGRAM);
 		//program.setTargetsAndOutcomes(targetsAndOutcomes);
 		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
+		
 		program.setFunding(funding);
 		Double totalAmount=0.0;
 		for(ProgramFundDTO programFund: funding){
@@ -175,6 +177,21 @@ public class CreateProgramView extends PopupViewImpl implements
 			fund.setId(model.getId());
 			return fund;
 		}
+		
+		@Override
+		public List<DataModel> getDataModels(List<Object> funding) {
+			List<DataModel> models = new ArrayList<DataModel>();
+			for(Object obj: funding){
+				ProgramFundDTO fund = (ProgramFundDTO)obj;
+				DataModel model = new DataModel();
+				model.set("donor", fund.getFund());
+				model.setId(fund.getId());
+				model.set("amount", fund.getAmount());
+				models.add(model);
+			}
+			
+			return models;
+		}
 	};
 
 	@Override
@@ -186,6 +203,18 @@ public class CreateProgramView extends PopupViewImpl implements
 		}
 		donorField.setDropDownItems(donors);
 		gridView.refresh();
+	}
+
+	@Override
+	public void setProgram(IsProgramActivity program) {
+		txtDescription.setValue(program.getDescription());
+		txtName.setValue(program.getName());
+		lstPeriod.setValue(program.getPeriod());
+		List<Object> lst = new ArrayList<Object>();
+		for(ProgramFundDTO dto: program.getFunding()){
+			lst.add(dto);
+		}
+		gridView.setData(programFundMapper.getDataModels(lst));
 	} 
 
 }

@@ -82,7 +82,11 @@ public class ProgramDaoHelper {
 		return get(program,false);
 	}
 
-	private static ProgramDTO get(ProgramDetail program, boolean loadChildren) {
+	private static ProgramDTO get(ProgramDetail program, boolean loadChildren){
+		return get(program, loadChildren, true);
+	}
+	
+	private static ProgramDTO get(ProgramDetail program, boolean loadChildren, boolean loadObjectives) {
 		
 		ProgramDTO dto = new ProgramDTO();
 		dto.setActualAmount(program.getActualAmount());
@@ -100,6 +104,9 @@ public class ProgramDaoHelper {
 		
 		if(loadChildren){
 			dto.setChildren(getActivity(program.getChildren(),loadChildren));
+		}
+		
+		if(loadObjectives){
 			dto.setObjectives(getActivity(program.getObjectives(), false));
 		}
 		

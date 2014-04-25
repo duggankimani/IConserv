@@ -25,4 +25,8 @@ public class CreateActivityPresenter extends
 	protected void onBind() {
 		super.onBind();
 	}
+
+	public void setActivity(IsProgramActivity selected) {
+		
+	}
 }
