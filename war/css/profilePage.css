@@ -64,6 +64,13 @@
 	cursor:pointer;
 }
 
+.main-container .activities-page .tabs-below > .nav-tabs > li > a:hover,
+.main-container .activities-page .tabs-below > .nav-tabs > li > a:focus {
+  border-bottom-color: transparent;
+  border-top-color:#aaa;
+  background-color: #DFDFDF;
+}
+
 
 /*Profile Page Styles*/
 .main-container .profile-page{

@@ -8,11 +8,24 @@
 	ui:generateLocales='default'>
 
 	<g:HTMLPanel>
+		<!-- BreadCrump -->
+		<d:BulletListPanel styleName="breadcrumb" ui:field="crumbContainer">
+		</d:BulletListPanel>
+
+		<d:IssuesPanel ui:field="issues">
+		</d:IssuesPanel>
+
 		<fieldset>
+			<div class="control-group">
+				<div class="controls">
+					<g:InlineLabel ui:field="spnPeriod" styleName="muted">Jan 1 -
+						Dec 31 2014</g:InlineLabel>
+				</div>
+			</div>
 			<div class="control-group">
 				<div class="control-label" ui:field="tdDocType">Activity Name:</div>
 				<div class="controls">
-					<g:TextBox ui:field="txtSubject" />
+					<g:TextArea ui:field="txtOutcome" width="90%" />
 					<span class="mandatory" title="Required Field">*</span>
 				</div>
 			</div>
@@ -27,7 +40,7 @@
 			<div class="control-group">
 				<div class="control-label">Budget:</div>
 				<div class="controls">
-					<grid:AggregationGrid ui:field="gridView"></grid:AggregationGrid>
+					<grid:AggregationGrid ui:field="budgetGrid"></grid:AggregationGrid>
 				</div>
 			</div>
 
@@ -54,7 +67,7 @@
 			<div class="control-group">
 				<div class="control-label" ui:field="tdDocType2">Target:</div>
 				<div class="controls">
-					<g:TextBox ui:field="txtSubject2" />
+					<grid:AggregationGrid ui:field="targetGrid"></grid:AggregationGrid>
 					<span class="mandatory" title="Required Field">*</span>
 				</div>
 			</div>
@@ -62,7 +75,7 @@
 			<div class="control-group">
 				<div class="control-label" ui:field="tdDocType3">Indicators:</div>
 				<div class="controls">
-					<g:TextBox ui:field="txtSubject3" />
+					<grid:AggregationGrid ui:field="indicatorGrid"></grid:AggregationGrid>
 					<span class="mandatory" title="Required Field">*</span>
 				</div>
 			</div>
@@ -70,7 +83,7 @@
 			<div class="control-group">
 				<div class="control-label" ui:field="tdDocType4">Output:</div>
 				<div class="controls">
-					<g:TextBox ui:field="txtSubject4" />
+					<grid:AggregationGrid ui:field="outputGrid"></grid:AggregationGrid>
 					<span class="mandatory" title="Required Field">*</span>
 				</div>
 			</div>
