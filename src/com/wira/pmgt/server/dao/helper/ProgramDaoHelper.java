@@ -143,6 +143,7 @@ public class ProgramDaoHelper {
 	}
 
 	private static FundDTO get(Fund fund) {
+		
 		FundDTO dto = new FundDTO();
 		dto.setDescription(fund.getDescription());
 		dto.setId(fund.getId());
@@ -177,7 +178,7 @@ public class ProgramDaoHelper {
 		detail.setStartDate(programDTO.getStartDate());
 		
 		if(childrentoo)
-		detail.setObjectives(getProgramChildren(programDTO.getObjectives()));
+			detail.setObjectives(getProgramChildren(programDTO.getObjectives()));
 		
 		//detail.setTarget(String);
 		//detail.setTargets(Set<TargetAndOutcome>);

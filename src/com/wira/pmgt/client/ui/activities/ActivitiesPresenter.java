@@ -69,6 +69,7 @@ public class ActivitiesPresenter extends
 	CreateObjectivePresenter objectivePresenter;
 
 	Long programId;
+	
 	IsProgramActivity selected;
 
 	@Inject

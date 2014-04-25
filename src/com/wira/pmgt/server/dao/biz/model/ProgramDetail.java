@@ -16,6 +16,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Cascade;
+
 import com.wira.pmgt.shared.model.ProgramDetailType;
 
 /**
@@ -52,7 +54,15 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	@JoinColumn(name="periodid", referencedColumnName="id", nullable=true)
 	private Period period;	//Calendar year within which this 
 	
-	@OneToMany(mappedBy="programDetail", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="programDetail")
+	@Cascade(value={org.hibernate.annotations.CascadeType.DELETE_ORPHAN,
+			org.hibernate.annotations.CascadeType.SAVE_UPDATE,
+			org.hibernate.annotations.CascadeType.PERSIST,
+			org.hibernate.annotations.CascadeType.MERGE,
+			org.hibernate.annotations.CascadeType.DELETE,
+			org.hibernate.annotations.CascadeType.EVICT,
+			org.hibernate.annotations.CascadeType.REMOVE
+			})
 	private Set<ProgramFund> sourceOfFunds = new HashSet<>();	
 
 	private Double budgetAmount; //Total budget amount (accumulation of source of funds)
@@ -172,9 +182,17 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 		return sourceOfFunds;
 	}
 
-	public void setSourceOfFunds(Set<ProgramFund> sourceOfFunds) {
-		this.sourceOfFunds.clear();
-		for(ProgramFund fund: sourceOfFunds){
+	public void setSourceOfFunds(Set<ProgramFund> sourceOfFundz) {
+//		for(ProgramFund fund:this.sourceOfFunds){
+//			if(!sourceOfFundz.contains(fund)){
+//				fund.setProgramDetail(null);
+//				fund.setFund(null);
+//				//create an opha
+//			}
+//		}
+		sourceOfFunds.clear();//clear the set
+		
+		for(ProgramFund fund: sourceOfFundz){
 			fund.setProgramDetail(this);
 			this.sourceOfFunds.add(fund);
 		}
@@ -193,7 +211,6 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	}
 
 	public void setChildren(Set<ProgramDetail> children) {
-		this.children.clear();
 		for(ProgramDetail child: children){
 			this.children.add(child);
 			child.setParent(this);
