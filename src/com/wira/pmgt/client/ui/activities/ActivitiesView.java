@@ -31,6 +31,7 @@ public class ActivitiesView extends ViewImpl implements
 	@UiField Anchor aNewActivity;
 	@UiField Anchor aNewObjective;
 	@UiField Anchor aNewTask;
+	@UiField Anchor aEdit;
 	
 	@UiField BulletListPanel listPanel;
 	
@@ -122,39 +123,15 @@ public class ActivitiesView extends ViewImpl implements
 	/**
 	 * Sets Parent Activity
 	 */
-	@Override
+	
 	public void setActivity(IsProgramActivity singleResult) {
-		show(aNewOutcome,false);
-		show(aNewObjective,false);
-		show(aNewActivity,false);
-		show(aNewTask,false);
-		
+		setSelection(singleResult.getType());
 		if(singleResult.getType()==ProgramDetailType.PROGRAM){
 			//select tab
 			selectTab(singleResult.getId());
 			setBudget(singleResult.getBudgetAmount());
 			setTitle(singleResult.getName());
-			show(aNewOutcome,true);
-			show(aNewObjective,true);
-			show(aNewActivity, true);
-		}else if(singleResult.getType()==ProgramDetailType.OBJECTIVE){
-			show(aNewActivity,true);
-		}else if(singleResult.getType()==ProgramDetailType.OUTCOME){
-			show(aNewActivity,true);
-			show(aNewObjective,true);
-		}else if(singleResult.getType()==ProgramDetailType.ACTIVITY){
-			show(aNewActivity,true);
-			show(aNewTask,true);
-		}else{
-			show(aNewTask,true);
 		}
-		
-//		List<ProgramSummary> summaries = singleResult.getProgramSummary();
-//		for(int i=summaries.size()-1; i>-1; i--){
-//			ProgramSummary summary = summaries.get(i);
-//			createCrumb(summary.getName(), summary.getId(), i==0);
-//		}
-		
 		setActivities(singleResult.getChildren());
 	}
 
@@ -187,6 +164,27 @@ public class ActivitiesView extends ViewImpl implements
 	public HasClickHandlers getNewObjectiveLink() {
 
 		return aNewObjective;
+	}
+
+	@Override
+	public void setSelection(ProgramDetailType type) {
+		show(aNewOutcome,false);
+		show(aNewObjective,false);
+		show(aNewActivity,false);
+		show(aNewTask,false);
+		show(aEdit, true);
+		
+		if(type==ProgramDetailType.PROGRAM){
+			//select tab
+			show(aNewOutcome,true);
+			show(aNewObjective,true);
+			show(aEdit, false);
+		}else if(type==ProgramDetailType.OUTCOME){
+			show(aNewActivity,true);
+		}else if(type==ProgramDetailType.ACTIVITY){
+			show(aNewActivity,true);
+			show(aNewTask,true);
+		}
 	}
 
 }

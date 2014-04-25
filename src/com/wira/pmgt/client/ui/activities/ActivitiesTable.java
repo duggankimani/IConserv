@@ -29,32 +29,24 @@ public class ActivitiesTable extends Composite {
 	interface ActivitiesTableUiBinder extends UiBinder<Widget, ActivitiesTable> {
 	}
 
-	@UiField TableView tblView;
+	@UiField
+	TableView tblView;
 	CheckBox selected = null;
-	
-	
+
 	public ActivitiesTable() {
 		initWidget(uiBinder.createAndBindUi(this));
 		tblView.setStriped(true);
 		createGrid();
 	}
-	
+
 	public void setData(List<IsProgramActivity> programActivities) {
 		tblView.clearRows();
-		for(IsProgramActivity activity: programActivities){
-			
-			CheckBox box = new CheckBox();
-			box.addValueChangeHandler(handler);
-			
-			HTMLPanel budgetPanel = new HTMLPanel("");
-			InlineLabel budget = new InlineLabel(activity.getBudgetAmount()==null? null: NumberFormat.getCurrencyFormat().format(activity.getBudgetAmount()));
-			budgetPanel.add(budget);
-			
-			budgetPanel.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
-			
-			tblView.addRow(box, new InlineLabel(activity.getName()),new InlineLabel("CREATED"),
-					new InlineLabel("0%"), new InlineLabel("N/A"), budgetPanel);
+		for (IsProgramActivity activity : programActivities) {
+			ActivitiesTableRow row = new ActivitiesTableRow(activity);
+			row.setSelectionChangeHandler(handler);
+			tblView.addRow(row);
 		}
+
 	}
 
 	private void createGrid() {
@@ -68,22 +60,18 @@ public class ActivitiesTable extends Composite {
 		tblView.setHeaders(names);
 	}
 
-	
 	ValueChangeHandler<Boolean> handler = new ValueChangeHandler<Boolean>() {
-		
 		@Override
 		public void onValueChange(ValueChangeEvent<Boolean> event) {
-			
 			boolean isSelected = event.getValue();
-			if(isSelected){
-				if(selected!=null){
+			if (isSelected) {
+				if (selected != null) {
 					selected.setValue(false);
 				}
-				
-				selected = (CheckBox)event.getSource();
-				//AppContext.fireEvent(event);
-			}else{
-				selected=null;
+
+				selected = (CheckBox) event.getSource();
+			} else {
+				selected = null;
 			}
 		}
 	};

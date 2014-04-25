@@ -84,7 +84,7 @@ public class TableView extends Composite {
 		panelBody.add(row);
 	}
 	
-	public void addRow(AggregationGridRow rowWidget){
+	public void addRow(RowWidget rowWidget){
 		rowWidget.setAutoNumber(isAutoNumber());
 		rowWidget.setRowNumber(++count);
 		panelBody.add(rowWidget);		
