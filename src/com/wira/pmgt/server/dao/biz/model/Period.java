@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.wira.pmgt.server.dao.model.PO;
 
@@ -27,7 +29,7 @@ import com.wira.pmgt.server.dao.model.PO;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name="Period.findActive", query="FROM Period p where p.isActive=:isActive and now()>=p.startDate and  now()=<p.endDate"),
+	@NamedQuery(name="Period.findActive", query="FROM Period p where p.isActive=:isActive and p.startDate<:now and p.endDate>:now"),
 	@NamedQuery(name="Period.findAll", query="FROM Period p"),
 	@NamedQuery(name="Period.findById", query="FROM Period p where p.id=:id")
 	})
@@ -39,8 +41,13 @@ public class Period extends PO{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String description;
+	
+	@Temporal(TemporalType.DATE)
 	private Date startDate;
+	
+	@Temporal(TemporalType.DATE)
 	private Date endDate;
+	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="period")
 	private Set<ProgramDetail> programs = new HashSet<>();//Programs and activities 
 	
@@ -85,5 +92,10 @@ public class Period extends PO{
 
 	public void setPrograms(Set<ProgramDetail> programs) {
 		this.programs = programs;
+	}
+	
+	@Override
+	public String toString() {
+		return getDescription();
 	}
 }

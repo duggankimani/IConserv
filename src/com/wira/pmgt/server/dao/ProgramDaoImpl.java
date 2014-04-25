@@ -1,9 +1,12 @@
 package com.wira.pmgt.server.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
+import org.apache.log4j.Logger;
 
 import com.wira.pmgt.server.dao.biz.model.Fund;
 import com.wira.pmgt.server.dao.biz.model.Period;
@@ -19,13 +22,31 @@ import com.wira.pmgt.shared.model.ProgramDetailType;
  */
 public class ProgramDaoImpl extends BaseDaoImpl{
 
+	private Logger log = Logger.getLogger(ProgramDaoImpl.class);
+	
 	public ProgramDaoImpl(EntityManager em) {
 		super(em);
 	}
 	
 	public Period getActivePeriod(){
-		Query query = em.createNamedQuery("Period.findActive").setParameter("isActive", 1);
-		return getSingleResultOrNull(query);
+		Query query = em.createNamedQuery("Period.findActive")
+				.setParameter("isActive", 1)
+				.setParameter("now", new Date());
+		
+		List<Period> periods = getResultList(query);
+		
+		if(periods!=null && !periods.isEmpty()){
+			if(periods.size()==1){
+				return periods.get(0);
+			}				
+			if(periods.size()>1){
+				Period period = periods.get(0);
+				log.error("Period.findActive returns more than 1 active periods: using first result ["+period+"]");
+				return period;
+			}
+		}
+		
+		return null;
 	}
 	
 	public List<Period> getPeriods(){
