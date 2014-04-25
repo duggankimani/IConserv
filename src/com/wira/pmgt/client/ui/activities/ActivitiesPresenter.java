@@ -14,6 +14,7 @@ import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.OnOptionSelected;
 import com.wira.pmgt.client.ui.OptionControl;
+import com.wira.pmgt.client.ui.activities.ActivitySelectionChangedEvent.ActivitySelectionChangedHandler;
 import com.wira.pmgt.client.ui.detailedActivity.CreateActivityPresenter;
 import com.wira.pmgt.client.ui.objective.CreateObjectivePresenter;
 import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
@@ -27,7 +28,7 @@ import com.wira.pmgt.shared.responses.GetProgramsResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
 public class ActivitiesPresenter extends
-		PresenterWidget<ActivitiesPresenter.IActivitiesView> {
+		PresenterWidget<ActivitiesPresenter.IActivitiesView>  implements ActivitySelectionChangedHandler{
 
 	public interface IActivitiesView extends View {
 		void showContent(boolean b);
@@ -37,6 +38,7 @@ public class ActivitiesPresenter extends
 		void setActivities(List<IsProgramActivity> programs);
 		void setPrograms(List<IsProgramActivity> programs);
 		void setActivity(IsProgramActivity singleResult);
+		void setSelection(ProgramDetailType type);
 	}
 
 	@Inject DispatchAsync requestHelper;
@@ -45,6 +47,7 @@ public class ActivitiesPresenter extends
 	@Inject CreateObjectivePresenter objectivePresenter;
 
 	Long activityId;
+	IsProgramActivity selected;
 	
 	@Inject
 	public ActivitiesPresenter(final EventBus eventBus,
@@ -55,7 +58,7 @@ public class ActivitiesPresenter extends
 	@Override
 	protected void onBind() {
 		super.onBind();
-		
+		addRegisteredHandler(ActivitySelectionChangedEvent.TYPE, this);
 		getView().getaNewOutcome().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -181,6 +184,17 @@ public class ActivitiesPresenter extends
 			}
 		});
 		
+	}
+
+	@Override
+	public void onActivitySelectionChanged(ActivitySelectionChangedEvent event) {
+		if(event.isSelected()){
+			this.selected = event.getProgramActivity();
+			getView().setSelection(event.getProgramActivity().getType());
+		}else{
+			this.selected=null;
+			getView().setSelection(ProgramDetailType.PROGRAM);
+		}
 	}
 	
 }

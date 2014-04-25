@@ -55,6 +55,13 @@
 								Add Task
 							</g:Anchor>
 						</div>
+						<div class="span3 hide">
+							<g:Anchor ui:field="aEdit" styleName="btn btn-default"
+								title="Add Task">
+								<i class="icon-plus"></i>
+								Edit
+							</g:Anchor>
+						</div>
 					</div>
 
 					<div id="usercontent" class="tab-content">
