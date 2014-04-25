@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
+import com.wira.pmgt.client.ui.util.DateUtils;
 
 public class DateRangeWidget extends Composite {
 
@@ -28,7 +29,8 @@ public class DateRangeWidget extends Composite {
 	@UiField DateBox dateInput2;
 	@UiField InlineLabel spnCalendar1;
 	@UiField InlineLabel spnCalendar2;
-	
+	Date rangeStart;
+	Date rangeEnd;
 	
 	public DateRangeWidget() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -76,6 +78,37 @@ public class DateRangeWidget extends Composite {
 	public void setDates(Date startDate, Date endDate){
 		dateInput1.setValue(startDate);
 		dateInput2.setValue(endDate);
+	}
+	
+	public void setValidation(Date rangeStart, Date rangeEnd){
+		this.rangeStart = rangeStart;
+		this.rangeEnd = rangeEnd;
+	}
+	
+	/**
+	 * Returns Null where valid, String error otherwise
+	 * @return
+	 */
+	public String isValid(){
+		if(rangeStart!=null && getStartDate()!=null){
+			if(rangeStart.after(getStartDate())){
+				return "Start Date cannot be earlier than ["+DateUtils.DATEFORMAT.format(rangeStart)+"]";
+			}
+		}
+		
+		if(rangeEnd!=null && getEndDate()!=null){
+			if(getEndDate().after(rangeEnd)){
+				return "End Date cannot be later than ["+DateUtils.DATEFORMAT.format(rangeStart)+"]";
+			}
+		}
+		
+		if(getStartDate()!=null && getEndDate()!=null){
+			if(getStartDate().after(getEndDate())){
+				return "Start Date cannot be later than End Date";
+			}
+		}
+		
+		return null;
 	}
  
 }
