@@ -229,12 +229,10 @@ public class HomePresenter extends
 		addRegisteredHandler(SearchEvent.TYPE, this);
 		addRegisteredHandler(CreateProgramEvent.TYPE, this);
 		
-	
-		
 		getView().getAddButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				showEditForm(MODE.CREATE);
+				showEditForm(null);
 			}
 			
 		});
@@ -403,25 +401,12 @@ public class HomePresenter extends
 		}
 	
 	}
-	
-	protected void showEditForm(final MODE mode) {
+		
+	protected void showEditForm(final Long programId){
 		createDocProvider.get(new ServiceCallback<CreateProgramPresenter>() {
 			@Override
 			public void processResult(CreateProgramPresenter result) {
-				if(mode.equals(MODE.EDIT) && selectedDocumentId!=null){
-					//result.setDocumentId(selectedDocumentId);
-				}
-					
-				addToPopupSlot(result, false);
-			}
-		});
-	}
-	
-	protected void showEditForm(final Long programId){
-		genericFormProvider.get(new ServiceCallback<GenericFormPresenter>() {
-			@Override
-			public void processResult(GenericFormPresenter result) {
-				//result.setDocumentType(type);
+				result.setProgramId(programId);					
 				addToPopupSlot(result, false);
 			}
 		});
@@ -502,13 +487,7 @@ public class HomePresenter extends
 	@Override
 	public void onCreateDocument(CreateProgramEvent event) {
 		Long programId = event.getProgramId();	
-		
-		if(programId!=null){
-			showEditForm(MODE.CREATE);
-			//showEditForm(programId);
-		}else{
-			showEditForm(MODE.CREATE);
-		}
+		showEditForm(programId);
 	}
 
 }

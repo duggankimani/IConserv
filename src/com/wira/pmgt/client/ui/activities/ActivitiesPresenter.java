@@ -56,7 +56,7 @@ public class ActivitiesPresenter extends
 
 		void setPeriods(List<PeriodDTO> periods);
 
-		HasClickHandlers getaProgramEdit();
+		HasClickHandlers getProgramEdit();
 	}
 
 	@Inject
@@ -82,7 +82,7 @@ public class ActivitiesPresenter extends
 		super.onBind();
 		addRegisteredHandler(ActivitySelectionChangedEvent.TYPE, this);
 		
-		getView().getaProgramEdit().addClickHandler(new ClickHandler() {
+		getView().getProgramEdit().addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {

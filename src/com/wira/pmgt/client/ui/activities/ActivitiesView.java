@@ -248,7 +248,7 @@ public class ActivitiesView extends ViewImpl implements
 	}
 
 	@Override
-	public HasClickHandlers getaProgramEdit() {
+	public HasClickHandlers getProgramEdit() {
 		return aProgramEdit;
 	}
 
