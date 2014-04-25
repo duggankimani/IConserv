@@ -13,10 +13,13 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
+import com.wira.pmgt.client.ui.component.AnchorOptions;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
+import com.wira.pmgt.client.ui.component.DropDownList;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.PeriodDTO;
 
 public class ActivitiesView extends ViewImpl implements
 		ActivitiesPresenter.IActivitiesView {
@@ -32,6 +35,7 @@ public class ActivitiesView extends ViewImpl implements
 	@UiField Anchor aNewObjective;
 	@UiField Anchor aNewTask;
 	@UiField Anchor aEdit;
+	@UiField DropDownList<PeriodDTO> lstPeriod;
 	
 	@UiField BulletListPanel listPanel;
 	
@@ -89,10 +93,12 @@ public class ActivitiesView extends ViewImpl implements
 	public void createTab(String text, long id,boolean active){
 		BulletPanel li = new BulletPanel();
 		Anchor a = new Anchor(text);
-		HTMLPanel opt = new HTMLPanel("<span class='icon-caret-down pull-right'></span>");
 		a.setHref("#home;page=activities;activity="+id);
+		AnchorOptions aOptions = new AnchorOptions();
+		aOptions.createMenu("Edit");
 		li.add(a);
-		//li.add(opt);
+		li.add(aOptions);
+		
 		if(active){
 			li.addStyleName("active");
 		}else{
@@ -114,6 +120,7 @@ public class ActivitiesView extends ViewImpl implements
 		if(programs==null){
 			return;
 		}
+		System.err.println("Size = " + programs.size());
 		for(IsProgramActivity activity: programs){
 			boolean first = programs.indexOf(activity)==0;
 			createTab(activity.getName(),activity.getId(), first);
@@ -185,6 +192,11 @@ public class ActivitiesView extends ViewImpl implements
 			show(aNewActivity,true);
 			show(aNewTask,true);
 		}
+	}
+
+	@Override
+	public void setPeriods(List<PeriodDTO> periods) {
+		lstPeriod.setItems(periods);
 	}
 
 }

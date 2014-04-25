@@ -12,7 +12,6 @@ import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.AppManager;
-import com.wira.pmgt.client.ui.OnOptionSelected;
 import com.wira.pmgt.client.ui.OptionControl;
 import com.wira.pmgt.client.ui.activities.ActivitySelectionChangedEvent.ActivitySelectionChangedHandler;
 import com.wira.pmgt.client.ui.detailedActivity.CreateActivityPresenter;
@@ -20,10 +19,15 @@ import com.wira.pmgt.client.ui.objective.CreateObjectivePresenter;
 import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.requests.CreateProgramRequest;
+import com.wira.pmgt.shared.requests.GetPeriodRequest;
+import com.wira.pmgt.shared.requests.GetPeriodsRequest;
 import com.wira.pmgt.shared.requests.GetProgramsRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
 import com.wira.pmgt.shared.responses.CreateProgramResponse;
+import com.wira.pmgt.shared.responses.GetPeriodResponse;
+import com.wira.pmgt.shared.responses.GetPeriodsResponse;
 import com.wira.pmgt.shared.responses.GetProgramsResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
@@ -39,6 +43,7 @@ public class ActivitiesPresenter extends
 		void setPrograms(List<IsProgramActivity> programs);
 		void setActivity(IsProgramActivity singleResult);
 		void setSelection(ProgramDetailType type);
+		void setPeriods(List<PeriodDTO> periods);
 	}
 
 	@Inject DispatchAsync requestHelper;
@@ -146,6 +151,8 @@ public class ActivitiesPresenter extends
 		
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetProgramsRequest(ProgramDetailType.PROGRAM, false));
+		action.addRequest(new GetPeriodsRequest());
+		
 		if(hasActivityId){
 			this.activityId = activityId;
 			action.addRequest(new GetProgramsRequest(activityId, true));
@@ -157,9 +164,12 @@ public class ActivitiesPresenter extends
 				GetProgramsResponse response = (GetProgramsResponse)aResponse.get(0);
 				getView().setPrograms(response.getPrograms());
 				
+				GetPeriodsResponse getPeriod = (GetPeriodsResponse)aResponse.get(1);
+				getView().setPeriods(getPeriod.getPeriods());
+				
 				//activities under a program
 				if(hasActivityId){
-					GetProgramsResponse response2 = (GetProgramsResponse)aResponse.get(1);
+					GetProgramsResponse response2 = (GetProgramsResponse)aResponse.get(2);
 					getView().setActivity(response2.getSingleResult());
 					
 				}else{

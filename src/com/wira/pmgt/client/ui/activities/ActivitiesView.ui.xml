@@ -22,9 +22,10 @@
 					</span>
 				</g:HTMLPanel>
 			</div>
-			
+
 			<div class="row-fluid full-page">
-				<g:HTMLPanel ui:field="divContent" styleName="tabbable tabs-below hidden full-page no-overflow-x">
+				<g:HTMLPanel ui:field="divContent"
+					styleName="tabbable tabs-below hidden full-page no-overflow-x">
 					<!--Action Buttons -->
 					<div class="action-buttons row-fluid">
 						<div class="span3 hide">
@@ -57,10 +58,14 @@
 						</div>
 						<div class="span3 hide">
 							<g:Anchor ui:field="aEdit" styleName="btn btn-default"
-								title="Add Task">
-								<i class="icon-plus"></i>
+								title="Edit">
+								<i class="icon-edit"></i>
 								Edit
 							</g:Anchor>
+						</div>
+						<div class="pull-right">
+							<d:DropDownList ui:field="lstPeriod">
+							</d:DropDownList>
 						</div>
 					</div>
 
