@@ -14,6 +14,8 @@ public class CreateActivityView extends ViewImpl implements
 	public interface Binder extends UiBinder<Widget, CreateActivityView> {
 	}
 
+	IsProgramActivity Outcome; //The outcome under which this activity is created
+		
 	@Inject
 	public CreateActivityView(final Binder binder) {
 		widget = binder.createAndBindUi(this);

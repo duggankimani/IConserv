@@ -136,6 +136,7 @@ public class ActivitiesView extends ViewImpl implements
 			setTitle(singleResult.getName());
 			show(aNewOutcome,true);
 			show(aNewObjective,true);
+			show(aNewActivity, true);
 		}else if(singleResult.getType()==ProgramDetailType.OBJECTIVE){
 			show(aNewActivity,true);
 		}else if(singleResult.getType()==ProgramDetailType.OUTCOME){
