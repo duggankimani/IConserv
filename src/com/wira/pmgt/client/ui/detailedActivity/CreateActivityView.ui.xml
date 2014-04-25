@@ -23,7 +23,7 @@
 				</div>
 			</div>
 			<div class="control-group">
-				<div class="control-label" ui:field="tdDocType">Activity Name:</div>
+				<div class="control-label" ui:field="tdDocType">Activity:</div>
 				<div class="controls">
 					<g:TextArea ui:field="txtOutcome" width="90%" />
 					<span class="mandatory" title="Required Field">*</span>
@@ -41,6 +41,13 @@
 				<div class="control-label">Budget:</div>
 				<div class="controls">
 					<grid:AggregationGrid ui:field="budgetGrid"></grid:AggregationGrid>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<div class="control-label">Objectives:</div>
+				<div class="controls">
+					<c:ListField ui:field="lstUObjetives" />
 				</div>
 			</div>
 
