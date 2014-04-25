@@ -11,9 +11,9 @@
 		<div class="full-page">
 
 			<div class="content-top">
-				<h4 ui:field="spnTitle">Programs Management</h4>
+				<h4 ui:field="spnTitle"></h4>
 				<span class="muted pull-right budget" ui:field="spnBudget"></span>
-				<g:HTMLPanel ui:field="divNoContent">
+				<g:HTMLPanel ui:field="divNoContent" styleName="hidden">
 					<i class="icon-warning-sign helper-font-16"></i>
 					<span class="helper-font-16">
 						No Programs Added. Click
