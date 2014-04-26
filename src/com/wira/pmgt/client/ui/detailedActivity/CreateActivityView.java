@@ -3,18 +3,17 @@ package com.wira.pmgt.client.ui.detailedActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gwtplatform.mvp.client.ViewImpl;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.DateRangeWidget;
 import com.wira.pmgt.client.ui.component.IssuesPanel;
-import com.wira.pmgt.client.ui.component.TableView;
 import com.wira.pmgt.client.ui.component.autocomplete.AutoCompleteField;
 import com.wira.pmgt.client.ui.component.grid.AggregationGrid;
 import com.wira.pmgt.client.ui.component.grid.ColumnConfig;
@@ -41,7 +40,7 @@ public class CreateActivityView extends ViewImpl implements
 	}
 
 	IsProgramActivity Outcome; //The outcome under which this activity is created
-		
+
 	@UiField IssuesPanel issues;
 	@UiField TextArea txtActivity;
 	@UiField AggregationGrid gridView;
@@ -63,6 +62,7 @@ public class CreateActivityView extends ViewImpl implements
 		createGrid();
 		txtActivity.getElement().setAttribute("rows", "3");
 		createTargetsAndIndicatorsGrid();
+
 	}
 
 	@Override
@@ -204,6 +204,7 @@ public class CreateActivityView extends ViewImpl implements
 		}
 		
 		return isValid;
+
 	}
 
 	@Override

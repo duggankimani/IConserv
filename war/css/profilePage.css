@@ -4,7 +4,6 @@
 .action-buttons{
 	margin-bottom:15px;
 }
-
 .main-container .activities-page{
 	padding: 0px 0px;
 	height: 100%;
@@ -14,7 +13,6 @@
     height: 70%;
     overflow-x: hidden;
 }
-
 .activities-page .content-top{
 	margin: 17px;
 	border-bottom: 1px solid #E6E6E6;
@@ -29,34 +27,42 @@
 	margin-left: 2%;
 	display: inline;
 }
-
 .activities-page .content-top .budget{
 	position:absolute;
 	right:2%;
 	top: 4%;
 }
-
 .activities-page .action-buttons{
 	margin: 0px 20px;
 	width: 96%;
 }
-
 .activities-page .user-content{
 	margin: 20px;
 }
+.activities-page .tabs-below .tabs-container{
+	width:90%;
+}
 
+.activities-page .tabs-below .controllers{
+	background-color: #eeeeee;
+	border-top: 1px solid #aaa;
+	padding-top: 10px;
+	padding-bottom: 2%;
+	margin-left:0px;
+	width:10%;
+}
 
-.activities-page .tabs-below > .nav-tabs{
+.activities-page .tabs-below .tabs-container > .nav-tabs{
 	background-color: #eeeeee;
 	border-top: 1px solid #aaa;
 	margin-bottom: 0px;
 	padding-bottom: 2%;
+	height: 33px;
+	white-space: nowrap;
 }
-
 .activities-page .nav-tabs > .active{
 	margin-left: 22px;
 }
-
 .main-container .activities-page .nav-tabs > .active > a, 
 .main-container .activities-page .nav-tabs > .active > a:hover, 
 .main-container .activities-page .nav-tabs > .active > a:focus{
@@ -64,6 +70,18 @@
 	cursor:pointer;
 }
 
+.main-container .activities-page .tabs-below .nav-tabs > li a:hover,
+.main-container .activities-page .tabs-below .nav-tabs > li a:focus {
+  border-bottom-color: transparent;
+  border-top-color:#aaa;
+  background-color: #DFDFDF;
+}
+
+.activities-page .nav-tabs > li{
+white-space: nowrap;
+display: inline-block;
+float: none;
+}
 
 /*Profile Page Styles*/
 .main-container .profile-page{
