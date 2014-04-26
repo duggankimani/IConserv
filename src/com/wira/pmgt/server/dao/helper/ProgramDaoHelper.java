@@ -180,8 +180,7 @@ public class ProgramDaoHelper {
 		}
 		
 		//detail.setActual(String);
-		detail.setActualAmount(programDTO.getActualAmount());
-		detail.setBudgetAmount(programDTO.getBudgetAmount());
+		detail.setActualAmount(programDTO.getActualAmount()==null? 0.0: programDTO.getActualAmount());
 		detail.setDescription(programDTO.getDescription());
 		detail.setEndDate(programDTO.getEndDate());
 		//detail.setIndicator(String);

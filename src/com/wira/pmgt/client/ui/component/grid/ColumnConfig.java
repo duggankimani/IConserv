@@ -73,6 +73,7 @@ public class ColumnConfig {
 	}
 	
 	public void setDropDownItems(List<Listable> items){
+		this.dropDownItems.clear();
 		this.dropDownItems.addAll(items);
 	}
 
