@@ -135,6 +135,7 @@ public class ActivitiesPresenter extends
 		case ACTIVITY:
 			//Use selected an outcome
 			createActivity.setActivity(edit?selected:null);
+			createActivity.load(selected.getId());
 			AppManager.showPopUp("Create Activity",
 					createActivity.getWidget(), new OptionControl() {
 						
@@ -143,7 +144,7 @@ public class ActivitiesPresenter extends
 							
 							if(name.equals("Save")){
 								if(createActivity.getView().isValid()){
-									save(createActivity.getView().getActivity());
+									save(createActivity.getActivity());
 									hide();
 								}
 							}else{
@@ -154,8 +155,14 @@ public class ActivitiesPresenter extends
 			break;
 	
 		case OBJECTIVE:
-			objectivePresenter.setObjective(edit?selected:null);
-			objectivePresenter.load(programId);//Parent Id Passed here
+			objectivePresenter.setObjective(
+					(edit && selected.getType()==ProgramDetailType.OBJECTIVE)?selected:null);
+			Long parentId = edit?selected.getParentId():programId;
+			
+			//in case you selected an Program from summary view and clicked New Objective
+			parentId= parentId!=null? parentId : selected!=null? selected.getId():null;
+			objectivePresenter.load(parentId);//Parent Id Passed here
+			
 			AppManager.showPopUp("Add Objective", objectivePresenter.getWidget(), new OptionControl() {
 				
 				@Override
@@ -173,8 +180,8 @@ public class ActivitiesPresenter extends
 			break;
 			
 		case OUTCOME:
-			createOutcome.setOutcome(edit?selected:null);
-			createOutcome.load(programId);
+			createOutcome.setOutcome(edit?selected:null);			
+			createOutcome.load(edit?selected.getParentId():programId);
 			AppManager.showPopUp("Create Outcome",
 					createOutcome.getWidget(), new OptionControl() {
 						
@@ -192,6 +199,10 @@ public class ActivitiesPresenter extends
 							
 						}}, "Save", "Cancel");
 			break;
+		case PROGRAM:
+			if(selected!=null && edit)
+				AppContext.fireEvent(new CreateProgramEvent(selected.getId()));
+		break;
 			
 		case TASK:
 			
@@ -246,14 +257,7 @@ public class ActivitiesPresenter extends
 						}else{
 							getView().setActivities(response.getPrograms());
 						}
-						//else {
-//							// load activities under default program
-//							if (response.getPrograms() != null
-//									&& !response.getPrograms().isEmpty()) {
-//								loadProgram(response.getPrograms().get(0)
-//										.getId());
-//							}
-//						}
+						
 					}
 				});
 	}
@@ -280,7 +284,7 @@ public class ActivitiesPresenter extends
 			getView().setSelection(event.getProgramActivity().getType());
 		} else {
 			this.selected = null;
-			getView().setSelection(ProgramDetailType.PROGRAM);
+			getView().setSelection(null);
 		}
 	}
 

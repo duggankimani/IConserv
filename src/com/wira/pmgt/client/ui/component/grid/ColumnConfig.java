@@ -8,6 +8,8 @@ import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.DoubleField;
 import com.wira.pmgt.client.ui.component.DropDownList;
+import com.wira.pmgt.client.ui.component.IntegerField;
+import com.wira.pmgt.client.ui.component.TextArea;
 import com.wira.pmgt.client.ui.component.TextField;
 import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.Listable;
@@ -46,7 +48,11 @@ public class ColumnConfig {
 	public Widget createWidget(Object value){
 	
 		HasValue widget = null;
-		if(type==DataType.DOUBLE){
+		if(type==DataType.INTEGER){
+			IntegerField field= new IntegerField();
+			 //field.setStyleName("input-medium");
+			 widget = field;
+		}else if(type==DataType.DOUBLE){
 			 DoubleField field= new DoubleField();
 			 //field.setStyleName("input-medium");
 			 widget = field;
@@ -54,6 +60,8 @@ public class ColumnConfig {
 			DropDownList dropDown = new DropDownList();
 			dropDown.setItems(dropDownItems);
 			widget=dropDown;
+		}else if(type==DataType.STRINGLONG){
+			widget = new TextArea();
 		}
 		else{
 			widget = new TextField();

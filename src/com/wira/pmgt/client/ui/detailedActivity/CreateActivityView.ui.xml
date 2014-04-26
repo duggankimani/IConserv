@@ -1,26 +1,66 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-	xmlns:c='urn:import:com.wira.pmgt.client.ui.admin.component' xmlns:d='urn:import:com.wira.pmgt.client.ui.component'
-	xmlns:grid='urn:import:com.wira.pmgt.client.ui.component.grid' xmlns:g='urn:import:com.google.gwt.user.client.ui'
+	xmlns:d='urn:import:com.wira.pmgt.client.ui.component' xmlns:g='urn:import:com.google.gwt.user.client.ui'
+	xmlns:grid='urn:import:com.wira.pmgt.client.ui.component.grid' xmlns:a='urn:import:com.wira.pmgt.client.ui.component.autocomplete'
 	ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
 	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
 	ui:generateLocales='default'>
 
 	<g:HTMLPanel>
+		<!-- BreadCrump -->
+		<d:BulletListPanel styleName="breadcrumb" ui:field="crumbContainer">
+		</d:BulletListPanel>
+		<d:IssuesPanel ui:field="issues">
+		</d:IssuesPanel>
+			
 		<fieldset>
 			<div class="control-group">
-				<div class="control-label" ui:field="tdDocType">Activity Name:</div>
 				<div class="controls">
-					<g:TextBox ui:field="txtSubject" />
+					<g:InlineLabel ui:field="spnPeriod" styleName="muted"></g:InlineLabel>
+				</div>
+			</div>
+			
+			<div class="control-group">
+				<div class="control-label">Activity Name:</div>
+				<div class="controls">
+					<g:TextArea ui:field="txtActivity" width="90%"/>
 					<span class="mandatory" title="Required Field">*</span>
 				</div>
 			</div>
 
 			<div class="control-group">
-				<div class="control-label">Date Range:</div>
+				<div class="control-label">Start &amp; End Dates:</div>
 				<div class="controls">
-					<d:DateRangeWidget></d:DateRangeWidget>
+					<d:DateRangeWidget ui:field="dtRange"></d:DateRangeWidget>
+				</div>
+			</div>
+			
+			<div class="control-group">
+				<div class="control-label">Objectives:</div>
+				<div class="controls">
+					<a:AutoCompleteField ui:field="autoComplete" />
+				</div>
+			</div>
+						
+			<div class="control-group">
+				<div class="control-label" title="Allocate to users">Allocated To User(s):</div>
+				<div class="controls" title="Allocate to users">
+					<a:AutoCompleteField ui:field="allocatedToUsers"/>
+				</div>
+			</div>
+			
+			<div class="control-group">
+				<div class="control-label" title="Allocate to groups">Allocated to Group(s):</div>
+				<div class="controls" title="Allocate to groups">
+					<a:AutoCompleteField ui:field="allocatedToGroups"/>
+				</div>
+			</div>
+			
+			<div class="control-group">
+				<div class="control-label">Targets And Indicators:</div>
+				<div class="controls">
+					<grid:AggregationGrid ui:field="gridTargets"></grid:AggregationGrid>
 				</div>
 			</div>
 
@@ -30,51 +70,8 @@
 					<grid:AggregationGrid ui:field="gridView"></grid:AggregationGrid>
 				</div>
 			</div>
-
-
-			<div class="control-group">
-				<div class="control-label">Allocated To:</div>
-				<div class="controls">
-					<c:ListField ui:field="lstUsers" />
-				</div>
-			</div>
-
-
-			<div class="control-group">
-				<div class="control-label">Status:</div>
-				<div class="controls">
-					<div class="btn-group">
-						<button class="btn active">Opened</button>
-						<button class="btn">In-Progress</button>
-						<button class="btn">Closed</button>
-					</div>
-				</div>
-			</div>
-
-			<div class="control-group">
-				<div class="control-label" ui:field="tdDocType2">Target:</div>
-				<div class="controls">
-					<g:TextBox ui:field="txtSubject2" />
-					<span class="mandatory" title="Required Field">*</span>
-				</div>
-			</div>
-
-			<div class="control-group">
-				<div class="control-label" ui:field="tdDocType3">Indicators:</div>
-				<div class="controls">
-					<g:TextBox ui:field="txtSubject3" />
-					<span class="mandatory" title="Required Field">*</span>
-				</div>
-			</div>
-
-			<div class="control-group">
-				<div class="control-label" ui:field="tdDocType4">Output:</div>
-				<div class="controls">
-					<g:TextBox ui:field="txtSubject4" />
-					<span class="mandatory" title="Required Field">*</span>
-				</div>
-			</div>
-
 		</fieldset>
 	</g:HTMLPanel>
+
 </ui:UiBinder>
+

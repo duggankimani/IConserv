@@ -180,9 +180,8 @@ public class ActivitiesView extends ViewImpl implements
 	/**
 	 * Sets Parent Activity
 	 */
-
 	public void setActivity(IsProgramActivity singleResult) {
-		setSelection(singleResult.getType());
+		setSelection(singleResult.getType(),false);
 		if (singleResult.getType() == ProgramDetailType.PROGRAM) {
 			// select tab
 			selectTab(singleResult.getId());
@@ -225,6 +224,15 @@ public class ActivitiesView extends ViewImpl implements
 
 	@Override
 	public void setSelection(ProgramDetailType type) {
+		setSelection(type, true);
+	}
+	
+	/**
+	 * 
+	 * @param type
+	 * @param isRowData
+	 */
+	public void setSelection(ProgramDetailType type, boolean isRowData){
 		show(aNewOutcome, false);
 		show(aNewObjective, false);
 		show(aNewActivity, false);
@@ -232,10 +240,12 @@ public class ActivitiesView extends ViewImpl implements
 		show(aEdit, true);
 
 		if (type == ProgramDetailType.PROGRAM) {
-			// select tab
-			show(aNewOutcome, true);
+			show(aNewOutcome, !isRowData);
 			show(aNewObjective, true);
-			show(aEdit, false);
+			
+			//Program can be selected from the SummaryTab == isRowData 
+			//or When A Program Tab e.g Wildlife Program is selected
+			show(aEdit, isRowData); 
 		} else if (type == ProgramDetailType.OUTCOME) {
 			show(aNewActivity, true);
 		} else if (type == ProgramDetailType.ACTIVITY) {
