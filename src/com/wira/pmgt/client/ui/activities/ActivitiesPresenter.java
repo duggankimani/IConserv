@@ -213,14 +213,14 @@ public class ActivitiesPresenter extends
 	}
 
 	public void loadData(final Long activityId) {
-		final boolean hasActivityId = activityId != null && activityId != 0L;
+		final boolean hasProgramId = activityId != null && activityId != 0L;
 
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetProgramsRequest(ProgramDetailType.PROGRAM,
 				false));
 		action.addRequest(new GetPeriodsRequest());
 
-		if (hasActivityId) {
+		if (hasProgramId) {
 			this.programId = activityId;
 			action.addRequest(new GetProgramsRequest(activityId, true));
 		}
@@ -238,19 +238,22 @@ public class ActivitiesPresenter extends
 						getView().setPeriods(getPeriod.getPeriods());
 
 						// activities under a program
-						if (hasActivityId) {
+						if (hasProgramId) {
 							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
 									.get(2);
 							getView().setActivity(response2.getSingleResult());
 
-						} else {
-							// load activities under default program
-							if (response.getPrograms() != null
-									&& !response.getPrograms().isEmpty()) {
-								loadProgram(response.getPrograms().get(0)
-										.getId());
-							}
+						}else{
+							getView().setActivities(response.getPrograms());
 						}
+						//else {
+//							// load activities under default program
+//							if (response.getPrograms() != null
+//									&& !response.getPrograms().isEmpty()) {
+//								loadProgram(response.getPrograms().get(0)
+//										.getId());
+//							}
+//						}
 					}
 				});
 	}

@@ -106,8 +106,21 @@ public class ProgramDaoHelper {
 			dto.setChildren(getActivity(program.getChildren(),loadChildren));
 		}
 		
-		if(loadObjectives){
-			dto.setObjectives(getActivity(program.getObjectives(), false));
+		if(program.getType()==ProgramDetailType.PROGRAM){
+			//Objectives are saved a children of program
+			//Load program objectives here
+			List<IsProgramActivity> objectives = new ArrayList<>();
+			for(ProgramDetail obj: program.getChildren()){					
+				if(obj.getType()==ProgramDetailType.OBJECTIVE){
+					objectives.add(get(obj, false));
+				}					
+			}
+			dto.setObjectives(objectives);
+		}else{
+			//Objectives for Outcomes (many to many relationship)
+			if(loadObjectives){
+				dto.setObjectives(getActivity(program.getObjectives(), false));
+			}
 		}
 		
 		return dto;

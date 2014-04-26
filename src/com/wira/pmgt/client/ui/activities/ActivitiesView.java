@@ -133,6 +133,10 @@ public class ActivitiesView extends ViewImpl implements
 		}
 	}
 
+	public void createDefaultTab(){
+		createTab("Summary", 0, true);
+	}
+	
 	public void createTab(String text, long id, boolean active) {
 		BulletPanel li = new BulletPanel();
 		Anchor a = new Anchor(text);
@@ -164,10 +168,12 @@ public class ActivitiesView extends ViewImpl implements
 		if (programs == null) {
 			return;
 		}
+		
+		createDefaultTab();
 		// System.err.println("Size = " + programs.size());
 		for (IsProgramActivity activity : programs) {
-			boolean first = programs.indexOf(activity) == 0;
-			createTab(activity.getName(), activity.getId(), first);
+			//boolean first = programs.indexOf(activity) == 0;
+			createTab(activity.getName(), activity.getId(), false);
 		}
 	}
 
