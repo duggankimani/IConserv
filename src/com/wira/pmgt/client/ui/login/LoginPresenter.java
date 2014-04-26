@@ -120,7 +120,7 @@ public class LoginPresenter extends
 	}
 
 	protected void onReset() {
-		Window.setTitle("WIRA");	
+		Window.setTitle("iConserve");	
 		getView().clearViewItems(true);
 	};
 	

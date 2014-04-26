@@ -1,5 +1,5 @@
 /*Activity Page Styles*/
-
+/**Testing workspace*/
 /*--Action Buttons --*/
 .action-buttons{
 	margin-bottom:15px;
@@ -10,7 +10,7 @@
 }
 .main-container .activities-page .tab-content{
     margin: 10px 20px;
-    height: 70%;
+    height: 65%;
     overflow-x: hidden;
 }
 .activities-page .content-top{
@@ -39,6 +39,13 @@
 .activities-page .user-content{
 	margin: 20px;
 }
+
+.activities-page .table-programs .td > .padded{
+	
+}
+
+
+/* Tabs Below */
 .activities-page .tabs-below .tabs-container{
 	width:90%;
 }
@@ -55,10 +62,10 @@
 .activities-page .tabs-below .tabs-container > .nav-tabs{
 	background-color: #eeeeee;
 	border-top: 1px solid #aaa;
-	margin-bottom: 0px;
+	margin-top: 0px;
 	padding-bottom: 2%;
-	height: 33px;
 	white-space: nowrap;
+	z-index: 1;
 }
 .activities-page .nav-tabs > .active{
 	margin-left: 22px;
@@ -73,14 +80,22 @@
 .main-container .activities-page .tabs-below .nav-tabs > li a:hover,
 .main-container .activities-page .tabs-below .nav-tabs > li a:focus {
   border-bottom-color: transparent;
-  border-top-color:#aaa;
   background-color: #DFDFDF;
+}
+
+
+.main-container .activities-page .tabs-below .nav-tabs > li > .active a:hover,
+.main-container .activities-page .tabs-below .nav-tabs > li > .active a:focus {
+  background-color: transparent;
+  border-bottom-color: transparent;
+  border-top-color:transparent;
 }
 
 .activities-page .nav-tabs > li{
 white-space: nowrap;
 display: inline-block;
 float: none;
+z-index: 99;
 }
 
 /*Profile Page Styles*/

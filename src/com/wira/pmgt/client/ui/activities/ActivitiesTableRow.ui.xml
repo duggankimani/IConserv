@@ -2,12 +2,14 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<g:HTMLPanel styleName="tr" ui:field="row">
-		<g:HTMLPanel styleName="td" ui:field="divRowNo"></g:HTMLPanel>
+		<!-- <g:HTMLPanel styleName="td" ui:field="divRowNo"></g:HTMLPanel> -->
 		<g:HTMLPanel styleName="td" ui:field="divCheckbox">
 			<g:CheckBox ui:field="chkSelect"></g:CheckBox>
 		</g:HTMLPanel>
 		<g:HTMLPanel styleName="td" ui:field="divName"></g:HTMLPanel>
-		<g:HTMLPanel styleName="td" ui:field="divStatus"></g:HTMLPanel>
+		<g:HTMLPanel styleName="td">
+			<span ui:field="divStatus" class="label"></span>
+		</g:HTMLPanel>
 		<g:HTMLPanel styleName="td" ui:field="divProgress"></g:HTMLPanel>
 		<g:HTMLPanel styleName="td" ui:field="divRating"></g:HTMLPanel>
 		<g:HTMLPanel styleName="td" ui:field="divBudget"></g:HTMLPanel>

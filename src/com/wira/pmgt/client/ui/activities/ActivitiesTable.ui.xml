@@ -3,6 +3,8 @@
     xmlns:g="urn:import:com.google.gwt.user.client.ui"
     xmlns:d="urn:import:com.wira.pmgt.client.ui.component">
 	<g:HTMLPanel>
-	    <d:TableView ui:field="tblView" striped="false"	isGrid="false" bordered="false"></d:TableView>
+	    <d:TableView ui:field="tblView" striped="false"	isGrid="false" bordered="false" autoNumber="false"
+	    		styleName="table-programs"
+	    	></d:TableView>
 	</g:HTMLPanel>
 </ui:UiBinder>
