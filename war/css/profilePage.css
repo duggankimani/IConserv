@@ -40,6 +40,11 @@
 	margin: 20px;
 }
 
+.activities-page .table-programs .thead{
+	border-bottom: 1px solid #E6E6E6;
+	border-top: 1px solid #E6E6E6;
+}
+
 .activities-page .table-programs .td > .padded{
 	
 }

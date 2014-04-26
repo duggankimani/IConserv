@@ -14,7 +14,6 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.RowWidget;
 import com.wira.pmgt.client.util.AppContext;
-import com.wira.pmgt.shared.model.Priority;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.IsProgramActivity;
 
@@ -52,9 +51,9 @@ public class ActivitiesTableRow extends RowWidget {
 		initWidget(uiBinder.createAndBindUi(this));
 		setRow(row);
 		setStatus("created", "info");
-
-		divName.getElement().setInnerText(activity.getName());
-		setActivityPadding(activity.getType()); // set Padding
+		
+		 //set Padding
+		setActivityName(activity.getType());
 
 		divProgress.getElement().setInnerText("0%");
 		divRating.getElement().setInnerText("N/A");
@@ -76,18 +75,29 @@ public class ActivitiesTableRow extends RowWidget {
 		divBudget.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
 	}
 
-	private void setActivityPadding(ProgramDetailType type) {
+	private void setActivityName(ProgramDetailType type) {
 		if (type != null) {
 			ProgramDetailType passedType = type;
 
 			switch (passedType) {
+			case PROGRAM:
+				divName.getElement().setInnerText(activity.getName());
+				divName.getElement().addClassName("bold");
+				break;
+			case OUTCOME:
+				divName.getElement().setInnerText(activity.getName());
+				divName.getElement().addClassName("bold");
+				break;
 			case ACTIVITY:
+				divName.getElement().setInnerText(activity.getName());
 				setisPadded(true);
 				break;
 			case OBJECTIVE:
+				divName.getElement().setInnerText(activity.getName()+" - "+activity.getDescription());
 				setisPadded(true);
 				break;
 			default:
+				divName.getElement().setInnerText(activity.getName());
 				setisPadded(false);
 			}
 

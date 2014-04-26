@@ -80,7 +80,7 @@ public class DateRangeWidget extends Composite {
 		dateInput2.setValue(endDate);
 	}
 	
-	public void setValidation(Date rangeStart, Date rangeEnd){
+	public void setRangeValidation(Date rangeStart, Date rangeEnd){
 		this.rangeStart = rangeStart;
 		this.rangeEnd = rangeEnd;
 	}
@@ -98,13 +98,13 @@ public class DateRangeWidget extends Composite {
 		
 		if(rangeEnd!=null && getEndDate()!=null){
 			if(getEndDate().after(rangeEnd)){
-				return "End Date cannot be later than ["+DateUtils.DATEFORMAT.format(rangeStart)+"]";
+				return "End Date cannot be later than ["+DateUtils.DATEFORMAT.format(rangeEnd)+"]";
 			}
 		}
 		
 		if(getStartDate()!=null && getEndDate()!=null){
 			if(getStartDate().after(getEndDate())){
-				return "Start Date cannot be later than End Date";
+				return "End Date cannot be earlier than Start Date";
 			}
 		}
 		

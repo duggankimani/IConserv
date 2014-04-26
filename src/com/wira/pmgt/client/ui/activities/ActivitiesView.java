@@ -133,6 +133,10 @@ public class ActivitiesView extends ViewImpl implements
 		}
 	}
 
+	public void createDefaultTab(){
+		createTab("Summary", 0, true);
+	}
+	
 	public void createTab(String text, long id, boolean active) {
 		BulletPanel li = new BulletPanel();
 		Anchor a = new Anchor(text);
@@ -164,19 +168,20 @@ public class ActivitiesView extends ViewImpl implements
 		if (programs == null) {
 			return;
 		}
+		
+		createDefaultTab();
 		// System.err.println("Size = " + programs.size());
 		for (IsProgramActivity activity : programs) {
-			boolean first = programs.indexOf(activity) == 0;
-			createTab(activity.getName(), activity.getId(), first);
+			//boolean first = programs.indexOf(activity) == 0;
+			createTab(activity.getName(), activity.getId(), false);
 		}
 	}
 
 	/**
 	 * Sets Parent Activity
 	 */
-
 	public void setActivity(IsProgramActivity singleResult) {
-		setSelection(singleResult.getType());
+		setSelection(singleResult.getType(),false);
 		if (singleResult.getType() == ProgramDetailType.PROGRAM) {
 			// select tab
 			selectTab(singleResult.getId());
@@ -219,6 +224,15 @@ public class ActivitiesView extends ViewImpl implements
 
 	@Override
 	public void setSelection(ProgramDetailType type) {
+		setSelection(type, true);
+	}
+	
+	/**
+	 * 
+	 * @param type
+	 * @param isRowData
+	 */
+	public void setSelection(ProgramDetailType type, boolean isRowData){
 		show(aNewOutcome, false);
 		show(aNewObjective, false);
 		show(aNewActivity, false);
@@ -226,10 +240,12 @@ public class ActivitiesView extends ViewImpl implements
 		show(aEdit, true);
 
 		if (type == ProgramDetailType.PROGRAM) {
-			// select tab
-			show(aNewOutcome, true);
+			show(aNewOutcome, !isRowData);
 			show(aNewObjective, true);
-			show(aEdit, false);
+			
+			//Program can be selected from the SummaryTab == isRowData 
+			//or When A Program Tab e.g Wildlife Program is selected
+			show(aEdit, isRowData); 
 		} else if (type == ProgramDetailType.OUTCOME) {
 			show(aNewActivity, true);
 		} else if (type == ProgramDetailType.ACTIVITY) {

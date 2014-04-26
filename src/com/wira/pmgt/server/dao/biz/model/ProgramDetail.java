@@ -71,7 +71,7 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	private Date startDate; //For Activities & tasks - Start Date (Programs run for a whole year)
 	private Date endDate; //For Activities & tasks - End Date
 	
-	//An activity may have other activities
+	//An activity may have other sub-activities
 	@ManyToOne
 	@JoinColumn(name="parentid", referencedColumnName="id", nullable=true)
 	private ProgramDetail parent;

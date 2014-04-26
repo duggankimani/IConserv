@@ -42,12 +42,16 @@ public class AutoCompleteField<T extends Listable> extends Composite {
 	Map<String,T> valuesMap = new HashMap<String, T>(); 
 	DataOracle<T> oracle = new DataOracle<T>();
 	SuggestBox box=null;
+	
+	static int x=0;//count to help generate unique ids
+	String id="suggestion_box"+(++x);
+	
 	public AutoCompleteField() {	
 		initWidget(uiBinder.createAndBindUi(this));
 		itemBox.getElement().setAttribute("style", "outline-color: -moz-use-text-color; outline-style: none; outline-width: medium;");
-		container.getElement().setAttribute("onclick", "document.getElementById('suggestion_box').focus()");
+		container.getElement().setAttribute("onclick", "document.getElementById('"+id+"').focus()");
 		box = new SuggestBox(oracle, itemBox);
-		box.getElement().setId("suggestion_box");
+		box.getElement().setId(id);
 		box.setAnimationEnabled(true);		
 		liPanel.add(box);
 		box.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {

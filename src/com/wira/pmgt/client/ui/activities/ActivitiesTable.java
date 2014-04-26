@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.TableView;
+import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.IsProgramActivity;
 
 public class ActivitiesTable extends Composite {
@@ -34,12 +35,23 @@ public class ActivitiesTable extends Composite {
 
 	public void setData(List<IsProgramActivity> programActivities) {
 		tblView.clearRows();
+		setActivities(programActivities);
+	}
+	
+	private void setActivities(List<IsProgramActivity> programActivities){
 		for (IsProgramActivity activity : programActivities) {
 			ActivitiesTableRow row = new ActivitiesTableRow(activity);
 			row.setSelectionChangeHandler(handler);
 			tblView.addRow(row);
+			
+			if(activity.getType()==ProgramDetailType.PROGRAM){
+				System.err.println(">> Program "+activity.getObjectives());
+				//this is data for the summary tab
+				if(activity.getObjectives()!=null){
+					setActivities(activity.getObjectives());
+				}
+			}
 		}
-
 	}
 
 	private void createGrid() {
