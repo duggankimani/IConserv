@@ -65,8 +65,8 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 			})
 	private Set<ProgramFund> sourceOfFunds = new HashSet<>();	
 
-	private Double budgetAmount; //Total budget amount (accumulation of source of funds)
-	private Double actualAmount; //Actual amount spent
+	private Double budgetAmount=0.0; //Total budget amount (accumulation of source of funds)
+	private Double actualAmount=0.0; //Actual amount spent
 	
 	private Date startDate; //For Activities & tasks - Start Date (Programs run for a whole year)
 	private Date endDate; //For Activities & tasks - End Date
@@ -118,15 +118,11 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 		return budgetAmount;
 	}
 
-	public void setBudgetAmount(Double budgetAmount) {
-		this.budgetAmount = budgetAmount;
-	}
-
 	public Double getActualAmount() {
 		return actualAmount;
 	}
 
-	public void setActualAmount(Double actualAmount) {
+	public void setActualAmount(double actualAmount) {
 		this.actualAmount = actualAmount;
 	}
 

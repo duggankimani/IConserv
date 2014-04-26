@@ -103,6 +103,7 @@ public class CreateActivityView extends ViewImpl implements
 	
 	@Override
 	public void setFunds(List<FundDTO> funds) {
+		donors.clear();
 		if(funds!=null){
 			for(FundDTO dto: funds){
 				donors.add(dto);
