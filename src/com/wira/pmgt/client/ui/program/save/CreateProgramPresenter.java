@@ -116,7 +116,8 @@ public class CreateProgramPresenter extends
 							public void processResult(
 									CreateProgramResponse aResponse) {
 								getView().hide();
-								History.newItem("home;page=activities;type=listing");
+								History.newItem("home;page=activities;activity="+aResponse.getProgram().getId(),
+										true);
 							}
 						});
 				}

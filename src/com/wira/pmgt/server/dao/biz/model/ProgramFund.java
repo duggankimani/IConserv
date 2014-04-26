@@ -30,11 +30,11 @@ public class ProgramFund implements Serializable {
 	private Double amount;
 	
 	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinColumn(name="fundid", referencedColumnName="id", nullable=true)
+	@JoinColumn(name="fundid", referencedColumnName="id", nullable=false)
 	private Fund fund;
 	
 	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinColumn(name="programid", referencedColumnName="id", nullable=true)
+	@JoinColumn(name="programid", referencedColumnName="id", nullable=false)
 	private ProgramDetail programDetail;
 
 	public ProgramFund() {
