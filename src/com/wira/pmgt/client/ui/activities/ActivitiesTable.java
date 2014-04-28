@@ -56,6 +56,9 @@ public class ActivitiesTable extends Composite {
 					setActivities(activity.getObjectives());
 				}
 			}
+			
+			if(activity.getChildren()!=null)
+				setActivities(activity.getChildren());
 		}
 	}
 

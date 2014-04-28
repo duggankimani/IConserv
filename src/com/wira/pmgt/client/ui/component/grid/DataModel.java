@@ -23,4 +23,16 @@ public class DataModel extends HashMap<String, Object>{
 	public void set(String key, Object value){
 		put(key, value);
 	}
+	
+	public boolean isEmpty(){
+		if(values().isEmpty()){
+			return true;
+		}
+		for(Object value: values()){
+			if(value!=null && !value.toString().isEmpty()){
+				return false;
+			}
+		}
+		return true;
+	}
 }

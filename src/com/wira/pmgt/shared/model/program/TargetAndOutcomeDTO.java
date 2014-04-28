@@ -1,12 +1,18 @@
 package com.wira.pmgt.shared.model.program;
 
+import java.io.Serializable;
+
 /**
  * 
  * @author duggan
  *
  */
-public class TargetAndOutcomeDTO {
+public class TargetAndOutcomeDTO implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Long id;
 	private Double target;
 	private Double actualOutcome;

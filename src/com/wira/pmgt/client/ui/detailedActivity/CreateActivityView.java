@@ -30,6 +30,7 @@ import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
+import com.wira.pmgt.shared.model.program.TargetAndOutcomeDTO;
 
 public class CreateActivityView extends ViewImpl implements
 		CreateActivityPresenter.MyView {
@@ -49,7 +50,7 @@ public class CreateActivityView extends ViewImpl implements
 	@UiField AggregationGrid gridTargets;
 	@UiField AutoCompleteField<HTUser> allocatedToUsers;
 	@UiField AutoCompleteField<UserGroup> allocatedToGroups;
-	@UiField AutoCompleteField<IsProgramActivity> autoComplete;
+	@UiField AutoCompleteField<IsProgramActivity> objectivesAutoComplete;
 	
 	@UiField DateRangeWidget dtRange;
 
@@ -75,7 +76,7 @@ public class CreateActivityView extends ViewImpl implements
 //		ColumnConfig config = new ColumnConfig("condition", "Check", DataType.SELECTBASIC);
 //		configs.add(config);
 		
-		ColumnConfig config = new ColumnConfig("target", "Target", DataType.INTEGER);
+		ColumnConfig config = new ColumnConfig("target", "Target", DataType.DOUBLE);
 		configs.add(config);
 		
 		config = new ColumnConfig("indicator", "Indicator", DataType.STRING);
@@ -113,36 +114,6 @@ public class CreateActivityView extends ViewImpl implements
 		gridView.refresh();
 	} 
 
-	DataMapper programFundMapper = new DataMapper() {
-		@Override
-		public ProgramFundDTO getData(DataModel model) {
-			ProgramFundDTO fund = new ProgramFundDTO();
-			if(model.get("donor")==null){
-				return null;
-			}
-			
-			fund.setFund(model.get("donor")==null? null: (FundDTO)model.get("donor"));
-			fund.setAmount(model.get("amount")==null? null: (Double)model.get("amount"));
-			fund.setId(model.getId());
-			return fund;
-		}
-
-		@Override
-		public List<DataModel> getDataModels(List<Object> funding) {
-			List<DataModel> models = new ArrayList<DataModel>();
-			for(Object obj: funding){
-				ProgramFundDTO fund = (ProgramFundDTO)obj;
-				DataModel model = new DataModel();
-				model.set("donor", fund.getFund());
-				model.setId(fund.getId());
-				model.set("amount", fund.getAmount());
-				models.add(model);
-			}
-			
-			return models;
-		}
-	};
-
 	@Override
 	public void setPeriod(PeriodDTO period) {
 		if(period!=null){
@@ -155,7 +126,7 @@ public class CreateActivityView extends ViewImpl implements
 	@Override
 	public void setObjectives(List<IsProgramActivity> objectives) {
 		if(objectives!=null){
-			autoComplete.setValues(objectives);
+			objectivesAutoComplete.setValues(objectives);
 		}
 	}
 
@@ -172,6 +143,7 @@ public class CreateActivityView extends ViewImpl implements
 	}
 
 	public void setBreadCrumbs(List<ProgramSummary> summaries) {
+		crumbContainer.clear();
 		for(int i=summaries.size()-1; i>-1; i--){
 			ProgramSummary summary = summaries.get(i);
 			createCrumb(summary.getName(),summary.getDescription(), summary.getId(), i==0);
@@ -213,11 +185,17 @@ public class CreateActivityView extends ViewImpl implements
 		ProgramDTO program = new ProgramDTO();
 		program.setDescription(txtActivity.getValue());
 		program.setName(txtActivity.getValue());
-		program.setType(ProgramDetailType.OUTCOME);
-		program.setObjectives(autoComplete.getSelectedItems());
-		//program.setTargetsAndOutcomes(targetsAndOutcomes);
+		program.setType(ProgramDetailType.ACTIVITY);
+		program.setObjectives(objectivesAutoComplete.getSelectedItems());
+		
+		//Targets and Outcomes
+		List<TargetAndOutcomeDTO> targets = gridTargets.getData(targetAndOutcomeMapper); 
+		program.setTargetsAndOutcomes(targets);
+		
+		//Activity Funds
 		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
 		program.setFunding(funding);
+		
 		Double totalAmount=0.0;
 		for(ProgramFundDTO programFund: funding){
 			Double val = programFund.getAmount();
@@ -231,22 +209,33 @@ public class CreateActivityView extends ViewImpl implements
 	}
 
 	@Override
-	public void setActivity(IsProgramActivity outcome) {
-		if(outcome==null){
+	public void setActivity(IsProgramActivity activity) {
+		if(activity==null){
 			return;		
 		}
 		
-		txtActivity.setValue(outcome.getDescription());
-		autoComplete.select(outcome.getObjectives());
+		txtActivity.setValue(activity.getDescription());
+		System.err.println(activity.getObjectives());
+		objectivesAutoComplete.select(activity.getObjectives());
 		
 		//program.setTargetsAndOutcomes(targetsAndOutcomes);
-		List<Object> lst = new ArrayList<Object>();
-		for(ProgramFundDTO dto: outcome.getFunding()){
-			lst.add(dto);
-		}		
+		//
+		List<Object> targets = new ArrayList<Object>();
+		if(activity.getTargetsAndOutcomes()!=null)
+		for(TargetAndOutcomeDTO dto: activity.getTargetsAndOutcomes()){
+			targets.add(dto);
+		}	
+		List<DataModel> models = targetAndOutcomeMapper.getDataModels(targets); 
+		gridTargets.setData(models);
 		
-		List<DataModel> models = programFundMapper.getDataModels(lst); 
+		//Program Funds
+		List<Object> lst = new ArrayList<Object>();
+		for(ProgramFundDTO dto: activity.getFunding()){
+			lst.add(dto);
+		}	
+		models = programFundMapper.getDataModels(lst); 
 		gridView.setData(models);
+		
 	}
 
 	@Override
@@ -255,7 +244,7 @@ public class CreateActivityView extends ViewImpl implements
 		txtActivity.setValue(null);
 		crumbContainer.clear();
 		spnPeriod.setText(null);
-		autoComplete.clearSelection();
+		objectivesAutoComplete.clearSelection();
 	}
 
 	@Override
@@ -267,5 +256,72 @@ public class CreateActivityView extends ViewImpl implements
 	public void setUsers(List<HTUser> users) {
 		allocatedToUsers.setValues(users);
 	}
+	
+
+	/**
+	 * Program Fund Mapper
+	 */
+	DataMapper programFundMapper = new DataMapper() {
+		@Override
+		public ProgramFundDTO getData(DataModel model) {
+			ProgramFundDTO fund = new ProgramFundDTO();
+			if(model.get("donor")==null){
+				return null;
+			}
+			
+			fund.setFund(model.get("donor")==null? null: (FundDTO)model.get("donor"));
+			fund.setAmount(model.get("amount")==null? null: (Double)model.get("amount"));
+			fund.setId(model.getId());
+			return fund;
+		}
+
+		@Override
+		public List<DataModel> getDataModels(List<Object> funding) {
+			List<DataModel> models = new ArrayList<DataModel>();
+			for(Object obj: funding){
+				ProgramFundDTO fund = (ProgramFundDTO)obj;
+				DataModel model = new DataModel();
+				model.set("donor", fund.getFund());
+				model.setId(fund.getId());
+				model.set("amount", fund.getAmount());
+				models.add(model);
+			}
+			
+			return models;
+		}
+	};
+
+	DataMapper targetAndOutcomeMapper = new DataMapper() {
+		
+		@Override
+		public List<DataModel> getDataModels(List<Object> funding) {
+
+			List<DataModel> models = new ArrayList<DataModel>();
+			for(Object obj: funding){
+				TargetAndOutcomeDTO target = (TargetAndOutcomeDTO)obj;
+				DataModel model = new DataModel();
+				model.setId(target.getId());
+				model.set("target", target.getTarget());
+				model.set("indicator", target.getMeasure());
+				models.add(model);
+			}
+			
+			return models;
+		}
+		
+		@Override
+		public TargetAndOutcomeDTO getData(DataModel model) {
+
+			TargetAndOutcomeDTO dto = new TargetAndOutcomeDTO();
+			dto.setId(model.getId());
+			dto.setMeasure(model.get("indicator")==null? null:
+				model.get("indicator").toString().isEmpty()? null: 
+					model.get("indicator").toString());
+			
+			dto.setTarget(model.get("target")==null ? null: 
+				(Double)model.get("target"));
+			return dto;
+		}
+	};
 
 }

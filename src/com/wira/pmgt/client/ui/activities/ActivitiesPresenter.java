@@ -141,17 +141,26 @@ public class ActivitiesPresenter extends
 		switch (type) {
 		case ACTIVITY:
 			//Use selected an outcome
-			createActivity.setActivity(edit?selected:null);
-			createActivity.load(selected.getId());
+			
+			if(edit){
+				//we are editing the selected item
+				createActivity.setActivity(selected);
+				createActivity.load(selected.getParentId());
+			}else{
+				//selected item is the parent - We are creating a new activity based on selected item
+				createActivity.load(selected.getId());
+			}
+			
 			AppManager.showPopUp("Create Activity",
 					createActivity.getWidget(), new OptionControl() {
-						
 						@Override
 						public void onSelect(String name) {
 							
 							if(name.equals("Save")){
 								if(createActivity.getView().isValid()){
-									save(createActivity.getActivity());
+									IsProgramActivity activity=createActivity.getActivity();
+									//System.err.println("")
+									save(activity);
 									hide();
 								}
 							}else{
@@ -176,7 +185,9 @@ public class ActivitiesPresenter extends
 				public void onSelect(String name) {
 					if(name.equals("Save")){
 						if(objectivePresenter.getView().isValid()){
-							save(objectivePresenter.getObjective());
+							IsProgramActivity objective =objectivePresenter.getObjective();		
+							objective.setParentId(programId);
+							save(objective);
 							hide();
 						}
 					}else{hide();}
@@ -197,7 +208,9 @@ public class ActivitiesPresenter extends
 							
 							if(name.equals("Save")){
 								if(createOutcome.getView().isValid()){
-									save(createOutcome.getOutcome());
+									IsProgramActivity outcome =createOutcome.getOutcome();
+									outcome.setParentId(programId);
+									save(outcome);
 									hide();
 								}
 							}else{
@@ -220,7 +233,7 @@ public class ActivitiesPresenter extends
 	}
 
 	private void save(IsProgramActivity program) {
-		program.setParentId(programId);
+		//program.setParentId(programId);
 		requestHelper.execute(new CreateProgramRequest(program),
 				new TaskServiceCallback<CreateProgramResponse>() {
 					@Override
@@ -235,11 +248,13 @@ public class ActivitiesPresenter extends
 		getView().setSummaryView(hasProgramId);
 		
 		MultiRequestAction action = new MultiRequestAction();
+		//List of Programs for tabs
 		action.addRequest(new GetProgramsRequest(ProgramDetailType.PROGRAM,false));
 		action.addRequest(new GetPeriodsRequest());
 		action.addRequest(new GetFundsRequest());
 
 		if (hasProgramId) {
+			//Details of selected program
 			this.programId = activityId;
 			action.addRequest(new GetProgramsRequest(activityId, true));
 		}

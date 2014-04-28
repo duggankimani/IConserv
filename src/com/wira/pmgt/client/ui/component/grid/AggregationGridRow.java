@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -30,7 +33,6 @@ public class AggregationGridRow extends RowWidget{
 	private Map<ColumnConfig, HasValue> columnWigetMap = new HashMap<ColumnConfig, HasValue>();
 	
 	private AggregationGrid grid;
-	private boolean isChanged=false;
 	
 	public AggregationGridRow() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -45,6 +47,7 @@ public class AggregationGridRow extends RowWidget{
 		this.model = data;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onLoad() {
 		super.onLoad();
@@ -56,12 +59,28 @@ public class AggregationGridRow extends RowWidget{
 			columnWigetMap.put(config, (HasValue)widget);
 			if(config.isAggregationColumn()){
 				grid.addValueChangeHandler(config, widget);
+			}else{
+				if(widget instanceof HasValueChangeHandlers){
+					HasValueChangeHandlers<Object> hasValueChangeHandlers = (HasValueChangeHandlers<Object>)widget;
+					hasValueChangeHandlers.addValueChangeHandler(valueChangedHandler);
+				}
+				 
 			}
 			widgets.add(widget);
 		}
 		
 		createRow(widgets);
 	}
+	
+	ValueChangeHandler<Object> valueChangedHandler=new ValueChangeHandler<Object>() {
+		@Override
+		public void onValueChange(ValueChangeEvent<Object> event) {
+			Object value = event.getValue();
+			if(value!=null){
+				grid.createRowLast();
+			}
+		}
+	};
 	
 	public Long getModelId() {
 		return modelId;
@@ -91,14 +110,6 @@ public class AggregationGridRow extends RowWidget{
 		}
 		
 		return model;
-	}
-
-	public boolean isChanged() {
-		return isChanged;
-	}
-
-	public void setChanged(boolean isChanged) {
-		this.isChanged = isChanged;
 	}
 
 }

@@ -46,6 +46,7 @@ public class CreateActivityPresenter extends
 	@Inject DispatchAsync requestHelper;
 	
 	private IsProgramActivity activity;
+	private Long parentId;
 	
 	@Inject
 	public CreateActivityPresenter(final EventBus eventBus, final MyView view) {
@@ -54,7 +55,9 @@ public class CreateActivityPresenter extends
 
 	public IsProgramActivity getActivity(){
 		IsProgramActivity viewactivity= getView().getActivity();
+		viewactivity.setParentId(parentId);
 		if(activity!=null){
+			//update
 			viewactivity.setId(activity.getId());
 			viewactivity.setParentId(activity.getParentId());
 			viewactivity.setPeriod(activity.getPeriod());
@@ -64,7 +67,8 @@ public class CreateActivityPresenter extends
 	}
 
 	public void load(Long outcomeId) {
-		assert outcomeId!=null;
+		
+		this.parentId = outcomeId;
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetFundsRequest());
 		action.addRequest(new GetPeriodRequest());
@@ -76,23 +80,24 @@ public class CreateActivityPresenter extends
 		requestHelper.execute(action, new TaskServiceCallback<MultiRequestActionResult>() {
 			@Override
 			public void processResult(MultiRequestActionResult aResponse) {
-				GetFundsResponse getFunds = (GetFundsResponse)aResponse.get(0);
+				int i=0;
+				GetFundsResponse getFunds = (GetFundsResponse)aResponse.get(i++);
 				getView().setFunds(getFunds.getFunds());
 				
-				GetPeriodResponse getPeriod = (GetPeriodResponse)aResponse.get(1);
+				GetPeriodResponse getPeriod = (GetPeriodResponse)aResponse.get(i++);
 				getView().setPeriod(getPeriod.getPeriod());
 			
-				GetProgramsResponse getPrograms = (GetProgramsResponse)aResponse.get(2);
+				GetProgramsResponse getPrograms = (GetProgramsResponse)aResponse.get(i++);
 				getView().setObjectives(getPrograms.getPrograms());
 				
-				GetProgramsResponse getProgram = (GetProgramsResponse)aResponse.get(3);
+				GetProgramsResponse getProgram = (GetProgramsResponse)aResponse.get(i++);
 				getView().setParentProgram(getProgram.getSingleResult());
 				getView().setActivity(activity);
 				
-				GetGroupsResponse getGroups = (GetGroupsResponse)aResponse.get(4);
+				GetGroupsResponse getGroups = (GetGroupsResponse)aResponse.get(i++);
 				getView().setGroups(getGroups.getGroups());
 				
-				GetUsersResponse getUsers = (GetUsersResponse)aResponse.get(5);
+				GetUsersResponse getUsers = (GetUsersResponse)aResponse.get(i++);
 				getView().setUsers(getUsers.getUsers());
 				
 			}

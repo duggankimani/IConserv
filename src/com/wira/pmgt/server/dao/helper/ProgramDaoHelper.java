@@ -12,6 +12,7 @@ import com.wira.pmgt.server.dao.biz.model.FundAllocation;
 import com.wira.pmgt.server.dao.biz.model.Period;
 import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
 import com.wira.pmgt.server.dao.biz.model.ProgramFund;
+import com.wira.pmgt.server.dao.biz.model.TargetAndOutcome;
 import com.wira.pmgt.server.db.DB;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
@@ -20,6 +21,7 @@ import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
+import com.wira.pmgt.shared.model.program.TargetAndOutcomeDTO;
 
 public class ProgramDaoHelper {
 
@@ -79,6 +81,7 @@ public class ProgramDaoHelper {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		ProgramDetail program = get(programDTO);
 		ProgramDetail parent = program.getParent();
+		
 		//Parent must have a preset set of funds before child source of funds are generated
 		if(parent!=null){
 			
@@ -145,10 +148,10 @@ public class ProgramDaoHelper {
 			}
 			dto.setObjectives(objectives);
 		}else{
-			//Objectives for Outcomes (many to many relationship)
-			if(loadObjectives){
-				dto.setObjectives(getActivity(program.getObjectives(), false));
-			}
+			//Objectives for Outcomes/Activities (many to many relationship)
+			//if(loadObjectives){
+			dto.setObjectives(getActivity(program.getObjectives(), false,true));
+			//}
 		}
 		
 		return dto;
@@ -162,8 +165,7 @@ public class ProgramDaoHelper {
 		List<IsProgramActivity> activity = new ArrayList<>();
 		if(children!=null)
 			for(ProgramDetail detail: children){
-				if(!loadObjectives)
-				if(detail.getType()==ProgramDetailType.OBJECTIVE){
+				if(!loadObjectives && detail.getType()==ProgramDetailType.OBJECTIVE){
 					continue;
 				}
 				activity.add(get(detail,loadChildren));
@@ -204,11 +206,8 @@ public class ProgramDaoHelper {
 		
 		return dto;
 	}
-	private static ProgramDetail get(IsProgramActivity programDTO){
-		return get(programDTO, true);
-	}
-	
-	private static ProgramDetail get(IsProgramActivity programDTO,boolean childrentoo) {
+		
+	private static ProgramDetail get(IsProgramActivity programDTO) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		ProgramDetail detail = new ProgramDetail();
 		if(programDTO.getId()!=null){
@@ -229,15 +228,36 @@ public class ProgramDaoHelper {
 		detail.setSourceOfFunds(get(programDTO.getFunding()));
 		detail.setStartDate(programDTO.getStartDate());
 		
-		if(childrentoo)
+		if(programDTO.getObjectives()!=null)
 			detail.setObjectives(getProgramChildren(programDTO.getObjectives()));
 		
 		//detail.setTarget(String);
 		//detail.setTargets(Set<TargetAndOutcome>);
 		detail.setType(programDTO.getType());
 		
+		List<TargetAndOutcomeDTO> targets = programDTO.getTargetsAndOutcomes();
+		detail.setTargets(getTargets(targets));
 		
 		return detail;
+	}
+
+	private static Collection<TargetAndOutcome> getTargets(List<TargetAndOutcomeDTO> targets) {
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		List<TargetAndOutcome> targetsAndOutcomes = new ArrayList<>();
+		if(targets!=null)
+		for(TargetAndOutcomeDTO dto: targets){
+			TargetAndOutcome target = new TargetAndOutcome();
+			if(dto.getId()!=null){
+				target = dao.getById(TargetAndOutcome.class, dto.getId());
+			}
+			target.setMeasure(dto.getMeasure());
+			target.setTarget(dto.getTarget());
+			target.setActualOutcome(dto.getActualOutcome());
+			target.setOutcomeRemarks(dto.getOutcomeRemarks());
+			
+			targetsAndOutcomes.add(target);
+		}
+		return targetsAndOutcomes;
 	}
 
 	private static Set<ProgramDetail> getProgramChildren(
@@ -249,7 +269,7 @@ public class ProgramDaoHelper {
 		
 		Set<ProgramDetail> details = new HashSet<>();
 		for(IsProgramActivity activity: objectives){
-			ProgramDetail detail = get(activity, false);
+			ProgramDetail detail = get(activity);
 			details.add(detail);
 		}
 		

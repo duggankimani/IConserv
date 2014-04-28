@@ -39,7 +39,7 @@
 			<div class="control-group">
 				<div class="control-label">Objectives:</div>
 				<div class="controls">
-					<a:AutoCompleteField ui:field="autoComplete" />
+					<a:AutoCompleteField ui:field="objectivesAutoComplete" />
 				</div>
 			</div>
 						

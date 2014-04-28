@@ -112,8 +112,8 @@ public class AggregationGrid extends Composite {
 				AggregationGridRow row = (AggregationGridRow)w;
 				lastRowData = row.getData();
 			}
-			
-			if(lastRowData!=null && columnConfigs!=null && !columnConfigs.isEmpty()){
+			//System.err.println(lastRowData);
+			if(lastRowData!=null && !lastRowData.isEmpty() && columnConfigs!=null && !columnConfigs.isEmpty()){
 				ColumnConfig config = columnConfigs.get(columnConfigs.size()-1);
 				assert config!=null;
 				assert config.getKey()!=null; 

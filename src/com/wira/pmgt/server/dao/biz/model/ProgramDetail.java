@@ -1,5 +1,6 @@
 package com.wira.pmgt.server.dao.biz.model;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -81,7 +82,7 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	private Set<ProgramDetail> children = new HashSet<>();
 	
 	/**
-	 * Objectives and Outcomes have a many to Many Relationship
+	 * Objectives and Outcomes/Activities have a many to Many Relationship
 	 * 
 	 * Also Objectives belong to a single Program
 	 */
@@ -155,8 +156,13 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 		return targets;
 	}
 
-	public void setTargets(Set<TargetAndOutcome> targets) {
-		this.targets = targets;
+	public void setTargets(Collection<TargetAndOutcome> targetsAndOutcomes) {
+		this.targets.clear();
+		for(TargetAndOutcome target: targetsAndOutcomes){
+			target.setProgramDetail(this);
+			this.targets.add(target);
+		}
+		
 	}
 
 	public Date getStartDate() {
