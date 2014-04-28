@@ -154,12 +154,31 @@ public class ProgramDaoHelper {
 			//}
 		}
 		
+		if(program.getTargets()!=null)
+			dto.setTargetsAndOutcomes(getTargets(program.getTargets()));
 		return dto;
 	}
 
-	private static List<IsProgramActivity> getActivity(Collection<ProgramDetail> children, boolean loadChildren){
-		return getActivity(children, loadChildren, false);
+	private static List<TargetAndOutcomeDTO> getTargets(
+			Set<TargetAndOutcome> targets) {
+
+		List<TargetAndOutcomeDTO> targetsDTO = new ArrayList<>();
+		for(TargetAndOutcome target: targets){
+			TargetAndOutcomeDTO dto = new TargetAndOutcomeDTO();
+			dto.setId(target.getId());
+			dto.setActualOutcome(target.getActualOutcome());
+			dto.setMeasure(target.getMeasure());
+			dto.setOutcomeRemarks(target.getOutcomeRemarks());
+			dto.setTarget(target.getTarget());
+			targetsDTO.add(dto);
+		}
+		
+		return targetsDTO;
 	}
+
+//	private static List<IsProgramActivity> getActivity(Collection<ProgramDetail> children, boolean loadChildren){
+//		return getActivity(children, loadChildren, false);
+//	}
 	
 	private static List<IsProgramActivity> getActivity(Collection<ProgramDetail> children, boolean loadChildren, boolean loadObjectives) {
 		List<IsProgramActivity> activity = new ArrayList<>();
@@ -243,6 +262,7 @@ public class ProgramDaoHelper {
 
 	private static Collection<TargetAndOutcome> getTargets(List<TargetAndOutcomeDTO> targets) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		
 		List<TargetAndOutcome> targetsAndOutcomes = new ArrayList<>();
 		if(targets!=null)
 		for(TargetAndOutcomeDTO dto: targets){

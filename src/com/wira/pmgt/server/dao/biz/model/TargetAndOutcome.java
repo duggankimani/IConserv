@@ -1,5 +1,6 @@
 package com.wira.pmgt.server.dao.biz.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,8 +22,12 @@ public class TargetAndOutcome extends PO{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
+	
+	@Column(nullable=false)
 	private Double target;
 	private Double actualOutcome;
+	
+	@Column(nullable=false)
 	private String measure;
 	private String outcomeRemarks;//this may be provided in place of counts
 	
@@ -65,6 +70,12 @@ public class TargetAndOutcome extends PO{
 	}
 	public void setProgramDetail(ProgramDetail programDetail) {
 		this.programDetail = programDetail;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		TargetAndOutcome other = (TargetAndOutcome)obj;
+		return other.measure.equals(measure);
 	}
 
 }

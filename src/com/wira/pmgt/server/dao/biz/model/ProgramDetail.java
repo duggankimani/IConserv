@@ -162,7 +162,6 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 			target.setProgramDetail(this);
 			this.targets.add(target);
 		}
-		
 	}
 
 	public Date getStartDate() {

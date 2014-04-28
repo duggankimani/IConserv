@@ -148,6 +148,7 @@ public class ActivitiesPresenter extends
 				createActivity.load(selected.getParentId());
 			}else{
 				//selected item is the parent - We are creating a new activity based on selected item
+				createActivity.setActivity(null);
 				createActivity.load(selected.getId());
 			}
 			

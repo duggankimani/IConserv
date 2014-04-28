@@ -186,6 +186,8 @@ public class CreateActivityView extends ViewImpl implements
 		program.setDescription(txtActivity.getValue());
 		program.setName(txtActivity.getValue());
 		program.setType(ProgramDetailType.ACTIVITY);
+		program.setStartDate(dtRange.getStartDate());
+		program.setEndDate(dtRange.getEndDate());
 		program.setObjectives(objectivesAutoComplete.getSelectedItems());
 		
 		//Targets and Outcomes
@@ -215,7 +217,6 @@ public class CreateActivityView extends ViewImpl implements
 		}
 		
 		txtActivity.setValue(activity.getDescription());
-		System.err.println(activity.getObjectives());
 		objectivesAutoComplete.select(activity.getObjectives());
 		
 		//program.setTargetsAndOutcomes(targetsAndOutcomes);
@@ -312,6 +313,10 @@ public class CreateActivityView extends ViewImpl implements
 		@Override
 		public TargetAndOutcomeDTO getData(DataModel model) {
 
+			if(model.isEmpty()){
+				return null;
+			}
+			
 			TargetAndOutcomeDTO dto = new TargetAndOutcomeDTO();
 			dto.setId(model.getId());
 			dto.setMeasure(model.get("indicator")==null? null:
@@ -320,6 +325,7 @@ public class CreateActivityView extends ViewImpl implements
 			
 			dto.setTarget(model.get("target")==null ? null: 
 				(Double)model.get("target"));
+			
 			return dto;
 		}
 	};

@@ -59,6 +59,7 @@ public class CreateActivityPresenter extends
 		if(activity!=null){
 			//update
 			viewactivity.setId(activity.getId());
+			System.err.println("Activity: "+activity.getId()+": Parent="+parentId+":: "+activity.getParentId());
 			viewactivity.setParentId(activity.getParentId());
 			viewactivity.setPeriod(activity.getPeriod());
 		}
