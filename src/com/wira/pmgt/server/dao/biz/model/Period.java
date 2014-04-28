@@ -29,7 +29,7 @@ import com.wira.pmgt.server.dao.model.PO;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name="Period.findActive", query="FROM Period p where p.isActive=:isActive and p.startDate<:now and p.endDate>:now"),
+	@NamedQuery(name="Period.findActive", query="FROM Period p where p.isActive=:isActive and p.startDate<:now and p.endDate>:now order by description"),
 	@NamedQuery(name="Period.findAll", query="FROM Period p"),
 	@NamedQuery(name="Period.findById", query="FROM Period p where p.id=:id")
 	})

@@ -71,4 +71,10 @@ public class Fund extends PO {
 	public void setProgramFunds(Set<ProgramFund> programFunds) {
 		this.programFunds = programFunds;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		Fund other = (Fund)obj;
+		return other.name.equals(name);
+	}
 }

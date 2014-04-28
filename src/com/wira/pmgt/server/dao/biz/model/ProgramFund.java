@@ -15,6 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.wira.pmgt.server.dao.model.PO;
+
 /**
  * This holds the amount funded from a single Fund
  * for a Single Program
@@ -24,7 +26,7 @@ import javax.persistence.UniqueConstraint;
  */
 @Table(uniqueConstraints=@UniqueConstraint(columnNames={"fundid","programid"}))
 @Entity
-public class ProgramFund implements Serializable {
+public class ProgramFund extends PO {
 
 	private static final long serialVersionUID = -5816043324216522679L;
 	
@@ -37,11 +39,11 @@ public class ProgramFund implements Serializable {
 	@OneToOne(mappedBy="fund")
 	private FundAllocation allocation;
 	
-	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinColumn(name="fundid", referencedColumnName="id", nullable=false)
 	private Fund fund;
 	
-	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinColumn(name="programid", referencedColumnName="id", nullable=false)
 	private ProgramDetail programDetail;
 	

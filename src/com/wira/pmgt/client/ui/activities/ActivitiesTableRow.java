@@ -1,21 +1,27 @@
 package com.wira.pmgt.client.ui.activities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.RowWidget;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.ProgramDetailType;
+import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.ProgramFundDTO;
+import static com.wira.pmgt.client.ui.util.NumberUtils.*;
 
 public class ActivitiesTableRow extends RowWidget {
 
@@ -31,8 +37,8 @@ public class ActivitiesTableRow extends RowWidget {
 	// @UiField HTMLPanel divRowNo;
 	@UiField
 	HTMLPanel divName;
-	@UiField
-	SpanElement divStatus;
+	@UiField 
+	HTMLPanel divStatus;
 	@UiField
 	HTMLPanel divProgress;
 	@UiField
@@ -43,10 +49,13 @@ public class ActivitiesTableRow extends RowWidget {
 	HTMLPanel divCheckbox;
 	@UiField
 	CheckBox chkSelect;
+	
+	@UiField SpanElement spnStatus;
 
 	IsProgramActivity activity;
+	List<FundDTO> funding=null;
 
-	public ActivitiesTableRow(IsProgramActivity activity) {
+	public ActivitiesTableRow(IsProgramActivity activity,boolean isSummaryRow) {
 		this.activity = activity;
 		initWidget(uiBinder.createAndBindUi(this));
 		setRow(row);
@@ -55,14 +64,21 @@ public class ActivitiesTableRow extends RowWidget {
 		 //set Padding
 		setActivityName(activity.getType());
 
-		divProgress.getElement().setInnerText("0%");
-		divRating.getElement().setInnerText("N/A");
-
+		if(isSummaryRow){
+			divProgress.setStyleName("hide");
+			divRating.setStyleName("hide");
+			divStatus.setStyleName("hide");
+			
+		}else{
+			divProgress.getElement().setInnerText("0%");
+			divRating.getElement().setInnerText("N/A");
+			
+		}
+		
+		String budgetAmount =activity.getBudgetAmount() == null ? "" : CURRENCYFORMAT.format(activity.getBudgetAmount());
+		
 		divBudget.getElement()
-				.setInnerText(
-						activity.getBudgetAmount() == null ? "" : NumberFormat
-								.getCurrencyFormat().format(
-										activity.getBudgetAmount()));
+				.setInnerText(budgetAmount);
 
 		chkSelect.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
@@ -73,6 +89,7 @@ public class ActivitiesTableRow extends RowWidget {
 		});
 
 		divBudget.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
+		
 	}
 
 	private void setActivityName(ProgramDetailType type) {
@@ -116,8 +133,8 @@ public class ActivitiesTableRow extends RowWidget {
 	 * Sets the status var statusType: danger-red, warning-golden, info - bluish
 	 */
 	public void setStatus(String text, String statusType) {
-		divStatus.setInnerText(text);
-		divStatus.addClassName("label-" + statusType);
+		spnStatus.setInnerText(text);
+		spnStatus.addClassName("label-" + statusType);
 	}
 
 	@Override
@@ -131,5 +148,36 @@ public class ActivitiesTableRow extends RowWidget {
 			divName.getElement().getStyle().setPaddingLeft(40.0, Unit.PX);
 		}
 	}
-
+	
+	public void setFunding(List<FundDTO> funding){
+		this.funding = funding;
+		List<ProgramFundDTO> activityFunding = activity.getFunding();
+		List<FundDTO> activitySourceOfFunds = new ArrayList<FundDTO>();
+		for(ProgramFundDTO dto:activityFunding){
+			activitySourceOfFunds.add(dto.getFund());
+		}
+		
+		for(FundDTO programFund: funding){
+			int idx = activitySourceOfFunds.indexOf(programFund);
+			
+			if(idx==-1){
+				createTd(new InlineLabel(""), TextAlign.RIGHT);
+			}else{
+				ProgramFundDTO activityFund = activityFunding.get(idx);
+				HTMLPanel amounts = new HTMLPanel("");
+				String amount = activityFund.getAmount()==null? "": NUMBERFORMAT.format(activityFund.getAmount());
+				amounts.add(new InlineLabel(amount));
+				
+				Double allocation =activityFund.getAllocation();
+				if(allocation!=null){
+					HTMLPanel allocationPanel= new HTMLPanel("("+NUMBERFORMAT.format(allocation)+")");
+					allocationPanel.setTitle("Allocated amount");
+					allocationPanel.getElement().getStyle().setFontSize(0.8, Unit.EM);
+					amounts.add(allocationPanel);
+				}
+				createTd(amounts, TextAlign.RIGHT);
+			}
+			
+		}
+	}
 }

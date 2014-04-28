@@ -163,4 +163,11 @@ public class TableView extends Composite {
 	public void resetCount(){
 		count=0;
 	}
+
+	public void createHeader(String name) {
+		HTMLPanel th = new HTMLPanel("");
+		th.setStyleName("th");
+		th.add(new InlineLabel(name));
+		panelHeader.add(th);
+	}
 }

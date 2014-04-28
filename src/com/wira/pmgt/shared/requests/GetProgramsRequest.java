@@ -12,6 +12,7 @@ public class GetProgramsRequest extends BaseRequest<GetProgramsResponse> {
 	private Long id;
 	ProgramDetailType type;
 	boolean loadChildren;
+	boolean loadObjectives;
 	
 	public GetProgramsRequest() {
 	}
@@ -20,10 +21,18 @@ public class GetProgramsRequest extends BaseRequest<GetProgramsResponse> {
 		this.id = id;
 		this.loadChildren = loadChildren;
 	}
+	public GetProgramsRequest(Long id, boolean loadChildren, boolean loadObjectives){
+		this(id,loadChildren);
+		this.loadObjectives=loadObjectives;
+	}
 	
 	public GetProgramsRequest(ProgramDetailType type, boolean loadChildren){
 		this.type = type;
 		this.loadChildren= loadChildren;
+	}
+	public GetProgramsRequest(ProgramDetailType type, boolean loadChildren, boolean loadObjectives){
+		this(type,loadChildren);
+		this.loadObjectives = loadObjectives;
 	}
 
 	public Long getId() {
@@ -41,5 +50,13 @@ public class GetProgramsRequest extends BaseRequest<GetProgramsResponse> {
 	
 	public ProgramDetailType getType(){
 		return type;
+	}
+
+	public boolean isLoadObjectives() {
+		return loadObjectives;
+	}
+
+	public void setLoadObjectives(boolean loadObjectives) {
+		this.loadObjectives = loadObjectives;
 	}
 }

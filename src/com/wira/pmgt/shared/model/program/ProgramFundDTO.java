@@ -12,6 +12,7 @@ public class ProgramFundDTO implements Serializable{
 	private FundDTO fund;
 	private Long programId;
 	private Double amount;//fund amount 
+	private Double allocation;//amount already allocated from this fund
 	
 	public ProgramFundDTO() {
 	}
@@ -41,6 +42,14 @@ public class ProgramFundDTO implements Serializable{
 
 	public void setAmount(Double amount) {
 		this.amount = amount;
+	}
+
+	public Double getAllocation() {
+		return allocation;
+	}
+
+	public void setAllocation(Double allocation) {
+		this.allocation = allocation;
 	}
 	
 }

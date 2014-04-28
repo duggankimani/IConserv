@@ -2,6 +2,7 @@ package com.wira.pmgt.client.ui.component;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
@@ -43,11 +44,21 @@ public abstract class RowWidget extends Composite {
 		}
 	}
 	
-	private Widget getTd(Widget widget) {
+	protected Widget getTd(Widget widget) {
 		HTMLPanel td = new HTMLPanel("");
 		td.addStyleName("td");
 		td.add(widget);				
 		return td;
+	}
+	
+	protected void createTd(Widget widget){
+		createTd(widget, TextAlign.LEFT);
+	}
+	
+	public void createTd(Widget widget, TextAlign align) {
+		HTMLPanel td = (HTMLPanel)getTd(widget);
+		td.getElement().getStyle().setTextAlign(align);
+		row.add(td);
 	}
 
 }

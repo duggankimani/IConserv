@@ -22,6 +22,7 @@ import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
 import com.wira.pmgt.client.ui.component.DropDownList;
 import com.wira.pmgt.shared.model.ProgramDetailType;
+import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramActivity;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 
@@ -266,6 +267,16 @@ public class ActivitiesView extends ViewImpl implements
 	@Override
 	public HasClickHandlers getProgramEdit() {
 		return aProgramEdit;
+	}
+
+	@Override
+	public void setSummaryView(boolean hasProgramId) {
+		tblView.setSummaryTable(!hasProgramId);
+	}
+
+	@Override
+	public void setFunds(List<FundDTO> funds) {
+		tblView.setFunds(funds);
 	}
 
 }

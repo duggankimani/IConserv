@@ -20,13 +20,16 @@ import com.wira.pmgt.client.ui.objective.CreateObjectivePresenter;
 import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.ProgramDetailType;
+import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramActivity;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.requests.CreateProgramRequest;
+import com.wira.pmgt.shared.requests.GetFundsRequest;
 import com.wira.pmgt.shared.requests.GetPeriodsRequest;
 import com.wira.pmgt.shared.requests.GetProgramsRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
 import com.wira.pmgt.shared.responses.CreateProgramResponse;
+import com.wira.pmgt.shared.responses.GetFundsResponse;
 import com.wira.pmgt.shared.responses.GetPeriodsResponse;
 import com.wira.pmgt.shared.responses.GetProgramsResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
@@ -57,6 +60,10 @@ public class ActivitiesPresenter extends
 		void setPeriods(List<PeriodDTO> periods);
 
 		HasClickHandlers getProgramEdit();
+
+		void setSummaryView(boolean hasProgramId);
+
+		void setFunds(List<FundDTO> funds);
 	}
 
 	@Inject
@@ -225,11 +232,12 @@ public class ActivitiesPresenter extends
 
 	public void loadData(final Long activityId) {
 		final boolean hasProgramId = activityId != null && activityId != 0L;
-
+		getView().setSummaryView(hasProgramId);
+		
 		MultiRequestAction action = new MultiRequestAction();
-		action.addRequest(new GetProgramsRequest(ProgramDetailType.PROGRAM,
-				false));
+		action.addRequest(new GetProgramsRequest(ProgramDetailType.PROGRAM,false));
 		action.addRequest(new GetPeriodsRequest());
+		action.addRequest(new GetFundsRequest());
 
 		if (hasProgramId) {
 			this.programId = activityId;
@@ -240,18 +248,24 @@ public class ActivitiesPresenter extends
 				new TaskServiceCallback<MultiRequestActionResult>() {
 					@Override
 					public void processResult(MultiRequestActionResult aResponse) {
+						int i=0;
+						//Programs
 						GetProgramsResponse response = (GetProgramsResponse) aResponse
-								.get(0);
+								.get(i++);
 						getView().setPrograms(response.getPrograms());
 
+						//Periods
 						GetPeriodsResponse getPeriod = (GetPeriodsResponse) aResponse
-								.get(1);
+								.get(i++);
 						getView().setPeriods(getPeriod.getPeriods());
 
+						GetFundsResponse getFundsReq = (GetFundsResponse)aResponse.get(i++);
+						getView().setFunds(getFundsReq.getFunds());
+						
 						// activities under a program
 						if (hasProgramId) {
 							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
-									.get(2);
+									.get(i++);
 							getView().setActivity(response2.getSingleResult());
 
 						}else{

@@ -25,14 +25,14 @@ public class GetProgramsRequestHandler extends
 		GetProgramsResponse response = (GetProgramsResponse)actionResult;
 		List<IsProgramActivity> activities = new ArrayList<>();
 		if(action.getId()!=null){
-			IsProgramActivity activity = ProgramDaoHelper.getProgramById(action.getId(), action.isLoadChildren());
+			IsProgramActivity activity = ProgramDaoHelper.getProgramById(action.getId(), action.isLoadChildren(),action.isLoadObjectives());
 			if(activity!=null){
 				activities.add(activity);
 			}
 		}else if(action.getType()!=null){
-			activities = ProgramDaoHelper.getPrograms(action.getType(), action.isLoadChildren());
+			activities = ProgramDaoHelper.getPrograms(action.getType(), action.isLoadChildren(),action.isLoadObjectives());
 		}else{
-			activities = ProgramDaoHelper.getPrograms(action.isLoadChildren());
+			activities = ProgramDaoHelper.getPrograms(action.isLoadChildren(),action.isLoadObjectives());
 		}
 		
 		response.setPrograms(activities);

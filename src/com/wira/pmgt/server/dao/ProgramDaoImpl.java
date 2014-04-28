@@ -87,6 +87,12 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		Query query = em.createNamedQuery("ProgramDetail.findById").setParameter("id", id);
 		return getSingleResultOrNull(query);
 	}
+
+	public long getPreviousFundId(Long programFundId) {
+		Query query = em.createNativeQuery("select fundid from ProgramFund where id=?")
+				.setParameter(1, programFundId);
+		return ((Number) query.getSingleResult()).longValue();
+	}
 	
 	
 }

@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.wira.pmgt.server.dao.ProgramDaoImpl;
 import com.wira.pmgt.server.dao.biz.model.Fund;
+import com.wira.pmgt.server.dao.biz.model.FundAllocation;
 import com.wira.pmgt.server.dao.biz.model.Period;
 import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
 import com.wira.pmgt.server.dao.biz.model.ProgramFund;
@@ -77,6 +78,33 @@ public class ProgramDaoHelper {
 	public static ProgramDTO save(IsProgramActivity programDTO) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		ProgramDetail program = get(programDTO);
+		ProgramDetail parent = program.getParent();
+		//Parent must have a preset set of funds before child source of funds are generated
+		if(parent!=null){
+			
+			Set<ProgramFund> parentSourceOfFunds = parent.getSourceOfFunds();
+			Set<Fund> fundSources = new HashSet<>(); 
+			for(ProgramFund programFund: parentSourceOfFunds){
+				Fund fund = programFund.getFund();
+				fundSources.add(fund);				
+			}
+			
+			Set<ProgramFund> childFunds =  program.getSourceOfFunds();
+			for(ProgramFund childFund: childFunds){
+				if(fundSources.contains(childFund.getFund())){
+					continue;
+				}else{
+					//Auto create program fund for parent if it did not exist
+					ProgramFund programFund= new ProgramFund();
+					programFund.setAmount(0.0);
+					programFund.setFund(childFund.getFund());
+					programFund.setProgramDetail(parent);
+					dao.save(programFund);
+				}				
+			}
+			
+		}
+		
 		dao.save(program);
 				
 		return get(program,false);
@@ -103,7 +131,7 @@ public class ProgramDaoHelper {
 		dto.setType(program.getType());
 		
 		if(loadChildren){
-			dto.setChildren(getActivity(program.getChildren(),loadChildren));
+			dto.setChildren(getActivity(program.getChildren(),loadChildren,loadObjectives));
 		}
 		
 		if(program.getType()==ProgramDetailType.PROGRAM){
@@ -126,10 +154,18 @@ public class ProgramDaoHelper {
 		return dto;
 	}
 
-	private static List<IsProgramActivity> getActivity(Collection<ProgramDetail> children, boolean loadChildren) {
+	private static List<IsProgramActivity> getActivity(Collection<ProgramDetail> children, boolean loadChildren){
+		return getActivity(children, loadChildren, false);
+	}
+	
+	private static List<IsProgramActivity> getActivity(Collection<ProgramDetail> children, boolean loadChildren, boolean loadObjectives) {
 		List<IsProgramActivity> activity = new ArrayList<>();
 		if(children!=null)
 			for(ProgramDetail detail: children){
+				if(!loadObjectives)
+				if(detail.getType()==ProgramDetailType.OBJECTIVE){
+					continue;
+				}
 				activity.add(get(detail,loadChildren));
 			}
 		return activity;
@@ -151,6 +187,10 @@ public class ProgramDaoHelper {
 		programFundDTO.setFund(get(programFund.getFund()));
 		programFundDTO.setId(programFund.getId());
 		programFundDTO.setProgramId(programFund.getProgramDetail().getId());
+		FundAllocation allocation = programFund.getAllocation();
+		if(allocation!=null){
+			programFundDTO.setAllocation(allocation.getAllocation());
+		}
 		
 		return programFundDTO;
 	}
@@ -217,13 +257,26 @@ public class ProgramDaoHelper {
 	}
 
 	private static Set<ProgramFund> get(List<ProgramFundDTO> fundingDtos) {
-		
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		Set<ProgramFund> funding = new HashSet<>();
 		
 		if(fundingDtos!=null)
 		for(ProgramFundDTO dto: fundingDtos){
-			ProgramFund fund = get(dto);
-			funding.add(fund);
+			if(dto.getId()!=null && dto.getFund()!=null){
+				//find previous fund
+				
+				long fundid = dto.getFund().getId();
+				long previousFundId = dao.getPreviousFundId(dto.getId());			
+				
+				if(previousFundId!=fundid){
+					//funds changed
+					dto.setId(null); //generate new entry
+				}
+			}
+			
+			ProgramFund programFund = get(dto);
+			
+			funding.add(programFund);
 		}
 		return funding;
 	}
@@ -254,10 +307,10 @@ public class ProgramDaoHelper {
 		return fund;
 	}
 
-	public static IsProgramActivity getProgramById(Long id, boolean loadChildren) {
+	public static IsProgramActivity getProgramById(Long id, boolean loadChildren,boolean loadObjectives) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		ProgramDetail detail = dao.getById(ProgramDetail.class, id);
-		IsProgramActivity activity = get(detail, loadChildren);
+		IsProgramActivity activity = get(detail, loadChildren,loadObjectives);
 		activity.setProgramSummary(getProgramSummary(detail));
 		
 		return activity;
@@ -287,26 +340,26 @@ public class ProgramDaoHelper {
 		}
 	}
 
-	public static List<IsProgramActivity> getPrograms(boolean loadChildren) {
+	public static List<IsProgramActivity> getPrograms(boolean loadChildren, boolean loadObjectives) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		List<IsProgramActivity> activities = new ArrayList<>();
 		
 		List<ProgramDetail> details = dao.getProgramDetails();
 		
 		for(ProgramDetail detail: details){
-			activities.add(get(detail, loadChildren));
+			activities.add(get(detail, loadChildren,loadObjectives));
 		}	
 		
 		return activities;
 	}
 
 	public static List<IsProgramActivity> getPrograms(ProgramDetailType type,
-			boolean loadChildren) {
+			boolean loadChildren, boolean loadObjectives) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		
 		List<ProgramDetail> details = dao.getProgramDetails(type);
 		
-		return getActivity(details, loadChildren);
+		return getActivity(details, loadChildren,loadObjectives|| type==ProgramDetailType.OBJECTIVE);
 	}
 
 	public static List<FundDTO> getFunds() {

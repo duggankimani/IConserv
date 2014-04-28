@@ -29,8 +29,8 @@ import com.wira.pmgt.shared.model.ProgramDetailType;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name="ProgramDetail.findByType", query="FROM ProgramDetail p where p.isActive=:isActive and p.type=:type and p.period=:period order by id"), 
-	@NamedQuery(name="ProgramDetail.findAll", query="FROM ProgramDetail p where p.isActive=:isActive order by id"),
+	@NamedQuery(name="ProgramDetail.findByType", query="FROM ProgramDetail p where p.isActive=:isActive and p.type=:type and p.period=:period order by name"), 
+	@NamedQuery(name="ProgramDetail.findAll", query="FROM ProgramDetail p where p.isActive=:isActive order by name"),
 	@NamedQuery(name="ProgramDetail.findById", query="FROM ProgramDetail p where p.id=:id")
 })
 public class ProgramDetail 	extends ProgramBasicDetail{
@@ -61,7 +61,8 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 			org.hibernate.annotations.CascadeType.MERGE,
 			org.hibernate.annotations.CascadeType.DELETE,
 			org.hibernate.annotations.CascadeType.EVICT,
-			org.hibernate.annotations.CascadeType.REMOVE
+			org.hibernate.annotations.CascadeType.REMOVE,
+			org.hibernate.annotations.CascadeType.REFRESH
 			})
 	private Set<ProgramFund> sourceOfFunds = new HashSet<>();	
 
@@ -179,13 +180,6 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	}
 
 	public void setSourceOfFunds(Set<ProgramFund> sourceOfFundz) {
-//		for(ProgramFund fund:this.sourceOfFunds){
-//			if(!sourceOfFundz.contains(fund)){
-//				fund.setProgramDetail(null);
-//				fund.setFund(null);
-//				//create an opha
-//			}
-//		}
 		sourceOfFunds.clear();//clear the set
 		
 		for(ProgramFund fund: sourceOfFundz){

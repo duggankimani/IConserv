@@ -52,5 +52,12 @@ public class FundDTO implements Serializable,Listable {
 		
 		return name;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		FundDTO other = (FundDTO)obj;
+		
+		return other.name.equals(name);
+	}
 
 }

@@ -1,6 +1,8 @@
 package com.wira.pmgt.client.ui.activities;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -13,6 +15,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.TableView;
 import com.wira.pmgt.shared.model.ProgramDetailType;
+import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramActivity;
 
 public class ActivitiesTable extends Composite {
@@ -23,14 +26,14 @@ public class ActivitiesTable extends Composite {
 	interface ActivitiesTableUiBinder extends UiBinder<Widget, ActivitiesTable> {
 	}
 
-	@UiField
-	TableView tblView;
+	@UiField TableView tblView;
 	CheckBox selected = null;
-
+	boolean isSummaryTable;
+	List<FundDTO> funds = new ArrayList<FundDTO>();
+	
 	public ActivitiesTable() {
 		initWidget(uiBinder.createAndBindUi(this));
 		tblView.setStriped(true);
-		createGrid();
 	}
 
 	public void setData(List<IsProgramActivity> programActivities) {
@@ -39,30 +42,57 @@ public class ActivitiesTable extends Composite {
 	}
 	
 	private void setActivities(List<IsProgramActivity> programActivities){
+		sort(programActivities);
 		for (IsProgramActivity activity : programActivities) {
-			ActivitiesTableRow row = new ActivitiesTableRow(activity);
+			ActivitiesTableRow row = new ActivitiesTableRow(activity,isSummaryTable);
+			row.setFunding(funds);
 			row.setSelectionChangeHandler(handler);
 			tblView.addRow(row);
 			
 			if(activity.getType()==ProgramDetailType.PROGRAM){
-				System.err.println(">> Program "+activity.getObjectives());
 				//this is data for the summary tab
 				if(activity.getObjectives()!=null){
+					sort(activity.getObjectives());
 					setActivities(activity.getObjectives());
 				}
 			}
 		}
 	}
 
+	private void sort(List<IsProgramActivity> objectives) {
+		Collections.sort(objectives, new Comparator<IsProgramActivity>(){
+			@Override
+			public int compare(IsProgramActivity o1, IsProgramActivity o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+	}
+
+	@Override
+	protected void onLoad() {
+		super.onLoad();
+		createGrid();
+	}
+	
 	private void createGrid() {
 		List<String> names = new ArrayList<String>();
-		names.add("");
-		names.add("TITLE");
-		names.add("STATUS");
-		names.add("PROGRESS");
-		names.add("RATING");
-		names.add("BUDGET");
+		if(isSummaryTable){
+			names.add("");
+			names.add("TITLE");
+			names.add("BUDGET");
+		}else{
+			names.add("");
+			names.add("TITLE");
+			names.add("STATUS");
+			names.add("PROGRESS");
+			names.add("RATING");
+			names.add("BUDGET");
+		}
 		tblView.setHeaders(names);
+	}
+	
+	public void setSummaryTable(boolean isSummaryTable){
+		this.isSummaryTable=isSummaryTable;
 	}
 
 	ValueChangeHandler<Boolean> handler = new ValueChangeHandler<Boolean>() {
@@ -80,4 +110,16 @@ public class ActivitiesTable extends Composite {
 			}
 		}
 	};
+
+	/**
+	 * Dynamically add fund names
+	 * @param funds
+	 */
+	public void setFunds(List<FundDTO> funds) {
+		this.funds= funds;
+		createGrid();
+		for(FundDTO fund: funds){
+			tblView.createHeader(fund.getName());
+		}
+	}
 }
