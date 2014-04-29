@@ -39,6 +39,9 @@ public class ActivitiesTable extends Composite {
 
 	public void setData(List<IsProgramActivity> programActivities) {
 		tblView.clearRows();
+		if(programActivities==null){
+			return;
+		}
 		setActivities(programActivities,-1);
 	}
 	

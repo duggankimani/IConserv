@@ -275,12 +275,12 @@ public class HomePresenter extends
 			
 		}else if(page!=null && page.equals("activities")){
 			final Long activityId = new Long(request.getParameter("activity", "0"));
-			
+			final Long detailId = new Long(request.getParameter("detail", "0"));
 			Window.setTitle("Activities");
 			activitiesFactory.get(new ServiceCallback<ActivitiesPresenter>() {
 				@Override
 				public void processResult(ActivitiesPresenter aResponse) {
-					aResponse.loadData(activityId);
+					aResponse.loadData(activityId, detailId);
 					setInSlot(ACTIVITIES_SLOT, aResponse);
 				}
 			});

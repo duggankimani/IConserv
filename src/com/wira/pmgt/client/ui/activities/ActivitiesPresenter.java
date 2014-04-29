@@ -84,6 +84,8 @@ public class ActivitiesPresenter extends
 
 	Long programId;
 	
+	Long programDetailId; //Drill Down
+	
 	IsProgramActivity selected;
 
 	@Inject
@@ -290,8 +292,14 @@ public class ActivitiesPresenter extends
 				});
 	}
 
-	public void loadData(final Long activityId) {
+	public void loadData(final Long activityId){
+		loadData(activityId, programDetailId);
+	}
+	
+	public void loadData(final Long activityId, Long detailId) {
 		final boolean hasProgramId = activityId != null && activityId != 0L;
+		programDetailId = detailId==0? null: detailId;
+		
 		getView().setSummaryView(hasProgramId);
 		
 		MultiRequestAction action = new MultiRequestAction();
@@ -303,9 +311,14 @@ public class ActivitiesPresenter extends
 		if (hasProgramId) {
 			//Details of selected program
 			this.programId = activityId;
-			action.addRequest(new GetProgramsRequest(activityId, true));
+			action.addRequest(new GetProgramsRequest(activityId, programDetailId==null));
 		}
+		
 
+		if(programDetailId!=null){
+			action.addRequest(new GetProgramsRequest(programDetailId, true));
+		}
+		
 		requestHelper.execute(action,
 				new TaskServiceCallback<MultiRequestActionResult>() {
 					@Override
@@ -332,6 +345,12 @@ public class ActivitiesPresenter extends
 
 						}else{
 							getView().setActivities(response.getPrograms());
+						}
+						
+						if(programDetailId!=null){
+							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
+									.get(i++);
+							getView().setActivity(response2.getSingleResult());
 						}
 						
 					}

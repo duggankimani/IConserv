@@ -1,5 +1,6 @@
 package com.wira.pmgt.client.ui.activities;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.dom.client.HeadingElement;
@@ -187,13 +188,17 @@ public class ActivitiesView extends ViewImpl implements
 	 */
 	public void setActivity(IsProgramActivity singleResult) {
 		setSelection(singleResult.getType(),false);
+		setBudget(singleResult.getBudgetAmount());
+		
 		if (singleResult.getType() == ProgramDetailType.PROGRAM) {
 			// select tab
 			selectTab(singleResult.getId());
-			setBudget(singleResult.getBudgetAmount());
 			setTitle(singleResult.getName());
+			setActivities(singleResult.getChildren());
+		}else{
+			setActivities(Arrays.asList(singleResult));
 		}
-		setActivities(singleResult.getChildren());
+		
 	}
 
 	private void show(Anchor aAnchor, boolean show) {
