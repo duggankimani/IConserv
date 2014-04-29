@@ -4,8 +4,12 @@
 	<g:HTMLPanel styleName="tr" ui:field="row">
 		<!-- <g:HTMLPanel styleName="td" ui:field="divRowNo"></g:HTMLPanel> -->
 		<g:HTMLPanel styleName="td" ui:field="divCheckbox">
-			<g:CheckBox ui:field="chkSelect"></g:CheckBox>
-			<!--span ui:field="divName"></span -->
+		    <div style="display:inline-block">
+				<g:CheckBox ui:field="chkSelect"></g:CheckBox>
+			</div>
+			<div style="display:inline-block">
+			    <g:InlineLabel ui:field="spnName">This is some text</g:InlineLabel>
+			</div>
 		</g:HTMLPanel>
 		
 		<g:HTMLPanel styleName="td" ui:field="divStatus">

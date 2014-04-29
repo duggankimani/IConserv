@@ -35,9 +35,9 @@ public class ActivitiesTableRow extends RowWidget {
 
 	@UiField
 	HTMLPanel row;
-	// @UiField HTMLPanel divRowNo;
-//	@UiField
-//	Element divName;
+	
+	@UiField InlineLabel spnName;
+	
 	@UiField 
 	HTMLPanel divStatus;
 	@UiField
@@ -95,13 +95,13 @@ public class ActivitiesTableRow extends RowWidget {
 	}
 
 	private void setActivityName() {
-		chkSelect.setText(activity.getName());
+		spnName.setText(activity.getName());
 		
 		if(activity.getType()==ProgramDetailType.OBJECTIVE)
-			chkSelect.setText(activity.getName()+" - "+activity.getDescription());
+			spnName.setText(activity.getName()+" - "+activity.getDescription());
 		
 		if(level==0){
-			chkSelect.addStyleName("bold");
+			spnName.addStyleName("bold");
 		}
 		
 	}
