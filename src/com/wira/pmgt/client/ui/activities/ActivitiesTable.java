@@ -80,16 +80,10 @@ public class ActivitiesTable extends Composite {
 	private void createGrid() {
 		List<TableHeader> th = new ArrayList<TableHeader>();
 		if(isSummaryTable){
-			th.add(new TableHeader("",1.0));
-			th.add(new TableHeader("",1.0));
-			th.add(new TableHeader("",1.0));
 			th.add(new TableHeader("TITLE",40.0));
 			th.add(new TableHeader("BUDGET",null));
 			
 		}else{
-			th.add(new TableHeader("",1.0));
-			th.add(new TableHeader("",1.0));
-			th.add(new TableHeader("",1.0));
 			th.add(new TableHeader("TITLE",40.0));
 			th.add(new TableHeader("STATUS",10.0));
 			th.add(new TableHeader("PROGRESS",10.0));

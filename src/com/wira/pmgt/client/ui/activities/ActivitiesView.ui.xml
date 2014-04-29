@@ -80,6 +80,15 @@
 								Edit
 							</g:Anchor>
 						</div>
+						
+						
+						<div class="span3 hide">
+							<g:Anchor ui:field="aDelete" styleName="btn btn-danger"
+								title="Delete">
+								<i class="icon-trash"></i>
+								Delete
+							</g:Anchor>
+						</div>
 						<div class="pull-right">
 							<d:DropDownList ui:field="lstPeriod">
 							</d:DropDownList>

@@ -1,10 +1,12 @@
 package com.wira.pmgt.client.ui.activities;
 
+import static com.wira.pmgt.client.ui.util.NumberUtils.CURRENCYFORMAT;
+import static com.wira.pmgt.client.ui.util.NumberUtils.NUMBERFORMAT;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
@@ -23,7 +25,6 @@ import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramActivity;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
-import static com.wira.pmgt.client.ui.util.NumberUtils.*;
 
 public class ActivitiesTableRow extends RowWidget {
 
@@ -41,8 +42,8 @@ public class ActivitiesTableRow extends RowWidget {
 	@UiField
 	Anchor divRowCaret;
 	
-//	@UiField
-//	HTMLPanel divName;
+	@UiField
+	HTMLPanel divName;
 	
 	//@UiField HTMLPanel divRowNo;
 	@UiField 
@@ -103,13 +104,13 @@ public class ActivitiesTableRow extends RowWidget {
 	}
 
 	private void setActivityName() {
-		chkSelect.setText(activity.getName());
+		divName.getElement().setInnerText(activity.getName());
+		divRowStrip.addClassName("label-info");
 		
 		if(activity.getType()==ProgramDetailType.OBJECTIVE)
-			chkSelect.setText(activity.getName()+" - "+activity.getDescription());
-		
+			divName.getElement().setInnerText(activity.getName()+" - "+activity.getDescription());
 		if(level==0){
-			chkSelect.addStyleName("bold");
+			divName.addStyleName("bold");
  		}
 		
 	}
@@ -139,6 +140,8 @@ public class ActivitiesTableRow extends RowWidget {
 		if (level>0) {
 			//divName.getElement().getStyle().setPaddingLeft(level*40.0, Unit.PX);
 			divCheckbox.getElement().getStyle().setPaddingLeft(level*40.0, Unit.PX);
+			divRowStrip.removeClassName("label-info");
+			divRowStrip.addClassName("label-warning");
 		}
 	}
 

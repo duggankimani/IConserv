@@ -48,7 +48,7 @@
 }
 
 .activities-page .table-programs .tbody .td{
-	padding-right: 22px;
+	padding-right: 10px;
 	padding-bottom: 0px;
 	text-align: center;
 }
@@ -56,8 +56,23 @@
 	text-align: left;
 }
 
-.activities-page .table-programs .tbody .no-padding{
-	padding-right: 0px;
+.activities-page .table-programs .tbody .caret-container{
+	width:5%;
+	line-height: 4;
+}
+
+.activities-page .table-programs .tbody .strip-container{
+	width:5%;
+}
+
+.activities-page .table-programs .tbody .select-container{
+	width:5%;
+	line-height: 3;
+}
+
+.activities-page .table-programs .tbody .name-container{
+	width: 77%;
+	text-align: left;
 }
 
 
@@ -188,5 +203,4 @@ body .GWTUpld .gwt-FileUpload{
   background-color: #3078eb;
   background-color: #3078eb \9;
 }
-
 
