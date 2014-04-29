@@ -2,16 +2,22 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<g:HTMLPanel styleName="tr" ui:field="row">
-		<!-- <g:HTMLPanel styleName="td" ui:field="divRowNo"></g:HTMLPanel> -->
 		<g:HTMLPanel styleName="td" ui:field="divCheckbox">
-		    <div style="display:inline-block">
+			<g:HTMLPanel styleName="span4 caret-container">
+				<g:Anchor ui:field="divRowCaret" styleName="icon-caret-right helper-font-16 muted"></g:Anchor>
+			</g:HTMLPanel>
+
+			<g:HTMLPanel styleName="span4 strip-container">
+				<span class="color-strip" ui:field="divRowStrip"></span>
+			</g:HTMLPanel>
+
+			<g:HTMLPanel styleName="span4 select-container">
 				<g:CheckBox ui:field="chkSelect"></g:CheckBox>
-			</div>
-			<div style="display:inline-block">
-			    <g:InlineLabel ui:field="spnName">This is some text</g:InlineLabel>
-			</div>
+			</g:HTMLPanel>
+
+			<g:HTMLPanel styleName="span4 name-container" ui:field="divName">
+			</g:HTMLPanel>
 		</g:HTMLPanel>
-		
 		<g:HTMLPanel styleName="td" ui:field="divStatus">
 			<span ui:field="spnStatus" class="label"></span>
 		</g:HTMLPanel>

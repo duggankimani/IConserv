@@ -34,7 +34,6 @@ public class ActivitiesTable extends Composite {
 	
 	public ActivitiesTable() {
 		initWidget(uiBinder.createAndBindUi(this));
-		tblView.setStriped(true);
 	}
 
 	public void setData(List<IsProgramActivity> programActivities) {
@@ -91,20 +90,19 @@ public class ActivitiesTable extends Composite {
 	}
 	
 	private void createGrid() {
-		List<String> names = new ArrayList<String>();
+		List<TableHeader> th = new ArrayList<TableHeader>();
 		if(isSummaryTable){
-			//names.add("");
-			names.add("TITLE");
-			names.add("BUDGET");
+			th.add(new TableHeader("TITLE",40.0));
+			th.add(new TableHeader("BUDGET",null));
+			
 		}else{
-			//names.add("");
-			names.add("TITLE");
-			names.add("STATUS");
-			names.add("PROGRESS");
-			names.add("RATING");
-			names.add("BUDGET");
+			th.add(new TableHeader("TITLE",40.0));
+			th.add(new TableHeader("STATUS",10.0));
+			th.add(new TableHeader("PROGRESS",10.0));
+			th.add(new TableHeader("RATING",10.0));
+			th.add(new TableHeader("BUDGET",10.0));
 		}
-		tblView.setHeaders(names);
+		tblView.setTableHeaders(th);
 	}
 	
 	public void setSummaryTable(boolean isSummaryTable){
@@ -138,7 +136,7 @@ public class ActivitiesTable extends Composite {
 			tblView.createHeader(fund.getName());
 		}
 	}
-
+	
 	public void setLastUpdatedId(Long lastUpdatedId) {
 		this.lastUpdatedId = lastUpdatedId;
 	}

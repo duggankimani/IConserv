@@ -40,13 +40,57 @@
 	margin: 20px;
 }
 
-.activities-page .table-programs .thead{
-	border-bottom: 1px solid #E6E6E6;
-	border-top: 1px solid #E6E6E6;
+.activities-page .table-programs .thead .th{
+	border-bottom: 1px solid #F7F7F7;
+	border-top: 1px solid #E6E6E6 !important;
+	text-align:center;
+	white-space: nowrap;
 }
 
-.activities-page .table-programs .td > .padded{
-	
+.activities-page .table-programs .tbody .td{
+	padding-right: 10px;
+	padding-bottom: 0px;
+	text-align: center;
+}
+.activities-page .table-programs .tbody .hovered{
+	background-color: #fcf8e3;
+	transition: background .25s ease-in-out;
+   -moz-transition: background .25s ease-in-out;
+   -webkit-transition: background .25s ease-in-out;
+}
+.activities-page .table-programs .tbody .left{
+	text-align: left;
+}
+
+.activities-page .table-programs .tbody .caret-container{
+	width:5%;
+	line-height: 4;
+}
+
+.activities-page .table-programs .tbody .strip-container{
+	width:5%;
+}
+
+.activities-page .table-programs .tbody .select-container{
+	width:5%;
+	line-height: 3;
+}
+
+.activities-page .table-programs .tbody .name-container{
+	width: 77%;
+	text-align: left;
+}
+
+
+.activities-page .color-strip {
+	width: 3px;
+	min-height: 50px;
+	display: inline-block;
+	height: auto;
+}
+
+.activities-page .table-programs .label-default {
+	background-color:#999999;
 }
 
 
@@ -170,5 +214,4 @@ body .GWTUpld .gwt-FileUpload{
   background-color: #3078eb;
   background-color: #3078eb \9;
 }
-
 
