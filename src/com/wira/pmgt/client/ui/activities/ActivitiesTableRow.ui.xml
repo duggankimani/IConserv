@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<g:HTMLPanel styleName="tr" ui:field="row">
 		<g:HTMLPanel styleName="td no-padding">
-			<g:Anchor ui:field="divRowIcon"
+			<g:Anchor ui:field="divRowCaret"
 				styleName="icon-caret-right helper-font-16 muted"></g:Anchor>
 		</g:HTMLPanel>
 		<g:HTMLPanel styleName="td no-padding">

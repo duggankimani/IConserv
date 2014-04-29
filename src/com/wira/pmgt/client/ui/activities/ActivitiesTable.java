@@ -80,7 +80,6 @@ public class ActivitiesTable extends Composite {
 	private void createGrid() {
 		List<TableHeader> th = new ArrayList<TableHeader>();
 		if(isSummaryTable){
-<<<<<<< HEAD
 			th.add(new TableHeader("",1.0));
 			th.add(new TableHeader("",1.0));
 			th.add(new TableHeader("",1.0));
@@ -96,18 +95,6 @@ public class ActivitiesTable extends Composite {
 			th.add(new TableHeader("PROGRESS",10.0));
 			th.add(new TableHeader("RATING",10.0));
 			th.add(new TableHeader("BUDGET",10.0));
-=======
-			//names.add("");
-			names.add("TITLE");
-			names.add("BUDGET");
-		}else{
-			//names.add("");
-			names.add("TITLE");
-			names.add("STATUS");
-			names.add("PROGRESS");
-			names.add("RATING");
-			names.add("BUDGET");
->>>>>>> 5d4154e2f9d9a73d86d268c58f17be06d6e9c428
 		}
 		tblView.setTableHeaders(th);
 	}

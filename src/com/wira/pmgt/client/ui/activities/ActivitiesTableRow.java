@@ -39,7 +39,7 @@ public class ActivitiesTableRow extends RowWidget {
 	@UiField
 	SpanElement divRowStrip;
 	@UiField
-	Anchor divRowIcon;
+	Anchor divRowCaret;
 //	@UiField
 //	HTMLPanel divName;
 	
