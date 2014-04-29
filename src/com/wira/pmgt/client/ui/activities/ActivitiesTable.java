@@ -30,6 +30,7 @@ public class ActivitiesTable extends Composite {
 	CheckBox selected = null;
 	boolean isSummaryTable;
 	List<FundDTO> funds = new ArrayList<FundDTO>();
+	Long lastUpdatedId = null;
 	
 	public ActivitiesTable() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -45,6 +46,10 @@ public class ActivitiesTable extends Composite {
 		sort(programActivities);
 		for (IsProgramActivity activity : programActivities) {
 			ActivitiesTableRow row = new ActivitiesTableRow(activity,isSummaryTable, level);
+			if(activity.getId()==lastUpdatedId){
+				row.highlight();
+			}
+			
 			row.setFunding(funds);
 			row.setSelectionChangeHandler(handler);
 			tblView.addRow(row);
@@ -57,8 +62,12 @@ public class ActivitiesTable extends Composite {
 				}
 			}
 			
-			if(activity.getChildren()!=null)
+			if(activity.getChildren()!=null && !activity.getChildren().isEmpty()){
+				row.setHasChildren(true);
 				setActivities(activity.getChildren(),level);
+			}else{
+				row.setHasChildren(false);
+			}
 		}
 	}
 
@@ -125,4 +134,7 @@ public class ActivitiesTable extends Composite {
 		}
 	}
 	
+	public void setLastUpdatedId(Long lastUpdatedId) {
+		this.lastUpdatedId = lastUpdatedId;
+	}
 }

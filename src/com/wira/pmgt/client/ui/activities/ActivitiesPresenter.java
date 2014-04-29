@@ -66,6 +66,8 @@ public class ActivitiesPresenter extends
 		void setSummaryView(boolean hasProgramId);
 
 		void setFunds(List<FundDTO> funds);
+
+		void setLastUpdatedId(Long id);
 	}
 
 	@Inject
@@ -276,12 +278,13 @@ public class ActivitiesPresenter extends
 		}
 	}
 
-	private void save(IsProgramActivity program) {
+	private void save(IsProgramActivity activity) {
 		//program.setParentId(programId);
-		requestHelper.execute(new CreateProgramRequest(program),
+		requestHelper.execute(new CreateProgramRequest(activity),
 				new TaskServiceCallback<CreateProgramResponse>() {
 					@Override
 					public void processResult(CreateProgramResponse aResponse) {
+						getView().setLastUpdatedId(aResponse.getProgram().getId());
 						loadData(programId);
 					}
 				});

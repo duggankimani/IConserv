@@ -14,6 +14,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -41,12 +42,12 @@ public class ActivitiesTableRow extends RowWidget {
 	SpanElement divRowStrip;
 	@UiField
 	Anchor divRowCaret;
-	
+
 	@UiField
 	HTMLPanel divName;
-	
-	//@UiField HTMLPanel divRowNo;
-	@UiField 
+
+	// @UiField HTMLPanel divRowNo;
+	@UiField
 	HTMLPanel divStatus;
 	@UiField
 	HTMLPanel divProgress;
@@ -62,11 +63,20 @@ public class ActivitiesTableRow extends RowWidget {
 	@UiField
 	SpanElement spnStatus;
 
-	int level=0;
+	int level = 0;
 	IsProgramActivity activity;
 	List<FundDTO> funding = null;
 
-	public ActivitiesTableRow(IsProgramActivity activity,boolean isSummaryRow, int level) {
+	Timer timer = new Timer() {
+
+		@Override
+		public void run() {
+			highlight(false);
+		}
+	};
+
+	public ActivitiesTableRow(IsProgramActivity activity, boolean isSummaryRow,
+			int level) {
 		this.activity = activity;
 		initWidget(uiBinder.createAndBindUi(this));
 		setRow(row);
@@ -106,13 +116,14 @@ public class ActivitiesTableRow extends RowWidget {
 	private void setActivityName() {
 		divName.getElement().setInnerText(activity.getName());
 		divRowStrip.addClassName("label-info");
-		
-		if(activity.getType()==ProgramDetailType.OBJECTIVE)
-			divName.getElement().setInnerText(activity.getName()+" - "+activity.getDescription());
-		if(level==0){
+
+		if (activity.getType() == ProgramDetailType.OBJECTIVE)
+			divName.getElement().setInnerText(
+					activity.getName() + " - " + activity.getDescription());
+		if (level == 0) {
 			divName.addStyleName("bold");
- 		}
-		
+		}
+
 	}
 
 	public IsProgramActivity getActivity() {
@@ -137,11 +148,17 @@ public class ActivitiesTableRow extends RowWidget {
 	}
 
 	public void setPadding() {
-		if (level>0) {
-			//divName.getElement().getStyle().setPaddingLeft(level*40.0, Unit.PX);
-			divCheckbox.getElement().getStyle().setPaddingLeft(level*40.0, Unit.PX);
+		if (level > 0) {
+			
+			if (level == 2) {
+				divRowStrip.addClassName("label-info");
+				divRowStrip.addClassName("label-warning");
+			}
+			
+			divCheckbox.getElement().getStyle()
+					.setPaddingLeft(level * 40.0, Unit.PX);
 			divRowStrip.removeClassName("label-info");
-			divRowStrip.addClassName("label-warning");
+			divRowStrip.addClassName("label-default");
 		}
 	}
 
@@ -166,23 +183,49 @@ public class ActivitiesTableRow extends RowWidget {
 				amounts.add(new InlineLabel(amount));
 
 				Double allocation = activityFund.getAllocation();
-				if (allocation != null) {
+				if (allocation != null && allocation != 0.0) {
 					HTMLPanel allocationPanel = new HTMLPanel("("
 							+ NUMBERFORMAT.format(allocation) + ")");
 					allocationPanel.setTitle("Allocated amount");
 					allocationPanel.getElement().getStyle()
 							.setFontSize(0.8, Unit.EM);
-					if(allocation>activityFund.getAmount()){
+					if (allocation > activityFund.getAmount()) {
 						allocationPanel.addStyleName("text-warning");
-					}else{
+					} else {
 						allocationPanel.addStyleName("text-success");
 					}
-					allocationPanel.getElement().getStyle().setFontSize(0.8, Unit.EM);
+					allocationPanel.getElement().getStyle()
+							.setFontSize(0.8, Unit.EM);
 					amounts.add(allocationPanel);
 				}
 				createTd(amounts, TextAlign.RIGHT);
 			}
 
 		}
+	}
+
+	public void highlight() {
+		// spnName.getElement().getStyle().setBackgroundColor("green");
+		highlight(true);
+	}
+
+	private void highlight(boolean status) {
+		if (status) {
+			timer.schedule(2000);
+			row.addStyleName("hovered");
+		} else {
+			row.removeStyleName("hovered");
+		}
+	}
+
+	public void setHasChildren(boolean hasChildren) {
+		if (hasChildren) {
+			divRowCaret.removeStyleName("icon-caret-right");
+			divRowCaret.addStyleName("icon-caret-down");
+		} else {
+			divRowCaret.removeStyleName("icon-caret-down");
+			divRowCaret.addStyleName("icon-caret-right");
+		}
+
 	}
 }
