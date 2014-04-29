@@ -47,6 +47,8 @@ public class ActivitiesPresenter extends
 
 		HasClickHandlers getNewObjectiveLink();
 		
+		HasClickHandlers getNewTaskLink();
+		
 		HasClickHandlers getEditLink();
 
 		void setActivities(List<IsProgramActivity> programs);
@@ -74,6 +76,9 @@ public class ActivitiesPresenter extends
 	CreateActivityPresenter createActivity;
 	@Inject
 	CreateObjectivePresenter objectivePresenter;
+	@Inject
+	CreateActivityPresenter createTask;
+	
 
 	Long programId;
 	
@@ -122,6 +127,14 @@ public class ActivitiesPresenter extends
 			}
 		});
 		
+		getView().getNewTaskLink().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				showEditPopup(ProgramDetailType.TASK);
+			}
+		});
+		
 		getView().getEditLink().addClickHandler(new ClickHandler() {
 			
 			@Override
@@ -139,20 +152,52 @@ public class ActivitiesPresenter extends
 	protected void showEditPopup(ProgramDetailType type, boolean edit){
 		
 		switch (type) {
-		case ACTIVITY:
-			//Use selected an outcome
+		case TASK:
+			//Use 
+			createTask.setType(type);
+			if(edit){
+				//we are editing the selected item
+				createTask.setActivity(selected);
+				createTask.load(selected.getParentId());
+			}else{
+				//selected item is the parent - We are creating a new activity based on selected item
+				createTask.setActivity(null);
+				createTask.load(selected.getId());
+			}
 			
+			AppManager.showPopUp(edit? "Edit Task":
+				"Create Task",
+					createTask.getWidget(), new OptionControl() {
+						@Override
+						public void onSelect(String name) {
+							
+							if(name.equals("Save")){
+								if(createTask.getView().isValid()){
+									IsProgramActivity activity=createTask.getActivity();
+									//System.err.println("")
+									save(activity);
+									hide();
+								}
+							}else{
+								hide();
+							}
+							
+						}}, "Save", "Cancel");
+			break;
+		case ACTIVITY:
 			if(edit){
 				//we are editing the selected item
 				createActivity.setActivity(selected);
 				createActivity.load(selected.getParentId());
 			}else{
 				//selected item is the parent - We are creating a new activity based on selected item
+				//User selected an outcome & is now creating a new Activity
 				createActivity.setActivity(null);
 				createActivity.load(selected.getId());
 			}
 			
-			AppManager.showPopUp("Create Activity",
+			AppManager.showPopUp(edit? "Edit Activity":
+				"Create Activity",
 					createActivity.getWidget(), new OptionControl() {
 						@Override
 						public void onSelect(String name) {
@@ -180,7 +225,8 @@ public class ActivitiesPresenter extends
 			parentId= parentId!=null? parentId : selected!=null? selected.getId():null;
 			objectivePresenter.load(parentId);//Parent Id Passed here
 			
-			AppManager.showPopUp("Add Objective", objectivePresenter.getWidget(), new OptionControl() {
+			AppManager.showPopUp(edit?"Edit Objective"
+					:"Add Objective", objectivePresenter.getWidget(), new OptionControl() {
 				
 				@Override
 				public void onSelect(String name) {
@@ -201,7 +247,8 @@ public class ActivitiesPresenter extends
 		case OUTCOME:
 			createOutcome.setOutcome(edit?selected:null);			
 			createOutcome.load(edit?selected.getParentId():programId);
-			AppManager.showPopUp("Create Outcome",
+			AppManager.showPopUp(edit? "Edit Outcome":
+					"Create Outcome",
 					createOutcome.getWidget(), new OptionControl() {
 						
 						@Override
@@ -224,10 +271,6 @@ public class ActivitiesPresenter extends
 			if(selected!=null && edit)
 				AppContext.fireEvent(new CreateProgramEvent(selected.getId()));
 		break;
-			
-		case TASK:
-			
-			break;
 		default:
 			break;
 		}

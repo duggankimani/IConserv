@@ -1,8 +1,10 @@
 package com.wira.pmgt.client.ui.detailedActivity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.InlineLabel;
@@ -42,6 +44,7 @@ public class CreateActivityView extends ViewImpl implements
 
 	IsProgramActivity Outcome; //The outcome under which this activity is created
 
+	@UiField DivElement divActivityName;
 	@UiField IssuesPanel issues;
 	@UiField TextArea txtActivity;
 	@UiField AggregationGrid gridView;
@@ -51,11 +54,15 @@ public class CreateActivityView extends ViewImpl implements
 	@UiField AutoCompleteField<HTUser> allocatedToUsers;
 	@UiField AutoCompleteField<UserGroup> allocatedToGroups;
 	@UiField AutoCompleteField<IsProgramActivity> objectivesAutoComplete;
+	@UiField DivElement divTargetsAndIndicators;
+	@UiField DivElement divObjectives;
 	
 	@UiField DateRangeWidget dtRange;
 
 	List<Listable> donors = new ArrayList<Listable>();
 	ColumnConfig donorField = new ColumnConfig("donor", "Donor Name", DataType.SELECTBASIC);
+	
+	ProgramDetailType type=ProgramDetailType.ACTIVITY;
 	
 	@Inject
 	public CreateActivityView(final Binder binder) {
@@ -153,6 +160,10 @@ public class CreateActivityView extends ViewImpl implements
 	
 	@Override
 	public void setParentProgram(IsProgramActivity isProgramActivity) {
+		if(isProgramActivity.getStartDate()!=null && isProgramActivity.getEndDate()!=null){
+			dtRange.setDates(isProgramActivity.getStartDate(), isProgramActivity.getEndDate());
+			dtRange.setRangeValidation(isProgramActivity.getStartDate(), isProgramActivity.getEndDate());
+		}
 		setBreadCrumbs(isProgramActivity.getProgramSummary());
 	}
 	
@@ -185,7 +196,7 @@ public class CreateActivityView extends ViewImpl implements
 		ProgramDTO program = new ProgramDTO();
 		program.setDescription(txtActivity.getValue());
 		program.setName(txtActivity.getValue());
-		program.setType(ProgramDetailType.ACTIVITY);
+		program.setType(type);
 		program.setStartDate(dtRange.getStartDate());
 		program.setEndDate(dtRange.getEndDate());
 		program.setObjectives(objectivesAutoComplete.getSelectedItems());
@@ -218,7 +229,7 @@ public class CreateActivityView extends ViewImpl implements
 		
 		txtActivity.setValue(activity.getDescription());
 		objectivesAutoComplete.select(activity.getObjectives());
-		
+		dtRange.setDates(activity.getStartDate(), activity.getEndDate());
 		//program.setTargetsAndOutcomes(targetsAndOutcomes);
 		//
 		List<Object> targets = new ArrayList<Object>();
@@ -246,6 +257,7 @@ public class CreateActivityView extends ViewImpl implements
 		crumbContainer.clear();
 		spnPeriod.setText(null);
 		objectivesAutoComplete.clearSelection();
+		issues.clear();
 	}
 
 	@Override
@@ -329,5 +341,15 @@ public class CreateActivityView extends ViewImpl implements
 			return dto;
 		}
 	};
+
+	@Override
+	public void setType(ProgramDetailType type) {
+		this.type=type;
+		if(type==ProgramDetailType.TASK){
+			divActivityName.setInnerText("Task Name");
+			divTargetsAndIndicators.setClassName("hide");
+			divObjectives.setClassName("hide");
+		}
+	}
 
 }

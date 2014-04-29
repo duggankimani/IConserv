@@ -37,13 +37,14 @@ public class ActivitiesTable extends Composite {
 
 	public void setData(List<IsProgramActivity> programActivities) {
 		tblView.clearRows();
-		setActivities(programActivities);
+		setActivities(programActivities,-1);
 	}
 	
-	private void setActivities(List<IsProgramActivity> programActivities){
+	private void setActivities(List<IsProgramActivity> programActivities, int level){
+		level++;
 		sort(programActivities);
 		for (IsProgramActivity activity : programActivities) {
-			ActivitiesTableRow row = new ActivitiesTableRow(activity,isSummaryTable);
+			ActivitiesTableRow row = new ActivitiesTableRow(activity,isSummaryTable, level);
 			row.setFunding(funds);
 			row.setSelectionChangeHandler(handler);
 			tblView.addRow(row);
@@ -52,12 +53,12 @@ public class ActivitiesTable extends Composite {
 				//this is data for the summary tab
 				if(activity.getObjectives()!=null){
 					sort(activity.getObjectives());
-					setActivities(activity.getObjectives());
+					setActivities(activity.getObjectives(),level);
 				}
 			}
 			
 			if(activity.getChildren()!=null)
-				setActivities(activity.getChildren());
+				setActivities(activity.getChildren(),level);
 		}
 	}
 
@@ -79,6 +80,7 @@ public class ActivitiesTable extends Composite {
 	private void createGrid() {
 		List<TableHeader> th = new ArrayList<TableHeader>();
 		if(isSummaryTable){
+<<<<<<< HEAD
 			th.add(new TableHeader("",1.0));
 			th.add(new TableHeader("",1.0));
 			th.add(new TableHeader("",1.0));
@@ -94,6 +96,18 @@ public class ActivitiesTable extends Composite {
 			th.add(new TableHeader("PROGRESS",10.0));
 			th.add(new TableHeader("RATING",10.0));
 			th.add(new TableHeader("BUDGET",10.0));
+=======
+			//names.add("");
+			names.add("TITLE");
+			names.add("BUDGET");
+		}else{
+			//names.add("");
+			names.add("TITLE");
+			names.add("STATUS");
+			names.add("PROGRESS");
+			names.add("RATING");
+			names.add("BUDGET");
+>>>>>>> 5d4154e2f9d9a73d86d268c58f17be06d6e9c428
 		}
 		tblView.setTableHeaders(th);
 	}
