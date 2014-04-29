@@ -5,8 +5,9 @@
 		<!-- <g:HTMLPanel styleName="td" ui:field="divRowNo"></g:HTMLPanel> -->
 		<g:HTMLPanel styleName="td" ui:field="divCheckbox">
 			<g:CheckBox ui:field="chkSelect"></g:CheckBox>
+			<!--span ui:field="divName"></span -->
 		</g:HTMLPanel>
-		<g:HTMLPanel styleName="td" ui:field="divName"></g:HTMLPanel>
+		
 		<g:HTMLPanel styleName="td" ui:field="divStatus">
 			<span ui:field="spnStatus" class="label"></span>
 		</g:HTMLPanel>

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
@@ -35,8 +36,8 @@ public class ActivitiesTableRow extends RowWidget {
 	@UiField
 	HTMLPanel row;
 	// @UiField HTMLPanel divRowNo;
-	@UiField
-	HTMLPanel divName;
+//	@UiField
+//	Element divName;
 	@UiField 
 	HTMLPanel divStatus;
 	@UiField
@@ -52,17 +53,18 @@ public class ActivitiesTableRow extends RowWidget {
 	
 	@UiField SpanElement spnStatus;
 
+	int level=0;
 	IsProgramActivity activity;
 	List<FundDTO> funding=null;
 
-	public ActivitiesTableRow(IsProgramActivity activity,boolean isSummaryRow) {
+	public ActivitiesTableRow(IsProgramActivity activity,boolean isSummaryRow, int level) {
 		this.activity = activity;
 		initWidget(uiBinder.createAndBindUi(this));
 		setRow(row);
 		setStatus("created", "info");
-		
-		 //set Padding
-		setActivityName(activity.getType());
+		this.level = level;
+		setActivityName();
+		setPadding();
 
 		if(isSummaryRow){
 			divProgress.setStyleName("hide");
@@ -92,33 +94,16 @@ public class ActivitiesTableRow extends RowWidget {
 		
 	}
 
-	private void setActivityName(ProgramDetailType type) {
-		if (type != null) {
-			ProgramDetailType passedType = type;
-
-			switch (passedType) {
-			case PROGRAM:
-				divName.getElement().setInnerText(activity.getName());
-				divName.getElement().addClassName("bold");
-				break;
-			case OUTCOME:
-				divName.getElement().setInnerText(activity.getName());
-				divName.getElement().addClassName("bold");
-				break;
-			case ACTIVITY:
-				divName.getElement().setInnerText(activity.getName());
-				setisPadded(true);
-				break;
-			case OBJECTIVE:
-				divName.getElement().setInnerText(activity.getName()+" - "+activity.getDescription());
-				setisPadded(true);
-				break;
-			default:
-				divName.getElement().setInnerText(activity.getName());
-				setisPadded(false);
-			}
-
+	private void setActivityName() {
+		chkSelect.setText(activity.getName());
+		
+		if(activity.getType()==ProgramDetailType.OBJECTIVE)
+			chkSelect.setText(activity.getName()+" - "+activity.getDescription());
+		
+		if(level==0){
+			chkSelect.addStyleName("bold");
 		}
+		
 	}
 
 	public IsProgramActivity getActivity() {
@@ -142,10 +127,10 @@ public class ActivitiesTableRow extends RowWidget {
 		// divRowNo.getElement().setInnerText(""+number);
 	}
 
-	public void setisPadded(Boolean isPadded) {
-		if (isPadded) {
-			String padding = divName.getElement().getStyle().getPaddingLeft();
-			divName.getElement().getStyle().setPaddingLeft(40.0, Unit.PX);
+	public void setPadding() {
+		if (level>0) {
+			//divName.getElement().getStyle().setPaddingLeft(level*40.0, Unit.PX);
+			divCheckbox.getElement().getStyle().setPaddingLeft(level*40.0, Unit.PX);
 		}
 	}
 	
@@ -172,6 +157,11 @@ public class ActivitiesTableRow extends RowWidget {
 				if(allocation!=null){
 					HTMLPanel allocationPanel= new HTMLPanel("("+NUMBERFORMAT.format(allocation)+")");
 					allocationPanel.setTitle("Allocated amount");
+					if(allocation>activityFund.getAmount()){
+						allocationPanel.addStyleName("text-warning");
+					}else{
+						allocationPanel.addStyleName("text-success");
+					}
 					allocationPanel.getElement().getStyle().setFontSize(0.8, Unit.EM);
 					amounts.add(allocationPanel);
 				}

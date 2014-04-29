@@ -250,7 +250,8 @@ public class ActivitiesView extends ViewImpl implements
 		} else if (type == ProgramDetailType.OUTCOME) {
 			show(aNewActivity, true);
 		} else if (type == ProgramDetailType.ACTIVITY) {
-			show(aNewActivity, true);
+			show(aNewTask, true);
+		}else if (type== ProgramDetailType.TASK){
 			show(aNewTask, true);
 		}
 	}
@@ -277,6 +278,11 @@ public class ActivitiesView extends ViewImpl implements
 	@Override
 	public void setFunds(List<FundDTO> funds) {
 		tblView.setFunds(funds);
+	}
+
+	@Override
+	public HasClickHandlers getNewTaskLink() {
+		return aNewTask;
 	}
 
 }

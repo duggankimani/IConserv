@@ -41,6 +41,7 @@ public class CreateActivityPresenter extends
 		IsProgramActivity getActivity();
 		void setGroups(List<UserGroup> groups);
 		void setUsers(List<HTUser> users);
+		void setType(ProgramDetailType type);
 	}
 
 	@Inject DispatchAsync requestHelper;
@@ -108,5 +109,9 @@ public class CreateActivityPresenter extends
 	public void setActivity(IsProgramActivity selected) {
 		this.activity = selected;	
 		getView().clear();
+	}
+
+	public void setType(ProgramDetailType type) {
+		getView().setType(type);
 	}
 }

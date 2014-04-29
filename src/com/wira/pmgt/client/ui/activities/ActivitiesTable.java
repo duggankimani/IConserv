@@ -38,13 +38,14 @@ public class ActivitiesTable extends Composite {
 
 	public void setData(List<IsProgramActivity> programActivities) {
 		tblView.clearRows();
-		setActivities(programActivities);
+		setActivities(programActivities,-1);
 	}
 	
-	private void setActivities(List<IsProgramActivity> programActivities){
+	private void setActivities(List<IsProgramActivity> programActivities, int level){
+		level++;
 		sort(programActivities);
 		for (IsProgramActivity activity : programActivities) {
-			ActivitiesTableRow row = new ActivitiesTableRow(activity,isSummaryTable);
+			ActivitiesTableRow row = new ActivitiesTableRow(activity,isSummaryTable, level);
 			row.setFunding(funds);
 			row.setSelectionChangeHandler(handler);
 			tblView.addRow(row);
@@ -53,12 +54,12 @@ public class ActivitiesTable extends Composite {
 				//this is data for the summary tab
 				if(activity.getObjectives()!=null){
 					sort(activity.getObjectives());
-					setActivities(activity.getObjectives());
+					setActivities(activity.getObjectives(),level);
 				}
 			}
 			
 			if(activity.getChildren()!=null)
-				setActivities(activity.getChildren());
+				setActivities(activity.getChildren(),level);
 		}
 	}
 
@@ -80,11 +81,11 @@ public class ActivitiesTable extends Composite {
 	private void createGrid() {
 		List<String> names = new ArrayList<String>();
 		if(isSummaryTable){
-			names.add("");
+			//names.add("");
 			names.add("TITLE");
 			names.add("BUDGET");
 		}else{
-			names.add("");
+			//names.add("");
 			names.add("TITLE");
 			names.add("STATUS");
 			names.add("PROGRESS");
