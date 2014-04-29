@@ -11,6 +11,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
@@ -34,10 +35,13 @@ public class ActivitiesTableRow extends RowWidget {
 
 	@UiField
 	HTMLPanel row;
-	// @UiField HTMLPanel divRowNo;
+	@UiField
+	SpanElement divRowStrip;
+	@UiField
+	Anchor divRowIcon;
 	@UiField
 	HTMLPanel divName;
-	@UiField 
+	@UiField
 	HTMLPanel divStatus;
 	@UiField
 	HTMLPanel divProgress;
@@ -49,36 +53,38 @@ public class ActivitiesTableRow extends RowWidget {
 	HTMLPanel divCheckbox;
 	@UiField
 	CheckBox chkSelect;
-	
-	@UiField SpanElement spnStatus;
+
+	@UiField
+	SpanElement spnStatus;
 
 	IsProgramActivity activity;
-	List<FundDTO> funding=null;
+	List<FundDTO> funding = null;
 
-	public ActivitiesTableRow(IsProgramActivity activity,boolean isSummaryRow) {
+	public ActivitiesTableRow(IsProgramActivity activity, boolean isSummaryRow) {
 		this.activity = activity;
 		initWidget(uiBinder.createAndBindUi(this));
 		setRow(row);
-		setStatus("created", "info");
 		
-		 //set Padding
+		setStatus("created", "info");
+
+		// set Padding
 		setActivityName(activity.getType());
 
-		if(isSummaryRow){
+		if (isSummaryRow) {
 			divProgress.setStyleName("hide");
 			divRating.setStyleName("hide");
 			divStatus.setStyleName("hide");
-			
-		}else{
+
+		} else {
 			divProgress.getElement().setInnerText("0%");
 			divRating.getElement().setInnerText("N/A");
-			
+
 		}
-		
-		String budgetAmount =activity.getBudgetAmount() == null ? "" : CURRENCYFORMAT.format(activity.getBudgetAmount());
-		
-		divBudget.getElement()
-				.setInnerText(budgetAmount);
+
+		String budgetAmount = activity.getBudgetAmount() == null ? ""
+				: CURRENCYFORMAT.format(activity.getBudgetAmount());
+
+		divBudget.getElement().setInnerText(budgetAmount);
 
 		chkSelect.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
@@ -89,7 +95,7 @@ public class ActivitiesTableRow extends RowWidget {
 		});
 
 		divBudget.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
-		
+
 	}
 
 	private void setActivityName(ProgramDetailType type) {
@@ -100,22 +106,28 @@ public class ActivitiesTableRow extends RowWidget {
 			case PROGRAM:
 				divName.getElement().setInnerText(activity.getName());
 				divName.getElement().addClassName("bold");
+				divRowStrip.addClassName("label-info");
 				break;
 			case OUTCOME:
 				divName.getElement().setInnerText(activity.getName());
 				divName.getElement().addClassName("bold");
+				divRowStrip.addClassName("label-info");
 				break;
 			case ACTIVITY:
 				divName.getElement().setInnerText(activity.getName());
 				setisPadded(true);
+				divRowStrip.addClassName("label-default");
 				break;
 			case OBJECTIVE:
-				divName.getElement().setInnerText(activity.getName()+" - "+activity.getDescription());
+				divName.getElement().setInnerText(
+						activity.getName() + " - " + activity.getDescription());
 				setisPadded(true);
+				divRowStrip.addClassName("label-default");
 				break;
 			default:
 				divName.getElement().setInnerText(activity.getName());
 				setisPadded(false);
+				divRowStrip.addClassName("label-default");
 			}
 
 		}
@@ -148,36 +160,39 @@ public class ActivitiesTableRow extends RowWidget {
 			divName.getElement().getStyle().setPaddingLeft(40.0, Unit.PX);
 		}
 	}
-	
-	public void setFunding(List<FundDTO> funding){
+
+	public void setFunding(List<FundDTO> funding) {
 		this.funding = funding;
 		List<ProgramFundDTO> activityFunding = activity.getFunding();
 		List<FundDTO> activitySourceOfFunds = new ArrayList<FundDTO>();
-		for(ProgramFundDTO dto:activityFunding){
+		for (ProgramFundDTO dto : activityFunding) {
 			activitySourceOfFunds.add(dto.getFund());
 		}
-		
-		for(FundDTO programFund: funding){
+
+		for (FundDTO programFund : funding) {
 			int idx = activitySourceOfFunds.indexOf(programFund);
-			
-			if(idx==-1){
+
+			if (idx == -1) {
 				createTd(new InlineLabel(""), TextAlign.RIGHT);
-			}else{
+			} else {
 				ProgramFundDTO activityFund = activityFunding.get(idx);
 				HTMLPanel amounts = new HTMLPanel("");
-				String amount = activityFund.getAmount()==null? "": NUMBERFORMAT.format(activityFund.getAmount());
+				String amount = activityFund.getAmount() == null ? ""
+						: NUMBERFORMAT.format(activityFund.getAmount());
 				amounts.add(new InlineLabel(amount));
-				
-				Double allocation =activityFund.getAllocation();
-				if(allocation!=null){
-					HTMLPanel allocationPanel= new HTMLPanel("("+NUMBERFORMAT.format(allocation)+")");
+
+				Double allocation = activityFund.getAllocation();
+				if (allocation != null) {
+					HTMLPanel allocationPanel = new HTMLPanel("("
+							+ NUMBERFORMAT.format(allocation) + ")");
 					allocationPanel.setTitle("Allocated amount");
-					allocationPanel.getElement().getStyle().setFontSize(0.8, Unit.EM);
+					allocationPanel.getElement().getStyle()
+							.setFontSize(0.8, Unit.EM);
 					amounts.add(allocationPanel);
 				}
 				createTd(amounts, TextAlign.RIGHT);
 			}
-			
+
 		}
 	}
 }

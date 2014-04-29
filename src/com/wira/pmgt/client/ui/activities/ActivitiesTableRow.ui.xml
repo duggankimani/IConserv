@@ -2,11 +2,17 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<g:HTMLPanel styleName="tr" ui:field="row">
-		<!-- <g:HTMLPanel styleName="td" ui:field="divRowNo"></g:HTMLPanel> -->
+		<g:HTMLPanel styleName="td no-padding">
+			<g:Anchor ui:field="divRowIcon"
+				styleName="icon-caret-right helper-font-16 muted"></g:Anchor>
+		</g:HTMLPanel>
+		<g:HTMLPanel styleName="td no-padding">
+			<span class="color-strip no-padding" ui:field="divRowStrip"></span>
+		</g:HTMLPanel>
 		<g:HTMLPanel styleName="td" ui:field="divCheckbox">
 			<g:CheckBox ui:field="chkSelect"></g:CheckBox>
 		</g:HTMLPanel>
-		<g:HTMLPanel styleName="td" ui:field="divName"></g:HTMLPanel>
+		<g:HTMLPanel styleName="td left" ui:field="divName"></g:HTMLPanel>
 		<g:HTMLPanel styleName="td" ui:field="divStatus">
 			<span ui:field="spnStatus" class="label"></span>
 		</g:HTMLPanel>

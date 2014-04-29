@@ -5,13 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
-import com.wira.pmgt.client.ui.component.grid.AggregationGridRow;
+import com.wira.pmgt.client.ui.activities.TableHeader;
 
 public class TableView extends Composite {
 
@@ -36,13 +37,27 @@ public class TableView extends Composite {
 	
 	public void setHeaders(List<String> names){
 		List<Widget>widgets = new ArrayList<Widget>();
-				
+
 		for(String name: names){
 			InlineLabel label = new InlineLabel(name);
 			widgets.add(label);
 		}
-		
+
 		setHeaderWidgets(widgets);
+	}
+	
+	public void setTableHeaders(List<TableHeader> headers){
+		panelHeader.clear();
+		for(TableHeader header: headers){
+			InlineLabel label = new InlineLabel(header.getTitleName());
+			HTMLPanel th = new HTMLPanel("");
+			th.addStyleName("th");
+			th.add(label);
+			panelHeader.add(th);
+			if(header.getWidth()!=null){
+			th.getElement().getStyle().setWidth(header.getWidth(), Unit.PCT);
+			}
+		}
 	}
 	
 	@Override
@@ -60,7 +75,7 @@ public class TableView extends Composite {
 		
 		for(Widget widget: widgets){
 			HTMLPanel th = new HTMLPanel("");
-			th.setStyleName("th");
+			th.addStyleName("th");
 			th.add(widget);
 			panelHeader.add(th);
 		}

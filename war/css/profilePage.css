@@ -40,13 +40,31 @@
 	margin: 20px;
 }
 
-.activities-page .table-programs .thead{
-	border-bottom: 1px solid #E6E6E6;
-	border-top: 1px solid #E6E6E6;
+.activities-page .table-programs .thead .th{
+	border-bottom: 1px solid #F7F7F7;
+	border-top: 1px solid #E6E6E6 !important;
+	text-align:center;
+	white-space: nowrap;
 }
 
-.activities-page .table-programs .td > .padded{
-	
+.activities-page .table-programs .tbody .td{
+	padding-right: 22px;
+	padding-bottom: 0px;
+	text-align: center;
+}
+.activities-page .table-programs .tbody .left{
+	text-align: left;
+}
+
+.activities-page .table-programs .tbody .no-padding{
+	padding-right: 0px;
+}
+
+
+.activities-page .color-strip {
+	width: 3px;
+	height: 50px;
+	display: inline-block;
 }
 
 
