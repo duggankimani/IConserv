@@ -154,7 +154,7 @@ public class ActivitiesTableRow extends RowWidget {
 				amounts.add(new InlineLabel(amount));
 				
 				Double allocation =activityFund.getAllocation();
-				if(allocation!=null){
+				if(allocation!=null && allocation!=0.0){
 					HTMLPanel allocationPanel= new HTMLPanel("("+NUMBERFORMAT.format(allocation)+")");
 					allocationPanel.setTitle("Allocated amount");
 					if(allocation>activityFund.getAmount()){
@@ -169,5 +169,13 @@ public class ActivitiesTableRow extends RowWidget {
 			}
 			
 		}
+	}
+
+	public void highlight() {
+		spnName.getElement().getStyle().setBackgroundColor("green");
+	}
+
+	public void setHasChildren(boolean hasChildren) {
+		//XXX
 	}
 }

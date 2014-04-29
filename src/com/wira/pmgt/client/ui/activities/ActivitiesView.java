@@ -61,7 +61,9 @@ public class ActivitiesView extends ViewImpl implements
 
 	@UiField
 	HeadingElement spnTitle;
-
+	
+	Long lastUpdatedId;
+	
 	List<IsProgramActivity> programs = null;
 
 	public interface Binder extends UiBinder<Widget, ActivitiesView> {
@@ -157,8 +159,10 @@ public class ActivitiesView extends ViewImpl implements
 	}
 
 	@Override
-	public void setActivities(List<IsProgramActivity> programs) {
-		tblView.setData(programs);
+	public void setActivities(List<IsProgramActivity> activities) {
+		tblView.setLastUpdatedId(lastUpdatedId);
+		tblView.setData(activities);
+		lastUpdatedId=null;
 	}
 
 	@Override
@@ -283,6 +287,11 @@ public class ActivitiesView extends ViewImpl implements
 	@Override
 	public HasClickHandlers getNewTaskLink() {
 		return aNewTask;
+	}
+
+	@Override
+	public void setLastUpdatedId(Long lastUpdatedId) {
+		this.lastUpdatedId = lastUpdatedId;
 	}
 
 }
