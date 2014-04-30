@@ -104,7 +104,7 @@
 					<div class="row-fluid">
 						<div class="span10 tabs-container">
 							<d:BulletListPanel ui:field="listPanel"
-								styleName="nav nav-tabs overflow-x">
+								styleName="nav nav-tabs">
 							</d:BulletListPanel>
 						</div>
 						<div class="span2 controllers">

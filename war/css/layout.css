@@ -194,6 +194,7 @@ body .dateBoxPopup {
 /* Custom navbar stuff */
 .navbar {
 	margin-bottom: 1px;
+	position: relative;
 }
 
 .navbar-inverse .navbar-inner {
