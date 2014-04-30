@@ -274,8 +274,16 @@ public class HomePresenter extends
 			
 			
 		}else if(page!=null && page.equals("activities")){
-			final Long activityId = new Long(request.getParameter("activity", "0"));
-			final Long detailId = new Long(request.getParameter("detail", "0"));
+			String project = request.getParameter("activity","0");
+			String detail = "0";
+			if(project.contains("d")){
+				String [] ids=project.split("d");
+				project=ids[0];
+				detail = ids[1];
+			}
+			
+			final Long activityId = new Long(project);
+			final Long detailId = new Long(detail);
 			Window.setTitle("Activities");
 			activitiesFactory.get(new ServiceCallback<ActivitiesPresenter>() {
 				@Override

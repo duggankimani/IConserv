@@ -63,11 +63,13 @@ public class ActivitiesPresenter extends
 
 		HasClickHandlers getProgramEdit();
 
-		void setSummaryView(boolean hasProgramId);
+		//void setSummaryView(boolean hasProgramId);
 
 		void setFunds(List<FundDTO> funds);
 
 		void setLastUpdatedId(Long id);
+
+		void setProgramId(Long programId);
 	}
 
 	@Inject
@@ -296,11 +298,12 @@ public class ActivitiesPresenter extends
 		loadData(activityId, programDetailId);
 	}
 	
-	public void loadData(final Long activityId, Long detailId) {
-		final boolean hasProgramId = activityId != null && activityId != 0L;
-		programDetailId = detailId==0? null: detailId;
+	public void loadData(final Long programId, Long detailId) {
+		this.programId = (programId ==null || programId==0L) ? null : programId;
+		programDetailId = detailId==null? null: detailId==0? null:
+			detailId;
 		
-		getView().setSummaryView(hasProgramId);
+		getView().setProgramId(this.programId);
 		
 		MultiRequestAction action = new MultiRequestAction();
 		//List of Programs for tabs
@@ -308,10 +311,10 @@ public class ActivitiesPresenter extends
 		action.addRequest(new GetPeriodsRequest());
 		action.addRequest(new GetFundsRequest());
 
-		if (hasProgramId) {
+		if (this.programId!=null) {
 			//Details of selected program
-			this.programId = activityId;
-			action.addRequest(new GetProgramsRequest(activityId, programDetailId==null));
+			this.programId = programId;
+			action.addRequest(new GetProgramsRequest(programId, programDetailId==null));
 		}
 		
 
@@ -338,7 +341,7 @@ public class ActivitiesPresenter extends
 						getView().setFunds(getFundsReq.getFunds());
 						
 						// activities under a program
-						if (hasProgramId) {
+						if (ActivitiesPresenter.this.programId!=null) {
 							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
 									.get(i++);
 							getView().setActivity(response2.getSingleResult());

@@ -31,6 +31,8 @@ public class ActivitiesTable extends Composite {
 	boolean isSummaryTable;
 	List<FundDTO> funds = new ArrayList<FundDTO>();
 	Long lastUpdatedId = null;
+	private Long programId=null;
+
 	
 	public ActivitiesTable() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -48,7 +50,7 @@ public class ActivitiesTable extends Composite {
 		level++;
 		sort(programActivities);
 		for (IsProgramActivity activity : programActivities) {
-			ActivitiesTableRow row = new ActivitiesTableRow(activity,isSummaryTable, level);
+			ActivitiesTableRow row = new ActivitiesTableRow(activity,programId,isSummaryTable, level);
 			if(activity.getId()==lastUpdatedId){
 				row.highlight();
 			}
@@ -105,7 +107,7 @@ public class ActivitiesTable extends Composite {
 		tblView.setTableHeaders(th);
 	}
 	
-	public void setSummaryTable(boolean isSummaryTable){
+	private void setSummaryTable(boolean isSummaryTable){
 		this.isSummaryTable=isSummaryTable;
 	}
 
@@ -139,5 +141,10 @@ public class ActivitiesTable extends Composite {
 	
 	public void setLastUpdatedId(Long lastUpdatedId) {
 		this.lastUpdatedId = lastUpdatedId;
+	}
+
+	public void setProgramId(Long programId) {
+		this.programId = programId;
+		setSummaryTable(programId==null);
 	}
 }

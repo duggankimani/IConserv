@@ -5,14 +5,22 @@ import java.util.List;
 
 import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -62,7 +70,8 @@ public class ActivitiesView extends ViewImpl implements
 
 	@UiField
 	HeadingElement spnTitle;
-	
+	@UiField Anchor aLeft;
+	@UiField Anchor aRight;
 	Long lastUpdatedId;
 	
 	List<IsProgramActivity> programs = null;
@@ -70,12 +79,64 @@ public class ActivitiesView extends ViewImpl implements
 	public interface Binder extends UiBinder<Widget, ActivitiesView> {
 	}
 
+	Timer scrollTimer = new Timer() {
+		
+		@Override
+		public void run() {
+			listPanel.getElement().setScrollLeft(listPanel.getElement().getScrollLeft()+scrollDistancePX);
+		}
+	};  
+	int scrollDistancePX = 6; //6px at a time
+	
 	@Inject
 	public ActivitiesView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
 		listPanel.setId("mytab");
-
 		registerEditFocus();
+		
+		MouseDownHandler downHandler = new MouseDownHandler() {
+			
+			@Override
+			public void onMouseDown(MouseDownEvent event) {
+				if(event.getSource()==aLeft){
+					scrollDistancePX=-6;
+				}else{
+					scrollDistancePX=6;
+				}
+				scrollTimer.scheduleRepeating(20);
+			}
+		};
+		
+		MouseUpHandler upHandler = new MouseUpHandler() {
+			@Override
+			public void onMouseUp(MouseUpEvent event) {
+				scrollTimer.cancel();
+			}
+		};
+		
+		aRight.addMouseDownHandler(downHandler);
+		aLeft.addMouseDownHandler(downHandler);
+		
+		aRight.addMouseUpHandler(upHandler);
+		aLeft.addMouseUpHandler(upHandler);
+		
+		ClickHandler clickHandler = new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				scrollTimer.cancel();
+				if(event.getSource()==aLeft){
+					scrollDistancePX=-20;
+				}else{
+					scrollDistancePX=20;
+				}
+				listPanel.getElement().setScrollLeft(listPanel.getElement().getScrollLeft()+scrollDistancePX);
+			}
+		};
+		
+		aRight.addClickHandler(clickHandler);
+		aLeft.addClickHandler(clickHandler);
+			
 	}
 
 	private void registerEditFocus() {
@@ -145,11 +206,7 @@ public class ActivitiesView extends ViewImpl implements
 		BulletPanel li = new BulletPanel();
 		Anchor a = new Anchor(text);
 		a.setHref("#home;page=activities;activity=" + id);
-		// AnchorOptions aOptions = new AnchorOptions();
-		// aOptions.addStyleName("span2");
-		// aOptions.createMenu("Edit");
 		li.add(a);
-		// li.add(aOptions);
 
 		if (active) {
 			li.addStyleName("active");
@@ -220,6 +277,7 @@ public class ActivitiesView extends ViewImpl implements
 
 			if (active) {
 				li.addStyleName("active");
+				li.getElement().scrollIntoView();
 			} else {
 				li.removeStyleName("active");
 			}
@@ -280,11 +338,6 @@ public class ActivitiesView extends ViewImpl implements
 	}
 
 	@Override
-	public void setSummaryView(boolean hasProgramId) {
-		tblView.setSummaryTable(!hasProgramId);
-	}
-
-	@Override
 	public void setFunds(List<FundDTO> funds) {
 		tblView.setFunds(funds);
 	}
@@ -297,6 +350,11 @@ public class ActivitiesView extends ViewImpl implements
 	@Override
 	public void setLastUpdatedId(Long lastUpdatedId) {
 		this.lastUpdatedId = lastUpdatedId;
+	}
+
+	@Override
+	public void setProgramId(Long programId) {
+		tblView.setProgramId(programId);
 	}
 
 }
