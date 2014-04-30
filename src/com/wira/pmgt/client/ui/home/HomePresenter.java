@@ -274,13 +274,21 @@ public class HomePresenter extends
 			
 			
 		}else if(page!=null && page.equals("activities")){
-			final Long activityId = new Long(request.getParameter("activity", "0"));
+			String project = request.getParameter("activity","0");
+			String detail = "0";
+			if(project.contains("d")){
+				String [] ids=project.split("d");
+				project=ids[0];
+				detail = ids[1];
+			}
 			
+			final Long activityId = new Long(project);
+			final Long detailId = new Long(detail);
 			Window.setTitle("Activities");
 			activitiesFactory.get(new ServiceCallback<ActivitiesPresenter>() {
 				@Override
 				public void processResult(ActivitiesPresenter aResponse) {
-					aResponse.loadData(activityId);
+					aResponse.loadData(activityId, detailId);
 					setInSlot(ACTIVITIES_SLOT, aResponse);
 				}
 			});

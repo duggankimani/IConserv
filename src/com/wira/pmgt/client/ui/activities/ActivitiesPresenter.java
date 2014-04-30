@@ -63,11 +63,13 @@ public class ActivitiesPresenter extends
 
 		HasClickHandlers getProgramEdit();
 
-		void setSummaryView(boolean hasProgramId);
+		//void setSummaryView(boolean hasProgramId);
 
 		void setFunds(List<FundDTO> funds);
 
 		void setLastUpdatedId(Long id);
+
+		void setProgramId(Long programId);
 	}
 
 	@Inject
@@ -83,6 +85,8 @@ public class ActivitiesPresenter extends
 	
 
 	Long programId;
+	
+	Long programDetailId; //Drill Down
 	
 	IsProgramActivity selected;
 
@@ -290,9 +294,16 @@ public class ActivitiesPresenter extends
 				});
 	}
 
-	public void loadData(final Long activityId) {
-		final boolean hasProgramId = activityId != null && activityId != 0L;
-		getView().setSummaryView(hasProgramId);
+	public void loadData(final Long activityId){
+		loadData(activityId, programDetailId);
+	}
+	
+	public void loadData(final Long programId, Long detailId) {
+		this.programId = (programId ==null || programId==0L) ? null : programId;
+		programDetailId = detailId==null? null: detailId==0? null:
+			detailId;
+		
+		getView().setProgramId(this.programId);
 		
 		MultiRequestAction action = new MultiRequestAction();
 		//List of Programs for tabs
@@ -300,12 +311,17 @@ public class ActivitiesPresenter extends
 		action.addRequest(new GetPeriodsRequest());
 		action.addRequest(new GetFundsRequest());
 
-		if (hasProgramId) {
+		if (this.programId!=null) {
 			//Details of selected program
-			this.programId = activityId;
-			action.addRequest(new GetProgramsRequest(activityId, true));
+			this.programId = programId;
+			action.addRequest(new GetProgramsRequest(programId, programDetailId==null));
 		}
+		
 
+		if(programDetailId!=null){
+			action.addRequest(new GetProgramsRequest(programDetailId, true));
+		}
+		
 		requestHelper.execute(action,
 				new TaskServiceCallback<MultiRequestActionResult>() {
 					@Override
@@ -325,13 +341,19 @@ public class ActivitiesPresenter extends
 						getView().setFunds(getFundsReq.getFunds());
 						
 						// activities under a program
-						if (hasProgramId) {
+						if (ActivitiesPresenter.this.programId!=null) {
 							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
 									.get(i++);
 							getView().setActivity(response2.getSingleResult());
 
 						}else{
 							getView().setActivities(response.getPrograms());
+						}
+						
+						if(programDetailId!=null){
+							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
+									.get(i++);
+							getView().setActivity(response2.getSingleResult());
 						}
 						
 					}

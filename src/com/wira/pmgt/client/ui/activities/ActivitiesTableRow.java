@@ -10,10 +10,13 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -64,6 +67,7 @@ public class ActivitiesTableRow extends RowWidget {
 	SpanElement spnStatus;
 
 	int level = 0;
+	long programId=0;
 	IsProgramActivity activity;
 	List<FundDTO> funding = null;
 
@@ -74,14 +78,15 @@ public class ActivitiesTableRow extends RowWidget {
 			highlight(false);
 		}
 	};
-
-	public ActivitiesTableRow(IsProgramActivity activity, boolean isSummaryRow,
+	
+	public ActivitiesTableRow(IsProgramActivity activity, Long programId, boolean isSummaryRow,
 			int level) {
-		this.activity = activity;
 		initWidget(uiBinder.createAndBindUi(this));
+		this.activity = activity;
+		this.programId= (programId==null? 0: programId);
+		this.level = level;
 		setRow(row);
 		setStatus("created", "info");
-		this.level = level;
 		setActivityName();
 		setPadding();
 
@@ -219,6 +224,7 @@ public class ActivitiesTableRow extends RowWidget {
 	}
 
 	public void setHasChildren(boolean hasChildren) {
+		divRowCaret.setHref("#home;page=activities;activity="+programId+"d"+activity.getId());
 		if (hasChildren) {
 			divRowCaret.removeStyleName("icon-caret-right");
 			divRowCaret.addStyleName("icon-caret-down");
@@ -228,4 +234,5 @@ public class ActivitiesTableRow extends RowWidget {
 		}
 
 	}
+	
 }

@@ -130,4 +130,5 @@ public abstract class IsProgramActivity extends ProgramSummary implements Listab
 		
 		return getName();
 	}
+
 }
