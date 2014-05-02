@@ -87,6 +87,7 @@ public class ActivitiesPresenter extends
 	Long programId;
 	
 	Long programDetailId; //Drill Down
+	ProgramDetailType programType=ProgramDetailType.PROGRAM; //last selected
 	
 	IsProgramActivity selected;
 
@@ -341,11 +342,11 @@ public class ActivitiesPresenter extends
 						getView().setFunds(getFundsReq.getFunds());
 						
 						// activities under a program
+						//&& programDetailId==null
 						if (ActivitiesPresenter.this.programId!=null) {
 							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
 									.get(i++);
-							getView().setActivity(response2.getSingleResult());
-
+							setActivity(response2.getSingleResult());
 						}else{
 							getView().setActivities(response.getPrograms());
 						}
@@ -353,11 +354,16 @@ public class ActivitiesPresenter extends
 						if(programDetailId!=null){
 							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
 									.get(i++);
-							getView().setActivity(response2.getSingleResult());
+							setActivity(response2.getSingleResult());
 						}
 						
 					}
 				});
+	}
+
+	protected void setActivity(IsProgramActivity activity) {
+		getView().setActivity(activity);
+		programType = activity.getType();
 	}
 
 	protected void loadProgram(Long id) {
@@ -369,7 +375,7 @@ public class ActivitiesPresenter extends
 					@Override
 					public void processResult(GetProgramsResponse aResponse) {
 						GetProgramsResponse response = (GetProgramsResponse) aResponse;
-						getView().setActivity(response.getSingleResult());
+						setActivity(response.getSingleResult());
 					}
 				});
 

@@ -5,11 +5,14 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.apache.log4j.Logger;
+
 import com.wira.pmgt.server.dao.model.PO;
 
 public class BaseDaoImpl {
 
 	protected EntityManager em;
+	protected Logger log = Logger.getLogger(BaseDaoImpl.class); 
 	
 	public BaseDaoImpl(EntityManager em){
 		this.em = em;
@@ -25,7 +28,6 @@ public class BaseDaoImpl {
 	
 	@SuppressWarnings("unchecked")
 	public <T> T getSingleResultOrNull(Query query){
-		
 		T value = null;
 		try{
 			value = (T)query.getSingleResult();

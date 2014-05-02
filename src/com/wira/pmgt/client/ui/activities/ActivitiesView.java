@@ -319,6 +319,8 @@ public class ActivitiesView extends ViewImpl implements
 			show(aNewTask, true);
 		}else if (type== ProgramDetailType.TASK){
 			show(aNewTask, true);
+		}else{
+			show(aEdit, false);
 		}
 	}
 
