@@ -101,7 +101,7 @@
 						</div>
 					</div>
 
-					<div class="row-fluid">
+					<div class="row-fluid tab-body">
 						<div class="span10 tabs-container">
 							<d:BulletListPanel ui:field="listPanel"
 								styleName="nav nav-tabs">

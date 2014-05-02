@@ -3,9 +3,12 @@ package com.wira.pmgt.client.ui;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -26,6 +29,7 @@ public class MainPageView extends ViewImpl implements MainPagePresenter.MyView {
 	@UiField SpanElement spnAlertContent;
 	@UiField Anchor aView;
 	@UiField Element spnSubject;
+	@UiField HTMLPanel divBody;
 	
 	@UiField Element disconnectionText;
 	
@@ -43,6 +47,31 @@ public class MainPageView extends ViewImpl implements MainPagePresenter.MyView {
 	public MainPageView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
 		loadingtext.setId("loading-text");
+		resize();
+		Window.addResizeHandler(new ResizeHandler() {
+
+			  Timer resizeTimer = new Timer() {  
+			    @Override
+			    public void run() {
+			      resize();
+			    }
+
+			  };
+
+			  @Override
+			  public void onResize(ResizeEvent event) {
+			    resizeTimer.cancel();
+			    resizeTimer.schedule(250);
+			  }
+		});
+		
+		
+	}
+	
+	private void resize() {
+		int height = Window.getClientHeight();
+		divBody.setHeight((height-50)+"px");
+		System.out.println("client height >>>"+height);
 		
 	}
 
