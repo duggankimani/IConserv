@@ -10,7 +10,7 @@
 }
 .main-container .activities-page .tab-content{
     margin: 10px 20px;
-    height: 71%;
+    min-height: 71%;
     overflow-x: hidden;
 }
 .activities-page .content-top{
@@ -93,6 +93,11 @@
 	background-color:#999999;
 }
 
+/* Tabs Below */
+.activities-page .tabs-below .tab-body{
+	position: absolute;
+	bottom: 0px;
+}
 
 /* Tabs Below */
 .activities-page .tabs-below .tabs-container{
@@ -102,7 +107,7 @@
 .activities-page .tabs-below .controllers{
 	background-color: #eeeeee;
 	border-top: 1px solid #aaa;
-	padding: 16px 0px 10px 24px;
+	padding: 10px 0px 1px 24px;
 	margin-left: 0px;
 	width: 10%;
 	box-shadow: -7px 4px 10px #888888;
@@ -112,10 +117,12 @@
 	background-color: #eeeeee;
 	border-top: 1px solid #aaa;
 	margin-top: 0px;
-	padding-bottom: 9px;
+	padding-bottom: 4px;
 	white-space: nowrap;
 	z-index: 1;
 	overflow-x: hidden;
+	margin-bottom: 0px;
+	padding-left: 10px;
 }
 .activities-page .nav-tabs > .active{
 	margin-left: 22px;

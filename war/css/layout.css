@@ -1,85 +1,29 @@
-body {
-	overflow-y: hidden;
-	font-family: Arial, Helvetica, sans-serif !important;
+/*Structuring css*/
+.main-body{
+	width:100%;
+	height:100%;
+}
+.main-body .top-header{
+	height: 48px;
+	margin-bottom: 2px;
+}
+.main-body .sidebar-nav{
 	height: 100%;
+	width:13%;
+}
+.main-body .body-container{
+	 height: 94%;
+ }
+ 
+ .main-body .main-container{
 	width: 100%;
-}
-
-h1,h2,h3,h4,h5 {
-	margin: 0;
-	line-height: inherit;
-	color: #29323d;
-}
-
-a {
-	color: grey;
-	cursor: pointer;
-}
-
-a,a:visited,a:hover {
-	text-decoration: none;
-	/* color: #cccccc; */
-}
-
-.full-page {
 	height: 100%;
 }
 
-input:focus {
-	outline: none;
-	border: none;
-	box-shadow: none;
-}
 
-*:focus {
-	outline: none;
-}
-
-.header {
-	margin-bottom: 60px;
-}
-
-.header h1,.header h2,.header h3,.header h4,.header h5 {
-	float: left;
-	margin-top: 5px;
-}
-
-#loading-text {
-	text-align: center;
-	color: #222;
-	border-color: #f0c36d;
-	background-color: #f0c36d;
-	padding: 1px 0px;
-	border-radius: 2px;
-	-webkit-border-radius: 2px;
-	-webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-	font-weight: bold;
-	width: 100px;
-	margin: 0px;
-	position: absolute;
-	right: 648px;
-	top: 0px;
-	height: 20px;
-}
-
-.ellipsis {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	display: inline-block;
-}
-
-.main-body .alert {
-	position: absolute;
-	right: 38%;
-	top: 1%;
-	padding-right: 18px;
-}
-
-body .alert a {
-	text-decoration: underline;
-	color: #999999;
+.main-body .main-container .content-right{
+	width: 87%;
+	height: 100%;
 }
 
 /*Uploader Modal */
@@ -511,18 +455,10 @@ body .dateBoxPopup {
 	font-weight: bold;
 	color: #000;
 }
-/*Whole Inside Container*/
-.main-container {
-	background-color: #fafafa;
-	max-width: 100%;
-	height: 100%;
-	position: absolute;
-}
 
-/* Sidebar */
+
+/* Sidebar Navigation */
 #sidebar-nav {
-	width: 13%;
-	min-height: 100%;
 	padding: 10px 0px 0px 0px;
 	margin: 0px 0px 0px 0px;
 	position: relative;
@@ -564,16 +500,10 @@ body .dateBoxPopup {
 	cursor: pointer;
 }
 
-.working-request {
-	background: #ffffff;
-	opacity: .4;
-}
 
 /*---Middle-Pane--- */
 .main-container .content-right {
 	margin-left: 0px;
-	width: 87%;
-	height: 92%;
 	position: relative;
 	background-color: #ffffff;
 	border: 1px solid #CCCCCC;
