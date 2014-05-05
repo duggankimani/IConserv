@@ -16,6 +16,7 @@ import com.wira.pmgt.client.ui.OptionControl;
 import com.wira.pmgt.client.ui.activities.ActivitySelectionChangedEvent.ActivitySelectionChangedHandler;
 import com.wira.pmgt.client.ui.detailedActivity.CreateActivityPresenter;
 import com.wira.pmgt.client.ui.events.CreateProgramEvent;
+import com.wira.pmgt.client.ui.events.ActivitySavedEvent;
 import com.wira.pmgt.client.ui.objective.CreateObjectivePresenter;
 import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
 import com.wira.pmgt.client.util.AppContext;
@@ -284,18 +285,18 @@ public class ActivitiesPresenter extends
 		}
 	}
 
-	private void save(IsProgramActivity activity) {
+	private void save(final IsProgramActivity activity) {
 		//program.setParentId(programId);
 		requestHelper.execute(new CreateProgramRequest(activity),
 				new TaskServiceCallback<CreateProgramResponse>() {
 					@Override
 					public void processResult(CreateProgramResponse aResponse) {
+						fireEvent(new ActivitySavedEvent(activity.getType().name().toLowerCase() +" change(s) successfully saved"));
 						getView().setLastUpdatedId(aResponse.getProgram().getId());
 						loadData(programId);
 					}
 				});
 	}
-
 	public void loadData(final Long activityId){
 		loadData(activityId, programDetailId);
 	}

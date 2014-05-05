@@ -4,7 +4,7 @@
 
 	<d:BulletPanel ui:field="liItem">
 		<g:HTMLPanel>
-			<g:Anchor href="#" ui:field="aLink">Home</g:Anchor>
+			<g:Anchor href="#" ui:field="aLink" styleName="">Home</g:Anchor>
 			<span class="divider icon-caret-right muted" ui:field="spnDivider"></span>
 		</g:HTMLPanel>
 	</d:BulletPanel>

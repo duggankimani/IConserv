@@ -1,6 +1,5 @@
 package com.wira.pmgt.client.ui;
 
-
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.inject.Inject;
@@ -20,9 +19,11 @@ import com.gwtplatform.mvp.client.proxy.RevealRootContentEvent;
 import com.wira.pmgt.client.service.ServiceCallback;
 import com.wira.pmgt.client.ui.admin.AdminHomePresenter;
 import com.wira.pmgt.client.ui.error.ErrorPresenter;
+import com.wira.pmgt.client.ui.events.ActivitySavedEvent.ActivitySavedHandler;
 import com.wira.pmgt.client.ui.events.AdminPageLoadEvent;
 import com.wira.pmgt.client.ui.events.ClientDisconnectionEvent;
 import com.wira.pmgt.client.ui.events.ErrorEvent;
+import com.wira.pmgt.client.ui.events.ActivitySavedEvent;
 import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent;
 import com.wira.pmgt.client.ui.events.ProcessingEvent;
 import com.wira.pmgt.client.ui.events.WorkflowProcessEvent;
@@ -40,16 +41,21 @@ import com.wira.pmgt.shared.model.Document;
 import com.wira.pmgt.shared.model.HTSummary;
 
 public class MainPagePresenter extends
-		Presenter<MainPagePresenter.MyView, MainPagePresenter.MyProxy> 
-implements ErrorHandler, ProcessingCompletedHandler, 
-ProcessingHandler ,WorkflowProcessHandler, ShowIframeHandler, ClientDisconnectionHandler{
+		Presenter<MainPagePresenter.MyView, MainPagePresenter.MyProxy>
+		implements ErrorHandler, ProcessingCompletedHandler, ProcessingHandler,
+		WorkflowProcessHandler, ShowIframeHandler, ClientDisconnectionHandler,ActivitySavedHandler {
 
 	public interface MyView extends View {
 
-		void showProcessing(boolean processing,String message);
+		void showProcessing(boolean processing, String message);
+
 		void setAlertVisible(String subject, String action, String url);
+
 		void showDisconnectionMessage(String message);
+
 		void clearDisconnectionMsg();
+
+		void setAlertVisible(String message);
 	}
 
 	@ProxyCodeSplit
@@ -58,23 +64,27 @@ ProcessingHandler ,WorkflowProcessHandler, ShowIframeHandler, ClientDisconnectio
 
 	@ContentSlot
 	public static final Type<RevealContentHandler<?>> HEADER_content = new Type<RevealContentHandler<?>>();
-	
+
 	@ContentSlot
 	public static final Type<RevealContentHandler<?>> CONTENT_SLOT = new Type<RevealContentHandler<?>>();
 
-	@Inject HeaderPresenter headerPresenter;
-		
-	IndirectProvider<ErrorPresenter> errorFactory;
-	
-	@Inject DispatchAsync dispatcher;
-	
-	@Inject PlaceManager placeManager;
+	@Inject
+	HeaderPresenter headerPresenter;
 
-	@Inject IFrameDataPresenter presenter;
-	
+	IndirectProvider<ErrorPresenter> errorFactory;
+
+	@Inject
+	DispatchAsync dispatcher;
+
+	@Inject
+	PlaceManager placeManager;
+
+	@Inject
+	IFrameDataPresenter presenter;
+
 	@Inject
 	public MainPagePresenter(final EventBus eventBus, final MyView view,
-			final MyProxy proxy,Provider<ErrorPresenter> provider) {
+			final MyProxy proxy, Provider<ErrorPresenter> provider) {
 		super(eventBus, view, proxy);
 		this.errorFactory = new StandardProvider<ErrorPresenter>(provider);
 	}
@@ -93,16 +103,17 @@ ProcessingHandler ,WorkflowProcessHandler, ShowIframeHandler, ClientDisconnectio
 		addRegisteredHandler(WorkflowProcessEvent.TYPE, this);
 		addRegisteredHandler(ShowIframeEvent.TYPE, this);
 		addRegisteredHandler(ClientDisconnectionEvent.TYPE, this);
+		addRegisteredHandler(ActivitySavedEvent.TYPE, this);
 	}
-	
+
 	@Override
 	protected void onReset() {
 		super.onReset();
-		setInSlot(HEADER_content, headerPresenter);	
+		setInSlot(HEADER_content, headerPresenter);
 		getView().clearDisconnectionMsg();
-		//System.err.println("Main Page - Reset called......");
+		// System.err.println("Main Page - Reset called......");
 	}
-	
+
 	@Override
 	public void onError(final ErrorEvent event) {
 		addToPopupSlot(null);
@@ -110,11 +121,11 @@ ProcessingHandler ,WorkflowProcessHandler, ShowIframeHandler, ClientDisconnectio
 			@Override
 			public void processResult(ErrorPresenter result) {
 				String message = event.getMessage();
-				
+
 				result.setMessage(message, event.getId());
-				
+
 				MainPagePresenter.this.addToPopupSlot(result);
-				
+
 			}
 		});
 	}
@@ -122,11 +133,11 @@ ProcessingHandler ,WorkflowProcessHandler, ShowIframeHandler, ClientDisconnectio
 	@Override
 	public void setInSlot(Object slot, PresenterWidget<?> content) {
 		super.setInSlot(slot, content);
-		
-		if(slot==CONTENT_SLOT){
-			if(content!=null && content instanceof AdminHomePresenter){
+
+		if (slot == CONTENT_SLOT) {
+			if (content != null && content instanceof AdminHomePresenter) {
 				fireEvent(new AdminPageLoadEvent(true));
-			}else{
+			} else {
 				fireEvent(new AdminPageLoadEvent(false));
 			}
 		}
@@ -134,33 +145,34 @@ ProcessingHandler ,WorkflowProcessHandler, ShowIframeHandler, ClientDisconnectio
 
 	@Override
 	public void onProcessing(ProcessingEvent event) {
-		getView().showProcessing(true,event.getMessage());
+		getView().showProcessing(true, event.getMessage());
 	}
 
 	@Override
 	public void onProcessingCompleted(ProcessingCompletedEvent event) {
 		getView().showProcessing(false, null);
 	}
-	
+
 	@Override
 	public void onWorkflowProcess(WorkflowProcessEvent event) {
 		Doc summary = event.getDocument();
 		String url = "";
-		if(summary instanceof Document){
-			url = "#home;type=search;did="+summary.getId();
-		}else{
-			long processInstanceId = ((HTSummary)summary).getProcessInstanceId();
-			url = "#home;type=search;pid="+processInstanceId;
+		if (summary instanceof Document) {
+			url = "#home;type=search;did=" + summary.getId();
+		} else {
+			long processInstanceId = ((HTSummary) summary)
+					.getProcessInstanceId();
+			url = "#home;type=search;pid=" + processInstanceId;
 		}
-		
-		getView().setAlertVisible(event.getSubject(), event.getAction(),url);
+
+		getView().setAlertVisible(event.getSubject(), event.getAction(), url);
 	}
-	
+
 	@Override
 	public void onShowIframe(ShowIframeEvent event) {
 		addToPopupSlot(presenter, true);
 	}
-	
+
 	@Override
 	protected void onUnbind() {
 		super.onUnbind();
@@ -170,6 +182,11 @@ ProcessingHandler ,WorkflowProcessHandler, ShowIframeHandler, ClientDisconnectio
 	@Override
 	public void onClientDisconnection(ClientDisconnectionEvent event) {
 		getView().showDisconnectionMessage(event.getMessage());
+	}
+	
+	@Override
+	public void OnActivitySaved(ActivitySavedEvent event) {
+		getView().setAlertVisible(event.getMessage());
 	}
 
 }

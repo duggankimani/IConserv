@@ -103,6 +103,7 @@ input:focus {
 	right: 648px;
 	top: 0px;
 	height: 20px;
+	z-index: 10;
 }
 
 .full-page {
@@ -121,6 +122,7 @@ input:focus {
 	right: 38%;
 	top: 1%;
 	padding-right: 18px;
+	z-index: 10;
 }
 
 body .main-body .alert a {
