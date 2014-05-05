@@ -14,6 +14,7 @@ import com.gwtplatform.mvp.client.PresenterWidget;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.OptionControl;
+import com.wira.pmgt.client.ui.events.ActivitiesReloadEvent;
 import com.wira.pmgt.client.ui.period.save.PeriodSaveView;
 import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.program.FundDTO;
@@ -54,6 +55,7 @@ public class CreateProgramPresenter extends
 	@Inject DispatchAsync requestHelper;
 	private Long programId;
 	private IsProgramActivity program;
+	private boolean navigateOnSave;
 	
 	@Inject
 	public CreateProgramPresenter(final EventBus eventBus, final ICreateDocView view) {
@@ -116,8 +118,13 @@ public class CreateProgramPresenter extends
 							public void processResult(
 									CreateProgramResponse aResponse) {
 								getView().hide();
-								History.newItem("home;page=activities;activity="+aResponse.getProgram().getId(),
-										true);
+								
+								if(navigateOnSave){
+									History.newItem("home;page=activities;activity="+aResponse.getProgram().getId(),
+											true);
+								}else{
+									fireEvent(new ActivitiesReloadEvent());
+								}
 							}
 						});
 				}
@@ -171,5 +178,9 @@ public class CreateProgramPresenter extends
 
 	public void setProgramId(Long programId) {
 		this.programId=programId;
+	}
+
+	public void setNavigateOnSave(boolean navigateOnSave) {
+		this.navigateOnSave = navigateOnSave;
 	}
 }

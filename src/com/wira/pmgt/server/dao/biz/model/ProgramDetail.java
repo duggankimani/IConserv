@@ -1,8 +1,10 @@
 package com.wira.pmgt.server.dao.biz.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -185,11 +187,50 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	}
 
 	public void setSourceOfFunds(Set<ProgramFund> sourceOfFundz) {
-		sourceOfFunds.clear();//clear the set
+		Set<ProgramFund> canBeRmoved = new HashSet<>();
+		for(ProgramFund fund: sourceOfFunds){
+			//delete causes referencial integrity errors - Foreign key issues
+			//So we set their budgets to zero instead; but remove those we can
+			if(fund.getAllocation()==null){
+				canBeRmoved.add(fund);
+			}else if(!sourceOfFundz.contains(fund)){
+				fund.setAmount(0.0);
+			}
+		}		
+		this.sourceOfFunds.removeAll(canBeRmoved);
+		
+		//Put everything in a list to allow retrieval
+		List<ProgramFund> previousValues = new ArrayList<>();
+		previousValues.addAll(this.sourceOfFunds);
+		
 		
 		for(ProgramFund fund: sourceOfFundz){
-			fund.setProgramDetail(this);
-			this.sourceOfFunds.add(fund);
+			if(previousValues.contains(fund)){
+				
+				//We've found a fund that already exists in the previously persisted set
+				//This may happen is the same Fund is budgeted for twice/ or the programfund in 
+				//question cannot be deleted due to references by child funds - allocations
+				ProgramFund previous = previousValues.get(previousValues.indexOf(fund));
+				assert this.sourceOfFunds.remove(previous);
+				
+				//Double previousAmount =previous.getAmount()==null? 0.0: previous.getAmount();
+				Double amount = fund.getAmount()==null? 0.0: fund.getAmount();				
+				
+				previous.setAmount(amount);
+				System.err.println(previous.getFund().getName()+
+						" :: Contained=true;calcuated new amounts >>>> "+previous.getAmount());
+				
+				previous.setProgramDetail(this);
+				assert this.sourceOfFunds.add(previous);
+			}else{
+				System.err.println(fund.getFund().getName()+" :: Direct set >>>> "+fund.getAmount());
+				//add new values
+				fund.setProgramDetail(this);
+				this.sourceOfFunds.add(fund);
+			}
+			//replace if exists
+			
+			
 		}
 	}
 
@@ -206,6 +247,7 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	}
 
 	public void setChildren(Set<ProgramDetail> children) {
+		this.children.clear();
 		for(ProgramDetail child: children){
 			this.children.add(child);
 			child.setParent(this);
@@ -228,4 +270,19 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 		}
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if(obj==null || !(obj instanceof ProgramDetail))
+			return false;
+		
+		ProgramDetail other = (ProgramDetail)obj;
+		
+		if(getId()!=null && other.getId()!=null){
+			return getId().equals(other.getId());
+		}else if(type!=null && period!=null && getName()!=null){
+			return type==other.type && period.equals(other.period) && getName().equals(other.getName());
+		}
+		
+		return false;
+	}
 }

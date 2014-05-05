@@ -147,7 +147,7 @@ public class MainPageView extends ViewImpl implements MainPagePresenter.MyView {
 		divAlert.removeClassName("hidden");
 		spnAlertContent.setInnerText(message);
 		timer.cancel();
-		timer.schedule(3000);
+		timer.schedule(5000);
 	}
 
 }

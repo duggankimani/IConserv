@@ -13,10 +13,15 @@ import com.gwtplatform.mvp.client.View;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.OptionControl;
-import com.wira.pmgt.client.ui.activities.ActivitySelectionChangedEvent.ActivitySelectionChangedHandler;
 import com.wira.pmgt.client.ui.detailedActivity.CreateActivityPresenter;
+import com.wira.pmgt.client.ui.events.ActivitiesReloadEvent;
+import com.wira.pmgt.client.ui.events.ActivitiesReloadEvent.ActivitiesReloadHandler;
+import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent;
 import com.wira.pmgt.client.ui.events.CreateProgramEvent;
 import com.wira.pmgt.client.ui.events.ActivitySavedEvent;
+import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent;
+import com.wira.pmgt.client.ui.events.ProcessingEvent;
+import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent.ActivitySelectionChangedHandler;
 import com.wira.pmgt.client.ui.objective.CreateObjectivePresenter;
 import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
 import com.wira.pmgt.client.util.AppContext;
@@ -37,7 +42,7 @@ import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
 public class ActivitiesPresenter extends
 		PresenterWidget<ActivitiesPresenter.IActivitiesView> implements
-		ActivitySelectionChangedHandler {
+		ActivitySelectionChangedHandler, ActivitiesReloadHandler {
 
 	public interface IActivitiesView extends View {
 		void showContent(boolean show);
@@ -72,7 +77,7 @@ public class ActivitiesPresenter extends
 
 		void setProgramId(Long programId);
 
-		void setDates(String text);
+		void setSelection(ProgramDetailType programType, boolean b);
 	}
 
 	@Inject
@@ -91,7 +96,10 @@ public class ActivitiesPresenter extends
 	
 	Long programDetailId; //Drill Down
 	
+	ProgramDetailType programType=ProgramDetailType.PROGRAM; //last selected
+	
 	IsProgramActivity selected;
+	IsProgramActivity detail;
 
 	@Inject
 	public ActivitiesPresenter(final EventBus eventBus,
@@ -103,6 +111,7 @@ public class ActivitiesPresenter extends
 	protected void onBind() {
 		super.onBind();
 		addRegisteredHandler(ActivitySelectionChangedEvent.TYPE, this);
+		addRegisteredHandler(ActivitiesReloadEvent.TYPE, this);
 		
 		getView().getProgramEdit().addClickHandler(new ClickHandler() {
 
@@ -148,7 +157,7 @@ public class ActivitiesPresenter extends
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				showEditPopup(selected.getType(), true);
+				showEditPopup(selected!=null? selected.getType(): detail.getType(), true);
 			}
 		});
 
@@ -159,6 +168,20 @@ public class ActivitiesPresenter extends
 	}
 	
 	protected void showEditPopup(ProgramDetailType type, boolean edit){
+		IsProgramActivity activity=selected!=null? selected: detail;
+		
+		showEditPopup(type, activity, edit);
+	}
+	
+	/**
+	 * This could be a create or edit call;</br>
+	 * If its an edit; we may be editing a selected element or a detail element
+	 * <br/>
+	 * @param type
+	 * @param activity An activity selected on the grid or a detail activity(#home;page=activities;activity=50d52)
+	 * @param edit
+	 */
+	protected void showEditPopup(ProgramDetailType type,IsProgramActivity activity, boolean edit){
 		
 		switch (type) {
 		case TASK:
@@ -166,12 +189,12 @@ public class ActivitiesPresenter extends
 			createTask.setType(type);
 			if(edit){
 				//we are editing the selected item
-				createTask.setActivity(selected);
-				createTask.load(selected.getParentId());
+				createTask.setActivity(activity);
+				createTask.load(activity.getParentId());
 			}else{
 				//selected item is the parent - We are creating a new activity based on selected item
 				createTask.setActivity(null);
-				createTask.load(selected.getId());
+				createTask.load(activity.getId());
 			}
 			
 			AppManager.showPopUp(edit? "Edit Task":
@@ -196,13 +219,13 @@ public class ActivitiesPresenter extends
 		case ACTIVITY:
 			if(edit){
 				//we are editing the selected item
-				createActivity.setActivity(selected);
-				createActivity.load(selected.getParentId());
+				createActivity.setActivity(activity);
+				createActivity.load(activity.getParentId());
 			}else{
 				//selected item is the parent - We are creating a new activity based on selected item
 				//User selected an outcome & is now creating a new Activity
 				createActivity.setActivity(null);
-				createActivity.load(selected.getId());
+				createActivity.load(activity.getId());
 			}
 			
 			AppManager.showPopUp(edit? "Edit Activity":
@@ -227,11 +250,11 @@ public class ActivitiesPresenter extends
 	
 		case OBJECTIVE:
 			objectivePresenter.setObjective(
-					(edit && selected.getType()==ProgramDetailType.OBJECTIVE)?selected:null);
-			Long parentId = edit?selected.getParentId():programId;
+					(edit && activity.getType()==ProgramDetailType.OBJECTIVE)?activity:null);
+			Long parentId = edit?activity.getParentId():programId;
 			
 			//in case you selected an Program from summary view and clicked New Objective
-			parentId= parentId!=null? parentId : selected!=null? selected.getId():null;
+			parentId= parentId!=null? parentId : activity!=null? activity.getId():null;
 			objectivePresenter.load(parentId);//Parent Id Passed here
 			
 			AppManager.showPopUp(edit?"Edit Objective"
@@ -254,8 +277,8 @@ public class ActivitiesPresenter extends
 			break;
 			
 		case OUTCOME:
-			createOutcome.setOutcome(edit?selected:null);			
-			createOutcome.load(edit?selected.getParentId():programId);
+			createOutcome.setOutcome(edit?activity:null);			
+			createOutcome.load(edit?activity.getParentId():programId);
 			AppManager.showPopUp(edit? "Edit Outcome":
 					"Create Outcome",
 					createOutcome.getWidget(), new OptionControl() {
@@ -277,8 +300,9 @@ public class ActivitiesPresenter extends
 						}}, "Save", "Cancel");
 			break;
 		case PROGRAM:
-			if(selected!=null && edit)
-				AppContext.fireEvent(new CreateProgramEvent(selected.getId()));
+			if(activity!=null && edit){
+				AppContext.fireEvent(new CreateProgramEvent(activity.getId(),!edit));
+			}
 		break;
 		default:
 			break;
@@ -291,9 +315,10 @@ public class ActivitiesPresenter extends
 				new TaskServiceCallback<CreateProgramResponse>() {
 					@Override
 					public void processResult(CreateProgramResponse aResponse) {
-						fireEvent(new ActivitySavedEvent(activity.getType().name().toLowerCase() +" change(s) successfully saved"));
 						getView().setLastUpdatedId(aResponse.getProgram().getId());
 						loadData(programId);
+						fireEvent(new ProcessingCompletedEvent());
+						fireEvent(new ActivitySavedEvent(activity.getType().name().toLowerCase() +" change(s) successfully saved"));
 					}
 				});
 	}
@@ -302,6 +327,7 @@ public class ActivitiesPresenter extends
 	}
 	
 	public void loadData(final Long programId, Long detailId) {
+		fireEvent(new ProcessingEvent());
 		this.programId = (programId ==null || programId==0L) ? null : programId;
 		programDetailId = detailId==null? null: detailId==0? null:
 			detailId;
@@ -344,11 +370,11 @@ public class ActivitiesPresenter extends
 						getView().setFunds(getFundsReq.getFunds());
 						
 						// activities under a program
+						//&& programDetailId==null
 						if (ActivitiesPresenter.this.programId!=null) {
 							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
 									.get(i++);
-							getView().setActivity(response2.getSingleResult());
-
+							setActivity(response2.getSingleResult());
 						}else{
 							getView().setActivities(response.getPrograms());
 						}
@@ -356,11 +382,22 @@ public class ActivitiesPresenter extends
 						if(programDetailId!=null){
 							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
 									.get(i++);
-							getView().setActivity(response2.getSingleResult());
+							setActivity(response2.getSingleResult());
 						}
-						
+					
+						fireEvent(new ProcessingCompletedEvent());
 					}
 				});
+	}
+
+	protected void setActivity(IsProgramActivity activity) {
+		getView().setActivity(activity);
+	
+		if(activity.getType()!=ProgramDetailType.PROGRAM || programId==null){
+			//this is a detail activity
+			this.detail = activity;
+		}
+		programType = activity.getType();
 	}
 
 	protected void loadProgram(Long id) {
@@ -372,7 +409,7 @@ public class ActivitiesPresenter extends
 					@Override
 					public void processResult(GetProgramsResponse aResponse) {
 						GetProgramsResponse response = (GetProgramsResponse) aResponse;
-						getView().setActivity(response.getSingleResult());
+						setActivity(response.getSingleResult());
 					}
 				});
 
@@ -385,8 +422,19 @@ public class ActivitiesPresenter extends
 			getView().setSelection(event.getProgramActivity().getType());
 		} else {
 			this.selected = null;
-			getView().setSelection(null);
+			if(programId==null || programId==0){
+				//summary view
+				getView().setSelection(null);
+			}else{
+				getView().setSelection(programType,false);
+			}
+			
 		}
+	}
+
+	@Override
+	public void onActivitiesReload(ActivitiesReloadEvent event) {
+		loadData(programId, programDetailId);
 	}
 
 }

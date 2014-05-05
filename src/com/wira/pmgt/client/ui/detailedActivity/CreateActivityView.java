@@ -1,6 +1,7 @@
 package com.wira.pmgt.client.ui.detailedActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -187,6 +188,15 @@ public class CreateActivityView extends ViewImpl implements
 			issues.addError(err);
 		}
 		
+		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
+		for(ProgramFundDTO dto: funding){
+			int frequency = Collections.frequency(funding, dto);
+			if(frequency>1){
+				isValid=false;
+				issues.addError(dto.getFund().getName()+" is repeated");
+			}
+		}
+		
 		return isValid;
 
 	}
@@ -206,7 +216,7 @@ public class CreateActivityView extends ViewImpl implements
 		program.setTargetsAndOutcomes(targets);
 		
 		//Activity Funds
-		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
+		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);		
 		program.setFunding(funding);
 		
 		Double totalAmount=0.0;

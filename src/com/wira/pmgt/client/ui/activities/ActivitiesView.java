@@ -97,6 +97,8 @@ public class ActivitiesView extends ViewImpl implements
 	};
 	int scrollDistancePX = 6; // 6px at a time
 
+	private Long programId;
+
 	@Inject
 	public ActivitiesView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
@@ -106,10 +108,12 @@ public class ActivitiesView extends ViewImpl implements
 		MouseDownHandler downHandler = new MouseDownHandler() {
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
-				if (event.getSource() == aLeft) {
-					scrollDistancePX = -6;
-				} else {
-					scrollDistancePX = 6;
+				scrollTimer.cancel();
+				if(event.getSource()==aLeft){
+					scrollDistancePX=-6;
+				}else{
+					scrollDistancePX=6;
+
 				}
 				scrollTimer.scheduleRepeating(20);
 			}
@@ -146,12 +150,7 @@ public class ActivitiesView extends ViewImpl implements
 		aRight.addClickHandler(clickHandler);
 		aLeft.addClickHandler(clickHandler);
 
-		createCrumb("Home", "Home", null, false);
-		createCrumb("Increased understanding ..", "Increased understanding ..", null, false);
-		createCrumb("Increased understanding ..", "Increased understanding", null, true);
-		
-		setDates("(JAN 2014 - DEC 2014)");
-
+		createCrumb("Home", "Home", 0L, false);
 	}
 
 	private void registerEditFocus() {
@@ -262,8 +261,11 @@ public class ActivitiesView extends ViewImpl implements
 	public void setActivity(IsProgramActivity singleResult) {
 		setSelection(singleResult.getType(), false);
 		setBudget(singleResult.getBudgetAmount());
+		
+		if(singleResult.getProgramSummary()!=null)
+			setBreadCrumbs(singleResult.getProgramSummary());
 
-		if (singleResult.getType() == ProgramDetailType.PROGRAM) {
+		if (singleResult.getType() == ProgramDetailType.PROGRAM && !tblView.isSummaryTable) {
 			// select tab
 			selectTab(singleResult.getId());
 			setTitle(singleResult.getName());
@@ -326,16 +328,19 @@ public class ActivitiesView extends ViewImpl implements
 		if (type == ProgramDetailType.PROGRAM) {
 			show(aNewOutcome, !isRowData);
 			show(aNewObjective, true);
+			//Program can be selected from the SummaryTab == isRowData 
+			//or When A Program Tab e.g Wildlife Program is selected
+			show(aEdit, isRowData); 
+		}else if (type == ProgramDetailType.OBJECTIVE) {
 
-			// Program can be selected from the SummaryTab == isRowData
-			// or When A Program Tab e.g Wildlife Program is selected
-			show(aEdit, isRowData);
 		} else if (type == ProgramDetailType.OUTCOME) {
 			show(aNewActivity, true);
 		} else if (type == ProgramDetailType.ACTIVITY) {
 			show(aNewTask, true);
 		} else if (type == ProgramDetailType.TASK) {
 			show(aNewTask, true);
+		}else{
+			show(aEdit, false);
 		}
 	}
 
@@ -346,6 +351,11 @@ public class ActivitiesView extends ViewImpl implements
 
 	public void setPeriods(List<PeriodDTO> periods) {
 		lstPeriod.setItems(periods);
+		
+		if(periods!=null && !periods.isEmpty()){
+			setDates("("+periods.get(0).getDescription()+")");
+		}
+		
 	}
 
 	@Override
@@ -370,6 +380,7 @@ public class ActivitiesView extends ViewImpl implements
 
 	@Override
 	public void setProgramId(Long programId) {
+		this.programId=programId;
 		tblView.setProgramId(programId);
 	}
 
@@ -386,12 +397,23 @@ public class ActivitiesView extends ViewImpl implements
 		}
 		crumb.setActive(isActive);
 		crumb.setTitle(title);
-		crumb.setHref("#home;page=activities;activity=" + id);
+		
+		if(id==null || id==0){
+			crumb.setHref("#home;page=activities;activity=0");
+		}else if(programId==null){
+			crumb.setHref("#home;page=activities;activity=0d" + id);
+		}else if(id!=programId){
+			crumb.setHref("#home;page=activities;activity="+programId+"d" + id);
+		}else{
+			crumb.setHref("#home;page=activities;activity=" + id);
+		}
+		
 		crumbContainer.add(crumb);
 	}
 
 	public void setBreadCrumbs(List<ProgramSummary> summaries) {
 		crumbContainer.clear();
+		createCrumb("Home", "Home", 0L, false);
 		for (int i = summaries.size() - 1; i > -1; i--) {
 			ProgramSummary summary = summaries.get(i);
 			createCrumb(summary.getName(), summary.getDescription(),
@@ -400,7 +422,6 @@ public class ActivitiesView extends ViewImpl implements
 
 	}
 	
-	@Override
 	public void setDates(String text) {
 		spnDates.setInnerText(text);
 	}

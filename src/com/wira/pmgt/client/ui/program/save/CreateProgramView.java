@@ -1,6 +1,7 @@
 package com.wira.pmgt.client.ui.program.save;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -140,6 +141,17 @@ public class CreateProgramView extends PopupViewImpl implements
 			isValid = false;
 			issues.addError("Program period is mandatory");
 		}
+	
+		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
+		for(ProgramFundDTO dto: funding){
+			int frequency = Collections.frequency(funding, dto);
+			if(frequency>1){
+				isValid=false;
+				issues.addError(dto.getFund().getName()+" is repeated");
+				break;
+			}
+		}
+	
 		
 		return isValid;
 	}

@@ -45,7 +45,7 @@ import com.wira.pmgt.client.ui.events.AfterSearchEvent;
 import com.wira.pmgt.client.ui.events.AlertLoadEvent;
 import com.wira.pmgt.client.ui.events.AlertLoadEvent.AlertLoadHandler;
 import com.wira.pmgt.client.ui.events.CreateProgramEvent;
-import com.wira.pmgt.client.ui.events.CreateProgramEvent.CreateDocumentHandler;
+import com.wira.pmgt.client.ui.events.CreateProgramEvent.CreateProgramHandler;
 import com.wira.pmgt.client.ui.events.DocumentSelectionEvent;
 import com.wira.pmgt.client.ui.events.DocumentSelectionEvent.DocumentSelectionHandler;
 import com.wira.pmgt.client.ui.events.LoadAlertsEvent;
@@ -79,7 +79,7 @@ import com.wira.pmgt.shared.responses.GetTaskListResult;
 public class HomePresenter extends
 		Presenter<HomePresenter.MyView, HomePresenter.MyProxy> implements AfterSaveHandler,
 		DocumentSelectionHandler, ReloadHandler, AlertLoadHandler, ActivitiesSelectedHandler,
-		ProcessingHandler, ProcessingCompletedHandler, SearchHandler,CreateDocumentHandler{
+		ProcessingHandler, ProcessingCompletedHandler, SearchHandler,CreateProgramHandler{
 
 	public interface MyView extends View {
 		void showmask(boolean mask);
@@ -408,11 +408,21 @@ public class HomePresenter extends
 		}
 	
 	}
-		
+	
 	protected void showEditForm(final Long programId){
+		showEditForm(programId, true);
+	}
+	
+	/**
+	 * Navigate to the program Url on Save
+	 * @param programId
+	 * @param navigateOnSave
+	 */
+	protected void showEditForm(final Long programId, final boolean navigateOnSave){
 		createDocProvider.get(new ServiceCallback<CreateProgramPresenter>() {
 			@Override
 			public void processResult(CreateProgramPresenter result) {
+				result.setNavigateOnSave(navigateOnSave);
 				result.setProgramId(programId);					
 				addToPopupSlot(result, false);
 			}
@@ -492,9 +502,9 @@ public class HomePresenter extends
 	}
 
 	@Override
-	public void onCreateDocument(CreateProgramEvent event) {
+	public void onCreateProgram(CreateProgramEvent event) {
 		Long programId = event.getProgramId();	
-		showEditForm(programId);
+		showEditForm(programId,event.isNavigateOnSave());
 	}
 
 }

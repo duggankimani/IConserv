@@ -5,31 +5,36 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
 
 public class CreateProgramEvent extends
-		GwtEvent<CreateProgramEvent.CreateDocumentHandler> {
+		GwtEvent<CreateProgramEvent.CreateProgramHandler> {
 
-	public static Type<CreateDocumentHandler> TYPE = new Type<CreateDocumentHandler>();
+	public static Type<CreateProgramHandler> TYPE = new Type<CreateProgramHandler>();
 	private Long programId;
+	private boolean navigateOnSave;
 
-	public interface CreateDocumentHandler extends EventHandler {
-		void onCreateDocument(CreateProgramEvent event);
+	public interface CreateProgramHandler extends EventHandler {
+		void onCreateProgram(CreateProgramEvent event);
 	}
 
 	public CreateProgramEvent(Long progId) {
 		this.setProgramId(progId);
 	}
 
-
-	@Override
-	protected void dispatch(CreateDocumentHandler handler) {
-		handler.onCreateDocument(this);
+	public CreateProgramEvent(Long progId, boolean navigateOnSave) {
+		this.setProgramId(progId);
+		this.navigateOnSave = navigateOnSave;
 	}
 
 	@Override
-	public Type<CreateDocumentHandler> getAssociatedType() {
+	protected void dispatch(CreateProgramHandler handler) {
+		handler.onCreateProgram(this);
+	}
+
+	@Override
+	public Type<CreateProgramHandler> getAssociatedType() {
 		return TYPE;
 	}
 
-	public static Type<CreateDocumentHandler> getType() {
+	public static Type<CreateProgramHandler> getType() {
 		return TYPE;
 	}
 
@@ -45,5 +50,10 @@ public class CreateProgramEvent extends
 
 	public void setProgramId(Long programId) {
 		this.programId = programId;
+	}
+
+
+	public boolean isNavigateOnSave() {
+		return navigateOnSave;
 	}
 }

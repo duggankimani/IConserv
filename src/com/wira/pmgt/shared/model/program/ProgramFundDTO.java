@@ -52,4 +52,17 @@ public class ProgramFundDTO implements Serializable{
 		this.allocation = allocation;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj==null || !(obj instanceof ProgramFundDTO))
+			return false;
+		
+		ProgramFundDTO other = (ProgramFundDTO)obj;
+		if(fund==null || other.fund==null){
+			return false;
+		}
+		
+		return fund.equals(other.fund);
+	}
+	
 }

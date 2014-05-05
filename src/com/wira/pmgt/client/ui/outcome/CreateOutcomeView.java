@@ -1,6 +1,7 @@
 package com.wira.pmgt.client.ui.outcome;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gwt.uibinder.client.UiBinder;
@@ -174,6 +175,15 @@ public class CreateOutcomeView extends ViewImpl implements
 		if(isNullOrEmpty(txtOutcome.getValue())){
 			isValid = false;
 			issues.addError("Outcome is mandatory");
+		}
+		
+		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
+		for(ProgramFundDTO dto: funding){
+			int frequency = Collections.frequency(funding, dto);
+			if(frequency>1){
+				isValid=false;
+				issues.addError(dto.getFund().getName()+" is repeated");
+			}
 		}
 		
 		return isValid;
