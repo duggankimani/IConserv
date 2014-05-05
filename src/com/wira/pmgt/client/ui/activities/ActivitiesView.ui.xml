@@ -20,7 +20,7 @@
 									<span ui:field="spnDates" class="text-info helper-font-small "></span>
 								</g:HTMLPanel>
 								<div class="edit span1">
-									<g:Anchor styleName="icon-caret-down"
+									<g:Anchor styleName="icon-caret-down" title="Edit Program"
 										ui:field="aProgramEdit"></g:Anchor>
 								</div>
 							</g:HTMLPanel>

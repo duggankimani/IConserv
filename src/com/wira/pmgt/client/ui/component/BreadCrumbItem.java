@@ -33,7 +33,7 @@ public class BreadCrumbItem extends Composite {
 	
 	public void setHome(Boolean status){
 		if(status){
-			aLink.addStyleName("icon-home");
+			aLink.addStyleName("icon-home helper-font-16");
 		}
 	}
 	

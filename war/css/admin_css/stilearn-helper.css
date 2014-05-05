@@ -131,6 +131,11 @@ body .main-body .alert a {
 	background: #ffffff;
 	opacity: .4;
 }
+
+.breadcrumb .divider{
+	font-size: 14px;
+	margin: 7px;
+}
 /*End of my Utility helpers*/
 
 /** font size helper **/

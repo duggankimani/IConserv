@@ -156,6 +156,7 @@ public class ActivitiesView extends ViewImpl implements
 
 	private void registerEditFocus() {
 		show(aProgramEdit, false);
+		
 
 		panelTitle.addMouseOverHandler(new MouseOverHandler() {
 

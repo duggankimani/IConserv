@@ -98,6 +98,15 @@
 	text-align: left;
 }
 
+.activities-page .table-programs .tbody .name-container a{
+	color:#000000;
+}
+
+.activities-page .table-programs .tbody .name-container a:hover{
+	text-decoration:underline;
+	cursor:pointer;
+	color:#428bca;
+}
 
 .activities-page .color-strip {
 	width: 3px;
