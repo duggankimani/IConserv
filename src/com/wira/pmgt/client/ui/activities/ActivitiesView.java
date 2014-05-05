@@ -97,6 +97,8 @@ public class ActivitiesView extends ViewImpl implements
 	};
 	int scrollDistancePX = 6; // 6px at a time
 
+	private Long programId;
+
 	@Inject
 	public ActivitiesView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
@@ -148,10 +150,7 @@ public class ActivitiesView extends ViewImpl implements
 		aRight.addClickHandler(clickHandler);
 		aLeft.addClickHandler(clickHandler);
 
-		createCrumb("Home", "Home", null, false);
-		createCrumb("Increased understanding ..", "Increased understanding ..", null, false);
-		createCrumb("Increased understanding ..", "Increased understanding", null, true);
-
+		createCrumb("Home", "Home", 0L, false);
 	}
 
 	private void registerEditFocus() {
@@ -262,6 +261,9 @@ public class ActivitiesView extends ViewImpl implements
 	public void setActivity(IsProgramActivity singleResult) {
 		setSelection(singleResult.getType(), false);
 		setBudget(singleResult.getBudgetAmount());
+		
+		if(singleResult.getProgramSummary()!=null)
+			setBreadCrumbs(singleResult.getProgramSummary());
 
 		if (singleResult.getType() == ProgramDetailType.PROGRAM && !tblView.isSummaryTable) {
 			// select tab
@@ -378,6 +380,7 @@ public class ActivitiesView extends ViewImpl implements
 
 	@Override
 	public void setProgramId(Long programId) {
+		this.programId=programId;
 		tblView.setProgramId(programId);
 	}
 
@@ -394,12 +397,21 @@ public class ActivitiesView extends ViewImpl implements
 		}
 		crumb.setActive(isActive);
 		crumb.setTitle(title);
-		crumb.setHref("#home;page=activities;activity=" + id);
+		
+		if(programId==null){
+			crumb.setHref("#home;page=activities;activity=0d" + id);
+		}else if(id!=programId){
+			crumb.setHref("#home;page=activities;activity="+programId+"d" + id);
+		}else{
+			crumb.setHref("#home;page=activities;activity=" + id);
+		}
+		
 		crumbContainer.add(crumb);
 	}
 
 	public void setBreadCrumbs(List<ProgramSummary> summaries) {
 		crumbContainer.clear();
+		createCrumb("Home", "Home", 0L, false);
 		for (int i = summaries.size() - 1; i > -1; i--) {
 			ProgramSummary summary = summaries.get(i);
 			createCrumb(summary.getName(), summary.getDescription(),
