@@ -10,24 +10,32 @@
 	<g:HTMLPanel styleName="activities-page">
 		<div class="full-page">
 
-			<div class="content-top row-fluid">
-				<div class="span10">
-					<div class="row-fluid">
+			<div class="content-top">
+				<div class="row-fluid header">
+					<div class="span10">
 						<g:FocusPanel ui:field='panelTitle'>
 							<g:HTMLPanel styleName="row-fluid">
-								<g:HTMLPanel styleName="title span3">
-									<h4 ui:field="spnTitle"></h4>
+								<g:HTMLPanel styleName="title-container span3">
+									<h4 ui:field="spnTitle" class="title"></h4>
+									<span ui:field="spnDates" class="text-info helper-font-small "></span>
 								</g:HTMLPanel>
 								<div class="edit span1">
-									<g:Anchor styleName="icon-pencil helper-font-16 btn"
+									<g:Anchor styleName="icon-caret-down" title="Edit Program"
 										ui:field="aProgramEdit"></g:Anchor>
 								</div>
 							</g:HTMLPanel>
 						</g:FocusPanel>
 					</div>
+					<div class="span2">
+						<span class="muted pull-right budget" ui:field="spnBudget"></span>
+					</div>
 				</div>
-				<div class="span2">
-					<span class="muted pull-right budget" ui:field="spnBudget"></span>
+
+				<div class="row-fluid">
+					<!-- BreadCrumb -->
+					<d:BulletListPanel styleName="breadcrumb"
+						ui:field="crumbContainer">
+					</d:BulletListPanel>
 				</div>
 			</div>
 
@@ -80,8 +88,8 @@
 								Edit
 							</g:Anchor>
 						</div>
-						
-						
+
+
 						<div class="span3 hide">
 							<g:Anchor ui:field="aDelete" styleName="btn btn-danger"
 								title="Delete">

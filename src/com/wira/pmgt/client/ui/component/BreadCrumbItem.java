@@ -31,6 +31,12 @@ public class BreadCrumbItem extends Composite {
 		aLink.setText(text);
 	}
 	
+	public void setHome(Boolean status){
+		if(status){
+			aLink.addStyleName("icon-home helper-font-16");
+		}
+	}
+	
 	/*
 	 * The last Item in the breadCrumb;
 	 * if true - Link not clickable

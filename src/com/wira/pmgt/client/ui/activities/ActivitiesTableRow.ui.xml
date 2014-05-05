@@ -15,7 +15,8 @@
 				<g:CheckBox ui:field="chkSelect"></g:CheckBox>
 			</g:HTMLPanel>
 
-			<g:HTMLPanel styleName="span4 name-container" ui:field="divName">
+			<g:HTMLPanel styleName="span4 name-container">
+				<g:Anchor ui:field="divName" styleName=""></g:Anchor>
 			</g:HTMLPanel>
 		</g:HTMLPanel>
 		<g:HTMLPanel styleName="td" ui:field="divStatus">

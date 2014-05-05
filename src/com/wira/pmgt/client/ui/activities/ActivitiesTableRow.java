@@ -48,7 +48,7 @@ public class ActivitiesTableRow extends RowWidget {
 	Anchor divRowCaret;
 
 	@UiField
-	HTMLPanel divName;
+	Anchor divName;
 
 	// @UiField HTMLPanel divRowNo;
 	@UiField
@@ -121,6 +121,7 @@ public class ActivitiesTableRow extends RowWidget {
 
 	private void setActivityName() {
 		divName.getElement().setInnerText(activity.getName());
+		divName.setHref("#home;page=activities;activity="+programId+"d"+activity.getId());
 		divRowStrip.addClassName("label-info");
 
 		if (activity.getType() == ProgramDetailType.OBJECTIVE)
