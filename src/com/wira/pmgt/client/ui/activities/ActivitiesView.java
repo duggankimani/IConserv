@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
+import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
 import com.wira.pmgt.client.ui.component.DropDownList;
@@ -33,6 +34,7 @@ import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramActivity;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
+import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class ActivitiesView extends ViewImpl implements
 		ActivitiesPresenter.IActivitiesView {
@@ -48,7 +50,12 @@ public class ActivitiesView extends ViewImpl implements
 	@UiField
 	SpanElement spnBudget;
 	@UiField
+	SpanElement spnDates;
+	@UiField
 	Anchor aNewOutcome;
+	@UiField
+	BulletListPanel crumbContainer;
+
 	@UiField
 	Anchor aNewActivity;
 	@UiField
@@ -69,78 +76,87 @@ public class ActivitiesView extends ViewImpl implements
 
 	@UiField
 	HeadingElement spnTitle;
-	@UiField Anchor aLeft;
-	@UiField Anchor aRight;
+	@UiField
+	Anchor aLeft;
+	@UiField
+	Anchor aRight;
 	Long lastUpdatedId;
-	
+
 	List<IsProgramActivity> programs = null;
 
 	public interface Binder extends UiBinder<Widget, ActivitiesView> {
 	}
 
 	Timer scrollTimer = new Timer() {
-		
+
 		@Override
 		public void run() {
-			listPanel.getElement().setScrollLeft(listPanel.getElement().getScrollLeft()+scrollDistancePX);
+			listPanel.getElement().setScrollLeft(
+					listPanel.getElement().getScrollLeft() + scrollDistancePX);
 		}
-	};  
-	int scrollDistancePX = 6; //6px at a time
-	
+	};
+	int scrollDistancePX = 6; // 6px at a time
+
 	@Inject
 	public ActivitiesView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
 		listPanel.setId("mytab");
-		registerEditFocus();
-		
+		//registerEditFocus();
+
 		MouseDownHandler downHandler = new MouseDownHandler() {
-			
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
-				if(event.getSource()==aLeft){
-					scrollDistancePX=-6;
-				}else{
-					scrollDistancePX=6;
+				if (event.getSource() == aLeft) {
+					scrollDistancePX = -6;
+				} else {
+					scrollDistancePX = 6;
 				}
 				scrollTimer.scheduleRepeating(20);
 			}
 		};
-		
+
 		MouseUpHandler upHandler = new MouseUpHandler() {
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
 				scrollTimer.cancel();
 			}
 		};
-		
+
 		aRight.addMouseDownHandler(downHandler);
 		aLeft.addMouseDownHandler(downHandler);
-		
+
 		aRight.addMouseUpHandler(upHandler);
 		aLeft.addMouseUpHandler(upHandler);
-		
+
 		ClickHandler clickHandler = new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent event) {
 				scrollTimer.cancel();
-				if(event.getSource()==aLeft){
-					scrollDistancePX=-20;
-				}else{
-					scrollDistancePX=20;
+				if (event.getSource() == aLeft) {
+					scrollDistancePX = -20;
+				} else {
+					scrollDistancePX = 20;
 				}
-				listPanel.getElement().setScrollLeft(listPanel.getElement().getScrollLeft()+scrollDistancePX);
+				listPanel.getElement().setScrollLeft(
+						listPanel.getElement().getScrollLeft()
+								+ scrollDistancePX);
 			}
 		};
-		
 		aRight.addClickHandler(clickHandler);
 		aLeft.addClickHandler(clickHandler);
-			
+
+		createCrumb("Home", "Home", null, false);
+		createCrumb("Increased understanding ..", "Increased understanding ..", null, false);
+		createCrumb("Increased understanding ..", "Increased understanding", null, true);
+		
+		setDates("(JAN 2014 - DEC 2014)");
+
 	}
 
 	private void registerEditFocus() {
 		show(aProgramEdit, false);
-		
+
 		panelTitle.addMouseOverHandler(new MouseOverHandler() {
 
 			@Override
@@ -197,10 +213,10 @@ public class ActivitiesView extends ViewImpl implements
 		}
 	}
 
-	public void createDefaultTab(){
+	public void createDefaultTab() {
 		createTab("Summary", 0, true);
 	}
-	
+
 	public void createTab(String text, long id, boolean active) {
 		BulletPanel li = new BulletPanel();
 		Anchor a = new Anchor(text);
@@ -219,7 +235,7 @@ public class ActivitiesView extends ViewImpl implements
 	public void setActivities(List<IsProgramActivity> activities) {
 		tblView.setLastUpdatedId(lastUpdatedId);
 		tblView.setData(activities);
-		lastUpdatedId=null;
+		lastUpdatedId = null;
 	}
 
 	@Override
@@ -230,11 +246,11 @@ public class ActivitiesView extends ViewImpl implements
 		if (programs == null) {
 			return;
 		}
-		
+
 		createDefaultTab();
 		// System.err.println("Size = " + programs.size());
 		for (IsProgramActivity activity : programs) {
-			//boolean first = programs.indexOf(activity) == 0;
+			// boolean first = programs.indexOf(activity) == 0;
 			createTab(activity.getName(), activity.getId(), false);
 		}
 	}
@@ -243,18 +259,18 @@ public class ActivitiesView extends ViewImpl implements
 	 * Sets Parent Activity
 	 */
 	public void setActivity(IsProgramActivity singleResult) {
-		setSelection(singleResult.getType(),false);
+		setSelection(singleResult.getType(), false);
 		setBudget(singleResult.getBudgetAmount());
-		
+
 		if (singleResult.getType() == ProgramDetailType.PROGRAM) {
 			// select tab
 			selectTab(singleResult.getId());
 			setTitle(singleResult.getName());
 			setActivities(singleResult.getChildren());
-		}else{
+		} else {
 			setActivities(Arrays.asList(singleResult));
 		}
-		
+
 	}
 
 	private void show(Anchor aAnchor, boolean show) {
@@ -293,13 +309,13 @@ public class ActivitiesView extends ViewImpl implements
 	public void setSelection(ProgramDetailType type) {
 		setSelection(type, true);
 	}
-	
+
 	/**
 	 * 
 	 * @param type
 	 * @param isRowData
 	 */
-	public void setSelection(ProgramDetailType type, boolean isRowData){
+	public void setSelection(ProgramDetailType type, boolean isRowData) {
 		show(aNewOutcome, false);
 		show(aNewObjective, false);
 		show(aNewActivity, false);
@@ -309,15 +325,15 @@ public class ActivitiesView extends ViewImpl implements
 		if (type == ProgramDetailType.PROGRAM) {
 			show(aNewOutcome, !isRowData);
 			show(aNewObjective, true);
-			
-			//Program can be selected from the SummaryTab == isRowData 
-			//or When A Program Tab e.g Wildlife Program is selected
-			show(aEdit, isRowData); 
+
+			// Program can be selected from the SummaryTab == isRowData
+			// or When A Program Tab e.g Wildlife Program is selected
+			show(aEdit, isRowData);
 		} else if (type == ProgramDetailType.OUTCOME) {
 			show(aNewActivity, true);
 		} else if (type == ProgramDetailType.ACTIVITY) {
 			show(aNewTask, true);
-		}else if (type== ProgramDetailType.TASK){
+		} else if (type == ProgramDetailType.TASK) {
 			show(aNewTask, true);
 		}
 	}
@@ -326,7 +342,7 @@ public class ActivitiesView extends ViewImpl implements
 	public HasClickHandlers getEditLink() {
 		return aEdit;
 	}
-	
+
 	public void setPeriods(List<PeriodDTO> periods) {
 		lstPeriod.setItems(periods);
 	}
@@ -356,4 +372,35 @@ public class ActivitiesView extends ViewImpl implements
 		tblView.setProgramId(programId);
 	}
 
+	public void createCrumb(String text, String title, Long id, Boolean isActive) {
+		BreadCrumbItem crumb = new BreadCrumbItem();
+		if (text.equals("Home")) {
+			crumb.setHome(true);
+			crumb.setLinkText("");
+		}else{
+			if (text.length() > 25) {
+				text = text.substring(0, 25) + "...";
+			}
+			crumb.setLinkText(text);
+		}
+		crumb.setActive(isActive);
+		crumb.setTitle(title);
+		crumb.setHref("#home;page=activities;activity=" + id);
+		crumbContainer.add(crumb);
+	}
+
+	public void setBreadCrumbs(List<ProgramSummary> summaries) {
+		crumbContainer.clear();
+		for (int i = summaries.size() - 1; i > -1; i--) {
+			ProgramSummary summary = summaries.get(i);
+			createCrumb(summary.getName(), summary.getDescription(),
+					summary.getId(), i == 0);
+		}
+
+	}
+	
+	@Override
+	public void setDates(String text) {
+		spnDates.setInnerText(text);
+	}
 }

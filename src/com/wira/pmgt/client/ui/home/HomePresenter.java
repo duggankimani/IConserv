@@ -29,7 +29,6 @@ import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
 import com.gwtplatform.mvp.client.proxy.RevealContentHandler;
-import com.wira.pmgt.client.model.MODE;
 import com.wira.pmgt.client.model.TaskType;
 import com.wira.pmgt.client.place.NameTokens;
 import com.wira.pmgt.client.service.ServiceCallback;

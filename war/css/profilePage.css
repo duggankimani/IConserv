@@ -10,22 +10,39 @@
 }
 .main-container .activities-page .tab-content{
     margin: 10px 20px;
-    min-height: 71%;
+    max-height: 71%;
     overflow-x: hidden;
 }
 .activities-page .content-top{
-	margin: 17px;
-	border-bottom: 1px solid #E6E6E6;
+	margin: 19px;
 	padding-bottom: 0px;
 	width: 96%;
+	margin-bottom: 5px;
 }
-.activities-page .content-top .title{
+
+.activities-page .content-top .breadcrumb{
+	background-color: #ffffff;
+	margin-bottom: 0px;
+	background-image: none;
+	padding-left: 0px;
+}
+.activities-page .content-top .header {
+	border-bottom: 1px solid #E6E6E6;
+}
+
+.activities-page .content-top .title-container{
 	width:auto;
 	display: inline-block;
 }
+.activities-page .content-top .title{
+	display:inline;
+}
+
 .activities-page .content-top .edit{
-	margin-left: 2%;
+	margin-left: 11px;
 	display: inline;
+	margin-top: 2px;
+	font-size: 14px;
 }
 .activities-page .content-top .budget{
 	position:absolute;
@@ -125,7 +142,7 @@
 	padding-left: 10px;
 }
 .activities-page .nav-tabs > .active{
-	margin-left: 22px;
+	/* margin-left: 22px; */
 }
 .main-container .activities-page .nav-tabs > li.active > a, 
 .main-container .activities-page .nav-tabs > li.active > a:hover, 
@@ -147,7 +164,6 @@
 white-space: nowrap;
 display: inline-block;
 float: none;
-z-index: 99;
 }
 
 /*Profile Page Styles*/

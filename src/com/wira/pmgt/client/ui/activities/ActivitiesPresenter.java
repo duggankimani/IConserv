@@ -70,6 +70,8 @@ public class ActivitiesPresenter extends
 		void setLastUpdatedId(Long id);
 
 		void setProgramId(Long programId);
+
+		void setDates(String text);
 	}
 
 	@Inject
