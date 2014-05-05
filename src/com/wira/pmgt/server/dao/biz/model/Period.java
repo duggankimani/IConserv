@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -42,9 +43,11 @@ public class Period extends PO{
 	private Long id;
 	private String description;
 	
+	@Column(nullable=false)
 	@Temporal(TemporalType.DATE)
 	private Date startDate;
 	
+	@Column(nullable=false)
 	@Temporal(TemporalType.DATE)
 	private Date endDate;
 	
@@ -97,5 +100,20 @@ public class Period extends PO{
 	@Override
 	public String toString() {
 		return getDescription();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj==null  || !(obj instanceof Period)){
+			return false;
+		}
+		
+		Period period = (Period)obj;
+		if(period.getId()!=null && getId()!=null){
+			return period.getId().equals(getId());
+		}else{
+			return period.getStartDate().equals(startDate) && period.getEndDate().equals(endDate); 
+		}
+	
 	}
 }

@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.RowWidget;
+import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;

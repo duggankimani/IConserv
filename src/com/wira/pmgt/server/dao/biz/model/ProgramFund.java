@@ -86,4 +86,16 @@ public class ProgramFund extends PO {
 		return allocation;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if(obj==null || !(obj instanceof ProgramFund)){
+			return false;
+		}
+		
+		ProgramFund other = (ProgramFund)obj;
+		if(other.fund==null || fund==null || other.programDetail==null || programDetail==null)
+			return false;
+		
+		return fund.equals(other.fund) && programDetail.equals(other.programDetail);
+	}
 }

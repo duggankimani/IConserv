@@ -3,8 +3,10 @@ package com.wira.pmgt.shared.model.program;
 import java.util.Date;
 import java.util.List;
 
+import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.Listable;
 import com.wira.pmgt.shared.model.ProgramDetailType;
+import com.wira.pmgt.shared.model.UserGroup;
 
 public abstract class IsProgramActivity extends ProgramSummary implements Listable{
 	
@@ -25,6 +27,8 @@ public abstract class IsProgramActivity extends ProgramSummary implements Listab
 	private List<IsProgramActivity> children;
 	private List<IsProgramActivity> objectives; //Objectives of an outcome
 	private List<ProgramSummary> programSummary; //Used to build breadcrumb 
+	private List<HTUser> assignedUsers;
+	private List<UserGroup> assignedGroups;
 	
 	public IsProgramActivity() {
 	}
@@ -129,6 +133,22 @@ public abstract class IsProgramActivity extends ProgramSummary implements Listab
 	public String getDisplayName() {
 		
 		return getName();
+	}
+
+	public List<UserGroup> getAssignedGroups() {
+		return assignedGroups;
+	}
+
+	public void setAssignedGroups(List<UserGroup> assignedGroups) {
+		this.assignedGroups = assignedGroups;
+	}
+
+	public List<HTUser> getAssignedUsers() {
+		return assignedUsers;
+	}
+
+	public void setAssignedUsers(List<HTUser> assignedUsers) {
+		this.assignedUsers = assignedUsers;
 	}
 
 }

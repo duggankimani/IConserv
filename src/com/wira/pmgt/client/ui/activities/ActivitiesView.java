@@ -97,6 +97,7 @@ public class ActivitiesView extends ViewImpl implements
 			
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
+				scrollTimer.cancel();
 				if(event.getSource()==aLeft){
 					scrollDistancePX=-6;
 				}else{
@@ -246,7 +247,7 @@ public class ActivitiesView extends ViewImpl implements
 		setSelection(singleResult.getType(),false);
 		setBudget(singleResult.getBudgetAmount());
 		
-		if (singleResult.getType() == ProgramDetailType.PROGRAM) {
+		if (singleResult.getType() == ProgramDetailType.PROGRAM && !tblView.isSummaryTable) {
 			// select tab
 			selectTab(singleResult.getId());
 			setTitle(singleResult.getName());
@@ -313,6 +314,8 @@ public class ActivitiesView extends ViewImpl implements
 			//Program can be selected from the SummaryTab == isRowData 
 			//or When A Program Tab e.g Wildlife Program is selected
 			show(aEdit, isRowData); 
+		}else if (type == ProgramDetailType.OBJECTIVE) {
+					
 		} else if (type == ProgramDetailType.OUTCOME) {
 			show(aNewActivity, true);
 		} else if (type == ProgramDetailType.ACTIVITY) {

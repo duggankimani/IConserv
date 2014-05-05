@@ -97,7 +97,7 @@ public class ProgramDaoHelper {
 				if(fundSources.contains(childFund.getFund())){
 					continue;
 				}else{
-					//Auto create program fund for parent if it did not exist
+					//Auto create program fund for parent if it did not exist (with zero for budget amount)
 					ProgramFund programFund= new ProgramFund();
 					programFund.setAmount(0.0);
 					programFund.setFund(childFund.getFund());
