@@ -398,7 +398,9 @@ public class ActivitiesView extends ViewImpl implements
 		crumb.setActive(isActive);
 		crumb.setTitle(title);
 		
-		if(programId==null){
+		if(id==null || id==0){
+			crumb.setHref("#home;page=activities;activity=0");
+		}else if(programId==null){
 			crumb.setHref("#home;page=activities;activity=0d" + id);
 		}else if(id!=programId){
 			crumb.setHref("#home;page=activities;activity="+programId+"d" + id);
