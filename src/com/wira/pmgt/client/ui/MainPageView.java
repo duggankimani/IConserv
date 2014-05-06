@@ -142,4 +142,12 @@ public class MainPageView extends ViewImpl implements MainPagePresenter.MyView {
 		disconnectionText.addClassName("hide");
 	}
 
+	@Override
+	public void setAlertVisible(String message) {
+		divAlert.removeClassName("hidden");
+		spnAlertContent.setInnerText(message);
+		timer.cancel();
+		timer.schedule(5000);
+	}
+
 }

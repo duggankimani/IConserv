@@ -18,6 +18,7 @@ import com.wira.pmgt.client.ui.events.ActivitiesReloadEvent;
 import com.wira.pmgt.client.ui.events.ActivitiesReloadEvent.ActivitiesReloadHandler;
 import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent;
 import com.wira.pmgt.client.ui.events.CreateProgramEvent;
+import com.wira.pmgt.client.ui.events.ActivitySavedEvent;
 import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent;
 import com.wira.pmgt.client.ui.events.ProcessingEvent;
 import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent.ActivitySelectionChangedHandler;
@@ -310,26 +311,23 @@ public class ActivitiesPresenter extends
 
 	private void save(final IsProgramActivity activity) {
 		//program.setParentId(programId);
-		fireEvent(new ProcessingEvent("Saving "+activity.getType().getDisplayName()));
 		requestHelper.execute(new CreateProgramRequest(activity),
 				new TaskServiceCallback<CreateProgramResponse>() {
 					@Override
 					public void processResult(CreateProgramResponse aResponse) {
-						fireEvent(new ProcessingEvent("Saved "+activity.getType().getDisplayName()));
 						getView().setLastUpdatedId(aResponse.getProgram().getId());
+						loadData(programId);
 						fireEvent(new ProcessingCompletedEvent());
-						
-						loadData(programId);						
+						fireEvent(new ActivitySavedEvent(activity.getType().name().toLowerCase() +" change(s) successfully saved"));
 					}
 				});
 	}
-
 	public void loadData(final Long activityId){
 		loadData(activityId, programDetailId);
 	}
 	
 	public void loadData(final Long programId, Long detailId) {
-		fireEvent(new ProcessingEvent("Loading program data"));
+		fireEvent(new ProcessingEvent());
 		this.programId = (programId ==null || programId==0L) ? null : programId;
 		programDetailId = detailId==null? null: detailId==0? null:
 			detailId;
