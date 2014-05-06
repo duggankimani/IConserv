@@ -37,6 +37,9 @@ public class TestJbpmHumanTask {
 	public void createTask(){
 		LocalTaskService service =  JBPMHelper.get().getTaskClient();
 		HashMap<String, Object> data = new HashMap<>();
+		//Create Document
+		//
+		
 		byte[] content = SerializationUtils.serialize(data);
 
 		String language = "en-UK";

@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -21,6 +22,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.RowWidget;
@@ -83,6 +85,7 @@ public class ActivitiesTableRow extends RowWidget {
 	public ActivitiesTableRow(IsProgramActivity activity, Long programId, boolean isSummaryRow,
 			int level) {
 		initWidget(uiBinder.createAndBindUi(this));
+		row.getElement().setId("collapse-activity"+activity.getId());
 		this.activity = activity;
 		this.programId= (programId==null? 0: programId);
 		this.level = level;
@@ -224,9 +227,21 @@ public class ActivitiesTableRow extends RowWidget {
 			row.removeStyleName("hovered");
 		}
 	}
+	
+	@Override
+	protected void onLoad() {
+		super.onLoad();
+		divRowCaret.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				collapse();
+			}
+		});	
+	}
 
 	public void setHasChildren(boolean hasChildren) {
-		divRowCaret.setHref("#home;page=activities;activity="+programId+"d"+activity.getId());
+		//divRowCaret.setHref("#home;page=activities;activity="+programId+"d"+activity.getId());
 		if (hasChildren) {
 			divRowCaret.removeStyleName("icon-caret-right");
 			divRowCaret.addStyleName("icon-caret-down");
@@ -235,6 +250,38 @@ public class ActivitiesTableRow extends RowWidget {
 			divRowCaret.addStyleName("icon-caret-right");
 		}
 
+	}
+	
+	boolean showChildren=true;
+	public void collapse(){
+		HTMLPanel panel = (HTMLPanel)this.getParent();
+		int idx = panel.getWidgetIndex(this);
+		assert idx!=-1;
+		
+		int childCount= activity.getChildren()== null? 0: activity.getChildren().size();
+		if(programId==0){
+			//summary table
+			childCount = activity.getObjectives()==null?0 :activity.getObjectives().size();
+		}
+		
+		setHasChildren(showChildren=!showChildren);
+		if(childCount==0){
+			return;
+		}
+		
+		int childrenCollapsed=0;
+		//loop until you count n children
+		for(int i=idx+1;(i<panel.getWidgetCount() && childrenCollapsed<childCount); i++){
+			ActivitiesTableRow row = (ActivitiesTableRow)panel.getWidget(i);
+			if(row.getActivity().getParentId()==activity.getId()){
+				childrenCollapsed++;
+			}
+			row.hide(!showChildren);
+		}
+	}
+	
+	public void hide(boolean hide){		
+		row.setStyleName(hide? "hide":"tr");
 	}
 	
 }
