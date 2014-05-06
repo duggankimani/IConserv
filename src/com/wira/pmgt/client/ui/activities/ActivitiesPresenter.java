@@ -113,14 +113,14 @@ public class ActivitiesPresenter extends
 		addRegisteredHandler(ActivitySelectionChangedEvent.TYPE, this);
 		addRegisteredHandler(ActivitiesReloadEvent.TYPE, this);
 		
-		getView().getProgramEdit().addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				AppContext.fireEvent(new CreateProgramEvent(programId));
-			}
-		});
-		
+//		getView().getProgramEdit().addClickHandler(new ClickHandler() {
+//
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				AppContext.fireEvent(new CreateProgramEvent(programId));
+//			}
+//		});
+//		
 		
 		getView().getNewOutcome().addClickHandler(new ClickHandler() {
 			@Override

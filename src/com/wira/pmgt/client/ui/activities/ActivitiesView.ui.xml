@@ -17,22 +17,16 @@
 							<g:HTMLPanel styleName="row-fluid">
 								<g:HTMLPanel styleName="title-container span3">
 									<h4 ui:field="spnTitle" class="title"></h4>
-									<span ui:field="spnDates" class="text-info helper-font-small "></span>
 								</g:HTMLPanel>
-								<div class="edit span1">
-									<d:ActionLink styleName="icon-caret-down dropdown-toggle" title="Select Period"
-										ui:field="aProgramEdit" dataToggle="dropdown"></d:ActionLink>
-								</div>
+								<div class="edit span1 btn-group">
+									<span ui:field="spnDates" class="text-info helper-font-small "></span>
+									
+									<d:ActionLink styleName="icon-caret-down dropdown-toggle"
+										title="Select Period" ui:field="aProgramEdit" dataToggle="dropdown"></d:ActionLink>
 
-								<d:BulletListPanel styleName="dropdown-menu" role="menu" ui:field="ulMenu">
-									<d:BulletPanel>
-										<d:ActionLink ui:field="aRevoke" styleName="btn hidden"
-											title="Revoke this task so that its re-assignable to other users in your group">
-											<i class="icon-date"></i>
-											Jan 1st 2014 - Dec 31 2014
-										</d:ActionLink>
-									</d:BulletPanel>
-								</d:BulletListPanel>
+									<d:Dropdown ui:field="periodDropdown"></d:Dropdown>
+									
+								</div>
 							</g:HTMLPanel>
 						</g:FocusPanel>
 					</div>
@@ -108,7 +102,7 @@
 							</g:Anchor>
 						</div>
 						<div class="pull-right">
-							<d:DropDownList ui:field="lstPeriod">
+							<d:DropDownList ui:field="lstPeriod" styleName="hidden">
 							</d:DropDownList>
 						</div>
 					</div>

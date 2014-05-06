@@ -28,6 +28,7 @@
 }
 .activities-page .content-top .header {
 	border-bottom: 1px solid #E6E6E6;
+	min-height: 21px;
 }
 
 .activities-page .content-top .title-container{
@@ -43,6 +44,7 @@
 	display: inline;
 	margin-top: 2px;
 	font-size: 14px;
+	min-height: 20px;
 }
 .activities-page .content-top .budget{
 	position:absolute;
