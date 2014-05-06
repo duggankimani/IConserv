@@ -33,4 +33,8 @@ public class BulletListPanel extends ComplexPanel {
 		super.insert(w, getElement(), beforeIndex, true);
 	}
 	
+	public void setRole(String role){
+		getElement().setAttribute("role",role);
+	}
+	
 }

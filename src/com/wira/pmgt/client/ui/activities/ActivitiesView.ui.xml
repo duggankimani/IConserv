@@ -21,17 +21,17 @@
 								</g:HTMLPanel>
 								<div class="edit span1">
 									<d:ActionLink styleName="icon-caret-down dropdown-toggle" title="Select Period"
-										ui:field="aProgramEdit" data-toggle="dropdown"></d:ActionLink>
+										ui:field="aProgramEdit" dataToggle="dropdown"></d:ActionLink>
 								</div>
 
-								<d:BulletListPanel class="dropdown-menu" role="menu" ui:field="ulMenu">
-									<li>
+								<d:BulletListPanel styleName="dropdown-menu" role="menu" ui:field="ulMenu">
+									<d:BulletPanel>
 										<d:ActionLink ui:field="aRevoke" styleName="btn hidden"
 											title="Revoke this task so that its re-assignable to other users in your group">
 											<i class="icon-date"></i>
 											Jan 1st 2014 - Dec 31 2014
 										</d:ActionLink>
-									</li>
+									</d:BulletPanel>
 								</d:BulletListPanel>
 							</g:HTMLPanel>
 						</g:FocusPanel>

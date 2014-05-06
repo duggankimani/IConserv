@@ -11,6 +11,8 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -273,12 +275,20 @@ public class ActivitiesTableRow extends RowWidget {
 			ActivitiesTableRow row = (ActivitiesTableRow)panel.getWidget(i);
 			if(row.getActivity().getParentId()==activity.getId()){
 				childrenCollapsed++;
+				row.collapse();
+				row.hide(!showChildren);								
 			}
-			row.hide(!showChildren);
+			
 		}
 	}
 	
+	/**
+	 * Might be called directly by parent
+	 * 
+	 * @param hide
+	 */
 	public void hide(boolean hide){		
+		showChildren=!hide; //Synchronize states with caller
 		row.setStyleName(hide? "hide":"tr");
 	}
 	
