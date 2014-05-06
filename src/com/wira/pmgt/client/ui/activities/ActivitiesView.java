@@ -25,6 +25,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -53,7 +54,7 @@ public class ActivitiesView extends ViewImpl implements
 	@UiField
 	SpanElement spnBudget;
 	@UiField
-	SpanElement spnDates;
+	InlineLabel spnDates;
 	@UiField
 	Anchor aNewOutcome;
 	@UiField
@@ -72,6 +73,8 @@ public class ActivitiesView extends ViewImpl implements
 	FocusPanel panelTitle;
 	@UiField
 	DropDownList<PeriodDTO> lstPeriod;
+	
+	@UiField HTMLPanel divPopup;
 
 	@UiField
 	BulletListPanel listPanel;
@@ -138,7 +141,6 @@ public class ActivitiesView extends ViewImpl implements
 		aLeft.addMouseUpHandler(upHandler);
 
 		ClickHandler clickHandler = new ClickHandler() {
-
 			@Override
 			public void onClick(ClickEvent event) {
 				scrollTimer.cancel();
@@ -164,6 +166,8 @@ public class ActivitiesView extends ViewImpl implements
 				setDates(event.getValue().getDescription());
 			}
 		});
+		
+		spnDates.getElement().setAttribute("data-toggle", "dropdown");
 	}
 
 	private void registerEditFocus() {
@@ -437,6 +441,6 @@ public class ActivitiesView extends ViewImpl implements
 	}
 
 	public void setDates(String text) {
-		spnDates.setInnerText(text);
+		spnDates.getElement().setInnerText(text);
 	}
 }

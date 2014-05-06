@@ -22,7 +22,7 @@ public class Dropdown<T extends Listable> extends Composite implements HasValue<
 
 	interface DropdownUiBinder extends UiBinder<Widget, Dropdown> {
 	}
-
+	
 	@UiField BulletListPanel ulMenu;
 	private T selected=null;
 
