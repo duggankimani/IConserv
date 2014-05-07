@@ -52,7 +52,7 @@ public abstract class RowWidget extends Composite {
 	}
 	
 	protected void createTd(Widget widget){
-		createTd(widget, TextAlign.LEFT);
+		createTd(widget, TextAlign.CENTER);
 	}
 	
 	public void createTd(Widget widget, TextAlign align) {

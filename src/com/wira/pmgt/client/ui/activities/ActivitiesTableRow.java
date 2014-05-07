@@ -117,7 +117,6 @@ public class ActivitiesTableRow extends RowWidget {
 			}
 		});
 
-		divBudget.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
 
 	}
 
@@ -183,7 +182,7 @@ public class ActivitiesTableRow extends RowWidget {
 			int idx = activitySourceOfFunds.indexOf(programFund);
 
 			if (idx == -1) {
-				createTd(new InlineLabel(""), TextAlign.RIGHT);
+				createTd(new InlineLabel(""));
 			} else {
 				ProgramFundDTO activityFund = activityFunding.get(idx);
 				HTMLPanel amounts = new HTMLPanel("");
@@ -207,7 +206,7 @@ public class ActivitiesTableRow extends RowWidget {
 							.setFontSize(0.8, Unit.EM);
 					amounts.add(allocationPanel);
 				}
-				createTd(amounts, TextAlign.RIGHT);
+				createTd(amounts);
 			}
 
 		}
