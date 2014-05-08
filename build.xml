@@ -2,7 +2,7 @@
 	
 	<target name="war" depends="update-version-string">
 	    <copy file="src/Version.properties" todir="war/WEB-INF/classes" overwrite="true"></copy>
-		<war basedir="war" destfile="iconserv.war" webxml="war/WEB-INF/web.xml">
+		<war basedir="war" destfile="lwf.war" webxml="war/WEB-INF/web.xml">
 		    <!-- metainf>
 		        <fileset dir="war/META-INF"includes="**/*"></fileset>
 		    </metainf -->

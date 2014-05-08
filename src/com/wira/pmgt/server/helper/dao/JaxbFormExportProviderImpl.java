@@ -15,7 +15,7 @@ public class JaxbFormExportProviderImpl implements ContextResolver<JAXBContext> 
 		}
 		
 		try{
-			context = JAXBContext.newInstance("com.duggan.workflow.server.dao.model");
+			context = JAXBContext.newInstance("com.wira.pmgt.server.dao.model");
 			return context;
 		}catch(Exception e){
 			e.printStackTrace();

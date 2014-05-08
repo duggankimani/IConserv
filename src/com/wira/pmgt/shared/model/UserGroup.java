@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author duggan
  *
  */
-public class UserGroup implements Serializable, Listable{
+public class UserGroup implements Serializable, Listable, OrgEntity{
 
 	/**
 	 * 
@@ -76,5 +76,11 @@ public class UserGroup implements Serializable, Listable{
 	public String getDisplayName() {
 		
 		return fullName;
+	}
+
+	@Override
+	public String getEntityId() {
+
+		return name;
 	}
 }

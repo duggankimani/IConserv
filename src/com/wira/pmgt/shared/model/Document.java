@@ -33,7 +33,7 @@ public class Document extends Doc implements Serializable{
 	
 	protected Date documentDate;
 	
-	protected Integer priority;
+	protected Integer priority=0;
 	
 	private String partner;
 	

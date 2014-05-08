@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.lang.String;
 import java.util.List;
 
-public class HTUser implements Serializable, Listable {
+public class HTUser implements Serializable, Listable, OrgEntity {
 
 	private static final long serialVersionUID = -5249516544970187459L;
 	private Long id;
@@ -137,5 +137,10 @@ public class HTUser implements Serializable, Listable {
 	@Override
 	public String getDisplayName() {
 		return getFullName();
+	}
+
+	@Override
+	public String getEntityId() {
+		return userId;
 	}
 }

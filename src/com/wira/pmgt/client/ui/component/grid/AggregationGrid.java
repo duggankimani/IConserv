@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.TableView;
+import com.wira.pmgt.client.ui.util.NumberUtils;
 
 public class AggregationGrid extends Composite {
 
@@ -219,7 +220,7 @@ public class AggregationGrid extends Composite {
 			
 			String text = "";
 			if(value instanceof Number){
-				text = NumberFormat.getCurrencyFormat().format((Number) value);
+				text = NumberUtils.CURRENCYFORMAT.format((Number) value);
 			}else if(value!=null){
 				text = value.toString();
 			}
