@@ -70,7 +70,7 @@ a {
 
 a,a:visited,a:hover {
 	text-decoration: none;
-	/* color: #cccccc; */
+	/* color: grey; */
 }
 
 input:focus {
@@ -137,6 +137,19 @@ body .main-body .alert a {
 .breadcrumb .divider{
 	font-size: 14px;
 	margin: 7px;
+}
+.breadcrumb{
+	background-color: #ffffff;
+	margin-bottom: 0px;
+	background-image: none;
+	padding-left: 0px;
+}
+
+.breadcrumb a,a:hover{
+	color:grey;
+}
+.breadcrumb .active{
+	font-weight:bold;
 }
 /*End of my Utility helpers*/
 

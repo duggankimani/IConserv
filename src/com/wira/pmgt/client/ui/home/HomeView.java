@@ -4,10 +4,8 @@ import static com.wira.pmgt.client.ui.home.HomePresenter.ACTIVITIES_SLOT;
 
 import java.util.HashMap;
 
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -21,13 +19,9 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 	public interface Binder extends UiBinder<Widget, HomeView> {
 	}
 
-	@UiField
-	Anchor btnAdd;
+	
 	@UiField
 	HTMLPanel activityContainer;
-	@UiField
-	HTMLPanel divDocPopup;
-	@UiField
 	HTMLPanel mainContainer;
 
 	// Filter Dialog Caret
@@ -66,11 +60,6 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 		super.addToSlot(slot, content);
 	}
 
-	public HasClickHandlers getAddButton() {
-		return btnAdd;
-	}
-
-
 
 	@Override
 	public void showmask(boolean mask) {
@@ -83,19 +72,16 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 
 	@Override
 	public void setHasItems(boolean b) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void setHeading(String string) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void bindAlerts(HashMap<TaskType, Integer> alerts) {
-		// TODO Auto-generated method stub
 		
 	}
 

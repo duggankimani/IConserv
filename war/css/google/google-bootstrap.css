@@ -304,7 +304,7 @@ select:focus:required:invalid:focus {
   opacity: 0.5;
   filter: alpha(opacity=50);
 }
-/* Override ßsome of the values in Bootstrap
+/* Override ï¿½some of the values in Bootstrap
 /* White icons with optional class, or on hover/active states of certain elements */
 .nav-list > .active > a > [class^="icon-"],
 .nav-list > .active > a > [class*=" icon-"],

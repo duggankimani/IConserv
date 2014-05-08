@@ -78,6 +78,8 @@ public class ActivitiesPresenter extends
 		void setProgramId(Long programId);
 
 		void setSelection(ProgramDetailType programType, boolean b);
+
+		HasClickHandlers getAddButton();
 	}
 
 	@Inject
@@ -121,6 +123,13 @@ public class ActivitiesPresenter extends
 //			}
 //		});
 //		
+		getView().getAddButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				fireEvent(new CreateProgramEvent(null));
+			}
+			
+		});
 		
 		getView().getNewOutcome().addClickHandler(new ClickHandler() {
 			@Override

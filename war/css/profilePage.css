@@ -2,33 +2,35 @@
 /**Testing workspace*/
 /*--Action Buttons --*/
 .action-buttons{
-	margin-bottom:15px;
+	margin-bottom:10px;
 }
 .main-container .activities-page{
 	padding: 0px 0px;
 	height: 100%;
 }
 .main-container .activities-page .tab-content{
-    margin: 10px 20px;
+    padding: 0px 0px 0px 5px;
     max-height: 71%;
     overflow-x: hidden;
 }
 .activities-page .content-top{
-	margin: 19px;
-	padding-bottom: 0px;
-	width: 96%;
-	margin-bottom: 5px;
+	padding: 10px 0px 0px 0px;
 }
 
 .activities-page .content-top .breadcrumb{
 	background-color: #ffffff;
 	margin-bottom: 0px;
 	background-image: none;
-	padding-left: 0px;
+	padding-left: 20px;
+	padding-top: 3px;
+	font-size: 11px;
+	padding-bottom: 2px;
 }
 .activities-page .content-top .header {
 	border-bottom: 1px solid #E6E6E6;
 	min-height: 21px;
+	padding-left: 20px;
+	width: 100%;
 }
 
 .activities-page .content-top .title-container{
@@ -47,13 +49,15 @@
 	min-height: 20px;
 }
 .activities-page .content-top .budget{
-	position:absolute;
+	/* position:absolute; */
 	right:2%;
 	top: 4%;
 }
 .activities-page .action-buttons{
-	margin: 0px 20px;
-	width: 96%;
+	margin-top: 0px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #E6E6E6;
+	padding-left: 20px;
 }
 .activities-page .user-content{
 	margin: 20px;
@@ -127,9 +131,10 @@
 	bottom: 0px;
 }
 
-/* Tabs Below */
+/* Tabs Container */
 .activities-page .tabs-below .tabs-container{
 	width:90%;
+	box-shadow: -7px 4px 10px #888888;
 }
 
 .activities-page .tabs-below .controllers{

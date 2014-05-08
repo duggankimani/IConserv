@@ -8,22 +8,35 @@
 	<g:HTMLPanel styleName="row-fluid main-container no-overflow-x">
 		<g:HTMLPanel ui:field="mainContainer" styleName="full-page">
 			<div class="span2 sidebar-nav hidden-phone" id="sidebar-nav">
-				
-				<!--Button Add Document -->
-				<div class="add-doc">
-					<g:Anchor ui:field="btnAdd" styleName="btn-danger btn-large">Create Program</g:Anchor>
-
-					<!-- Document Pop-up -->
-					<g:HTMLPanel ui:field="divDocPopup" styleName="dropdown-menu document-drop">
-					</g:HTMLPanel>
-
-				</div>
-
 				<ul class="nav nav-tabs nav-stacked" id="dashboard-menu">
+					<li class="side-user hidden-xs">
+						<img class="img-circle" src="img/me.jpg" alt=""/>
+							<p class="welcome">
+								<i class="fa fa-key"></i>
+								Logged in as
+							</p>
+							<p class="name tooltip-sidebar-logout">
+								Tom
+								<span class="last-name">Kimani</span>
+								<a style="color: inherit" class="logout_open" href="#logout"
+									data-toggle="tooltip" data-placement="top" title="Logout"
+									data-popup-ordinal="1" id="open_85617309">
+									<i class="fa fa-sign-out"></i>
+								</a>
+							</p>
+							<div class="clearfix"></div>
+					</li>
+					<li class="active">
+						<g:Anchor href='#home;page=activities' ui:field='aHome'>
+							<i class="icon-home"></i>
+							My Dashboard
+						</g:Anchor>
+					</li>
+
 					<li>
 						<g:Anchor href='#home;page=activities' ui:field='aActivities'>
 							<i class="icon-tasks"></i>
-							Activities
+							Programs Man.
 						</g:Anchor>
 					</li>
 					<li>
