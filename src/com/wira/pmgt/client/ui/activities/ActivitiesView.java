@@ -44,7 +44,10 @@ public class ActivitiesView extends ViewImpl implements
 		ActivitiesPresenter.IActivitiesView {
 
 	private final Widget widget;
-
+	
+	@UiField
+	Anchor btnAdd;
+	
 	@UiField
 	HTMLPanel divContent;
 	@UiField
@@ -443,4 +446,10 @@ public class ActivitiesView extends ViewImpl implements
 	public void setDates(String text) {
 		spnDates.getElement().setInnerText(text);
 	}
+	
+	
+	public HasClickHandlers getAddButton() {
+		return btnAdd;
+	}
+
 }

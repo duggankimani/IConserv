@@ -96,6 +96,7 @@
 	                                <li><a href="">Users &amp; Groups</a></li>
 	                          	    </ul>
 							</div -->
+							
 							<!-- Content Details -->
 							<g:HTMLPanel  ui:field="divContent"></g:HTMLPanel>
 						</div>

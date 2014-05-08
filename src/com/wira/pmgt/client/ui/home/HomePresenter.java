@@ -5,9 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.user.client.History;
@@ -89,9 +86,6 @@ public class HomePresenter extends
 		void setHeading(String string);
 
 		void bindAlerts(HashMap<TaskType, Integer> alerts);
-
-		HasClickHandlers getAddButton();
-
 	}
 
 	@ProxyCodeSplit
@@ -228,13 +222,6 @@ public class HomePresenter extends
 		addRegisteredHandler(SearchEvent.TYPE, this);
 		addRegisteredHandler(CreateProgramEvent.TYPE, this);
 		
-		getView().getAddButton().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				showEditForm(null);
-			}
-			
-		});
 	}
 
 	/**
