@@ -11,6 +11,7 @@
 		<!-- BreadCrump -->
 		<d:BulletListPanel styleName="breadcrumb" ui:field="crumbContainer">
 		</d:BulletListPanel>
+		
 		<d:IssuesPanel ui:field="issues">
 		</d:IssuesPanel>
 			

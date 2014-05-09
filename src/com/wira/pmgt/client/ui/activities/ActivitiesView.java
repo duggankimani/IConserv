@@ -46,7 +46,7 @@ public class ActivitiesView extends ViewImpl implements
 	private final Widget widget;
 	
 	@UiField
-	Anchor btnAdd;
+	Anchor aProgram;
 	
 	@UiField
 	HTMLPanel divContent;
@@ -71,11 +71,14 @@ public class ActivitiesView extends ViewImpl implements
 	@UiField
 	Anchor aEdit;
 	@UiField
+	Anchor aBack;
+	@UiField
+	Anchor aAssign;
+	
+	@UiField
 	Anchor aProgramEdit;
 	@UiField
 	FocusPanel panelTitle;
-	@UiField
-	DropDownList<PeriodDTO> lstPeriod;
 	
 	@UiField HTMLPanel divPopup;
 
@@ -99,15 +102,14 @@ public class ActivitiesView extends ViewImpl implements
 	}
 
 	Timer scrollTimer = new Timer() {
-
 		@Override
 		public void run() {
 			listPanel.getElement().setScrollLeft(
 					listPanel.getElement().getScrollLeft() + scrollDistancePX);
 		}
 	};
+	
 	int scrollDistancePX = 6; // 6px at a time
-
 	private Long programId;
 
 	@Inject
@@ -344,22 +346,33 @@ public class ActivitiesView extends ViewImpl implements
 		show(aNewActivity, false);
 		show(aNewTask, false);
 		show(aEdit, true);
+		show(aAssign,false);
 
 		if (type == ProgramDetailType.PROGRAM) {
+			show(aProgram,false);
 			show(aNewOutcome, !isRowData);
 			show(aNewObjective, true);
+			show(aAssign,true);
 			// Program can be selected from the SummaryTab == isRowData
 			// or When A Program Tab e.g Wildlife Program is selected
 			show(aEdit, isRowData);
 		} else if (type == ProgramDetailType.OBJECTIVE) {
-
+			show(aProgram,false);
+			show(aAssign,false);
 		} else if (type == ProgramDetailType.OUTCOME) {
+			show(aProgram,false);
 			show(aNewActivity, true);
+			show(aAssign,true);
 		} else if (type == ProgramDetailType.ACTIVITY) {
+			show(aProgram,false);
 			show(aNewTask, true);
+			show(aAssign,true);
 		} else if (type == ProgramDetailType.TASK) {
+			show(aProgram,false);
 			show(aNewTask, true);
+			show(aAssign,true);
 		} else {
+			show(aProgram,true);
 			show(aEdit, false);
 		}
 	}
@@ -391,6 +404,10 @@ public class ActivitiesView extends ViewImpl implements
 	@Override
 	public HasClickHandlers getNewTaskLink() {
 		return aNewTask;
+	}
+	
+	public HasClickHandlers getaAssign() {
+		return aAssign;
 	}
 
 	@Override
@@ -449,7 +466,7 @@ public class ActivitiesView extends ViewImpl implements
 	
 	
 	public HasClickHandlers getAddButton() {
-		return btnAdd;
+		return aProgram;
 	}
 
 }

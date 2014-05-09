@@ -4,6 +4,7 @@ import static com.wira.pmgt.client.ui.home.HomePresenter.ACTIVITIES_SLOT;
 
 import java.util.HashMap;
 
+import com.google.gwt.dom.client.LIElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -19,10 +20,19 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 	public interface Binder extends UiBinder<Widget, HomeView> {
 	}
 
-	
 	@UiField
 	HTMLPanel activityContainer;
+	@UiField
 	HTMLPanel mainContainer;
+
+	@UiField
+	LIElement liDashboard;
+
+	@UiField
+	LIElement liActivities;
+
+	@UiField
+	LIElement liReports;
 
 	// Filter Dialog Caret
 	boolean isNotDisplayed = true;
@@ -60,10 +70,10 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 		super.addToSlot(slot, content);
 	}
 
-
 	@Override
 	public void showmask(boolean mask) {
 		if (mask) {
+			activityContainer.clear();
 			activityContainer.addStyleName("working-request");
 		} else {
 			activityContainer.removeStyleName("working-request");
@@ -72,7 +82,7 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 
 	@Override
 	public void setHasItems(boolean b) {
-		
+
 	}
 
 	@Override
@@ -82,9 +92,33 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 
 	@Override
 	public void bindAlerts(HashMap<TaskType, Integer> alerts) {
-		
+
 	}
 
+	private void setActive(LIElement element, Boolean status) {
+		if (status) {
+			element.addClassName("active");
+		} else {
+			element.removeClassName("active");
+		}
+	}
+
+	public void setSelectedTab(String page) {
+		setActive(liDashboard, false);
+		setActive(liActivities, false);
+		setActive(liReports, false);
+		if (page.equals("Home")) {
+			setActive(liDashboard, true);
+		} else if (page.equals("Activities")) {
+			setActive(liActivities, true);
+		} else if (page.equals("Report")) {
+			setActive(liReports, true);
+		} else if (page.equals("Profile")) {
+			setActive(liDashboard, false);
+			setActive(liActivities, false);
+			setActive(liReports, false);
+		}
+	}
 	/*
 	 * @Override public void setDocPopupVisible() { if(isDocPopupDisplayed){
 	 * divDocPopup.removeStyleName("hidden"); isDocPopupDisplayed=false; }else{

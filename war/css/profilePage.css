@@ -1,5 +1,39 @@
 /*Activity Page Styles*/
-/**Testing workspace*/
+
+/*User Assignment Page*/
+.modal .users-container{
+	padding:10px;
+	margin-bottom:20px;
+	height: 144px;
+}
+.modal .users-container .heading{
+	border-bottom:1px solid #eeeeee
+}
+
+.modal .users-container .name-box{
+	margin-top:5px;
+	padding-bottom:5px;
+	border-bottom:1px solid #eeeeee;
+}
+
+.modal .users-container .name-box .span7{
+	margin-left:0px;
+	margin-top:10px
+}
+
+.modal .actions-box{
+	width:auto;
+}
+
+.modal .actions-box .ace{
+	display:inline;
+}
+
+.actions-box ul.token-input-list-facebook{
+	width:350px;
+}
+
+
 /*--Action Buttons --*/
 .action-buttons{
 	margin-bottom:10px;

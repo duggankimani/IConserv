@@ -13,6 +13,7 @@ import com.gwtplatform.mvp.client.View;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.OptionControl;
+import com.wira.pmgt.client.ui.assign.AssignActivityPresenter;
 import com.wira.pmgt.client.ui.detailedActivity.CreateActivityPresenter;
 import com.wira.pmgt.client.ui.events.ActivitiesReloadEvent;
 import com.wira.pmgt.client.ui.events.ActivitiesReloadEvent.ActivitiesReloadHandler;
@@ -80,6 +81,8 @@ public class ActivitiesPresenter extends
 		void setSelection(ProgramDetailType programType, boolean b);
 
 		HasClickHandlers getAddButton();
+
+		HasClickHandlers getaAssign();
 	}
 
 	@Inject
@@ -92,6 +95,10 @@ public class ActivitiesPresenter extends
 	CreateObjectivePresenter objectivePresenter;
 	@Inject
 	CreateActivityPresenter createTask;
+	@Inject
+	AssignActivityPresenter assignActivity;
+	
+	
 	
 
 	Long programId;
@@ -122,6 +129,32 @@ public class ActivitiesPresenter extends
 //				AppContext.fireEvent(new CreateProgramEvent(programId));
 //			}
 //		});
+		
+		getView().getaAssign().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				AppManager.showPopUp("Assign Activity",
+						assignActivity.getWidget(), new OptionControl() {
+							@Override
+							public void onSelect(String name) {
+								
+								if(name.equals("Save")){
+									if(createActivity.getView().isValid()){
+										IsProgramActivity activity=createActivity.getActivity();
+										//System.err.println("")
+										save(activity);
+										hide();
+									}
+								}else{
+									hide();
+								}
+								
+							}}, "Save", "Cancel");
+			
+			}
+		});
 //		
 		getView().getAddButton().addClickHandler(new ClickHandler() {
 			@Override

@@ -86,6 +86,8 @@ public class HomePresenter extends
 		void setHeading(String string);
 
 		void bindAlerts(HashMap<TaskType, Integer> alerts);
+
+		void setSelectedTab(String page);
 	}
 
 	@ProxyCodeSplit
@@ -255,6 +257,7 @@ public class HomePresenter extends
 				@Override
 				public void processResult(ProfilePresenter aResponse) {
 					setInSlot(ACTIVITIES_SLOT, aResponse);
+					getView().setSelectedTab("Profile");
 				}
 			});
 			
@@ -276,6 +279,7 @@ public class HomePresenter extends
 				public void processResult(ActivitiesPresenter aResponse) {
 					aResponse.loadData(activityId, detailId);
 					setInSlot(ACTIVITIES_SLOT, aResponse);
+					getView().setSelectedTab("Activities");
 				}
 			});
 		}else{
@@ -283,8 +287,8 @@ public class HomePresenter extends
 			newsFeedFactory.get(new ServiceCallback<NewsFeedPresenter>() {
 				@Override
 				public void processResult(NewsFeedPresenter presenter) {
-
 					setInSlot(ACTIVITIES_SLOT, presenter);
+					getView().setSelectedTab("Home");
 					presenter.loadActivities();
 				}
 			});

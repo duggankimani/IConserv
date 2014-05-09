@@ -11,10 +11,10 @@
 				<ul class="nav nav-tabs nav-stacked" id="dashboard-menu">
 					<li class="side-user hidden-xs">
 						<img class="img-circle" src="img/me.jpg" alt=""/>
-							<p class="welcome">
+							<!--p class="welcome">
 								<i class="fa fa-key"></i>
 								Logged in as
-							</p>
+							</p -->
 							<p class="name tooltip-sidebar-logout">
 								Tom
 								<span class="last-name">Kimani</span>
@@ -26,20 +26,20 @@
 							</p>
 							<div class="clearfix"></div>
 					</li>
-					<li class="active">
-						<g:Anchor href='#home;page=activities' ui:field='aHome'>
+					<li class="active" ui:field="liDashboard">
+						<g:Anchor href='#home;page=home' ui:field='aHome'>
 							<i class="icon-home"></i>
 							My Dashboard
 						</g:Anchor>
 					</li>
 
-					<li>
+					<li ui:field="liActivities">
 						<g:Anchor href='#home;page=activities' ui:field='aActivities'>
 							<i class="icon-tasks"></i>
 							Programs Man.
 						</g:Anchor>
 					</li>
-					<li>
+					<li ui:field="liReports">
 						<a href='#reports'>
 							<i class="icon-bar-chart"></i>
 							Reports
