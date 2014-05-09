@@ -115,6 +115,28 @@
 						<span ui:field="spnAuth"/>
 					</div>
 				</div>
+				
+				<!-- div><b>Alert Settings</b></div>
+				<div class="control-group">
+					<label class="control-label">
+						<b>Enable automatic e-mail notification to task Assignees:</b>
+					</label>
+					<div class="controls">
+						<g:CheckBox ui:field="chkSendEmail" value="false" 
+						    title="If true, an email will be generated and sent to each assignee of the task."/>
+						<span ui:field="spnSendEmail"/>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">
+						<b>Enable automatic e-mail notification to task assignor on completion of each task:</b>
+					</label>
+					<div class="controls">
+						<g:CheckBox ui:field="chkonCompleteEmail" value="false" 
+						    title="If true, an email will be generated and sent to each assignee of the task."/>
+						<span ui:field="spnonCompleteEmail"/>
+					</div>
+				</div-->
 			</div>
 		</div>
 
