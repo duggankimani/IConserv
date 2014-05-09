@@ -1,6 +1,6 @@
 package com.wira.pmgt.shared.model;
 
-public interface OrgEntity {
+public interface OrgEntity extends Listable {
 
 	public String getEntityId();
 

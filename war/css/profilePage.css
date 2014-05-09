@@ -4,7 +4,7 @@
 .modal .users-container{
 	padding:10px;
 	margin-bottom:20px;
-	height: 144px;
+	height: auto;
 }
 .modal .users-container .heading{
 	border-bottom:1px solid #eeeeee
@@ -23,6 +23,7 @@
 
 .modal .actions-box{
 	width:auto;
+	margin-bottom: 0px;
 }
 
 .modal .actions-box .ace{

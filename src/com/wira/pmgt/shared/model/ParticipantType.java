@@ -1,6 +1,6 @@
 package com.wira.pmgt.shared.model;
 
-public enum ParticipantType {
+public enum ParticipantType implements Listable{
 
 	ASSIGNEE("Assignee"),
 	INITIATOR("Initiator"),
@@ -10,6 +10,14 @@ public enum ParticipantType {
 	public String displayName;
 	private ParticipantType(String displayName){
 		this.displayName = displayName;
+	}
+	@Override
+	public String getName() {
+		return name();
+	}
+	@Override
+	public String getDisplayName() {
+		return displayName;
 	}
 	
 }

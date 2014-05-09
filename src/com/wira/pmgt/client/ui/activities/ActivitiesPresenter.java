@@ -134,24 +134,14 @@ public class ActivitiesPresenter extends
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				
+				assignActivity.load();
 				AppManager.showPopUp("Assign Activity",
 						assignActivity.getWidget(), new OptionControl() {
 							@Override
 							public void onSelect(String name) {
+								hide();
 								
-								if(name.equals("Save")){
-									if(createActivity.getView().isValid()){
-										IsProgramActivity activity=createActivity.getActivity();
-										//System.err.println("")
-										save(activity);
-										hide();
-									}
-								}else{
-									hide();
-								}
-								
-							}}, "Save", "Cancel");
+							}}, "Done", "Cancel");
 			
 			}
 		});
