@@ -9,7 +9,7 @@
 }
 
 .main-body .top-header .navbar-inner{
-	background-image:none;
+	background-image: linear-gradient(to bottom, #ffffff, #eeeeee);
 	background-color:#eeeeee;
 }
 
@@ -28,7 +28,7 @@
 
 
 .main-body .main-container .content-right{
-	min-width: 87%;
+	width: 87%;
 	height: 100%;
 }
 
@@ -470,6 +470,7 @@ body .dateBoxPopup {
 	position: relative;
 	width: 13%;
 	background-color: #eeeeee;
+	left: 0px;
 }
 
 #sidebar-nav .add-doc {
@@ -514,13 +515,12 @@ body .dateBoxPopup {
 	margin-left: 0px;
 	position: relative;
 	background-color: #ffffff;
-	/* border: 1px solid #CCCCCC; */
 }
-
 .main-container .content-right #middle-box {
 	width: 25%;
 	height: 92.6%;
 }
+
 
 #nav-top {
 	background: #ffffff;
@@ -1349,7 +1349,7 @@ ul.icons-list.text-xl {
 background-color: #FAFAFA;
 border-right: 1px solid #eeeeee;
 border-left: 4px solid #3a87ad;
-}
+padding-left: 7px;}
 
 
 /* MEDIA QUERIES */
