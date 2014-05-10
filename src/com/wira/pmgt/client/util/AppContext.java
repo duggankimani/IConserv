@@ -5,6 +5,7 @@ import java.util.Date;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 import com.google.inject.Inject;
@@ -199,5 +200,9 @@ public class AppContext {
 	
 	public static String getUserImageUrl(HTUser htUser, double width, double height){
 		return getUserImageUrl(htUser)+"&width="+width+"&height="+height;
+	}
+
+	public static String getUserImageUrl(double width, double height) {
+		return getUserImageUrl(getContextUser(), width, height);
 	}
 }

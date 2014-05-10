@@ -26,15 +26,20 @@ import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent.ActivitySele
 import com.wira.pmgt.client.ui.objective.CreateObjectivePresenter;
 import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
 import com.wira.pmgt.client.util.AppContext;
+import com.wira.pmgt.shared.model.HTUser;
+import com.wira.pmgt.shared.model.ParticipantType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
+import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramActivity;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
+import com.wira.pmgt.shared.requests.AssignTaskRequest;
 import com.wira.pmgt.shared.requests.CreateProgramRequest;
 import com.wira.pmgt.shared.requests.GetFundsRequest;
 import com.wira.pmgt.shared.requests.GetPeriodsRequest;
 import com.wira.pmgt.shared.requests.GetProgramsRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
+import com.wira.pmgt.shared.responses.AssignTaskResponse;
 import com.wira.pmgt.shared.responses.CreateProgramResponse;
 import com.wira.pmgt.shared.responses.GetFundsResponse;
 import com.wira.pmgt.shared.responses.GetPeriodsResponse;
@@ -53,9 +58,9 @@ public class ActivitiesPresenter extends
 		HasClickHandlers getNewActivityLink();
 
 		HasClickHandlers getNewObjectiveLink();
-		
+
 		HasClickHandlers getNewTaskLink();
-		
+
 		HasClickHandlers getEditLink();
 
 		void setActivities(List<IsProgramActivity> programs);
@@ -70,7 +75,7 @@ public class ActivitiesPresenter extends
 
 		HasClickHandlers getProgramEdit();
 
-		//void setSummaryView(boolean hasProgramId);
+		// void setSummaryView(boolean hasProgramId);
 
 		void setFunds(List<FundDTO> funds);
 
@@ -98,16 +103,13 @@ public class ActivitiesPresenter extends
 	CreateActivityPresenter createTask;
 	@Inject
 	AssignActivityPresenter assignActivity;
-	
-	
-	
 
 	Long programId;
-	
-	Long programDetailId; //Drill Down
-	
-	ProgramDetailType programType=ProgramDetailType.PROGRAM; //last selected
-	
+
+	Long programDetailId; // Drill Down
+
+	ProgramDetailType programType = ProgramDetailType.PROGRAM; // last selected
+
 	IsProgramActivity selected;
 	IsProgramActivity detail;
 
@@ -122,17 +124,17 @@ public class ActivitiesPresenter extends
 		super.onBind();
 		addRegisteredHandler(ActivitySelectionChangedEvent.TYPE, this);
 		addRegisteredHandler(ActivitiesReloadEvent.TYPE, this);
-		
-//		getView().getProgramEdit().addClickHandler(new ClickHandler() {
-//
-//			@Override
-//			public void onClick(ClickEvent event) {
-//				AppContext.fireEvent(new CreateProgramEvent(programId));
-//			}
-//		});
-		
+
+		// getView().getProgramEdit().addClickHandler(new ClickHandler() {
+		//
+		// @Override
+		// public void onClick(ClickEvent event) {
+		// AppContext.fireEvent(new CreateProgramEvent(programId));
+		// }
+		// });
+
 		getView().getaAssign().addClickHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent event) {
 				assignActivity.load();
@@ -140,21 +142,39 @@ public class ActivitiesPresenter extends
 						assignActivity.getWidget(), new OptionControl() {
 							@Override
 							public void onSelect(String name) {
+								TaskInfo taskInfo = assignActivity
+										.getTaskInfo();
+
+								if (selected != null) {
+									taskInfo.setDescription(selected
+											.getDescription());
+									taskInfo.setActivityId(selected.getId());
+									String taskName = "Program-"
+											+ selected.getId();
+									String approvalTaskName = taskName;
+									taskInfo.setTaskName(taskName);
+									taskInfo.setApprovalTaskName(approvalTaskName);
+
+									taskInfo.setDescription(selected
+											.getDescription());
+									assignTask(taskInfo);
+								}
 								hide();
-								
-							}},"Done");
-			
+
+							}
+						}, "Done", "Cancel");
+
 			}
 		});
-//		
+		//
 		getView().getAddButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				fireEvent(new CreateProgramEvent(null));
 			}
-			
+
 		});
-		
+
 		getView().getNewOutcome().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -177,247 +197,271 @@ public class ActivitiesPresenter extends
 				showEditPopup(ProgramDetailType.OBJECTIVE);
 			}
 		});
-		
+
 		getView().getNewTaskLink().addClickHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent event) {
 				showEditPopup(ProgramDetailType.TASK);
 			}
 		});
-		
+
 		getView().getEditLink().addClickHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent event) {
-				showEditPopup(selected!=null? selected.getType(): detail.getType(), true);
+				showEditPopup(
+						selected != null ? selected.getType() : detail
+								.getType(), true);
 			}
 		});
 
 	}
-	
-	protected void showEditPopup(ProgramDetailType type){
+
+	protected void showEditPopup(ProgramDetailType type) {
 		showEditPopup(type, false);
 	}
-	
-	protected void showEditPopup(ProgramDetailType type, boolean edit){
-		IsProgramActivity activity=selected!=null? selected: detail;
-		
+
+	protected void showEditPopup(ProgramDetailType type, boolean edit) {
+		IsProgramActivity activity = selected != null ? selected : detail;
+
 		showEditPopup(type, activity, edit);
 	}
-	
+
 	/**
-	 * This could be a create or edit call;</br>
-	 * If its an edit; we may be editing a selected element or a detail element
-	 * <br/>
+	 * This could be a create or edit call;</br> If its an edit; we may be
+	 * editing a selected element or a detail element <br/>
+	 * 
 	 * @param type
-	 * @param activity An activity selected on the grid or a detail activity(#home;page=activities;activity=50d52)
+	 * @param activity
+	 *            An activity selected on the grid or a detail
+	 *            activity(#home;page=activities;activity=50d52)
 	 * @param edit
 	 */
-	protected void showEditPopup(ProgramDetailType type,IsProgramActivity activity, boolean edit){
-		
+	protected void showEditPopup(ProgramDetailType type,
+			IsProgramActivity activity, boolean edit) {
+
 		switch (type) {
 		case TASK:
-			//Use 
+			// Use
 			createTask.setType(type);
-			if(edit){
-				//we are editing the selected item
+			if (edit) {
+				// we are editing the selected item
 				createTask.setActivity(activity);
 				createTask.load(activity.getParentId());
-			}else{
-				//selected item is the parent - We are creating a new activity based on selected item
+			} else {
+				// selected item is the parent - We are creating a new activity
+				// based on selected item
 				createTask.setActivity(null);
 				createTask.load(activity.getId());
 			}
-			
-			AppManager.showPopUp(edit? "Edit Task":
-				"Create Task",
+
+			AppManager.showPopUp(edit ? "Edit Task" : "Create Task",
 					createTask.getWidget(), new OptionControl() {
 						@Override
 						public void onSelect(String name) {
-							
-							if(name.equals("Save")){
-								if(createTask.getView().isValid()){
-									IsProgramActivity activity=createTask.getActivity();
-									//System.err.println("")
+
+							if (name.equals("Save")) {
+								if (createTask.getView().isValid()) {
+									IsProgramActivity activity = createTask
+											.getActivity();
+									// System.err.println("")
 									save(activity);
 									hide();
 								}
-							}else{
+							} else {
 								hide();
 							}
-							
-						}}, "Save", "Cancel");
+
+						}
+					}, "Save", "Cancel");
 			break;
 		case ACTIVITY:
-			if(edit){
-				//we are editing the selected item
+			if (edit) {
+				// we are editing the selected item
 				createActivity.setActivity(activity);
 				createActivity.load(activity.getParentId());
-			}else{
-				//selected item is the parent - We are creating a new activity based on selected item
-				//User selected an outcome & is now creating a new Activity
+			} else {
+				// selected item is the parent - We are creating a new activity
+				// based on selected item
+				// User selected an outcome & is now creating a new Activity
 				createActivity.setActivity(null);
 				createActivity.load(activity.getId());
 			}
-			
-			AppManager.showPopUp(edit? "Edit Activity":
-				"Create Activity",
+
+			AppManager.showPopUp(edit ? "Edit Activity" : "Create Activity",
 					createActivity.getWidget(), new OptionControl() {
 						@Override
 						public void onSelect(String name) {
-							
-							if(name.equals("Save")){
-								if(createActivity.getView().isValid()){
-									IsProgramActivity activity=createActivity.getActivity();
-									//System.err.println("")
+
+							if (name.equals("Save")) {
+								if (createActivity.getView().isValid()) {
+									IsProgramActivity activity = createActivity
+											.getActivity();
+									// System.err.println("")
 									save(activity);
 									hide();
 								}
-							}else{
+							} else {
 								hide();
 							}
-							
-						}}, "Save", "Cancel");
-			break;
-	
-		case OBJECTIVE:
-			objectivePresenter.setObjective(
-					(edit && activity.getType()==ProgramDetailType.OBJECTIVE)?activity:null);
-			Long parentId = edit?activity.getParentId():programId;
-			
-			//in case you selected an Program from summary view and clicked New Objective
-			parentId= parentId!=null? parentId : activity!=null? activity.getId():null;
-			objectivePresenter.load(parentId);//Parent Id Passed here
-			
-			AppManager.showPopUp(edit?"Edit Objective"
-					:"Add Objective", objectivePresenter.getWidget(), new OptionControl() {
-				
-				@Override
-				public void onSelect(String name) {
-					if(name.equals("Save")){
-						if(objectivePresenter.getView().isValid()){
-							IsProgramActivity objective =objectivePresenter.getObjective();		
-							objective.setParentId(programId);
-							save(objective);
-							hide();
-						}
-					}else{hide();}
-				}
 
-			}, "Save", "Cancel");
-			
+						}
+					}, "Save", "Cancel");
 			break;
-			
-		case OUTCOME:
-			createOutcome.setOutcome(edit?activity:null);			
-			createOutcome.load(edit?activity.getParentId():programId);
-			AppManager.showPopUp(edit? "Edit Outcome":
-					"Create Outcome",
-					createOutcome.getWidget(), new OptionControl() {
-						
+
+		case OBJECTIVE:
+			objectivePresenter
+					.setObjective((edit && activity.getType() == ProgramDetailType.OBJECTIVE) ? activity
+							: null);
+			Long parentId = edit ? activity.getParentId() : programId;
+
+			// in case you selected an Program from summary view and clicked New
+			// Objective
+			parentId = parentId != null ? parentId
+					: activity != null ? activity.getId() : null;
+			objectivePresenter.load(parentId);// Parent Id Passed here
+
+			AppManager.showPopUp(edit ? "Edit Objective" : "Add Objective",
+					objectivePresenter.getWidget(), new OptionControl() {
+
 						@Override
 						public void onSelect(String name) {
-							
-							if(name.equals("Save")){
-								if(createOutcome.getView().isValid()){
-									IsProgramActivity outcome =createOutcome.getOutcome();
+							if (name.equals("Save")) {
+								if (objectivePresenter.getView().isValid()) {
+									IsProgramActivity objective = objectivePresenter
+											.getObjective();
+									objective.setParentId(programId);
+									save(objective);
+									hide();
+								}
+							} else {
+								hide();
+							}
+						}
+
+					}, "Save", "Cancel");
+
+			break;
+
+		case OUTCOME:
+			createOutcome.setOutcome(edit ? activity : null);
+			createOutcome.load(edit ? activity.getParentId() : programId);
+			AppManager.showPopUp(edit ? "Edit Outcome" : "Create Outcome",
+					createOutcome.getWidget(), new OptionControl() {
+
+						@Override
+						public void onSelect(String name) {
+
+							if (name.equals("Save")) {
+								if (createOutcome.getView().isValid()) {
+									IsProgramActivity outcome = createOutcome
+											.getOutcome();
 									outcome.setParentId(programId);
 									save(outcome);
 									hide();
 								}
-							}else{
+							} else {
 								hide();
 							}
-							
-						}}, "Save", "Cancel");
+
+						}
+					}, "Save", "Cancel");
 			break;
 		case PROGRAM:
-			if(activity!=null && edit){
-				AppContext.fireEvent(new CreateProgramEvent(activity.getId(),!edit));
+			if (activity != null && edit) {
+				AppContext.fireEvent(new CreateProgramEvent(activity.getId(),
+						!edit));
 			}
-		break;
+			break;
 		default:
 			break;
 		}
 	}
 
 	private void save(final IsProgramActivity activity) {
-		//program.setParentId(programId);
+		// program.setParentId(programId);
 		requestHelper.execute(new CreateProgramRequest(activity),
 				new TaskServiceCallback<CreateProgramResponse>() {
 					@Override
 					public void processResult(CreateProgramResponse aResponse) {
-						getView().setLastUpdatedId(aResponse.getProgram().getId());
+						getView().setLastUpdatedId(
+								aResponse.getProgram().getId());
 						loadData(programId);
 						fireEvent(new ProcessingCompletedEvent());
-						fireEvent(new ActivitySavedEvent(activity.getType().name().toLowerCase() +" change(s) successfully saved"));
+						fireEvent(new ActivitySavedEvent(activity.getType()
+								.name().toLowerCase()
+								+ " change(s) successfully saved"));
 					}
 				});
 	}
-	public void loadData(final Long activityId){
+
+	public void loadData(final Long activityId) {
 		loadData(activityId, programDetailId);
 	}
-	
+
 	public void loadData(final Long programId, Long detailId) {
 		fireEvent(new ProcessingEvent());
-		this.programId = (programId ==null || programId==0L) ? null : programId;
-		programDetailId = detailId==null? null: detailId==0? null:
-			detailId;
-		
+		this.programId = (programId == null || programId == 0L) ? null
+				: programId;
+		programDetailId = detailId == null ? null : detailId == 0 ? null
+				: detailId;
+
 		getView().setProgramId(this.programId);
-		
+
 		MultiRequestAction action = new MultiRequestAction();
-		//List of Programs for tabs
-		action.addRequest(new GetProgramsRequest(ProgramDetailType.PROGRAM,false));
+		// List of Programs for tabs
+		action.addRequest(new GetProgramsRequest(ProgramDetailType.PROGRAM,
+				false));
 		action.addRequest(new GetPeriodsRequest());
 		action.addRequest(new GetFundsRequest());
 
-		if (this.programId!=null) {
-			//Details of selected program
+		if (this.programId != null) {
+			// Details of selected program
 			this.programId = programId;
-			action.addRequest(new GetProgramsRequest(programId, programDetailId==null));
+			action.addRequest(new GetProgramsRequest(programId,
+					programDetailId == null));
 		}
-		
 
-		if(programDetailId!=null){
+		if (programDetailId != null) {
 			action.addRequest(new GetProgramsRequest(programDetailId, true));
 		}
-		
+
 		requestHelper.execute(action,
 				new TaskServiceCallback<MultiRequestActionResult>() {
 					@Override
 					public void processResult(MultiRequestActionResult aResponse) {
-						int i=0;
-						//Programs
+						int i = 0;
+						// Programs
 						GetProgramsResponse response = (GetProgramsResponse) aResponse
 								.get(i++);
 						getView().setPrograms(response.getPrograms());
 
-						//Periods
+						// Periods
 						GetPeriodsResponse getPeriod = (GetPeriodsResponse) aResponse
 								.get(i++);
 						getView().setPeriods(getPeriod.getPeriods());
 
-						GetFundsResponse getFundsReq = (GetFundsResponse)aResponse.get(i++);
+						GetFundsResponse getFundsReq = (GetFundsResponse) aResponse
+								.get(i++);
 						getView().setFunds(getFundsReq.getFunds());
-						
+
 						// activities under a program
-						//&& programDetailId==null
-						if (ActivitiesPresenter.this.programId!=null) {
+						// && programDetailId==null
+						if (ActivitiesPresenter.this.programId != null) {
 							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
 									.get(i++);
 							setActivity(response2.getSingleResult());
-						}else{
+						} else {
 							getView().setActivities(response.getPrograms());
 						}
-						
-						if(programDetailId!=null){
+
+						if (programDetailId != null) {
 							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
 									.get(i++);
 							setActivity(response2.getSingleResult());
 						}
-					
+
 						fireEvent(new ProcessingCompletedEvent());
 					}
 				});
@@ -425,9 +469,10 @@ public class ActivitiesPresenter extends
 
 	protected void setActivity(IsProgramActivity activity) {
 		getView().setActivity(activity);
-	
-		if(activity.getType()!=ProgramDetailType.PROGRAM || programId==null){
-			//this is a detail activity
+
+		if (activity.getType() != ProgramDetailType.PROGRAM
+				|| programId == null) {
+			// this is a detail activity
 			this.detail = activity;
 		}
 		programType = activity.getType();
@@ -455,19 +500,28 @@ public class ActivitiesPresenter extends
 			getView().setSelection(event.getProgramActivity().getType());
 		} else {
 			this.selected = null;
-			if(programId==null || programId==0){
-				//summary view
+			if (programId == null || programId == 0) {
+				// summary view
 				getView().setSelection(null);
-			}else{
-				getView().setSelection(programType,false);
+			} else {
+				getView().setSelection(programType, false);
 			}
-			
+
 		}
 	}
 
 	@Override
 	public void onActivitiesReload(ActivitiesReloadEvent event) {
 		loadData(programId, programDetailId);
+	}
+
+	private void assignTask(TaskInfo taskInfo) {
+		requestHelper.execute(new AssignTaskRequest(taskInfo),
+				new TaskServiceCallback<AssignTaskResponse>() {
+					@Override
+					public void processResult(AssignTaskResponse aResponse) {
+					}
+				});
 	}
 
 }

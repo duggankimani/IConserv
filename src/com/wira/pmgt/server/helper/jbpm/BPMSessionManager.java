@@ -34,7 +34,7 @@ import org.jbpm.process.instance.context.variable.VariableScopeInstance;
 import org.jbpm.process.workitem.email.EmailWorkItemHandler;
 import org.jbpm.process.workitem.wsht.GenericHTWorkItemHandler;
 import org.jbpm.process.workitem.wsht.LocalHTWorkItemHandler;
-import org.jbpm.task.Deadline;
+import org.jbpm.task.Status;
 import org.jbpm.task.Task;
 import org.jbpm.task.event.TaskEventListener;
 import org.jbpm.task.event.entity.TaskUserEvent;
@@ -42,9 +42,12 @@ import org.jbpm.task.service.DefaultEscalatedDeadlineHandler;
 import org.jbpm.task.service.TaskService;
 import org.jbpm.task.service.local.LocalTaskService;
 
+import xtension.workitems.FormValidationWorkItemHandler;
 import xtension.workitems.GenerateNotificationWorkItemHandler;
 import xtension.workitems.IntegrationWorkItemHandler;
+import xtension.workitems.SMSWorkItemHandler;
 import xtension.workitems.SendMailWorkItemHandler;
+import xtension.workitems.UpdateActivityStatus;
 import xtension.workitems.UpdateApprovalStatusWorkItemHandler;
 import xtension.workitems.WiseDigitsDocumentIntegration;
 import bitronix.tm.TransactionManagerServices;
@@ -161,6 +164,15 @@ class BPMSessionManager {
 		//External Systems Integration Work Item 
 		session.getWorkItemManager().registerWorkItemHandler("RestfulCommandIntegration",
 				new IntegrationWorkItemHandler());
+		
+		session.getWorkItemManager().registerWorkItemHandler("AutoValidateApplication",
+				new FormValidationWorkItemHandler());
+		
+		session.getWorkItemManager().registerWorkItemHandler("SendSMS",
+				new SMSWorkItemHandler());
+		
+		session.getWorkItemManager().registerWorkItemHandler("UpdateActivityStatus",
+				new UpdateActivityStatus());
 
 		EmailWorkItemHandler emailHandler = new EmailWorkItemHandler(
 				EmailServiceHelper.getProperty("mail.smtp.host"),
@@ -528,6 +540,13 @@ class BPMSessionManager {
 		
 		// completing tasks is a single individuals responsibility
 		// Notifications & Emails sent after task completion must reflect this
+		
+		Task task = getTaskClient().getTask(taskId);
+		if(task.getTaskData().getStatus()==Status.Created || task.getTaskData().getStatus()==Status.Ready){
+			//start
+			getTaskClient().start(taskId, userId);
+		}
+		
 		values.put("ActorId", SessionHelper.getCurrentUser().getUserId());
 		getTaskClient().completeWithResults(taskId, userId, values);
 		return true;
@@ -544,26 +563,43 @@ class BPMSessionManager {
 
 		@Override
 		public void taskStopped(TaskUserEvent event) {
+			logger.debug("Task Stopped "+JBPMHelper.get().getDisplayName(event.getTaskId()));
 		}
 
+		/**
+		 * Task Could be reserved by yourself (Through Claim method)
+		 * or it could be assigned to you specifically (by the assignee specifying actorId)
+		 */
+		@Override
+		public void taskClaimed(TaskUserEvent event) {
+			//when do we use this?
+			logger.debug("Task Claimed ");
+			onTaskCreated(event.getTaskId());
+		}
+		
 		@Override
 		public void taskStarted(TaskUserEvent event) {
+			logger.debug("Task Started "+JBPMHelper.get().getDisplayName(event.getTaskId()));
 		}
 
 		@Override
 		public void taskSkipped(TaskUserEvent event) {
+			logger.debug("Task Skipped "+JBPMHelper.get().getDisplayName(event.getTaskId()));
 		}
 
 		@Override
 		public void taskReleased(TaskUserEvent event) {
+			logger.debug("Task Released "+JBPMHelper.get().getDisplayName(event.getTaskId()));
 		}
 
 		@Override
 		public void taskForwarded(TaskUserEvent event) {
+			logger.debug("Task Forwarded "+JBPMHelper.get().getDisplayName(event.getTaskId()));
 		}
 
 		@Override
 		public void taskFailed(TaskUserEvent event) {
+			logger.debug("Task Failed "+JBPMHelper.get().getDisplayName(event.getTaskId()));
 		}
 
 		/**
@@ -590,53 +626,12 @@ class BPMSessionManager {
 			// session.startProcess(processId, parameters)
 
 			try {
-				Task task = getTaskClient().getTask(event.getTaskId());
-				Map<String, Object> taskData = JBPMHelper.getMappedData(task);
-
-				Map<String, Object> values = null;
-				Map<String, Object> newValues = new HashMap<>();
-
-				Document doc = DocumentDaoHelper.getDocumentByProcessInstance(task.getTaskData().getProcessInstanceId());
-				
-				assert doc!=null;
-				
-				Long sessionId = doc.getSessionId();
-
-				if (sessionId == null) {
-					throw new IllegalArgumentException(
-							"SessionId must not be null!!!");
-				}
-
-				StatefulKnowledgeSession session = getSession(sessionId, task
-						.getTaskData().getProcessId());
-
-				org.jbpm.process.instance.ProcessInstance instance = (org.jbpm.process.instance.ProcessInstance) session
-						.getProcessInstance(task.getTaskData()
-								.getProcessInstanceId());
-				VariableScopeInstance variableScope = (VariableScopeInstance) instance
-						.getContextInstance(VariableScope.VARIABLE_SCOPE);
-				values = variableScope.getVariables();
-
-				Set<String> keys = values.keySet();
-
-				for (String key : keys) {
-					Object value = values.get(key);
-
-					key = key.substring(0, 1).toUpperCase() + key.substring(1);
-					newValues.put(key, value);
-				}
-
-				newValues.put("GroupId", taskData.get("GroupId"));
-				newValues.put("ActorId", taskData.get("ActorId"));
-				newValues.put("Priority", taskData.get("Priority"));
-				if (newValues.get("Priority") == null)
-					newValues.put("Priority", values.get("Priority"));
-
-				String processId = "beforetask-notification";
-
-				startProcess(processId, newValues);
+				logger.debug("onTaskCreated");
+				onTaskCreated(event.getTaskId());				
+				logger.debug("onTaskCreated : End");
 			} catch (Exception e) {
 				e.printStackTrace();
+				logger.debug("onTaskCreated : Fail");
 				throw new RuntimeException(e);
 			}
 		}
@@ -738,7 +733,10 @@ class BPMSessionManager {
 						ownerId = doc.getOwner().getUserId();
 						newValues.put("OwnerId", ownerId.toString());
 					}
-				}
+				}				
+				assert doc.getId()!=null;
+				newValues.put("DocumentId", doc.getId());
+
 
 				String processId = "aftertask-notification";
 
@@ -751,9 +749,72 @@ class BPMSessionManager {
 			}
 		}
 
-		@Override
-		public void taskClaimed(TaskUserEvent event) {
+	}
+	
+	/**
+	 * Called on TaskEventListener.taskCreated(group allocation) and TaskEventListener.taskClaimed(Specific Allocation)
+	 * 
+	 * @param taskId
+	 */
+	private void onTaskCreated(long taskId) {
+		Task task = getTaskClient().getTask(taskId);
+		Status previousStatus = task.getTaskData().getPreviousStatus();
+		if(previousStatus==Status.Ready){
+			//either this is a group task (had to be claimed, in which case before-task notifications would be repetitive)
+			//or after user was directly assigned the task, he revoked the task, and has re-claimed it again
+			return;
 		}
+		Map<String, Object> taskData = JBPMHelper.getMappedData(task);
+
+		Map<String, Object> values = null;
+		Map<String, Object> newValues = new HashMap<>();
+
+		Document doc = DocumentDaoHelper.getDocumentByProcessInstance(task.getTaskData().getProcessInstanceId());
+		
+		assert doc!=null;
+		
+		Long sessionId = doc.getSessionId();
+
+		if (sessionId == null) {
+			throw new IllegalArgumentException(
+					"SessionId must not be null!!!");
+		}
+
+		StatefulKnowledgeSession session = getSession(sessionId, task
+				.getTaskData().getProcessId());
+
+		org.jbpm.process.instance.ProcessInstance instance = (org.jbpm.process.instance.ProcessInstance) session
+				.getProcessInstance(task.getTaskData()
+						.getProcessInstanceId());
+		VariableScopeInstance variableScope = (VariableScopeInstance) instance
+				.getContextInstance(VariableScope.VARIABLE_SCOPE);
+		values = variableScope.getVariables();
+
+		Set<String> keys = values.keySet();
+
+		for (String key : keys) {
+			Object value = values.get(key);
+
+			key = key.substring(0, 1).toUpperCase() + key.substring(1);
+			newValues.put(key, value);
+			logger.debug(key+"="+value);
+		}
+
+		logger.debug("GroupId="+taskData.get("GroupId"));
+		logger.debug("ActorId="+taskData.get("ActorId"));
+		logger.debug("Priority="+taskData.get("Priority"));
+		
+		newValues.put("GroupId", taskData.get("GroupId"));
+		newValues.put("ActorId", taskData.get("ActorId"));
+		newValues.put("Priority", taskData.get("Priority"));
+		if (newValues.get("Priority") == null)
+			newValues.put("Priority", values.get("Priority"));
+
+		String processId = "beforetask-notification";
+
+		assert doc.getId()!=null;
+		newValues.put("DocumentId", doc.getId());
+		startProcess(processId, newValues);
 	}
 
 	public Process getProcess(String processId) {
@@ -765,6 +826,8 @@ class BPMSessionManager {
 
 		return null;
 	}
+
+
 
 	/**
 	 * Close knowledge Base

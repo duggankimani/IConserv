@@ -1,26 +1,28 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:d='urn:import:com.wira.pmgt.client.ui.component' 
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:d='urn:import:com.wira.pmgt.client.ui.component' xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<g:HTMLPanel styleName="row-fluid name-box">
 		<div class="span2 pic">
 			<g:Image styleName="img-rounded" ui:field="divImage"></g:Image>
 		</div>
-		
+
+
 		<div class="span6 names">
-			<span class="names" ui:field="spnName">Tom Kimani</span>
-			<span class="email muted" ui:field="spnEmail">tomkim@laikipia.org</span>
+			<span class="names" ui:field="spnName"></span>
+			<span class="email muted" ui:field="spnEmail"></span>
 		</div>
 
 		<div class="span2 participant-type">
 			<div class="btn-group">
-				<d:ActionLink styleName="btn dropdown-toggle" dataToggle="dropdown" ui:field="aParticipant">
+				<d:ActionLink styleName="btn dropdown-toggle"
+					dataToggle="dropdown" ui:field="aParticipant">
 					<span ui:field="spnText"></span>
 					<span class="caret"></span>
 				</d:ActionLink>
 				<d:Dropdown ui:field="participantDropdown"></d:Dropdown>
 			</div>
 		</div>
-		
+
 		<div class="span2">
 			<g:Anchor ui:field="aRemove" styleName="icon-remove muted pull-right"></g:Anchor>
 		</div>

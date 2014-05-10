@@ -19,11 +19,13 @@ public class TaskInfo implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	
-	private String subject;
-	private Long refId;
-	private ProgramDetailType type;
+	private String subject;//Task Document No
+	private Long activityId;// ProgramDetail ID
+	private Long processInstanceId;// Task
 	private String description;// description of the task - from ProgramActivity
 	private String message;//Message keyed in by user
+	private String approvalTaskName;
+	private String taskName;
 	
 	Map<ParticipantType, List<OrgEntity>> participants = new HashMap<ParticipantType, List<OrgEntity>>();
 	
@@ -56,6 +58,7 @@ public class TaskInfo implements Serializable{
 		}
 		
 		entities.add(participant);
+		participants.put(type, entities);
 	}
 	
 	/**
@@ -83,19 +86,11 @@ public class TaskInfo implements Serializable{
 	 */
 	public OrgEntity getParticipant(ParticipantType type){
 		List<OrgEntity> entities = participants.get(type);
-		if(type==null || entities.isEmpty()){
+		if(type==null || entities==null || entities.isEmpty()){
 			return null;
 		}
 		
 		return entities.get(0);
-	}
-
-	public Long getRefId() {
-		return refId;
-	}
-
-	public void setRefId(Long refId) {
-		this.refId = refId;
 	}
 
 	public String getDescription() {
@@ -130,12 +125,36 @@ public class TaskInfo implements Serializable{
 		this.subject = subject;
 	}
 
-	public ProgramDetailType getType() {
-		return type;
+	public Long getActivityId() {
+		return activityId;
 	}
 
-	public void setType(ProgramDetailType type) {
-		this.type = type;
+	public void setActivityId(Long activityId) {
+		this.activityId = activityId;
+	}
+
+	public Long getProcessInstanceId() {
+		return processInstanceId;
+	}
+
+	public void setProcessInstanceId(Long processInstanceId) {
+		this.processInstanceId = processInstanceId;
+	}
+
+	public String getApprovalTaskName() {
+		return approvalTaskName;
+	}
+
+	public void setApprovalTaskName(String approvalTaskName) {
+		this.approvalTaskName = approvalTaskName;
+	}
+
+	public String getTaskName() {
+		return taskName;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
 	}
 	
 }

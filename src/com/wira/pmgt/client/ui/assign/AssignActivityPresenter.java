@@ -11,6 +11,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.OrgEntity;
+import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.requests.GetGroupsRequest;
 import com.wira.pmgt.shared.requests.GetUsersRequest;
@@ -20,10 +21,14 @@ import com.wira.pmgt.shared.responses.GetUsersResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
 public class AssignActivityPresenter extends
-		PresenterWidget<AssignActivityPresenter.MyView> {
+		PresenterWidget<AssignActivityPresenter.MyView>{
 
 	public interface MyView extends View {
 		void setSelection(List<OrgEntity> entities);
+
+		void clear();
+
+		TaskInfo getTaskInfo();
 	}
 
 	@Inject DispatchAsync requestHelper;
@@ -40,10 +45,10 @@ public class AssignActivityPresenter extends
 	
 	
 	public void load(){
+		getView().clear();
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetUsersRequest());
 		action.addRequest(new GetGroupsRequest());
-		
 		
 		requestHelper.execute(action, new TaskServiceCallback<MultiRequestActionResult>() {
 			@Override
@@ -65,5 +70,10 @@ public class AssignActivityPresenter extends
 			}
 			
 		});
+	}
+
+	public TaskInfo getTaskInfo() {
+		
+		return getView().getTaskInfo();
 	}
 }

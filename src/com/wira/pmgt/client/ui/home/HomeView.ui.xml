@@ -10,14 +10,15 @@
 			<div class="span2 sidebar-nav hidden-phone" id="sidebar-nav">
 				<ul class="nav nav-tabs nav-stacked" id="dashboard-menu">
 					<li class="side-user hidden-xs">
-						<img class="img-circle" src="img/me.jpg" alt=""/>
+					    <g:Image styleName="img-circle" ui:field="imgUser"></g:Image>
+						<!-- img class="img-circle" src="img/me.jpg" alt=""/ -->
 							<!--p class="welcome">
 								<i class="fa fa-key"></i>
 								Logged in as
 							</p -->
 							<p class="name tooltip-sidebar-logout">
-								Tom
-								<span class="last-name">Kimani</span>
+								
+								<span class="last-name"	ui:field="spnUser"></span>
 								<a style="color: inherit" class="logout_open" href="#logout"
 									data-toggle="tooltip" data-placement="top" title="Logout"
 									data-popup-ordinal="1" id="open_85617309">

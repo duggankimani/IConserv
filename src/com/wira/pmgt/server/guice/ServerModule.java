@@ -122,6 +122,8 @@ import com.wira.pmgt.shared.requests.GetFundsRequest;
 import com.wira.pmgt.server.actionhandlers.GetFundsRequestHandler;
 import com.wira.pmgt.shared.requests.GetPeriodRequest;
 import com.wira.pmgt.server.actionhandlers.GetPeriodRequestHandler;
+import com.wira.pmgt.shared.requests.AssignTaskRequest;
+import com.wira.pmgt.server.actionhandlers.AssignTaskRequestHandler;
 
 
 
@@ -320,5 +322,8 @@ public class ServerModule extends HandlerModule {
 
 		bindHandler(GetPeriodRequest.class,
 				GetPeriodRequestHandler.class, SessionValidator.class);
+
+		bindHandler(AssignTaskRequest.class,
+				AssignTaskRequestHandler.class, SessionValidator.class);
 	}
 }
