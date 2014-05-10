@@ -42,6 +42,7 @@ public class AssignActivityView extends ViewImpl implements
 	public AssignActivityView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
 		selectedSet.add(AppContext.getContextUser());
+				
 		aAdd.addClickHandler(new ClickHandler() {
 			
 			@Override
@@ -108,8 +109,13 @@ public class AssignActivityView extends ViewImpl implements
 		}
 	}
 
+	/**
+	 * Drop Down of Users & Groups for selection
+	 */
 	public void setSelection(List<OrgEntity> entities){
 		allocatedToUsers.addItems(entities);
+		
+		addAllocations(new ArrayList<OrgEntity>());
 	}
 
 	@Override

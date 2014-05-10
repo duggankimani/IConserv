@@ -20,7 +20,7 @@ import com.wira.pmgt.shared.responses.GetUsersResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
 public class AssignActivityPresenter extends
-		PresenterWidget<AssignActivityPresenter.MyView> {
+		PresenterWidget<AssignActivityPresenter.MyView>{
 
 	public interface MyView extends View {
 		void setSelection(List<OrgEntity> entities);
