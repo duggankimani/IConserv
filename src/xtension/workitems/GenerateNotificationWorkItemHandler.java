@@ -9,14 +9,14 @@ import org.drools.runtime.process.WorkItem;
 import org.drools.runtime.process.WorkItemHandler;
 import org.drools.runtime.process.WorkItemManager;
 
-import com.wira.pmgt.server.dao.helper.DocumentDaoHelper;
-import com.wira.pmgt.server.dao.helper.NotificationDaoHelper;
-import com.wira.pmgt.server.helper.auth.LoginHelper;
-import com.wira.pmgt.shared.model.ApproverAction;
-import com.wira.pmgt.shared.model.Document;
-import com.wira.pmgt.shared.model.HTUser;
-import com.wira.pmgt.shared.model.Notification;
-import com.wira.pmgt.shared.model.NotificationType;
+import com.duggan.workflow.server.dao.helper.DocumentDaoHelper;
+import com.duggan.workflow.server.dao.helper.NotificationDaoHelper;
+import com.duggan.workflow.server.helper.auth.LoginHelper;
+import com.duggan.workflow.shared.model.ApproverAction;
+import com.duggan.workflow.shared.model.Document;
+import com.duggan.workflow.shared.model.HTUser;
+import com.duggan.workflow.shared.model.Notification;
+import com.duggan.workflow.shared.model.NotificationType;
 
 /**
  * This class is responsible for generating
@@ -79,10 +79,13 @@ public class GenerateNotificationWorkItemHandler implements WorkItemHandler {
 		
 		if(ownerId==null){
 			logger.debug("[[[[[###############]]]]]>>>>> OWNERID IS NULL :: "
-		+workItem.getName()+" :: "+workItem.getId());
+		+workItem.getName()+" :: WorkItem "+workItem.getId());
 			ownerId = "calcacuervo";
 		}
 		owner.add(LoginHelper.get().getUser(ownerId));
+		
+		ApproverAction action =isApproved==null? ApproverAction.COMPLETED:
+			(Boolean)isApproved? ApproverAction.APPROVED: ApproverAction.REJECTED;
 		
 		switch (type) {
 		case APPROVALREQUEST_OWNERNOTE:
@@ -96,11 +99,11 @@ public class GenerateNotificationWorkItemHandler implements WorkItemHandler {
 			}
 			break;
 		case TASKCOMPLETED_APPROVERNOTE:	
-			notification.setApproverAction((Boolean)isApproved? ApproverAction.APPROVED: ApproverAction.REJECTED);
+			notification.setApproverAction(action);
 			generateNotes(actors, notification);
 			break;
 		case TASKCOMPLETED_OWNERNOTE:
-			notification.setApproverAction((Boolean)isApproved? ApproverAction.APPROVED: ApproverAction.REJECTED);
+			notification.setApproverAction(action);
 			generateNotes(owner, notification);
 			break;
 		case PROCESS_COMPLETED:

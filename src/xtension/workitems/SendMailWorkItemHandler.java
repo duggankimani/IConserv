@@ -16,18 +16,18 @@ import org.apache.log4j.Logger;
 import org.drools.process.instance.WorkItemHandler;
 import org.drools.runtime.process.WorkItem;
 import org.drools.runtime.process.WorkItemManager;
+import org.jbpm.executor.ExecutorModule;
+import org.jbpm.executor.api.CommandCodes;
+import org.jbpm.executor.api.CommandContext;
 
-import com.wira.pmgt.server.dao.helper.DocumentDaoHelper;
-import com.wira.pmgt.server.executor.ExecutorModule;
-import com.wira.pmgt.server.executor.api.CommandCodes;
-import com.wira.pmgt.server.executor.api.CommandContext;
-import com.wira.pmgt.server.helper.auth.LoginHelper;
-import com.wira.pmgt.server.helper.session.SessionHelper;
-import com.wira.pmgt.shared.model.Document;
-import com.wira.pmgt.shared.model.DocumentType;
-import com.wira.pmgt.shared.model.HTUser;
-import com.wira.pmgt.shared.model.NotificationType;
-import com.wira.pmgt.shared.model.UserGroup;
+import com.duggan.workflow.server.dao.helper.DocumentDaoHelper;
+import com.duggan.workflow.server.helper.auth.LoginHelper;
+import com.duggan.workflow.server.helper.session.SessionHelper;
+import com.duggan.workflow.shared.model.Document;
+import com.duggan.workflow.shared.model.DocumentType;
+import com.duggan.workflow.shared.model.HTUser;
+import com.duggan.workflow.shared.model.NotificationType;
+import com.duggan.workflow.shared.model.UserGroup;
 
 /**
  * Send Asynchronous Email
@@ -109,6 +109,10 @@ public class SendMailWorkItemHandler implements WorkItemHandler {
 		}
 		
 		params.put("Approver", approver);
+		
+		String noteaction = isApproved==null?"Completed": 
+			(Boolean)isApproved? "Approved": "Denied";
+		
 		switch (type) {
 		case APPROVALREQUEST_OWNERNOTE:
 			subject = subject+" Approval Request Submitted";
@@ -120,13 +124,11 @@ public class SendMailWorkItemHandler implements WorkItemHandler {
 			owner = users;
 			break;
 		case TASKCOMPLETED_APPROVERNOTE:
-			String action = (Boolean)isApproved? "Approved": "Denied";
-			subject = subject+" - "+action;
-			body =  "You "+action.toLowerCase()+" Document #"+subject;
+			subject = subject+" - "+noteaction;
+			body =  "You "+noteaction.toLowerCase()+" Document #"+subject;
 			owner= users;
 			break;
-		case TASKCOMPLETED_OWNERNOTE:
-			String noteaction = (Boolean)isApproved? "Approved": "Denied";			
+		case TASKCOMPLETED_OWNERNOTE:						
 			subject = subject+" - "+approver+" "+noteaction;
 			body =  "The following document "+noteaction.toLowerCase()+" by "+approver;
 			break;
