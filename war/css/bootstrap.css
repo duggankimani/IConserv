@@ -405,7 +405,7 @@ a:focus {
 }
 
 .row-fluid [class*="span"] {
-  display: block;
+  /* display: block; */
   float: left;
   width: 100%;
   min-height: 30px;

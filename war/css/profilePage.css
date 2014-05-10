@@ -4,7 +4,7 @@
 .modal .users-container{
 	padding:10px;
 	margin-bottom:20px;
-	height: auto;
+	max-height: 200px;
 }
 .modal .users-container .heading{
 	border-bottom:1px solid #eeeeee
@@ -42,6 +42,8 @@
 .main-container .activities-page{
 	padding: 0px 0px;
 	height: 100%;
+	width: 100%;
+	right: 0px;
 }
 .main-container .activities-page .tab-content{
     padding: 0px 0px 0px 5px;
@@ -50,6 +52,7 @@
 }
 .activities-page .content-top{
 	padding: 10px 0px 0px 0px;
+	width: 100%;
 }
 
 .activities-page .content-top .breadcrumb{
@@ -64,8 +67,15 @@
 .activities-page .content-top .header {
 	border-bottom: 1px solid #E6E6E6;
 	min-height: 21px;
-	padding-left: 20px;
+	padding-left: 0px;
 	width: 100%;
+}
+
+.activities-page .content-top .header .span10{
+	margin-left: 20px;
+}
+.activities-page .content-top .header .span2{
+	margin-left:0px;
 }
 
 .activities-page .content-top .title-container{
@@ -164,6 +174,7 @@
 .activities-page .tabs-below .tab-body{
 	position: absolute;
 	bottom: 0px;
+	width: 100%;
 }
 
 /* Tabs Container */
