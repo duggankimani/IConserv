@@ -41,6 +41,8 @@ import com.wira.pmgt.client.ui.events.AfterSaveEvent.AfterSaveHandler;
 import com.wira.pmgt.client.ui.events.AfterSearchEvent;
 import com.wira.pmgt.client.ui.events.AlertLoadEvent;
 import com.wira.pmgt.client.ui.events.AlertLoadEvent.AlertLoadHandler;
+import com.wira.pmgt.client.ui.events.ContextLoadedEvent;
+import com.wira.pmgt.client.ui.events.ContextLoadedEvent.ContextLoadedHandler;
 import com.wira.pmgt.client.ui.events.CreateProgramEvent;
 import com.wira.pmgt.client.ui.events.CreateProgramEvent.CreateProgramHandler;
 import com.wira.pmgt.client.ui.events.DocumentSelectionEvent;
@@ -69,6 +71,7 @@ import com.wira.pmgt.shared.model.Doc;
 import com.wira.pmgt.shared.model.DocStatus;
 import com.wira.pmgt.shared.model.Document;
 import com.wira.pmgt.shared.model.HTSummary;
+import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.SearchFilter;
 import com.wira.pmgt.shared.requests.GetTaskList;
 import com.wira.pmgt.shared.responses.GetTaskListResult;
@@ -76,7 +79,7 @@ import com.wira.pmgt.shared.responses.GetTaskListResult;
 public class HomePresenter extends
 		Presenter<HomePresenter.MyView, HomePresenter.MyProxy> implements AfterSaveHandler,
 		DocumentSelectionHandler, ReloadHandler, AlertLoadHandler, ActivitiesSelectedHandler,
-		ProcessingHandler, ProcessingCompletedHandler, SearchHandler,CreateProgramHandler{
+		ProcessingHandler, ProcessingCompletedHandler, SearchHandler,CreateProgramHandler, ContextLoadedHandler{
 
 	public interface MyView extends View {
 		void showmask(boolean mask);
@@ -88,6 +91,8 @@ public class HomePresenter extends
 		void bindAlerts(HashMap<TaskType, Integer> alerts);
 
 		void setSelectedTab(String page);
+		
+		void showUserImg(HTUser currentUser);
 	}
 
 	@ProxyCodeSplit
@@ -223,6 +228,7 @@ public class HomePresenter extends
 		addRegisteredHandler(ProcessingCompletedEvent.TYPE, this);
 		addRegisteredHandler(SearchEvent.TYPE, this);
 		addRegisteredHandler(CreateProgramEvent.TYPE, this);
+		addRegisteredHandler(ContextLoadedEvent.TYPE, this);
 		
 	}
 
@@ -295,6 +301,8 @@ public class HomePresenter extends
 		}
 		
 	}	
+	
+	
 
 	private void clear() {		
 		//clear document slot
@@ -496,6 +504,11 @@ public class HomePresenter extends
 	public void onCreateProgram(CreateProgramEvent event) {
 		Long programId = event.getProgramId();	
 		showEditForm(programId,event.isNavigateOnSave());
+	}
+
+	@Override
+	public void onContextLoaded(ContextLoadedEvent event) {
+		getView().showUserImg(event.getCurrentUser());
 	}
 
 }

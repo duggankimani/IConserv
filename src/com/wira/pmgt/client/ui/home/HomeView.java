@@ -5,13 +5,21 @@ import static com.wira.pmgt.client.ui.home.HomePresenter.ACTIVITIES_SLOT;
 import java.util.HashMap;
 
 import com.google.gwt.dom.client.LIElement;
+import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ErrorEvent;
+import com.google.gwt.event.dom.client.ErrorHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.model.TaskType;
+import com.wira.pmgt.client.util.AppContext;
+import com.wira.pmgt.shared.model.HTUser;
 
 public class HomeView extends ViewImpl implements HomePresenter.MyView {
 
@@ -33,6 +41,9 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 
 	@UiField
 	LIElement liReports;
+	
+	@UiField Image imgUser;
+	@UiField SpanElement spnUser;
 
 	// Filter Dialog Caret
 	boolean isNotDisplayed = true;
@@ -41,7 +52,13 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 	@Inject
 	public HomeView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
-
+		imgUser.addErrorHandler(new ErrorHandler() {
+			
+			@Override
+			public void onError(ErrorEvent event) {
+				imgUser.setUrl("img/blueman.png");
+			}
+		});
 	}
 
 	public HTMLPanel getActivityContainer() {
@@ -119,10 +136,10 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 			setActive(liReports, false);
 		}
 	}
-	/*
-	 * @Override public void setDocPopupVisible() { if(isDocPopupDisplayed){
-	 * divDocPopup.removeStyleName("hidden"); isDocPopupDisplayed=false; }else{
-	 * divDocPopup.addStyleName("hidden"); isDocPopupDisplayed=true; } }
-	 */
+	
+	public void showUserImg(HTUser currentUser){
+		imgUser.setUrl(AppContext.getUserImageUrl(currentUser,175.0, 175.0));
+		spnUser.setInnerText(currentUser.getFullName());
+	}
 
 }

@@ -7,8 +7,8 @@
 		</div>
 		
 		<div class="span6">
-			<span class="names" ui:field="spnName">Tom Kimani</span>
-			<span class="email muted" ui:field="spnEmail">tomkim@laikipia.org</span>
+			<span class="names" ui:field="spnName"></span>
+			<span class="email muted" ui:field="spnEmail"></span>
 		</div>
 
 		<div class="span2">

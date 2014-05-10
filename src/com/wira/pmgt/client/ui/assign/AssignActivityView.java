@@ -1,5 +1,6 @@
 package com.wira.pmgt.client.ui.assign;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,7 +36,7 @@ public class AssignActivityView extends ViewImpl implements
 	public interface Binder extends UiBinder<Widget, AssignActivityView> {
 	}
 
-	Set<OrgEntity> selectedSet = new HashSet<OrgEntity>();
+	List<OrgEntity> selectedSet = new ArrayList<OrgEntity>();
 	
 	@Inject
 	public AssignActivityView(final Binder binder) {
@@ -47,8 +48,7 @@ public class AssignActivityView extends ViewImpl implements
 			public void onClick(ClickEvent event) {
 				List<OrgEntity> selected = allocatedToUsers.getSelectedItems();
 				if(selected!=null && !selected.isEmpty()){
-					selectedSet.addAll(selected);
-					addAllocations();
+					addAllocations(selected);
 				}
 				allocatedToUsers.clearSelection();
 			}
@@ -74,8 +74,18 @@ public class AssignActivityView extends ViewImpl implements
 		});
 	}
 	
-	protected void addAllocations() {
+	protected void addAllocations(List<OrgEntity> entities) {
 		divAllocations.clear();
+		if(selectedSet.isEmpty()){
+			entities.add(AppContext.getContextUser());
+		}
+		
+		for(OrgEntity entity: entities){
+			if(!selectedSet.contains(entity)){
+				selectedSet.add(entity);
+			}
+		}
+		
 		//loop and create widgets
 		for(OrgEntity entity:selectedSet){
 			ParticipantType type = ParticipantType.ASSIGNEE;
