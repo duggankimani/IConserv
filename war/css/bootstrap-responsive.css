@@ -206,7 +206,7 @@
     margin-left: 130px;
   }
   .row-fluid {
-    /* width: 100%; */
+    width: 100%;
     *zoom: 1;
   }
   .row-fluid:before,
