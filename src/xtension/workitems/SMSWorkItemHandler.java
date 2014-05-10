@@ -6,8 +6,7 @@ import org.drools.process.instance.WorkItemHandler;
 import org.drools.runtime.process.WorkItem;
 import org.drools.runtime.process.WorkItemManager;
 
-import com.duggan.workflow.server.sms.SMSIntegration;
-import com.duggan.workflow.shared.model.Document;
+import com.wira.pmgt.shared.model.Document;
 
 public class SMSWorkItemHandler implements WorkItemHandler {
 
@@ -21,8 +20,8 @@ public class SMSWorkItemHandler implements WorkItemHandler {
 			message = message.replace("{subject}", document.getSubject());
 		}catch(Exception e){}
 	
-		SMSIntegration integration = new SMSIntegration();
-		integration.send(telephone, message);
+//		SMSIntegration integration = new SMSIntegration();
+//		integration.send(telephone, message);
 		manager.completeWorkItem(workItem.getId(), new HashMap<String, Object>());
 	}
 

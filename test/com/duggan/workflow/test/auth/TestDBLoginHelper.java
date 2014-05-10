@@ -10,13 +10,12 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.duggan.workflow.server.db.DB;
-import com.duggan.workflow.server.db.DBTrxProvider;
-import com.duggan.workflow.server.helper.auth.DBLoginHelper;
-import com.duggan.workflow.server.helper.auth.LoginHelper;
-import com.duggan.workflow.server.helper.auth.callback.DBUserGroupCallbackImpl;
-import com.duggan.workflow.shared.model.HTUser;
-import com.duggan.workflow.shared.model.UserGroup;
+import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.server.db.DBTrxProvider;
+import com.wira.pmgt.server.helper.auth.DBLoginHelper;
+import com.wira.pmgt.server.helper.auth.callback.DBUserGroupCallbackImpl;
+import com.wira.pmgt.shared.model.HTUser;
+import com.wira.pmgt.shared.model.UserGroup;
 
 public class TestDBLoginHelper {
 

@@ -1,17 +1,15 @@
 package com.duggan.workflow.test.process;
 
-import java.util.Map;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.duggan.workflow.server.db.DB;
-import com.duggan.workflow.server.db.DBTrxProvider;
-import com.duggan.workflow.server.helper.jbpm.JBPMHelper;
-import com.duggan.workflow.server.helper.jbpm.ProcessMigrationHelper;
-import com.duggan.workflow.shared.model.form.ProcessMappings;
+import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.server.db.DBTrxProvider;
+import com.wira.pmgt.server.helper.jbpm.JBPMHelper;
+import com.wira.pmgt.server.helper.jbpm.ProcessMigrationHelper;
+import com.wira.pmgt.shared.model.form.ProcessMappings;
 
 public class TestGetTaskFields {
 

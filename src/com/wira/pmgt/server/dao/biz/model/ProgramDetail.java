@@ -98,6 +98,7 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	@ManyToMany(mappedBy="objectives")
 	private Set<ProgramDetail> outcomes = new HashSet<>();
 	
+	private Long processInstanceId;
 	
 	public ProgramDetail() {
 	}
@@ -284,5 +285,13 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 		}
 		
 		return false;
+	}
+
+	public Long getProcessInstanceId() {
+		return processInstanceId;
+	}
+
+	public void setProcessInstanceId(Long processInstanceId) {
+		this.processInstanceId = processInstanceId;
 	}
 }

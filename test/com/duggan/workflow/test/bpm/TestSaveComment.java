@@ -8,15 +8,15 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.duggan.workflow.server.dao.model.CommentModel;
-import com.duggan.workflow.server.dao.helper.CommentDaoHelper;
-import com.duggan.workflow.server.dao.helper.NotificationDaoHelper;
-import com.duggan.workflow.server.db.DB;
-import com.duggan.workflow.server.db.DBTrxProvider;
-import com.duggan.workflow.server.helper.auth.LoginHelper;
-import com.duggan.workflow.shared.model.Comment;
-import com.duggan.workflow.shared.model.Notification;
-import com.duggan.workflow.shared.model.NotificationType;
+import com.wira.pmgt.server.dao.helper.CommentDaoHelper;
+import com.wira.pmgt.server.dao.helper.NotificationDaoHelper;
+import com.wira.pmgt.server.dao.model.CommentModel;
+import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.server.db.DBTrxProvider;
+import com.wira.pmgt.server.helper.auth.LoginHelper;
+import com.wira.pmgt.shared.model.Comment;
+import com.wira.pmgt.shared.model.Notification;
+import com.wira.pmgt.shared.model.NotificationType;
 
 public class TestSaveComment {
 

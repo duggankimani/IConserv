@@ -6,12 +6,10 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
 
-import com.duggan.workflow.server.helper.auth.LoginHelper;
-import com.duggan.workflow.server.helper.jbpm.JBPMHelper;
-import com.duggan.workflow.shared.model.HTUser;
-import com.duggan.workflow.shared.model.UserGroup;
+import com.wira.pmgt.server.helper.auth.LoginHelper;
+import com.wira.pmgt.shared.model.HTUser;
+import com.wira.pmgt.shared.model.UserGroup;
 
 public class TestLdapAuth {
 	

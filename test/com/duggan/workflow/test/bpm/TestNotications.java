@@ -10,25 +10,22 @@ import java.util.Map;
 import junit.framework.Assert;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.duggan.workflow.client.model.TaskType;
-import com.duggan.workflow.server.dao.helper.DocumentDaoHelper;
-import com.duggan.workflow.server.dao.helper.NotificationDaoHelper;
-import com.duggan.workflow.server.db.DB;
-import com.duggan.workflow.server.db.DBTrxProvider;
-import com.duggan.workflow.server.helper.auth.LoginHelper;
-import com.duggan.workflow.server.helper.jbpm.JBPMHelper;
-import com.duggan.workflow.shared.model.Actions;
-import com.duggan.workflow.shared.model.DocStatus;
-import com.duggan.workflow.shared.model.Document;
-import com.duggan.workflow.shared.model.HTSummary;
-import com.duggan.workflow.shared.model.HTUser;
-import com.duggan.workflow.shared.model.Notification;
-import com.google.gwt.thirdparty.streamhtmlparser.util.EntityResolver.Status;
+import com.wira.pmgt.client.model.TaskType;
+import com.wira.pmgt.server.dao.helper.DocumentDaoHelper;
+import com.wira.pmgt.server.dao.helper.NotificationDaoHelper;
+import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.server.db.DBTrxProvider;
+import com.wira.pmgt.server.helper.auth.LoginHelper;
+import com.wira.pmgt.server.helper.jbpm.JBPMHelper;
+import com.wira.pmgt.shared.model.Actions;
+import com.wira.pmgt.shared.model.DocStatus;
+import com.wira.pmgt.shared.model.Document;
+import com.wira.pmgt.shared.model.HTSummary;
+import com.wira.pmgt.shared.model.HTUser;
+import com.wira.pmgt.shared.model.Notification;
 
 public class TestNotications {
 

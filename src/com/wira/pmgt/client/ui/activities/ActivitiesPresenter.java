@@ -26,15 +26,20 @@ import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent.ActivitySele
 import com.wira.pmgt.client.ui.objective.CreateObjectivePresenter;
 import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
 import com.wira.pmgt.client.util.AppContext;
+import com.wira.pmgt.shared.model.HTUser;
+import com.wira.pmgt.shared.model.ParticipantType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
+import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramActivity;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
+import com.wira.pmgt.shared.requests.AssignTaskRequest;
 import com.wira.pmgt.shared.requests.CreateProgramRequest;
 import com.wira.pmgt.shared.requests.GetFundsRequest;
 import com.wira.pmgt.shared.requests.GetPeriodsRequest;
 import com.wira.pmgt.shared.requests.GetProgramsRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
+import com.wira.pmgt.shared.responses.AssignTaskResponse;
 import com.wira.pmgt.shared.responses.CreateProgramResponse;
 import com.wira.pmgt.shared.responses.GetFundsResponse;
 import com.wira.pmgt.shared.responses.GetPeriodsResponse;
@@ -139,12 +144,26 @@ public class ActivitiesPresenter extends
 						assignActivity.getWidget(), new OptionControl() {
 							@Override
 							public void onSelect(String name) {
+								TaskInfo taskInfo = assignActivity.getTaskInfo();
+								
+								if(selected!=null){
+									taskInfo.setDescription(selected.getDescription());
+									taskInfo.setActivityId(selected.getId());
+									String taskName = "Program-"+selected.getId();
+									String approvalTaskName = taskName;
+									taskInfo.setTaskName(taskName);
+									taskInfo.setApprovalTaskName(approvalTaskName);
+									
+									taskInfo.setDescription(selected.getDescription());
+									assignTask(taskInfo);
+								}
 								hide();
 								
-							}}, "Done", "Cancel");
+							}
+						}, "Done", "Cancel");
 			
-			}
-		});
+				}
+			});
 //		
 		getView().getAddButton().addClickHandler(new ClickHandler() {
 			@Override
@@ -467,6 +486,14 @@ public class ActivitiesPresenter extends
 	@Override
 	public void onActivitiesReload(ActivitiesReloadEvent event) {
 		loadData(programId, programDetailId);
+	}
+
+	private void assignTask(TaskInfo taskInfo) {
+		requestHelper.execute(new AssignTaskRequest(taskInfo), new TaskServiceCallback<AssignTaskResponse>() {
+			@Override
+			public void processResult(AssignTaskResponse aResponse) {
+			}
+		});
 	}
 
 }

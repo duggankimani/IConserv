@@ -6,9 +6,9 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.duggan.workflow.server.db.DB;
-import com.duggan.workflow.server.db.DBTrxProvider;
-import com.duggan.workflow.server.helper.auth.LoginHelper;
+import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.server.db.DBTrxProvider;
+import com.wira.pmgt.server.helper.auth.LoginHelper;
 
 public class TestDocumentDaoImpl {
 

@@ -11,12 +11,12 @@ import org.drools.process.instance.WorkItemHandler;
 import org.drools.runtime.process.WorkItem;
 import org.drools.runtime.process.WorkItemManager;
 
-import com.duggan.workflow.server.rest.model.Request;
-import com.duggan.workflow.server.rest.model.Response;
-import com.duggan.workflow.server.rest.service.OutgoingRequestService;
-import com.duggan.workflow.server.rest.service.impl.OutgoingRequestImpl;
-import com.duggan.workflow.shared.model.Document;
-import com.duggan.workflow.shared.model.Value;
+import com.wira.pmgt.server.rest.model.Request;
+import com.wira.pmgt.server.rest.model.Response;
+import com.wira.pmgt.server.rest.service.OutgoingRequestService;
+import com.wira.pmgt.server.rest.service.impl.OutgoingRequestImpl;
+import com.wira.pmgt.shared.model.Document;
+import com.wira.pmgt.shared.model.Value;
 
 /**
  * Inbuilt Restful Interface handler 

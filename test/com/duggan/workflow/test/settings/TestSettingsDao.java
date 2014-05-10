@@ -8,12 +8,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.duggan.workflow.server.dao.helper.SettingsDaoHelper;
-import com.duggan.workflow.server.dao.model.LocalAttachment;
-import com.duggan.workflow.server.db.DB;
-import com.duggan.workflow.server.db.DBTrxProvider;
-import com.duggan.workflow.shared.model.settings.SETTINGNAME;
-import com.duggan.workflow.shared.model.settings.Setting;
+import com.wira.pmgt.server.dao.helper.SettingsDaoHelper;
+import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.server.db.DBTrxProvider;
+import com.wira.pmgt.shared.model.settings.SETTINGNAME;
+import com.wira.pmgt.shared.model.settings.Setting;
 
 public class TestSettingsDao {
 

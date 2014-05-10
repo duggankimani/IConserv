@@ -5,10 +5,10 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.duggan.workflow.server.dao.DashboardDaoImpl;
-import com.duggan.workflow.server.db.DB;
-import com.duggan.workflow.server.db.DBTrxProvider;
-import com.duggan.workflow.shared.model.DocStatus;
+import com.wira.pmgt.server.dao.DashboardDaoImpl;
+import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.server.db.DBTrxProvider;
+import com.wira.pmgt.shared.model.DocStatus;
 
 public class TestDashBoardDao {
 

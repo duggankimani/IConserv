@@ -1,23 +1,24 @@
 package com.wira.pmgt.client.ui.assign;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import com.gwtplatform.mvp.client.ViewImpl;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.component.autocomplete.AutoCompleteField;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.OrgEntity;
 import com.wira.pmgt.shared.model.ParticipantType;
+import com.wira.pmgt.shared.model.ProgramDetailType;
+import com.wira.pmgt.shared.model.TaskInfo;
 
 public class AssignActivityView extends ViewImpl implements
 		AssignActivityPresenter.MyView {
@@ -30,6 +31,7 @@ public class AssignActivityView extends ViewImpl implements
 	
 	@UiField Anchor aMessage;
 	@UiField HTMLPanel divMessage;
+	@UiField TextArea txtMessage;
 	
 	Boolean isShowMessage =false;
 
@@ -121,5 +123,27 @@ public class AssignActivityView extends ViewImpl implements
 	@Override
 	public Widget asWidget() {
 		return widget;
+	}
+
+	@Override
+	public void clear() {
+		
+	}
+
+	@Override
+	public TaskInfo getTaskInfo() {
+		TaskInfo taskInfo = new TaskInfo();
+		int count = divAllocations.getWidgetCount();
+		for(int i=0; i<count; i++){
+			TaskAllocation allocation = (TaskAllocation)divAllocations.getWidget(i);
+			taskInfo.addParticipant(allocation.getOrgEntity(), allocation.getParticipantType());
+		}
+		
+		taskInfo.setMessage("Kindly take care of this task, thank you.");
+	
+		if(!txtMessage.getValue().isEmpty())
+			taskInfo.setMessage(txtMessage.getValue());
+		
+		return taskInfo;
 	}
 }

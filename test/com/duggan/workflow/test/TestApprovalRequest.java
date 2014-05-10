@@ -3,20 +3,18 @@ package com.duggan.workflow.test;
 import java.io.IOException;
 import java.util.List;
 
-import org.aspectj.lang.annotation.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.duggan.workflow.client.model.TaskType;
-import com.duggan.workflow.server.dao.DocumentDaoImpl;
-import com.duggan.workflow.server.dao.helper.DocumentDaoHelper;
-import com.duggan.workflow.server.db.DB;
-import com.duggan.workflow.server.db.DBTrxProvider;
-import com.duggan.workflow.server.helper.auth.LoginHelper;
-import com.duggan.workflow.server.helper.jbpm.JBPMHelper;
-import com.duggan.workflow.shared.model.Doc;
-import com.duggan.workflow.shared.model.Document;
-import com.duggan.workflow.shared.model.HTSummary;
+import com.wira.pmgt.client.model.TaskType;
+import com.wira.pmgt.server.dao.DocumentDaoImpl;
+import com.wira.pmgt.server.dao.helper.DocumentDaoHelper;
+import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.server.db.DBTrxProvider;
+import com.wira.pmgt.server.helper.auth.LoginHelper;
+import com.wira.pmgt.server.helper.jbpm.JBPMHelper;
+import com.wira.pmgt.shared.model.Document;
+import com.wira.pmgt.shared.model.HTSummary;
 
 public class TestApprovalRequest {
 

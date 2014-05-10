@@ -7,12 +7,12 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.duggan.workflow.server.dao.helper.DocumentDaoHelper;
-import com.duggan.workflow.server.db.DB;
-import com.duggan.workflow.server.db.DBTrxProvider;
-import com.duggan.workflow.shared.model.Document;
-import com.duggan.workflow.shared.model.DocumentLine;
-import com.duggan.workflow.shared.model.Value;
+import com.wira.pmgt.server.dao.helper.DocumentDaoHelper;
+import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.server.db.DBTrxProvider;
+import com.wira.pmgt.shared.model.Document;
+import com.wira.pmgt.shared.model.DocumentLine;
+import com.wira.pmgt.shared.model.Value;
 
 public class WiseDigitsIntegration {
 

@@ -9,8 +9,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.duggan.workflow.server.db.LookupLoaderImpl;
-import com.duggan.workflow.shared.model.form.KeyValuePair;
+import com.wira.pmgt.server.db.LookupLoaderImpl;
+import com.wira.pmgt.shared.model.form.KeyValuePair;
 
 public class DBIntegration {
 

@@ -4,8 +4,7 @@ import java.io.Serializable;
 
 import org.junit.Test;
 
-import com.duggan.workflow.shared.model.Comment;
-import com.duggan.workflow.shared.model.Document;
+import com.wira.pmgt.shared.model.Comment;
 
 public class TestABC {
 

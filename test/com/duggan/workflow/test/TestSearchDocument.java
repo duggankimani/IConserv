@@ -11,16 +11,16 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.duggan.workflow.client.model.TaskType;
-import com.duggan.workflow.server.dao.DocumentDaoImpl;
-import com.duggan.workflow.server.dao.model.DocumentModel;
-import com.duggan.workflow.server.db.DB;
-import com.duggan.workflow.server.db.DBTrxProvider;
-import com.duggan.workflow.server.helper.auth.LoginHelper;
-import com.duggan.workflow.server.helper.jbpm.JBPMHelper;
-import com.duggan.workflow.shared.model.HTSummary;
-import com.duggan.workflow.shared.model.SearchFilter;
 import com.google.gwt.editor.client.Editor.Ignore;
+import com.wira.pmgt.client.model.TaskType;
+import com.wira.pmgt.server.dao.DocumentDaoImpl;
+import com.wira.pmgt.server.dao.model.DocumentModel;
+import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.server.db.DBTrxProvider;
+import com.wira.pmgt.server.helper.auth.LoginHelper;
+import com.wira.pmgt.server.helper.jbpm.JBPMHelper;
+import com.wira.pmgt.shared.model.HTSummary;
+import com.wira.pmgt.shared.model.SearchFilter;
 
 public class TestSearchDocument {
 

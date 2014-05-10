@@ -103,5 +103,9 @@ public class TaskAllocation extends Composite {
 		// TODO Auto-generated method stub
 		return entity;
 	}
+	
+	public ParticipantType getParticipantType(){
+		return type;
+	}
 
 }

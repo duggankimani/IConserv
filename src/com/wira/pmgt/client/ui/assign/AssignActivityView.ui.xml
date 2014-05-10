@@ -40,7 +40,7 @@
 				</div>
 
 				<g:HTMLPanel styleName="row-fluid hidden" ui:field="divMessage">
-					<g:TextArea></g:TextArea>
+					<g:TextArea ui:field="txtMessage"></g:TextArea>
 				</g:HTMLPanel>
 
 				<div class="row-fluid action-buttons hidden">

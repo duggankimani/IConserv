@@ -3,7 +3,6 @@ package com.duggan.workflow.test;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -11,17 +10,16 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.duggan.workflow.client.model.TaskType;
-import com.duggan.workflow.server.dao.DocumentDaoImpl;
-import com.duggan.workflow.server.dao.helper.DocumentDaoHelper;
-import com.duggan.workflow.server.dao.model.ADDocType;
-import com.duggan.workflow.server.dao.model.DocumentModel;
-import com.duggan.workflow.server.db.DB;
-import com.duggan.workflow.server.db.DBTrxProvider;
-import com.duggan.workflow.shared.model.DocStatus;
-import com.duggan.workflow.shared.model.Doc;
-import com.duggan.workflow.shared.model.DocumentType;
-import com.duggan.workflow.shared.model.Document;
+import com.wira.pmgt.client.model.TaskType;
+import com.wira.pmgt.server.dao.DocumentDaoImpl;
+import com.wira.pmgt.server.dao.helper.DocumentDaoHelper;
+import com.wira.pmgt.server.dao.model.ADDocType;
+import com.wira.pmgt.server.dao.model.DocumentModel;
+import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.server.db.DBTrxProvider;
+import com.wira.pmgt.shared.model.Doc;
+import com.wira.pmgt.shared.model.DocStatus;
+import com.wira.pmgt.shared.model.Document;
 
 public class TestDocumentDaoImpl {
 

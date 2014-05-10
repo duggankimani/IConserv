@@ -1,7 +1,6 @@
 package com.wira.jbpm.humantask;
 
 import java.util.List;
-import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;

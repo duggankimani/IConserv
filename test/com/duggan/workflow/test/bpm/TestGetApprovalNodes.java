@@ -2,16 +2,15 @@ package com.duggan.workflow.test.bpm;
 
 import java.util.List;
 
-import org.drools.definition.process.Node;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.duggan.workflow.server.db.DBTrxProvider;
-import com.duggan.workflow.server.helper.auth.LoginHelper;
-import com.duggan.workflow.server.helper.jbpm.JBPMHelper;
-import com.duggan.workflow.server.helper.jbpm.ProcessMigrationHelper;
-import com.duggan.workflow.shared.model.NodeDetail;
+import com.wira.pmgt.server.db.DBTrxProvider;
+import com.wira.pmgt.server.helper.auth.LoginHelper;
+import com.wira.pmgt.server.helper.jbpm.JBPMHelper;
+import com.wira.pmgt.server.helper.jbpm.ProcessMigrationHelper;
+import com.wira.pmgt.shared.model.NodeDetail;
 
 public class TestGetApprovalNodes {
 

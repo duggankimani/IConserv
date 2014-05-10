@@ -5,7 +5,7 @@ import org.drools.runtime.process.WorkItem;
 import org.drools.runtime.process.WorkItemHandler;
 import org.drools.runtime.process.WorkItemManager;
 
-import com.duggan.workflow.server.dao.helper.DocumentDaoHelper;
+import com.wira.pmgt.server.dao.helper.DocumentDaoHelper;
 
 /**
  * This work item handler updates the approval status
@@ -22,7 +22,7 @@ public class UpdateApprovalStatusWorkItemHandler implements WorkItemHandler{
 
 	@Override
 	public void executeWorkItem(WorkItem workItem, WorkItemManager manager) {
-		Long documentId = new Long((String)workItem.getParameter("DocumentId"));
+		Long documentId = new Long(workItem.getParameter("DocumentId").toString());
 		
 		Object isApproved = workItem.getParameter("isApproved");
 		
