@@ -1,7 +1,7 @@
 .main-container .news-feed {
 	margin-left: 0px;
-	padding: 10px 45px 0px 0px;
-	min-height: 100%;
+	padding: 10px 0px 0px 0px;
+	height: 100%;
 	border-top: 0px;
 }
 

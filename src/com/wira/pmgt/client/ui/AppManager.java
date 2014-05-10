@@ -40,15 +40,16 @@ public class AppManager {
 
 		popupPresenter.getView().setInSlot(GenericPopupPresenter.BODY_SLOT,
 				widget);
-		
+
 		for (final String text : buttons) {
 			Anchor aLnk = new Anchor();
 			if (text.equals("Cancel")) {
-				aLnk.setHTML("&nbsp;<i class=\"icon-remove\"></i>" + text);
-				aLnk.setStyleName("btn btn-danger pull-right");
+				// aLnk.setHTML("&nbsp;<i class=\"icon-remove\"></i>" +
+				aLnk.setHTML(text);
+				aLnk.setStyleName("btn btn-default pull-right");
 			} else {
-				aLnk.setHTML(text
-						+ "&nbsp;<i class=\"icon-double-angle-right\"></i>");
+				aLnk.setHTML(text);
+				// + "&nbsp;<i class=\"icon-double-angle-right\"></i>");
 				aLnk.setStyleName("btn btn-primary pull-left");
 			}
 
@@ -56,13 +57,15 @@ public class AppManager {
 
 				@Override
 				public void onClick(ClickEvent event) {
-					if(onOptionSelected instanceof OptionControl){
-						((OptionControl)onOptionSelected).setPopupView((PopupView)(popupPresenter.getView()));
+					if (onOptionSelected instanceof OptionControl) {
+						((OptionControl) onOptionSelected)
+								.setPopupView((PopupView) (popupPresenter
+										.getView()));
 						onOptionSelected.onSelect(text);
-					}else{
+					} else {
 						popupPresenter.getView().hide();
-						onOptionSelected.onSelect(text);	
-					}					
+						onOptionSelected.onSelect(text);
+					}
 				}
 			});
 			popupPresenter.getView().addToSlot(
@@ -81,9 +84,9 @@ public class AppManager {
 
 	public static void showPropertyPanel(FormModel parent,
 			List<Property> properties, int top, int left, int arrowposition) {
-		//Bad Fix - For correction 
+		// Bad Fix - For correction
 		propertyPanel.getView().showBody(false, null);
-		
+
 		propertyPanel.setProperties(parent, properties);
 		int[] position = calculatePosition(top, left);
 		propertyPanel.getView().getPopUpContainer()
@@ -98,19 +101,18 @@ public class AppManager {
 
 	public static void showCarouselPanel(Widget widget, int[] position,
 			boolean isLeft) {
-		//propertyPanel.getView().getPopUpContainer().clear();
+		// propertyPanel.getView().getPopUpContainer().clear();
 		propertyPanel.getView().showBody(true, widget);
-		
+
 		if (isLeft) {
 			propertyPanel.getView().getPopUpContainer()
 					.removeStyleName("right");
 			propertyPanel.getView().getPopUpContainer().addStyleName("left");
 		} else {
-			propertyPanel.getView().getPopUpContainer()
-					.removeStyleName("left");
+			propertyPanel.getView().getPopUpContainer().removeStyleName("left");
 			propertyPanel.getView().getPopUpContainer().addStyleName("right");
 		}
-		
+
 		propertyPanel.getView().getPopUpContainer()
 				.setPopupPosition(position[1], position[0]);
 		mainPagePresenter.addToPopupSlot(propertyPanel, false);

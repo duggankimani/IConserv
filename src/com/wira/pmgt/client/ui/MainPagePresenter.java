@@ -133,7 +133,6 @@ public class MainPagePresenter extends
 	@Override
 	public void setInSlot(Object slot, PresenterWidget<?> content) {
 		super.setInSlot(slot, content);
-
 		if (slot == CONTENT_SLOT) {
 			if (content != null && content instanceof AdminHomePresenter) {
 				fireEvent(new AdminPageLoadEvent(true));

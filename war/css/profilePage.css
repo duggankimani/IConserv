@@ -2,12 +2,16 @@
 
 /*User Assignment Page*/
 .modal .users-container{
-	padding:10px;
+	/* padding:10px; */
 	margin-bottom:20px;
+	min-height: 150px;
+}
+.modal .container-box{
+	border-top:1px solid #eeeeee;
 	max-height: 200px;
 }
+
 .modal .users-container .heading{
-	border-bottom:1px solid #eeeeee
 }
 
 .modal .users-container .name-box{
@@ -16,8 +20,16 @@
 	border-bottom:1px solid #eeeeee;
 }
 
-.modal .users-container .name-box .span7{
-	margin-left:0px;
+.modal .users-container .name-box .pic{
+	width:50px;
+}
+
+.modal .users-container .name-box img{
+	width:50px;
+	height: 44px;
+}
+.modal .users-container .name-box .names{
+	margin-left:10px;
 	margin-top:10px
 }
 
@@ -27,18 +39,47 @@
 }
 
 .modal .actions-box .ace{
-	display:inline;
+	width:20px;
+	line-height:0;
+}
+
+.modal .message-box{
+	margin-top:12px;
+}
+.modal .message-box a{
+	cursor: pointer;
+	color: #428bca;
+}
+.modal .message-box a:hover{
+	text-decoration: underline;
+}
+
+.modal .message-compose{
+	resize:none;
+	width:400px;
 }
 
 .actions-box ul.token-input-list-facebook{
-	width:350px;
+	width: 400px;
+}
+
+
+/*--Dashboard : Home Section--*/
+.main-container .news-feed .news-box{
+	padding-left:10px;
+	height: 100%;
+}
+.main-container .news-feed .activities-box{
+	padding-right:10px;
+}
+
+.main-container .news-feed .news-box .portlet-content{
+	padding-top:0px;
+	padding-left:0px;
 }
 
 
 /*--Action Buttons --*/
-.action-buttons{
-	margin-bottom:10px;
-}
 .main-container .activities-page{
 	padding: 0px 0px;
 	height: 100%;

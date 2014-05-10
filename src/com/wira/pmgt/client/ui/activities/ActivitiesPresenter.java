@@ -83,6 +83,7 @@ public class ActivitiesPresenter extends
 		HasClickHandlers getAddButton();
 
 		HasClickHandlers getaAssign();
+
 	}
 
 	@Inject
@@ -141,7 +142,7 @@ public class ActivitiesPresenter extends
 							public void onSelect(String name) {
 								hide();
 								
-							}}, "Done", "Cancel");
+							}},"Done");
 			
 			}
 		});

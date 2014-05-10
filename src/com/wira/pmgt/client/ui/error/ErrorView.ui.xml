@@ -6,7 +6,7 @@
 	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
 	ui:generateLocales='default'>
 
-	<g:DialogBox text="Error" modal="true" width="500px" glassEnabled="true">
+	<g:DialogBox text="Error" modal="true" width="500px" styleName="modal" glassEnabled="true">
 	    <g:HTMLPanel>
 		    <span ui:field="spnError"></span>
 		    <g:Hyperlink ui:field="lnkError" targetHistoryToken="#"></g:Hyperlink>

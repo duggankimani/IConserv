@@ -11,6 +11,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.wira.pmgt.client.ui.component.autocomplete.AutoCompleteField;
@@ -29,6 +30,7 @@ public class AssignActivityView extends ViewImpl implements
 	
 	@UiField Anchor aMessage;
 	@UiField HTMLPanel divMessage;
+	@UiField TextArea txtMessage;
 	
 	Boolean isShowMessage =false;
 
@@ -40,6 +42,8 @@ public class AssignActivityView extends ViewImpl implements
 	@Inject
 	public AssignActivityView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
+		
+		
 		selectedSet.add(AppContext.getContextUser());
 		aAdd.addClickHandler(new ClickHandler() {
 			

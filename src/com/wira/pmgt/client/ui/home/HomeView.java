@@ -59,6 +59,7 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 			activityContainer.clear();
 			if (content != null) {
 				activityContainer.add(content);
+				System.err.println(content);
 			}
 		} else {
 			super.setInSlot(slot, content);
@@ -73,7 +74,7 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 	@Override
 	public void showmask(boolean mask) {
 		if (mask) {
-			activityContainer.clear();
+			//activityContainer.clear();
 			activityContainer.addStyleName("working-request");
 		} else {
 			activityContainer.removeStyleName("working-request");

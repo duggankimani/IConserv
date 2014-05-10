@@ -7,7 +7,7 @@
 	ui:generateLocales='default'>
 
 
-	<g:HTMLPanel styleName="">
+	<g:HTMLPanel styleName="full-page">
 		<g:FocusPanel ui:field="parentPanel">
 			<g:HTMLPanel>
 				<div class="bootcamp js-notice" ui:field="divTutorial">
@@ -76,33 +76,94 @@
 		</g:FocusPanel>
 
 		<div class="news-feed row-fluid">
-			<div class="container">
-				<div class="span6">
-					<div class="portlet">
-						<div class="portlet-header">
-							<h3>
-								<i class="icon-bar-chart"></i>
-								News Feed
-							</h3>
-						</div>
-						<g:HTMLPanel styleName="portlet-content">
-							News Feed comes here..
-						</g:HTMLPanel>
+			<div class="span6 news-box">
+				<div class="portlet">
+					<div class="portlet-header">
+						<h3>
+							<i class="icon-bar-chart"></i>
+							News Feed
+						</h3>
 					</div>
-				</div>
+					<g:HTMLPanel styleName="portlet-content">
+						<d:BulletListPanel ui:field="panelActivity"
+							styleName="chat-box timeline">
+							<d:BulletPanel styleName="arrow-box-left gray">
+								<g:HTMLPanel>
+									<div class="avatar">
+										<g:Image styleName="avatar-small" ui:field="img"
+											url="img/blueman.png" />
+									</div>
+									<div class="info" id="activity">
+										<span class="name">
+											<!-- <span class="label label-blue" ui:field="spnTask">TASK</span> -->
+											<strong class="indent">
+												<span ui:field="spnUser">Michael Kamau</span>
+											</strong>
+											<span ui:field="spnAction">completed this task</span>
+											<strong>
+												<g:Anchor ui:field="aFile" styleName="item unread hand hide">
+												</g:Anchor>
+												<span ui:field="spnTo" class="hide">&nbsp;to&nbsp;</span>
+												<g:Anchor ui:field="aDocument" styleName="item unread hand">
+												</g:Anchor>
+												<!-- span ui:field="spnSubject">Core Admin</span -->
+											</strong>
+										</span>
+										<span class="time">
+											<i class="icon-time"></i>
+											<span ui:field="spnTime">6 minutes ago</span>
+										</span>
+									</div>
+								</g:HTMLPanel>
+							</d:BulletPanel>
 
-				<div class="span6">
-					<div class="portlet">
-						<div class="portlet-header">
-							<h3>
-								<i class="icon-bar-chart"></i>
-								Upcoming Activities
-							</h3>
-						</div>
-						<g:HTMLPanel styleName="portlet-content">
-							Upcoming Activities come here..
-						</g:HTMLPanel>
+							<d:BulletPanel styleName="arrow-box-left gray">
+								<g:HTMLPanel>
+									<div class="avatar">
+										<g:Image styleName="avatar-small" ui:field="img2"
+											url="img/blueman.png" />
+									</div>
+									<div class="info" id="activity">
+										<span class="name">
+											<!-- <span class="label label-blue" ui:field="spnTask2">TASK</span> -->
+											<strong class="indent">
+												<span ui:field="spnUser2">Michael Kamau</span>
+											</strong>
+											<span ui:field="spnAction2">completed this task</span>
+											<strong>
+												<g:Anchor ui:field="aFile2" styleName="item unread hand hide">
+												</g:Anchor>
+												<span ui:field="spnTo2" class="hide">&nbsp;to&nbsp;</span>
+												<g:Anchor ui:field="aDocument2" styleName="item unread hand">
+												</g:Anchor>
+												<!-- span ui:field="spnSubject">Core Admin</span -->
+											</strong>
+										</span>
+										<span class="time">
+											<i class="icon-time"></i>
+											<span ui:field="spnTime2">6 minutes ago</span>
+										</span>
+									</div>
+								</g:HTMLPanel>
+							</d:BulletPanel>
+
+
+						</d:BulletListPanel>
+					</g:HTMLPanel>
+				</div>
+			</div>
+
+			<div class="span6">
+				<div class="portlet activities-box">
+					<div class="portlet-header">
+						<h3>
+							<i class="icon-bar-chart"></i>
+							Upcoming Activities
+						</h3>
 					</div>
+					<g:HTMLPanel styleName="portlet-content">
+						Upcoming Activities come here..
+					</g:HTMLPanel>
 				</div>
 			</div>
 		</div>

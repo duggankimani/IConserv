@@ -21,6 +21,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -173,6 +174,13 @@ public class ActivitiesView extends ViewImpl implements
 		});
 		
 		spnDates.getElement().setAttribute("data-toggle", "dropdown");
+		
+		aBack.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				History.back();
+			}
+		});
 	}
 
 	private void registerEditFocus() {
@@ -426,29 +434,38 @@ public class ActivitiesView extends ViewImpl implements
 		if (text.equals("Home")) {
 			crumb.setHome(true);
 			crumb.setLinkText("");
+			crumb.setHref(getHref(id));
 		} else {
 			if (text.length() > 25) {
 				text = text.substring(0, 25) + "...";
 			}
 			crumb.setLinkText(text);
+			crumb.setHref(getHref(id));
 		}
 		crumb.setActive(isActive);
 		crumb.setTitle(title);
 
-		if (id == null || id == 0) {
-			crumb.setHref("#home;page=activities;activity=0");
-		} else if (programId == null) {
-			crumb.setHref("#home;page=activities;activity=0d" + id);
-		} else if (id != programId) {
-			crumb.setHref("#home;page=activities;activity=" + programId + "d"
-					+ id);
-		} else {
-			crumb.setHref("#home;page=activities;activity=" + id);
-		}
-
 		crumbContainer.add(crumb);
 	}
-
+	
+	/*
+	 * Get href from Id
+	 */
+	private String getHref(Long id) {
+		String href="";
+		if (id == null || id == 0) {
+			href="#home;page=activities;activity=0";
+		} else if (programId == null) {
+			href= "#home;page=activities;activity=0d" + id;
+		} else if (id != programId) {
+			href ="#home;page=activities;activity=" + programId + "d"
+					+ id;
+		} else {
+			href = "#home;page=activities;activity=" + id;
+		}
+		return href;
+	}
+	
 	public void setBreadCrumbs(List<ProgramSummary> summaries) {
 		crumbContainer.clear();
 		createCrumb("Home", "Home", 0L, false);
@@ -457,7 +474,7 @@ public class ActivitiesView extends ViewImpl implements
 			createCrumb(summary.getName(), summary.getDescription(),
 					summary.getId(), i == 0);
 		}
-
+			showBackButton(true);
 	}
 
 	public void setDates(String text) {
@@ -467,6 +484,15 @@ public class ActivitiesView extends ViewImpl implements
 	
 	public HasClickHandlers getAddButton() {
 		return aProgram;
+	}
+
+	
+	public void showBackButton(boolean status) {
+		if(status){
+			show(aBack, true);
+		}else{
+			show(aBack,false);
+		}
 	}
 
 }

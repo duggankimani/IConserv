@@ -12,6 +12,7 @@ import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.wira.pmgt.client.service.TaskServiceCallback;
+import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent;
 import com.wira.pmgt.client.ui.events.ProcessingEvent;
 import com.wira.pmgt.client.ui.newsfeed.components.CommentActivity;
@@ -30,6 +31,8 @@ public class NewsFeedPresenter extends
 
 	public interface MyView extends View {
 		void bind();
+
+		BulletListPanel getPanelActivity();
 	}
 
 	@Inject DispatchAsync requestHelper;
@@ -87,13 +90,12 @@ public class NewsFeedPresenter extends
 	}
 
 	private void bind(Activity activity, boolean b) {
-	
 		if(activity instanceof Notification){
 			TaskActivity activityView = new TaskActivity((Notification)activity);
-			//getView().getPanelActivity().add(activityView);
+			getView().getPanelActivity().add(activityView);
 		}else{
 			CommentActivity activityView = new CommentActivity((Comment)activity);
-			//getView().getPanelActivity().add(activityView);
+			getView().getPanelActivity().add(activityView);
 		}
 	}
 

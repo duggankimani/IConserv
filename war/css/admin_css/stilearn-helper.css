@@ -144,12 +144,14 @@ body .main-body .alert a {
 	background-image: none;
 	padding-left: 0px;
 }
-
 .breadcrumb a,a:hover{
 	color:grey;
 }
 .breadcrumb .active{
 	font-weight:bold;
+}
+.action-buttons{
+	margin-bottom:10px;
 }
 /*End of my Utility helpers*/
 

@@ -9,18 +9,19 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.AppManager;
+import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.events.CloseCarouselEvent;
 import com.wira.pmgt.client.ui.newsfeed.components.CarouselPopup;
 import com.wira.pmgt.client.util.AppContext;
@@ -57,6 +58,9 @@ public class NewsFeedView extends ViewImpl implements
 	LIElement liReceive;
 	@UiField
 	LIElement liReview;
+	
+	@UiField Image img;
+	
 
 	@UiField
 	DivElement imgReceive;
@@ -64,28 +68,30 @@ public class NewsFeedView extends ViewImpl implements
 	DivElement imgReview;
 
 	@UiField FocusPanel parentPanel;
+	@UiField BulletListPanel panelActivity;
 	protected boolean hasElapsed = false;
 
 	@Inject
 	public NewsFeedView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
-
 	}
 	
-
 	@Override
 	public Widget asWidget() {
 		return widget;
 	}
-
-
+	
+	@Override
+	public BulletListPanel getPanelActivity() {
+		return panelActivity;
+	}
 
 	@Override
 	public void bind() {
 		final CarouselPopup popUp1 = new CarouselPopup();
 		final int[] position = new int[2];
 		position[0] = 40;
-
+		
 		aCreate.addMouseOverHandler(new MouseOverHandler() {
 			@Override
 			public void onMouseOver(MouseOverEvent event) {
@@ -221,10 +227,11 @@ public class NewsFeedView extends ViewImpl implements
 		if(!AppContext.isShowWelcomeWiget()){
 			divTutorial.addClassName("hidden");
 		}
-
+		
 		// TODO: Remove this afterwards
 		// divTutorial.addClassName("hidden");
-		
 	}
+	
+	
 
 }

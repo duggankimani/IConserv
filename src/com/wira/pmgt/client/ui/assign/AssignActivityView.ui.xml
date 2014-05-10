@@ -17,7 +17,7 @@
 		<div class="row-fluid">
 			<div class="row-fluid users-container">
 				<h5 class="heading">Allocated Users</h5>
-				<g:HTMLPanel ui:field="divAllocations">
+				<g:HTMLPanel ui:field="divAllocations" styleName="overflow-y container-box">
 				</g:HTMLPanel>
 			</div>
 		</div>
@@ -33,25 +33,17 @@
 						<g:Anchor ui:field="aAdd" styleName="btn btn-default">Add</g:Anchor>
 					</div>
 				</div>
-				<div class="row-fluid">
-					<g:CheckBox styleName="ace"></g:CheckBox>
-					<span>Notify People via Email - </span>
-					<g:Anchor ui:field="aMessage">Add Assignee Message</g:Anchor>
+				<div class="row-fluid message-box">
+					<g:CheckBox styleName="ace span2" checked="true"></g:CheckBox>
+					<span class="muted">Notify People via Email - </span>
+					<g:Anchor ui:field="aMessage">Add Message</g:Anchor>
 				</div>
 
 				<g:HTMLPanel styleName="row-fluid hidden" ui:field="divMessage">
-					<g:TextArea></g:TextArea>
+					<d:TextArea styleName="message-compose" ui:field="txtMessage"
+						placeholder="Optional Message sent to Assignee"></d:TextArea>
 				</g:HTMLPanel>
 
-				<div class="row-fluid action-buttons hidden">
-					<div class="span3">
-						<g:Anchor ui:field="aSend" styleName="btn btn-success">OK</g:Anchor>
-					</div>
-
-					<div class="span3">
-						<g:Anchor ui:field="aCancel" styleName="btn btn-default">Cancel</g:Anchor>
-					</div>
-				</div>
 			</div>
 		</div>
 	</g:HTMLPanel>
