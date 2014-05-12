@@ -52,7 +52,7 @@
 							</div>
 						</div>
 
-						<div class="control-group">
+						<div class="control-group hidden">
 							<div class="control-label">Allocated To:</div>
 							<div class="controls">
 								<a:AutoCompleteField ui:field="autoComplete"/>

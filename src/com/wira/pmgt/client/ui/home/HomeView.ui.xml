@@ -10,22 +10,19 @@
 			<div class="span2 sidebar-nav hidden-phone" id="sidebar-nav">
 				<ul class="nav nav-tabs nav-stacked" id="dashboard-menu">
 					<li class="side-user hidden-xs">
-					    <g:Image styleName="img-circle" ui:field="imgUser"></g:Image>
+						<g:Image styleName="img-circle" ui:field="imgUser"></g:Image>
 						<!-- img class="img-circle" src="img/me.jpg" alt=""/ -->
-							<!--p class="welcome">
-								<i class="fa fa-key"></i>
-								Logged in as
-							</p -->
-							<p class="name tooltip-sidebar-logout">
-								
-								<span class="last-name"	ui:field="spnUser"></span>
-								<a style="color: inherit" class="logout_open" href="#logout"
-									data-toggle="tooltip" data-placement="top" title="Logout"
-									data-popup-ordinal="1" id="open_85617309">
-									<i class="icon-sign-out"></i>
-								</a>
-							</p>
-							<div class="clearfix"></div>
+						<!--p class="welcome"> <i class="fa fa-key"></i> Logged in as </p -->
+						<p class="name tooltip-sidebar-logout">
+
+							<span class="last-name" ui:field="spnUser"></span>
+							<a style="color: inherit" class="logout_open" href="#logout"
+								data-toggle="tooltip" data-placement="top" title="Logout"
+								data-popup-ordinal="1" id="open_85617309">
+								<i class="icon-sign-out"></i>
+							</a>
+						</p>
+						<div class="clearfix"></div>
 					</li>
 					<li class="active" ui:field="liDashboard">
 						<g:Anchor href='#home;page=home' ui:field='aHome'>
@@ -51,6 +48,33 @@
 
 			<g:HTMLPanel ui:field="activityContainer"
 				styleName="content-right span10 no-overflow-y no-overflow-x">
+
+			</g:HTMLPanel>
+
+			<g:HTMLPanel ui:field="taskContainer" styleName="content-right span10 no-overflow-y no-overflow-x">
+				<!--middle navigation -->
+				<div class="span2" id="middle-nav">
+					
+					<div id="nav-top">
+						<i class="icon-tag"></i>
+						<h5 ui:field="hCategory">Completed</h5>
+						<br />
+					</div>
+
+					<div ui:field="divDocListing">
+						<div class="content-nav row-fluid">
+							<d:BulletListPanel ui:field="ulTaskGroups">
+							</d:BulletListPanel>
+							<g:InlineLabel ui:field="spnNoItems"></g:InlineLabel>
+						</div>
+					</div>
+				</div>
+				
+				<!--Detailed Info Description -->
+				<div ui:field="divDocView" class="span10">
+					<g:HTMLPanel ui:field="docContainer" styleName="full-page">
+					</g:HTMLPanel>
+				</div>
 			</g:HTMLPanel>
 
 		</g:HTMLPanel>

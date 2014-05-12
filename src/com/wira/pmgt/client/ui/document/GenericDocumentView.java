@@ -37,7 +37,6 @@ import com.wira.pmgt.client.ui.wfstatus.ProcessState;
 import com.wira.pmgt.shared.model.Actions;
 import com.wira.pmgt.shared.model.Delegate;
 import com.wira.pmgt.shared.model.DocStatus;
-import com.wira.pmgt.shared.model.HTStatus;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.NodeDetail;
 import com.wira.pmgt.shared.model.Priority;
@@ -107,6 +106,7 @@ public class GenericDocumentView extends ViewImpl implements
 	@UiField DivElement divContent;
 	
 	@UiField HTMLPanel fldForm;
+	@UiField HTMLPanel divContainer;
 	
 	FormPanel formPanel;
 	
@@ -118,6 +118,7 @@ public class GenericDocumentView extends ViewImpl implements
 	@Inject
 	public GenericDocumentView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
+		
 		UIObject.setVisible(aEdit.getElement(), false);
 		aEdit.getElement().setAttribute("type","button");
 		aEdit.getElement().setAttribute("data-toggle","tooltip");
@@ -130,8 +131,10 @@ public class GenericDocumentView extends ViewImpl implements
 		panelActivity.getElement().setAttribute("id", "panelactivity");
 		aForward.getElement().setAttribute("alt", "Forward for Approval");
 		aShowProcess.setVisible(false);
+		
+		divContainer.getElement().setAttribute("id", "detailed-info");
+		
 		img.addErrorHandler(new ErrorHandler() {
-			
 			@Override
 			public void onError(ErrorEvent event) {
 				img.setUrl("img/blueman.png");

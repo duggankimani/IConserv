@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent.Type;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
@@ -93,6 +92,8 @@ public class HomePresenter extends
 		void setSelectedTab(String page);
 		
 		void showUserImg(HTUser currentUser);
+
+		void showActivitiesPanel(boolean show);
 	}
 
 	@ProxyCodeSplit
@@ -118,7 +119,6 @@ public class HomePresenter extends
 	@Inject DocumentPopupPresenter docPopup;
 		
 	private IndirectProvider<CreateProgramPresenter> createDocProvider;
-	private IndirectProvider<GenericFormPresenter> genericFormProvider;
 	private IndirectProvider<GenericDocumentPresenter> docViewFactory;
 	private IndirectProvider<DateGroupPresenter> dateGroupFactory;
 	private IndirectProvider<NewsFeedPresenter> newsFeedFactory;
@@ -167,7 +167,6 @@ public class HomePresenter extends
 		createDocProvider = new StandardProvider<CreateProgramPresenter>(docProvider);
 		docViewFactory  = new StandardProvider<GenericDocumentPresenter>(docViewProvider);
 		dateGroupFactory = new StandardProvider<DateGroupPresenter>(dateGroupProvider);
-		genericFormProvider = new StandardProvider<GenericFormPresenter>(formProvider);
 		newsFeedFactory = new StandardProvider<NewsFeedPresenter>(newsfeedProvider);
 		profileFactory = new StandardProvider<ProfilePresenter>(profileProvider);
 		activitiesFactory = new StandardProvider<ActivitiesPresenter>(activitiesProvider);
@@ -288,6 +287,26 @@ public class HomePresenter extends
 					getView().setSelectedTab("Activities");
 				}
 			});
+		}else if(page!=null && page.equals("detailed")){
+//			String project = request.getParameter("activity","0");
+//			String detail = "0";
+
+			Window.setTitle("Detailed Activity View");
+			docViewFactory.get(new ServiceCallback<GenericDocumentPresenter>() {
+				@Override
+				public void processResult(GenericDocumentPresenter docResponse) {
+					docResponse.loadData();
+					setInSlot(ACTIVITIES_SLOT, docResponse);
+					getView().setSelectedTab("Activities");
+				}
+			});
+		}else if(name!=null){
+
+			TaskType type = TaskType.getTaskType(name);
+			this.currentTaskType=type;
+			
+			//getView().setTaskType(currentTaskType);
+			loadTasks(type);
 		}else{
 			Window.setTitle("Home");
 			newsFeedFactory.get(new ServiceCallback<NewsFeedPresenter>() {
@@ -320,14 +339,14 @@ public class HomePresenter extends
 	 */
 	private void loadTasks(final TaskType type) {
 		clear();
-		if(type==null){
-			getView().setHeading("Home");
-			History.newItem("home;type=drafts");
-			return;
-		}
-		
-		getView().setHeading(type.getTitle());
-		
+//		if(type==null){
+//			getView().setHeading("Home");
+//			History.newItem("home;type=drafts");
+//			return;
+//		}
+//		
+//		getView().setHeading(type.getTitle());
+//		
 		String userId = AppContext.getUserId();
 		
 		GetTaskList request = new GetTaskList(userId,currentTaskType);
@@ -344,6 +363,7 @@ public class HomePresenter extends
 				GetTaskListResult rst = (GetTaskListResult)result;
 				List<Doc> tasks = rst.getTasks();
 				loadLines(tasks);
+				System.err.println("Tasks Loaded >> "+tasks.size());
 				
 				if(tasks.size()>0){
 					getView().setHasItems(true);

@@ -10,13 +10,13 @@
 				
 			<span ui:field="spnArrow" class="arrow"></span>
 				
-		   <div class="span10 textbox">
+		   <g:HTMLPanel styleName="span10 textbox" ui:field="divCommentWrap">
 			   <g:FocusPanel ui:field="commentPanel">
 					<g:HTMLPanel styleName="comment-container comment-small" ui:field="commentContainer">
 						<g:TextArea ui:field="commentBox" styleName="textarea-box textarea-small"></g:TextArea>
 						<d:ActionLink ui:field="aSaveComment" styleName="hand btn btn-primary pull-right button-post hidden">POST</d:ActionLink>
 					</g:HTMLPanel>
 				</g:FocusPanel>
-			</div>
+			</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 

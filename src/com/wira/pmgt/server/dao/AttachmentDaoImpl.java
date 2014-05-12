@@ -82,7 +82,9 @@ public class AttachmentDaoImpl extends BaseDaoImpl{
 	}
 
 	public boolean getHasAttachment(Long documentId) {
-		
+		if(documentId==null){
+			return false;
+		}
 		Long count = (Long)em.createQuery("Select count(l) FROM LocalAttachment l " +
 				"where documentId= :documentId")
 		.setParameter("documentId", documentId)

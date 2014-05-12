@@ -59,7 +59,6 @@ public class NewsFeedView extends ViewImpl implements
 	@UiField
 	LIElement liReview;
 	
-	@UiField Image img;
 	
 
 	@UiField

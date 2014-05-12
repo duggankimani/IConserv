@@ -49,7 +49,7 @@ public class DateGroupPresenter extends
 	@Override
 	public void onPresentTask(final PresentTaskEvent event) {
 		Date docDate = event.getDoc().getCreated();
-		
+		//System.err.println(">>>>>>>>>>>>>>> Present "+docDate+" :: "+event.getDoc());
 		if(!CalendarUtil.isSameDate(date, docDate)){
 			return;
 		}

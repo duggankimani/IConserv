@@ -33,7 +33,6 @@ import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
-import com.wira.pmgt.client.ui.component.DropDownList;
 import com.wira.pmgt.client.ui.component.Dropdown;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
@@ -75,6 +74,8 @@ public class ActivitiesView extends ViewImpl implements
 	Anchor aBack;
 	@UiField
 	Anchor aAssign;
+	@UiField
+	Anchor aDetail;
 	
 	@UiField
 	Anchor aProgramEdit;
@@ -355,7 +356,9 @@ public class ActivitiesView extends ViewImpl implements
 		show(aNewTask, false);
 		show(aEdit, true);
 		show(aAssign,false);
-
+		show(aBack, true);
+		show(aDetail, false);
+		
 		if (type == ProgramDetailType.PROGRAM) {
 			show(aProgram,false);
 			show(aNewOutcome, !isRowData);
@@ -371,14 +374,17 @@ public class ActivitiesView extends ViewImpl implements
 			show(aProgram,false);
 			show(aNewActivity, true);
 			show(aAssign,true);
+			show(aDetail,true);
 		} else if (type == ProgramDetailType.ACTIVITY) {
 			show(aProgram,false);
 			show(aNewTask, true);
 			show(aAssign,true);
+			show(aDetail,true);
 		} else if (type == ProgramDetailType.TASK) {
 			show(aProgram,false);
 			show(aNewTask, true);
 			show(aAssign,true);
+			show(aDetail,true);
 		} else {
 			show(aProgram,true);
 			show(aEdit, false);

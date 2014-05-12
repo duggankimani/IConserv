@@ -27,6 +27,7 @@ public class CommentBox extends Composite {
 	
 	@UiField Image img;
 	@UiField Anchor aSaveComment;
+	@UiField HTMLPanel divCommentWrap;
 	@UiField HTMLPanel commentContainer;
 	@UiField TextArea commentBox;
 	@UiField SpanElement spnArrow;
@@ -58,6 +59,7 @@ public class CommentBox extends Composite {
 		FocusHandler handler = new FocusHandler() {
 			@Override
 			public void onFocus(FocusEvent event) {
+				divCommentWrap.getElement().getStyle().setMarginTop(-7.0, Unit.PX);
 				commentContainer.addStyleName("comment-big");
 				commentContainer.removeStyleName("comment-small");
 				commentBox.addStyleName("textarea-big");
@@ -72,6 +74,7 @@ public class CommentBox extends Composite {
 			public void onBlur(BlurEvent event) {
 				
 				if(commentBox.getValue().trim().isEmpty()){
+					divCommentWrap.getElement().getStyle().setMarginTop(7.0, Unit.PX);
 					commentContainer.addStyleName("comment-small");
 					commentContainer.removeStyleName("comment-big");
 					commentBox.addStyleName("textarea-small");

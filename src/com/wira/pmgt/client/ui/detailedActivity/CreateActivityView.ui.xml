@@ -44,14 +44,14 @@
 				</div>
 			</div>
 						
-			<div class="control-group">
+			<div class="control-group hidden">
 				<div class="control-label" title="Allocate to users">Assigned To User(s):</div>
 				<div class="controls" title="Allocate to users">
 					<a:AutoCompleteField ui:field="allocatedToUsers"/>
 				</div>
 			</div>
 			
-			<div class="control-group">
+			<div class="control-group hidden">
 				<div class="control-label" title="Allocate to groups">Assigned to Group(s):</div>
 				<div class="controls" title="Allocate to groups">
 					<a:AutoCompleteField ui:field="allocatedToGroups"/>

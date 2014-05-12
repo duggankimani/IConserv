@@ -590,13 +590,13 @@ public class GenericDocumentPresenter extends
 	
 	@Override
 	protected void onReveal() {
-		super.onReveal();
-		
+		super.onReveal();	
 		loadData();
 	}
 	
-	private void loadData() {
+	public void loadData() {
 		MultiRequestAction requests = new MultiRequestAction();
+		System.err.println("docID= "+documentId+"; taskId="+taskId);
 		requests.addRequest(new GetDocumentRequest(documentId, taskId));
 		requests.addRequest(new GetCommentsRequest(documentId));
 		requests.addRequest(new GetAttachmentsRequest(documentId));
@@ -636,6 +636,10 @@ public class GenericDocumentPresenter extends
 				}	
 			});
 		}
+		
+		/*Temporary for UI testing*/
+		//getView().showDefaultFields(true);
+//		fireEvent(new ProcessingCompletedEvent());
 	}
 
 	protected void bindForm(Form form, Doc doc) {

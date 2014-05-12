@@ -9,7 +9,7 @@
 			</div>
 			<div class="info" id="activity">
 				<span class="name">
-					<span class="label label-blue" ui:field="spnTask">TASK</span>
+					<span class="label label-blue hidden" ui:field="spnTask">TASK</span>
 					<strong class="indent">
 						<span ui:field="spnUser">Michael</span>
 					</strong>

@@ -518,7 +518,7 @@ body .dateBoxPopup {
 }
 .main-container .content-right #middle-box {
 	width: 25%;
-	height: 92.6%;
+	height: 93.6%;
 }
 
 
@@ -589,9 +589,9 @@ body .dateBoxPopup {
 	padding: 0px 0px 5px 0px;
 	padding-right: 0px;
 	border: 1px solid #CCCCCC;
-	height: 89.5%;
-	border-right: none;
+	height: 100%;
 	overflow-y: auto;
+	width: 14%;
 }
 
 #middle-nav .nav-top i {
@@ -713,8 +713,8 @@ body .dateBoxPopup {
 	background-color: #ffffff;
 	margin-left: 0px;
 	border: 1px solid #CCCCCC;
-	width: 74.8%;
-	height: 92%;
+	width: 100%;
+	height: 100%;
 }
 
 #detailed-info .upper-content {
@@ -921,7 +921,7 @@ body .dateBoxPopup {
 	border-left: none;
 	position: relative;
 	overflow: hidden;
-	/*border-top: 1px dotted #CCCCCC;*/
+	/* border-top: 1px dotted #CCCCCC; */
 }
 
 #detailed-info .recent-activity .title {
@@ -930,8 +930,8 @@ body .dateBoxPopup {
 
 #detailed-info .comment-box .arrow {
 	position: absolute;
-	left: 53px;
-	top: 53px;
+	left: 55px;
+	top: 34px;
 	height: 0;
 	border: 5px solid transparent;
 	border-left-width: 0;
@@ -944,13 +944,13 @@ body .dateBoxPopup {
 }
 
 #detailed-info .comment-box .image {
-	width: 6.6%;
+	width: 45px;
 }
 
 #detailed-info .comment-box .textbox {
-	/* margin-left: 0px; */
+	margin-left: 15px;
 	margin-top: 7px;
-	/* width: 89.905983%; */
+	width: 90%;
 }
 
 #detailed-info .comment-box .button-post {
@@ -969,15 +969,6 @@ body .dateBoxPopup {
 	width: 98.4%;
 	padding: 3px;
 }
-
-#detailed-info .recent-activity .textarea-small {
-	height: 20px;
-}
-
-#detailed-info .recent-activity .textarea-big {
-	height: 64px;
-}
-
 #detailed-info .textarea-box:focus {
 	outline: none;
 	box-shadow: none;
@@ -998,6 +989,14 @@ body .dateBoxPopup {
 #detailed-info .recent-activity .comment-big {
 	height: 70px;
 	border-color: #1b7fcc;
+}
+
+#detailed-info .recent-activity .textarea-small {
+	height: 20px;
+}
+
+#detailed-info .recent-activity .textarea-big {
+	height: 64px;
 }
 
 #detailed-info .recent-activity .span1 {

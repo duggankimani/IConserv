@@ -21,9 +21,9 @@ public class TaskInfo implements Serializable{
 	
 	private String subject;//Task Document No
 	private Long activityId;// ProgramDetail ID
-	private Long processInstanceId;// Task
-	private String description;// description of the task - from ProgramActivity
-	private String message;//Message keyed in by user
+	private Long processInstanceId; //Task
+	private String description; //description of the task - from ProgramActivity
+	private String message; //Message keyed in by user
 	private String approvalTaskName;
 	private String taskName;
 	
