@@ -304,3 +304,7 @@ span.tasktimelines{
 	font-size:11px;
 	padding-right:5px;
 }
+
+span.underline{
+	text-decoration:underline;
+}
