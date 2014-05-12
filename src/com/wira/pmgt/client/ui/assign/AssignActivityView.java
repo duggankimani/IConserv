@@ -17,7 +17,6 @@ import com.wira.pmgt.client.ui.component.autocomplete.AutoCompleteField;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.OrgEntity;
 import com.wira.pmgt.shared.model.ParticipantType;
-import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.TaskInfo;
 
 public class AssignActivityView extends ViewImpl implements
@@ -141,7 +140,7 @@ public class AssignActivityView extends ViewImpl implements
 			taskInfo.addParticipant(allocation.getOrgEntity(), allocation.getParticipantType());
 		}
 		
-		taskInfo.setMessage("Kindly take care of this task, thank you.");
+		taskInfo.setMessage("Kindly take care of this task, Thank you.");
 	
 		if(!txtMessage.getValue().isEmpty())
 			taskInfo.setMessage(txtMessage.getValue());

@@ -103,7 +103,7 @@ public class TaskActivity extends Composite {
 		case APPROVALREQUEST_APPROVERNOTE:
 			//safeHtml = Template1.render(subject, owner, time);
 			spnUser.setInnerText(owner);
-			text = "submitted for approval ";
+			text = "forwarded ";
 
 			setImage(ownerObj);
 			
@@ -116,7 +116,7 @@ public class TaskActivity extends Composite {
 //				safeHtml2= Template6.render(owner,subject, time);
 //			}
 			spnUser.setInnerText(owner);
-			text = "forwarded for approval ";
+			text = "forwarded ";
 
 			setImage(ownerObj);
 			

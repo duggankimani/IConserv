@@ -17,17 +17,15 @@ import com.wira.pmgt.client.ui.assign.AssignActivityPresenter;
 import com.wira.pmgt.client.ui.detailedActivity.CreateActivityPresenter;
 import com.wira.pmgt.client.ui.events.ActivitiesReloadEvent;
 import com.wira.pmgt.client.ui.events.ActivitiesReloadEvent.ActivitiesReloadHandler;
-import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent;
-import com.wira.pmgt.client.ui.events.CreateProgramEvent;
 import com.wira.pmgt.client.ui.events.ActivitySavedEvent;
+import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent;
+import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent.ActivitySelectionChangedHandler;
+import com.wira.pmgt.client.ui.events.CreateProgramEvent;
 import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent;
 import com.wira.pmgt.client.ui.events.ProcessingEvent;
-import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent.ActivitySelectionChangedHandler;
 import com.wira.pmgt.client.ui.objective.CreateObjectivePresenter;
 import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
 import com.wira.pmgt.client.util.AppContext;
-import com.wira.pmgt.shared.model.HTUser;
-import com.wira.pmgt.shared.model.ParticipantType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.program.FundDTO;
@@ -520,6 +518,7 @@ public class ActivitiesPresenter extends
 				new TaskServiceCallback<AssignTaskResponse>() {
 					@Override
 					public void processResult(AssignTaskResponse aResponse) {
+						
 					}
 				});
 	}

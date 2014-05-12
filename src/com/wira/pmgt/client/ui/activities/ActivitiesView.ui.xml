@@ -63,7 +63,14 @@
 							<i class="icon-pencil"></i>
 						</g:Anchor>
 					</div>
-
+					
+					<div class="span3 hide">
+						<g:Anchor ui:field="aDetail" styleName="btn btn-default"
+							title="Detailed view" href="#home;page=detailed">
+							<i class="icon-tasks"></i>
+						</g:Anchor>
+					</div>
+	
 					<div class="span3 hide">
 						<g:Anchor ui:field="aDelete" styleName="btn btn-danger"
 							title="Delete">
