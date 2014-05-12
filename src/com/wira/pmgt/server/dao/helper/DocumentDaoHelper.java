@@ -2,7 +2,6 @@ package com.wira.pmgt.server.dao.helper;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,6 @@ import com.wira.pmgt.shared.model.Document;
 import com.wira.pmgt.shared.model.DocumentLine;
 import com.wira.pmgt.shared.model.DocumentType;
 import com.wira.pmgt.shared.model.GridValue;
-import com.wira.pmgt.shared.model.Notification;
 import com.wira.pmgt.shared.model.SearchFilter;
 import com.wira.pmgt.shared.model.StringValue;
 import com.wira.pmgt.shared.model.Value;
@@ -371,10 +369,16 @@ public class DocumentDaoHelper {
 	public static Document getDocument(Map<String, Object> content) {
 		Document doc = new Document();
 
-		if (content.get("document") != null) {
+		if(content.get("documentOut") != null){
+			
+			doc = (Document) content.get("documentOut");
+			
+		}else if (content.get("document") != null) {
+			
 			doc = (Document) content.get("document");
+			
 		} else {
-
+			System.err.println("Document is null!!");
 			String description = content.get("description") == null ? null
 					: (String) content.get("description");
 
@@ -391,14 +395,19 @@ public class DocumentDaoHelper {
 			doc.setSubject(subject);
 			doc.setValue(value);
 			doc.setPriority(priority);
+
 		}
 		
-		Object idStr = content.get("documentId");
-		if (idStr == null || idStr.equals("null")) {
-			idStr = null;
+		if(doc.getId()==null){
+			
+			Object idStr = content.get("documentId");
+			if (idStr == null || idStr.equals("null")) {
+				idStr = null;
+			}
+			Long id = idStr == null ? null : new Long(idStr.toString());
+			doc.setId(id);
+			
 		}
-		Long id = idStr == null ? null : new Long(idStr.toString());
-		doc.setId(id);
 		
 		return doc;
 	}
