@@ -14,6 +14,7 @@ import com.wira.pmgt.server.dao.helper.DocumentDaoHelper;
 import com.wira.pmgt.server.db.DB;
 import com.wira.pmgt.server.db.DBTrxProvider;
 import com.wira.pmgt.server.helper.auth.LoginHelper;
+import com.wira.pmgt.server.helper.email.EmailServiceHelper;
 import com.wira.pmgt.server.helper.jbpm.JBPMHelper;
 import com.wira.pmgt.server.helper.jbpm.ProcessMigrationHelper;
 import com.wira.pmgt.shared.model.Actions;
@@ -29,9 +30,14 @@ public class TestGetProcessData {
 	public void setup(){
 		DBTrxProvider.init();
 		DB.beginTransaction();
-		ProcessMigrationHelper.start(14L);
-		ProcessMigrationHelper.start(16L);
-		ProcessMigrationHelper.start(4L);
+//		ProcessMigrationHelper.start(14L);
+//		ProcessMigrationHelper.start(16L);
+//		ProcessMigrationHelper.start(4L);
+	}
+	
+	@Test
+	public void load(){
+		EmailServiceHelper.getProperties();
 	}
 	
 	@Ignore
@@ -82,7 +88,7 @@ public class TestGetProcessData {
 		System.out.println("Name ="+name);
 	}
 	
-	@Test
+	@Ignore
 	public void getParameterz(){
 		//Long taskId = 1518L;
 		Long taskId = 2568L;

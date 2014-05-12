@@ -71,6 +71,8 @@ public class ActivitiesTableRow extends RowWidget {
 	IsProgramActivity activity;
 	List<FundDTO> funding = null;
 
+	List<HTMLPanel> allocations = new ArrayList<HTMLPanel>();
+	
 	Timer timer = new Timer() {
 
 		@Override
@@ -99,7 +101,9 @@ public class ActivitiesTableRow extends RowWidget {
 		} else {
 			divProgress.getElement().setInnerText("0%");
 			divRating.getElement().setInnerText("N/A");
-
+			if(activity.getChildren().isEmpty()){
+				divRowCaret.addStyleName("hide");
+			}
 		}
 
 		String budgetAmount = activity.getBudgetAmount() == null ? ""
@@ -195,6 +199,7 @@ public class ActivitiesTableRow extends RowWidget {
 					allocationPanel.setTitle("Allocated amount");
 					allocationPanel.getElement().getStyle()
 							.setFontSize(0.8, Unit.EM);
+					allocationPanel.addStyleName("underline");
 					if (allocation > activityFund.getAmount()) {
 						allocationPanel.addStyleName("text-warning");
 					} else {
@@ -203,6 +208,7 @@ public class ActivitiesTableRow extends RowWidget {
 					allocationPanel.getElement().getStyle()
 							.setFontSize(0.8, Unit.EM);
 					amounts.add(allocationPanel);
+					allocations.add(allocationPanel);
 				}
 				createTd(amounts);
 			}
@@ -247,6 +253,8 @@ public class ActivitiesTableRow extends RowWidget {
 			divRowCaret.addStyleName("icon-caret-right");
 		}
 
+		if(level!=0)
+		showAllocations(hasChildren);
 	}
 	
 	boolean showChildren=true;
@@ -287,6 +295,12 @@ public class ActivitiesTableRow extends RowWidget {
 	public void hide(boolean hide){		
 		showChildren=!hide; //Synchronize states with caller
 		row.setStyleName(hide? "hide":"tr");
+	}
+
+	private void showAllocations(boolean showChildren) {
+		for(HTMLPanel widget: allocations){
+			widget.setVisible(showChildren);
+		}
 	}
 	
 }

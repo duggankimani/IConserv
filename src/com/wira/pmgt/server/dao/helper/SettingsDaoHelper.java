@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.wira.pmgt.server.dao.SettingsDaoImpl;
 import com.wira.pmgt.server.dao.model.ADValue;
 import com.wira.pmgt.server.db.DB;
@@ -15,6 +17,8 @@ import static com.wira.pmgt.server.dao.helper.FormDaoHelper.*;
 
 public class SettingsDaoHelper {
 
+	Logger log = Logger.getLogger(SettingsDaoHelper.class);
+	
 	public static boolean save(List<Setting> settings){
 		
 		SettingsDaoImpl dao = DB.getSettingsDao();
@@ -33,7 +37,7 @@ public class SettingsDaoHelper {
 		List<ADValue> values = dao.getSettingValues(names);
 		for(ADValue advalue: values){
 			Value value = getValue(advalue, advalue.getSettingName().getType());
-			Setting setting = new Setting(advalue.getSettingName(), value);
+			Setting setting = new Setting(advalue.getSettingName(), value);			
 			settings.add(setting);
 		}
 		
@@ -53,6 +57,7 @@ public class SettingsDaoHelper {
 	public static Object getSettingValue(SETTINGNAME settingName) {
 		
 		Setting setting = getSetting(settingName);
+		//logger.debug(setting.getName()+" : "+setting.getValue().getValue());		
 		return setting==null? null: setting.getValue().getValue();
 	}
 

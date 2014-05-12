@@ -20,6 +20,7 @@ import com.wira.pmgt.client.ui.events.ActivitiesReloadEvent.ActivitiesReloadHand
 import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent;
 import com.wira.pmgt.client.ui.events.CreateProgramEvent;
 import com.wira.pmgt.client.ui.events.ActivitySavedEvent;
+import com.wira.pmgt.client.ui.events.LoadAlertsEvent;
 import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent;
 import com.wira.pmgt.client.ui.events.ProcessingEvent;
 import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent.ActivitySelectionChangedHandler;
@@ -520,6 +521,7 @@ public class ActivitiesPresenter extends
 				new TaskServiceCallback<AssignTaskResponse>() {
 					@Override
 					public void processResult(AssignTaskResponse aResponse) {
+						fireEvent(new LoadAlertsEvent());
 					}
 				});
 	}
