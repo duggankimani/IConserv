@@ -95,6 +95,7 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 				docContainer.add(content);
 			}
 		} else if (slot == ACTIVITIES_SLOT) {
+			showActivitiesPanel(true);
 			activityContainer.clear();
 			if (content != null) {
 				activityContainer.add(content);
