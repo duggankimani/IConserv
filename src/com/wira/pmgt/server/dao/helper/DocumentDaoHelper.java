@@ -399,7 +399,7 @@ public class DocumentDaoHelper {
 		}
 		
 		if(doc.getId()==null){
-			
+			logger.warn("DocumentDaoHelper.getDocument: Document has no documentId");
 			Object idStr = content.get("documentId");
 			if (idStr == null || idStr.equals("null")) {
 				idStr = null;

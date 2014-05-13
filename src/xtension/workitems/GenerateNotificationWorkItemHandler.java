@@ -35,6 +35,9 @@ public class GenerateNotificationWorkItemHandler implements WorkItemHandler {
 	public void executeWorkItem(WorkItem workItem, WorkItemManager manager) {
 		String subject = (String) workItem.getParameter("Subject");
 		String noteType = (String) workItem.getParameter("NotificationType");
+		Boolean isTaskAssignmentNode = workItem.getParameter("isTaskAssignmentNode")==null? false:
+			Boolean.valueOf(workItem.getParameter("isTaskAssignmentNode").toString());
+		
 		NotificationType type = NotificationType.valueOf(noteType);
 		String documentId = (String) workItem.getParameter("DocumentId");
 		String groupId = (String) workItem.getParameter("GroupId");
@@ -45,11 +48,22 @@ public class GenerateNotificationWorkItemHandler implements WorkItemHandler {
 		logger.debug("Class : "+this.getClass());
 		logger.debug("Subject : "+subject);
 		logger.debug("NotificationType : "+noteType);
+		logger.debug("isTaskAssignmentNode : "+isTaskAssignmentNode);
 		logger.debug("DocumentId : "+documentId);
 		logger.debug("GroupId : "+groupId);
 		logger.debug("ActorId : "+actorId);
 		logger.debug("OwnerId : "+ownerId);		
 
+
+		if(type==NotificationType.APPROVALREQUEST_OWNERNOTE && isTaskAssignmentNode){
+			//Change type manually
+			type= NotificationType.TASKASSIGNMENT_ASSIGNORNOTE;
+		}
+		if(type==NotificationType.APPROVALREQUEST_APPROVERNOTE && isTaskAssignmentNode){
+			//Change type manually
+			type= NotificationType.TASKASSIGNMENT_ASSIGNEENOTE;
+		}
+		
 		Notification notification = new Notification();
 		notification.setCreated(new Date());
 		notification.setDocumentId(new Long(documentId));
@@ -88,11 +102,13 @@ public class GenerateNotificationWorkItemHandler implements WorkItemHandler {
 		
 		ApproverAction action =isApproved==null? ApproverAction.COMPLETED:
 			(Boolean)isApproved? ApproverAction.APPROVED: ApproverAction.REJECTED;	
-		
+	
 		switch (type) {
+		case TASKASSIGNMENT_ASSIGNORNOTE:
 		case APPROVALREQUEST_OWNERNOTE:
 			generateNotes(owner, notification);
 			break;
+		case TASKASSIGNMENT_ASSIGNEENOTE:
 		case APPROVALREQUEST_APPROVERNOTE:
 			if(actors!=null){
 				generateNotes(actors, notification);
@@ -137,7 +153,6 @@ public class GenerateNotificationWorkItemHandler implements WorkItemHandler {
 		}
 		
 	}
-
 	
 	@Override
 	public void abortWorkItem(WorkItem workItem, WorkItemManager manager) {
