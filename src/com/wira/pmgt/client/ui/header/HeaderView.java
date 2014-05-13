@@ -169,8 +169,10 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 	public void setAdminPageLookAndFeel(boolean isAdminPage) {
 		if (isAdminPage) {
 			divNavbar.addStyleName("navbar-inverse");
+			divNavbar.addStyleName("navbar-admin");
 		} else {
 			divNavbar.removeStyleName("navbar-inverse");
+			divNavbar.removeStyleName("navbar-admin");
 		}
 	}
 

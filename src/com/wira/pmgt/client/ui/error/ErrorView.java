@@ -1,20 +1,21 @@
 package com.wira.pmgt.client.ui.error;
 
-import com.gwtplatform.mvp.client.PopupViewImpl;
-import com.gwtplatform.mvp.client.proxy.PlaceManager;
-import com.gwtplatform.mvp.client.proxy.PlaceRequest;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Hyperlink;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+import com.gwtplatform.mvp.client.PopupViewImpl;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.wira.pmgt.client.place.NameTokens;
+import com.wira.pmgt.client.ui.AppManager;
 
 public class ErrorView extends PopupViewImpl implements ErrorPresenter.MyView {
 
@@ -26,6 +27,8 @@ public class ErrorView extends PopupViewImpl implements ErrorPresenter.MyView {
 	@UiField SpanElement spnError;
 	@UiField Button btnOk;
 	@UiField Hyperlink lnkError;
+	
+	@UiField DialogBox popUpPanel;
 	
 	@Inject PlaceManager manager;
 	
@@ -48,6 +51,9 @@ public class ErrorView extends PopupViewImpl implements ErrorPresenter.MyView {
 				hide();
 			}
 		}, ClickEvent.getType());
+		
+		int[] position=AppManager.calculatePosition(20, 50);
+		popUpPanel.setPopupPosition(position[1],position[0]);
 	}
 
 	@Override

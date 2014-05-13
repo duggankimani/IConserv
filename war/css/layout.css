@@ -147,10 +147,10 @@ body .dateBoxPopup {
 	position: relative;
 }
 
-.navbar-inverse .navbar-inner {
-	background-image: none;
+.navbar-inverse .navbar-admin .navbar-inner {
 	background-color: #333333;
 	border-radius: 0px;
+	background-image: linear-gradient(to bottom, #ffffff, #333333);
 }
 
 .navbar-inverse .navbar-inner .brand {
@@ -526,14 +526,17 @@ body .dateBoxPopup {
 	background: #ffffff;
 	padding-left: 5px;
 	left: 200px;
-	border: 1px solid #CCCCCC;
-	border-bottom: none;
+	/* border-bottom: 1px solid #CCCCCC; */
 	border-right: none;
-	height: 51px;
+	height: 35px;
+	padding-top: 5px;
 }
 
 #nav-top i {
 	display: inline;
+	float: left;
+	margin-top: 6px;
+	margin-right: 12px;
 }
 
 #nav-top h5 {
@@ -591,7 +594,7 @@ body .dateBoxPopup {
 	border: 1px solid #CCCCCC;
 	height: 100%;
 	overflow-y: auto;
-	width: 14%;
+	width: 25%;
 }
 
 #middle-nav .nav-top i {
@@ -604,7 +607,6 @@ body .dateBoxPopup {
 }
 
 #middle-nav h5 {
-	color: #0000FF;
 	font-weight: bold;
 	float: left;
 	margin-top: 2px;
@@ -713,8 +715,9 @@ body .dateBoxPopup {
 	background-color: #ffffff;
 	margin-left: 0px;
 	border: 1px solid #CCCCCC;
-	width: 100%;
+	width: 75%;
 	height: 100%;
+	border-left: none;
 }
 
 #detailed-info .upper-content {
@@ -931,7 +934,7 @@ body .dateBoxPopup {
 #detailed-info .comment-box .arrow {
 	position: absolute;
 	left: 55px;
-	top: 34px;
+	top: 51px;
 	height: 0;
 	border: 5px solid transparent;
 	border-left-width: 0;

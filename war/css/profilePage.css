@@ -88,12 +88,15 @@
 }
 .main-container .activities-page .tab-content{
     padding: 0px 0px 0px 5px;
-    max-height: 71%;
+    height: 73%;
     overflow-x: hidden;
 }
 .activities-page .content-top{
 	padding: 10px 0px 0px 0px;
 	width: 100%;
+	/* position:absolute; */
+	top:0px;
+	height: 108px;
 }
 
 .activities-page .content-top .breadcrumb{
@@ -139,6 +142,12 @@
 	right:2%;
 	top: 4%;
 }
+
+.activities-page .content-body{
+	/* position:absolute; */
+	/* top: 118px; */
+}
+
 .activities-page .action-buttons{
 	margin-top: 0px;
 	padding-bottom: 10px;

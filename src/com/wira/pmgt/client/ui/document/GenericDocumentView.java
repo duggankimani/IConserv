@@ -132,8 +132,6 @@ public class GenericDocumentView extends ViewImpl implements
 		aForward.getElement().setAttribute("alt", "Forward for Approval");
 		aShowProcess.setVisible(false);
 		
-		divContainer.getElement().setAttribute("id", "detailed-info");
-		
 		img.addErrorHandler(new ErrorHandler() {
 			@Override
 			public void onError(ErrorEvent event) {

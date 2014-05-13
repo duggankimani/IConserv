@@ -61,6 +61,8 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 	@Inject
 	public HomeView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
+		docContainer.getElement().setAttribute("id", "detailed-info");
+
 		imgUser.addErrorHandler(new ErrorHandler() {
 
 			@Override

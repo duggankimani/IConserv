@@ -51,10 +51,11 @@
 
 			</g:HTMLPanel>
 
-			<g:HTMLPanel ui:field="taskContainer" styleName="content-right span10 no-overflow-y no-overflow-x">
+			<g:HTMLPanel ui:field="taskContainer"
+				styleName="content-right span10 no-overflow-y no-overflow-x">
 				<!--middle navigation -->
 				<div class="span2" id="middle-nav">
-					
+
 					<div id="nav-top">
 						<i class="icon-tag"></i>
 						<h5 ui:field="hCategory">Completed</h5>
@@ -69,12 +70,10 @@
 						</div>
 					</div>
 				</div>
-				
+
 				<!--Detailed Info Description -->
-				<div ui:field="divDocView" class="span10">
-					<g:HTMLPanel ui:field="docContainer" styleName="full-page">
-					</g:HTMLPanel>
-				</div>
+				<g:HTMLPanel ui:field="docContainer" styleName="full-page span10">
+				</g:HTMLPanel>
 			</g:HTMLPanel>
 
 		</g:HTMLPanel>
