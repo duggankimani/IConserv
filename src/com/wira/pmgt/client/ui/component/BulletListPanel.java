@@ -11,12 +11,17 @@ public class BulletListPanel extends ComplexPanel {
 		   setElement(Document.get().createULElement());
     }
  
+    public void setCssId(String id)
+    {
+    	setId(id);
+    }
+ 
     public void setId(String id)
     {
         // Set an attribute common to all tags
         getElement().setId(id);
     }
- 
+    
     public void setDir(String dir)
     {
         // Set an attribute specific to this tag

@@ -30,7 +30,7 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 	@UiField
 	HTMLPanel activityContainer;
 	@UiField
-	HTMLPanel docContainer;
+	com.wira.pmgt.client.ui.component.HTMLPanel docContainer;
 	@UiField
 	HTMLPanel mainContainer;
 
@@ -61,8 +61,8 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 	@Inject
 	public HomeView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
-		docContainer.getElement().setAttribute("id", "detailed-info");
-
+		//docContainer.getElement().setAttribute("id", "detailed-info");
+		
 		imgUser.addErrorHandler(new ErrorHandler() {
 
 			@Override

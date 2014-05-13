@@ -147,10 +147,10 @@ body .dateBoxPopup {
 	position: relative;
 }
 
-.navbar-inverse .navbar-admin .navbar-inner {
+.navbar-inverse.navbar-admin .navbar-inner {
 	background-color: #333333;
 	border-radius: 0px;
-	background-image: linear-gradient(to bottom, #ffffff, #333333);
+	background-image: linear-gradient(to bottom, #5A5858, #333333);
 }
 
 .navbar-inverse .navbar-inner .brand {
@@ -532,59 +532,7 @@ body .dateBoxPopup {
 	padding-top: 5px;
 }
 
-#nav-top i {
-	display: inline;
-	float: left;
-	margin-top: 6px;
-	margin-right: 12px;
-}
 
-#nav-top h5 {
-	display: inline-block;
-	margin-top: 5px;
-}
-
-#nav-top .search {
-	box-shadow: none;
-	height: 21px;
-	font-size: 13px;
-	padding: 0px;
-	border: 1px solid #d0dde9;
-	margin: 0;
-	border-radius: 2px;
-	width: 90%;
-	display: inline-block;
-}
-
-#nav-top .search a.icon-caret-down {
-	color: grey;
-	opacity: .7;
-}
-
-#nav-top .search a.icon-caret-down:hover {
-	opacity: 1;
-}
-
-#nav-top .search-box {
-	margin: 0px;
-	border: 0;
-	outline: none;
-	width: 94%;
-	padding: 0px;
-	position: relative;
-	top: -2px;
-}
-
-#nav-top .search-box:hover,#nav-top .search-box:focus {
-	outline-style: none;
-	box-shadow: none;
-	border-color: transparent;
-}
-
-#nav-top .search-box .icon-caret-down {
-	opacity: .7;
-	cursor: pointer;
-}
 
 #middle-nav {
 	background: #ffffff;
@@ -598,8 +546,16 @@ body .dateBoxPopup {
 }
 
 #middle-nav .nav-top i {
-	margin-left: 5px;
-	cursor: pointer;
+	display: inline;
+	float: left;
+	margin-top: 9px;
+	margin-right: 12px;
+	margin-left: 10px;
+}
+
+#middle-nav .nav-top h5 {
+	display: inline-block;
+	margin-top: 5px;
 }
 
 #middle-nav .header-nav {
@@ -710,7 +666,153 @@ body .dateBoxPopup {
 	padding-left: 7px;
 }
 
-/*---Detailed-Info Styles---*/
+
+/*Navigation Menu -- Date Group presentation*/
+#navigation-menu {
+	list-style: none;
+	padding-right: 0px;
+	padding-left: 0px;
+	margin-bottom: 0;
+	margin-left: 0px;
+}
+
+#navigation-menu>li>a {
+	background-color: #EDEDED;
+	display: block;
+	margin-left: 0px;
+	padding: 2px 0px 0px 5px;
+	color: #555e64;
+	outline: 0px;
+}
+
+#navigation-menu>li {
+	position: relative;
+}
+
+#navigation-menu>li.active>a,#navigation-menu>li>a:hover {
+	color: #555e64;
+	text-decoration: none;
+}
+
+#navigation-menu>li.active a {
+	height: 24px;
+	font-weight: bold;
+}
+
+#navigation-menu>li.active i {
+	opacity: 1;
+}
+
+/* font awesome icon */
+#navigation-menu>li .icon-group {
+	font-size: 22px;
+}
+
+#navigation-menu>li i {
+	font-size: 23px;
+	top: 6px;
+}
+
+#navigation-menu .pointer {
+	position: absolute;
+	right: 9px;
+	top: 20px;
+}
+
+#navigation-menu .pointer .arrow,#navigation-menu .pointer .arrow_border
+	{
+	border-color: transparent #fff transparent transparent;
+	border-width: 11px;
+	border-style: solid;
+	font-size: 0;
+	left: 50%;
+	line-height: 0;
+	margin: 0 auto;
+	position: absolute;
+	top: 0;
+	width: 0;
+	z-index: 1002;
+	left: 0;
+	margin-left: 45%;
+}
+
+#navigation-menu .pointer .arrow_border {
+	border-color: transparent rgb(192, 210, 221) transparent transparent;
+	border-width: 11px;
+	margin-left: -1px;
+	border-style: solid;
+	z-index: 1001;
+	top: 0px;
+}
+
+#navigation-menu a span {
+	margin-left: 9px;
+	transition: color .1s linear;
+	-moz-transition: color .1s linear;
+	-webkit-transition: color .1s linear;
+	-o-transition: color .1s linear;
+}
+
+#navigation-menu a.ui-elements span {
+	margin-left: 25px;
+}
+
+#navigation-menu a i {
+	position: absolute;
+	/* height: 24px; */ /* width: 24px; */
+	opacity: 0.7;
+	font-size: 13px;
+	/* transition: opacity .1s ease; */
+	-moz-transition: opacity .1s ease;
+	/* -webkit-transition: opacity .1s ease; */
+	-o-transition: opacity .1s ease;
+}
+
+#navigation-menu>li:hover i {
+	opacity: 1;
+}
+
+/* Middle Navigation sidebar submenus */
+#navigation-menu>li.active .dropdown-toggle {
+	border-bottom: 0px;
+	box-shadow: none;
+}
+
+#navigation-menu ul.submenu {
+	list-style-type: none;
+	margin-top: 0px;
+	margin-left: 0px;
+	padding-left: 0px;
+	box-shadow: 0 2px 1px -1px #FFFFFF;
+}
+
+#navigation-menu ul.submenu.active {
+	display: block;
+}
+
+#navigation-menu ul.submenu a {
+	font-weight: normal;
+	font-size: 13px;
+	color: rgb(76, 83, 90);
+	text-decoration: none;
+	display: block;
+	margin-bottom: 7px;
+}
+
+#navigation-menu ul.submenu a:hover {
+	text-decoration: underline;
+}
+
+#navigation-menu ul.submenu a.active {
+	font-weight: bold;
+	text-shadow: none;
+}
+
+
+
+
+
+/*---Detailed-Info - Displays the Document---*/
 #detailed-info {
 	background-color: #ffffff;
 	margin-left: 0px;

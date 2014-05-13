@@ -55,8 +55,7 @@
 				styleName="content-right span10 no-overflow-y no-overflow-x">
 				<!--middle navigation -->
 				<div class="span2" id="middle-nav">
-
-					<div id="nav-top">
+					<div class="nav-top">
 						<i class="icon-tag"></i>
 						<h5 ui:field="hCategory">Completed</h5>
 						<br />
@@ -64,16 +63,16 @@
 
 					<div ui:field="divDocListing">
 						<div class="content-nav row-fluid">
-							<d:BulletListPanel ui:field="ulTaskGroups">
+							<d:BulletListPanel ui:field="ulTaskGroups" cssId="navigation-menu">
 							</d:BulletListPanel>
 							<g:InlineLabel ui:field="spnNoItems"></g:InlineLabel>
 						</div>
 					</div>
 				</div>
 
-				<!--Detailed Info Description -->
-				<g:HTMLPanel ui:field="docContainer" styleName="full-page span10">
-				</g:HTMLPanel>
+				<!--Detailed Info -->
+				<d:HTMLPanel ui:field="docContainer" styleName="full-page span10" cssId="detailed-info">
+				</d:HTMLPanel>
 			</g:HTMLPanel>
 
 		</g:HTMLPanel>

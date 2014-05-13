@@ -77,14 +77,14 @@
 
 		<div class="news-feed row-fluid">
 			<div class="span6 news-box">
-				<div class="portlet">
+				<div class="portlet full-page">
 					<div class="portlet-header">
 						<h3>
 							<i class="icon-bar-chart"></i>
 							News Feed
 						</h3>
 					</div>
-					<g:HTMLPanel styleName="portlet-content">
+					<g:HTMLPanel styleName="portlet-content overflow-y">
 						<d:BulletListPanel ui:field="panelActivity"
 							styleName="chat-box timeline">
 						</d:BulletListPanel>
