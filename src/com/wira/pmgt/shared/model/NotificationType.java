@@ -16,6 +16,8 @@ public enum NotificationType {
 	APPROVALREQUEST_OWNERNOTE("Invoice INV/001/2013 - succesfully submitted for approval (10 seconds ago)"),//for ownere - request assigned
 	TASKCOMPLETED_APPROVERNOTE("Invoice INV/001/2013 has been approved/denied. (requested by calcacuervo) (20mins ago)"),//for approver
 	TASKCOMPLETED_OWNERNOTE("Invoice INV/001/2013 - Denied by mariano (1hr ago)"),//for owner
+	TASKASSIGNMENT_ASSIGNORNOTE("You assigned a Task to Mariano Task#122."),
+	TASKASSIGNMENT_ASSIGNEENOTE("Admin assigned a Task to You Task#122 "),
 	COMMENT("INV/001/2013 - Andrew commented on this document  (5 hrs ago)"),
 	TASK_REMINDER("Reminder re: Document INV/001/2013"),
 	PROCESS_COMPLETED("Invoice INV/001/2013 approval process completed (3 mins ago)"),

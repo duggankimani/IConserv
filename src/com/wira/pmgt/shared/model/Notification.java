@@ -13,7 +13,7 @@ public class Notification extends Activity{
 	 * Original Document Owner
 	 */
 	private HTUser owner;
-	private HTUser targetUserId;
+	private HTUser targetUserId;//Assignee/ Approvers
 	private Long documentId;
 	private NotificationType notificationType;
 	private String subject;

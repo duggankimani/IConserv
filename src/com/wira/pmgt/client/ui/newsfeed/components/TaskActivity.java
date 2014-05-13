@@ -101,7 +101,6 @@ public class TaskActivity extends Composite {
 		
 		switch (notificationType) {
 		case APPROVALREQUEST_APPROVERNOTE:
-			//safeHtml = Template1.render(subject, owner, time);
 			spnUser.setInnerText(owner);
 			text = "forwarded ";
 
@@ -109,23 +108,28 @@ public class TaskActivity extends Composite {
 			
 			break;
 
+		case TASKASSIGNMENT_ASSIGNEENOTE:
+			spnUser.setInnerText(owner);
+			text = "assigned "+target+" ";
+
+			setImage(ownerObj);
+			
+			break;
 		case APPROVALREQUEST_OWNERNOTE:
-//			if(isNotification)
-//				safeHtml = Template2.render(owner, subject, time);
-//			else{
-//				safeHtml2= Template6.render(owner,subject, time);
-//			}
 			spnUser.setInnerText(owner);
 			text = "forwarded ";
 
 			setImage(ownerObj);
 			
 			break;
-
+		case TASKASSIGNMENT_ASSIGNORNOTE:
+			spnUser.setInnerText(owner);
+			text = "assigned ";
+			setImage(ownerObj);
+					
+			break;
 		case TASKCOMPLETED_APPROVERNOTE:
-//			safeHtml = Template3.render(subject, owner, time, action, 
-//					ApproverAction.APPROVED.equals(approverAction)? "icon-check": "icon-remove-sign");
-			
+		
 			spnUser.setInnerText(owner);
 			text =action +" ";
 
@@ -133,12 +137,6 @@ public class TaskActivity extends Composite {
 			
 			break;
 		case TASKCOMPLETED_OWNERNOTE:
-//			if(isNotification)
-//			safeHtml = Template4.render(subject, approver, time, action, 
-//					ApproverAction.APPROVED.equals(approverAction)? "icon-check": "icon-remove-sign");
-//			else
-//			safeHtml2 =Template5.render(subject, approver, time, 
-//					ApproverAction.APPROVED.equals(approverAction)? "icon-check": "icon-remove-sign",action)
 			spnUser.setInnerText(approver);
 			text =action+" ";
 
@@ -147,12 +145,6 @@ public class TaskActivity extends Composite {
 			break;
 		case TASKDELEGATED:
 			
-//			if(isNotification){
-//				safeHtml = Template9.render(subject, owner, target, time, action,"icon-signin");
-//			}else{
-//				safeHtml2 = Template8.render(approver,subject, target, time);
-//			}
-		
 			spnUser.setInnerText(approver);
 			text = "delegated to "+target+" "; 
 			setImage(notification.getCreatedBy());
@@ -187,21 +179,9 @@ public class TaskActivity extends Composite {
 			
 			break;
 		default:
-			//safeHtml= "<p>You have no new notification</p>";
 			break;
 		}
 		
-//		if(safeHtml!=null){
-//			aDocument.setHTML(safeHtml);
-//			aDocument.removeStyleName("hidden");
-//		}
-//		
-//		if(safeHtml2!=null){
-//			divActivity.getElement().setInnerSafeHtml(safeHtml2);	
-//			divActivity.removeStyleName("hidden");
-//			aDocument.addStyleName("hidden");
-//		}
-//		
 		aDocument.setText(subject);
 		
 		if(notification.getDocumentId()!=null){
@@ -211,7 +191,6 @@ public class TaskActivity extends Composite {
 		}
 
 		spnAction.setInnerText(text);
-		//spnSubject.setInnerText(subject);
 		spnTime.setInnerText(time);
 	}
 

@@ -32,6 +32,9 @@ public class NoteView extends ViewImpl implements NotePresenter.MyView {
 	
 	APPROVALREQUEST_APPROVERNOTE_TEMPLATE Template1 = GWT
 			.create(APPROVALREQUEST_APPROVERNOTE_TEMPLATE.class);
+	TASKASSIGNMENT_ASSIGNEENOTE_TEMPLATE taskAssignmentAssigneeTemplate= GWT.create(TASKASSIGNMENT_ASSIGNEENOTE_TEMPLATE.class);
+	TASKASSIGNMENT_ASSIGNORNOTE_TEMPATE taskAssignmentAssignorTemplate = GWT.create(TASKASSIGNMENT_ASSIGNORNOTE_TEMPATE.class);
+	
 	APPROVALREQUEST_OWNERNOTE_TEMPATE Template2 = GWT
 			.create(APPROVALREQUEST_OWNERNOTE_TEMPATE.class);
 	TASKCOMPLETED_APPROVERNOTE_TEMPLATE Template3 = GWT
@@ -107,7 +110,10 @@ public class NoteView extends ViewImpl implements NotePresenter.MyView {
 		case APPROVALREQUEST_APPROVERNOTE:
 			safeHtml = Template1.render(subject, owner, time);
 			break;
-
+		case TASKASSIGNMENT_ASSIGNEENOTE:
+			safeHtml = taskAssignmentAssigneeTemplate.render(subject, owner, time);
+			break;
+			
 		case APPROVALREQUEST_OWNERNOTE:
 			if(isNotification)
 			safeHtml = Template2.render(owner, subject, time);
@@ -115,7 +121,14 @@ public class NoteView extends ViewImpl implements NotePresenter.MyView {
 				safeHtml2= Template6.render(owner,subject, time);
 			}
 			break;
-
+		case TASKASSIGNMENT_ASSIGNORNOTE:
+			if(isNotification)
+				safeHtml = taskAssignmentAssignorTemplate.render(owner, subject, time);
+				else{
+					System.err.println(">>>>>> called");
+					safeHtml2= Template6.render(owner,subject, time);
+				}
+			break;
 		case TASKCOMPLETED_APPROVERNOTE:
 			safeHtml = Template3.render(subject, owner, time, action, 
 					ApproverAction.APPROVED.equals(approverAction)? "icon-check": "icon-remove-sign");
@@ -179,6 +192,18 @@ public class NoteView extends ViewImpl implements NotePresenter.MyView {
 		// mins ago)
 	}
 	
+	interface TASKASSIGNMENT_ASSIGNEENOTE_TEMPLATE extends SafeHtmlTemplates {
+		@Template("<i class=\"icon-signin\"></i>"+
+				"<span class=\"bluename\" >{0}</span>"+
+				
+				" Task assigned by <span class=\"bluename\">{1}</span>"
+				+ "."
+				+ "<span class=\"time\" ><i class=\"icon-time\"> {2}</i></span>")
+		public SafeHtml render(String subject, String owner, String time);
+		// eg Request for approval - Invoice INV/001/2013 from Calcacuervo. (2
+		// mins ago)
+	}
+	
 	interface APPROVALREQUEST_OWNERNOTE_TEMPATE extends SafeHtmlTemplates {
 		@Template("<i class=\"icon-signin\"></i>"+
 				"<span class=\"bluename\">{1}</span>"+
@@ -189,6 +214,18 @@ public class NoteView extends ViewImpl implements NotePresenter.MyView {
 		// e.g You have successfuly submitted Invoice INV/001/2013 for approval
 		// (10 seconds ago)
 	}
+	
+	interface TASKASSIGNMENT_ASSIGNORNOTE_TEMPATE extends SafeHtmlTemplates {
+		@Template("<i class=\"icon-signin\"></i>"+
+				"<span class=\"bluename\">{1}</span>"+
+				" assigned by <span class=\"bluename\">{0}</span>"
+				+ " <span class=\"time\"><i class=\"icon-time\">{2}</i></span>")
+		public SafeHtml render(String owner, String subject, String time);
+
+		// e.g You have successfuly submitted Invoice INV/001/2013 for approval
+		// (10 seconds ago)
+	}
+
 	
 	interface APPROVALREQUEST_OWNERNOTE_ACTIVITY_TEMPATE extends SafeHtmlTemplates {
 		@Template("<div class=\"feed-icon\"><i class=\"icon-signin\"></i></div>"+

@@ -799,14 +799,17 @@ class BPMSessionManager {
 			newValues.put(key, value);
 			logger.debug(key+"="+value);
 		}
+		newValues.put("GroupId", taskData.get("GroupId"));
+		newValues.put("ActorId", taskData.get("ActorId"));
+		newValues.put("Priority", taskData.get("Priority"));
+		newValues.put("isTaskAssignmentNode", taskData.get("isTaskAssignmentNode"));
+		
 
 		logger.debug("GroupId="+taskData.get("GroupId"));
 		logger.debug("ActorId="+taskData.get("ActorId"));
 		logger.debug("Priority="+taskData.get("Priority"));
+		logger.debug("isTaskAssignmentNode="+taskData.get("isTaskAssignmentNode"));
 		
-		newValues.put("GroupId", taskData.get("GroupId"));
-		newValues.put("ActorId", taskData.get("ActorId"));
-		newValues.put("Priority", taskData.get("Priority"));
 		if (newValues.get("Priority") == null)
 			newValues.put("Priority", values.get("Priority"));
 

@@ -1,33 +1,21 @@
 package com.wira.pmgt.server.helper.jbpm;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
-import org.apache.commons.lang.SerializationUtils;
-import org.apache.commons.lang.time.DateUtils;
-import org.jbpm.ruleflow.core.RuleFlowProcessFactory;
-import org.jbpm.task.AccessType;
-import org.jbpm.task.Deadline;
-import org.jbpm.task.Deadlines;
 import org.jbpm.task.Group;
-import org.jbpm.task.I18NText;
 import org.jbpm.task.OrganizationalEntity;
-import org.jbpm.task.PeopleAssignments;
-import org.jbpm.task.Task;
-import org.jbpm.task.TaskData;
 import org.jbpm.task.User;
-import org.jbpm.task.service.ContentData;
-import org.jbpm.task.service.local.LocalTaskService;
 
 import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
 import com.wira.pmgt.server.dao.helper.DocumentDaoHelper;
+import com.wira.pmgt.server.dao.helper.ProgramDaoHelper;
 import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.shared.exceptions.IllegalApprovalRequestException;
+import com.wira.pmgt.shared.model.DocStatus;
 import com.wira.pmgt.shared.model.Document;
 import com.wira.pmgt.shared.model.HTUser;
-import com.wira.pmgt.shared.model.LongValue;
 import com.wira.pmgt.shared.model.OrgEntity;
 import com.wira.pmgt.shared.model.ParticipantType;
 import com.wira.pmgt.shared.model.StringValue;
@@ -44,8 +32,6 @@ public class TaskApiHelper {
 	 */
 	public static void createTask(TaskInfo info){		
 		Document document = createDocument(info);
-		ProgramDetail program = DB.getProgramDaoImpl().getById(ProgramDetail.class, info.getActivityId());
-		
 		if(document.getId()==null){
 			//new request
 			document.setValue("taskName", new StringValue(info.getTaskName()));
@@ -73,13 +59,33 @@ public class TaskApiHelper {
 			
 			assert initiator!=null;
 			
-			//Start Process
-			JBPMHelper.get().createApprovalRequest(initiator.getEntityId(), document);
+			try{
+				startWorkflow(document, initiator.getEntityId());
+				
+				//Associate Program Detail with the process 
+				ProgramDetail program = DB.getProgramDaoImpl().getById(ProgramDetail.class, info.getActivityId());
+				program.setProcessInstanceId(document.getProcessInstanceId());
+				DB.getProgramDaoImpl().save(program);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 			
-			//Link Program to ProcesInstance
-			program.setProcessInstanceId(document.getProcessInstanceId());
 		}
 		
+	}
+	
+	public static void startWorkflow(Document doc, String initiatorId) throws IllegalApprovalRequestException{
+		doc.setStatus(DocStatus.INPROGRESS);
+		doc = DocumentDaoHelper.save(doc);
+		
+		if(doc.getProcessInstanceId()!=null){
+			throw new IllegalApprovalRequestException(doc);
+		}
+		String userId = initiatorId;
+		if(userId==null)
+			userId = com.wira.pmgt.server.helper.session.SessionHelper.getCurrentUser().getUserId();
+		
+		JBPMHelper.get().createApprovalRequest(userId, doc);
 	}
 
 	private static Value getGroups(List<OrgEntity> assignees) {
