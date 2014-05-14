@@ -45,6 +45,7 @@
 				</g:HTMLPanel>
 
 			</div>
+			<g:Anchor href="#adminhome;page=formbuilder;formid=1" target="_blank">Create/Edit task form</g:Anchor>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>
