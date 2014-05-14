@@ -43,7 +43,8 @@
 					<d:TextArea styleName="message-compose" ui:field="txtMessage"
 						placeholder="Optional Message sent to Assignee"></d:TextArea>
 				</g:HTMLPanel>
-
+				
+				<g:Anchor href="#adminhome;page=formbuilder;formid=1" target="_blank">Create/Edit Form</g:Anchor>
 			</div>
 		</div>
 	</g:HTMLPanel>

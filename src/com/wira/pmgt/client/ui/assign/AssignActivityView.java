@@ -23,87 +23,97 @@ public class AssignActivityView extends ViewImpl implements
 		AssignActivityPresenter.MyView {
 
 	private final Widget widget;
-	
-	@UiField Anchor aAdd;
-	@UiField AutoCompleteField<OrgEntity> allocatedToUsers;
-	@UiField HTMLPanel divAllocations;
-	
-	@UiField Anchor aMessage;
-	@UiField HTMLPanel divMessage;
-	@UiField TextArea txtMessage;
-	
-	Boolean isShowMessage =false;
+
+	@UiField
+	Anchor aAdd;
+	@UiField
+	AutoCompleteField<OrgEntity> allocatedToUsers;
+	@UiField
+	HTMLPanel divAllocations;
+
+	@UiField
+	Anchor aMessage;
+	@UiField
+	HTMLPanel divMessage;
+	@UiField
+	TextArea txtMessage;
+
+	Boolean isShowMessage = false;
 
 	public interface Binder extends UiBinder<Widget, AssignActivityView> {
 	}
 
 	List<OrgEntity> selectedSet = new ArrayList<OrgEntity>();
-	
+
 	@Inject
 	public AssignActivityView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
-		
-		
+
 		selectedSet.add(AppContext.getContextUser());
-				
+		
+
 		aAdd.addClickHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent event) {
-				List<OrgEntity> selected = allocatedToUsers.getSelectedItems();
-				if(selected!=null && !selected.isEmpty()){
-					addAllocations(selected);
-				}
-				allocatedToUsers.clearSelection();
+				addAllItems();
 			}
 		});
-		
+
 		aMessage.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				if(isShowMessage){
-					//current state = show message
-					//therefore negate
+				if (isShowMessage) {
+					// current state = show message
+					// therefore negate
 					divMessage.addStyleName("hidden");
 					aMessage.setText("Add Message");
-					isShowMessage=false;
-				}else{
-					//current state = hide message
+					isShowMessage = false;
+				} else {
+					// current state = hide message
 					divMessage.removeStyleName("hidden");
 					aMessage.setText("Discard Message");
-					isShowMessage=true;
+					isShowMessage = true;
 				}
-				
+
 			}
 		});
 	}
-	
+
+	public void addAllItems() {
+		List<OrgEntity> selected = allocatedToUsers.getSelectedItems();
+		if (selected != null && !selected.isEmpty()) {
+			addAllocations(selected);
+		}
+		allocatedToUsers.clearSelection();
+	}
+
 	protected void addAllocations(List<OrgEntity> entities) {
 		divAllocations.clear();
-		if(selectedSet.isEmpty()){
+		if (selectedSet.isEmpty()) {
 			entities.add(AppContext.getContextUser());
 		}
-		
-		for(OrgEntity entity: entities){
-			if(!selectedSet.contains(entity)){
+
+		for (OrgEntity entity : entities) {
+			if (!selectedSet.contains(entity)) {
 				selectedSet.add(entity);
 			}
 		}
-		
-		//loop and create widgets
-		for(OrgEntity entity:selectedSet){
+
+		// loop and create widgets
+		for (OrgEntity entity : selectedSet) {
 			ParticipantType type = ParticipantType.ASSIGNEE;
-			if(entity.equals(AppContext.getContextUser())){
+			if (entity.equals(AppContext.getContextUser())) {
 				type = ParticipantType.INITIATOR;
 			}
-			final TaskAllocation allocation =new TaskAllocation(entity, type);
+			final TaskAllocation allocation = new TaskAllocation(entity, type);
 			divAllocations.add(allocation);
-			
+
 			allocation.getRemoveLink().addClickHandler(new ClickHandler() {
-				
+
 				@Override
 				public void onClick(ClickEvent event) {
-					//event.getSource();
+					// event.getSource();
 					OrgEntity entity = allocation.getOrgEntity();
 					selectedSet.remove(entity);
 					divAllocations.remove(allocation);
@@ -115,9 +125,9 @@ public class AssignActivityView extends ViewImpl implements
 	/**
 	 * Drop Down of Users & Groups for selection
 	 */
-	public void setSelection(List<OrgEntity> entities){
+	public void setSelection(List<OrgEntity> entities) {
 		allocatedToUsers.addItems(entities);
-		
+
 		addAllocations(new ArrayList<OrgEntity>());
 	}
 
@@ -128,23 +138,26 @@ public class AssignActivityView extends ViewImpl implements
 
 	@Override
 	public void clear() {
-		
+		selectedSet.clear();
+		allocatedToUsers.clearSelection();
 	}
 
 	@Override
 	public TaskInfo getTaskInfo() {
 		TaskInfo taskInfo = new TaskInfo();
 		int count = divAllocations.getWidgetCount();
-		for(int i=0; i<count; i++){
-			TaskAllocation allocation = (TaskAllocation)divAllocations.getWidget(i);
-			taskInfo.addParticipant(allocation.getOrgEntity(), allocation.getParticipantType());
+		for (int i = 0; i < count; i++) {
+			TaskAllocation allocation = (TaskAllocation) divAllocations
+					.getWidget(i);
+			taskInfo.addParticipant(allocation.getOrgEntity(),
+					allocation.getParticipantType());
 		}
-		
+
 		taskInfo.setMessage("Kindly take care of this task, Thank you.");
-	
-		if(!txtMessage.getValue().isEmpty())
+
+		if (!txtMessage.getValue().isEmpty())
 			taskInfo.setMessage(txtMessage.getValue());
-		
+
 		return taskInfo;
 	}
 }

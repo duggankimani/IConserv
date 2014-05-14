@@ -231,15 +231,28 @@
 .activities-page .tabs-below .tabs-container{
 	width: 92%;
 	box-shadow: -7px 4px 10px #888888;
+	margin-left: 0px;
 }
 
 .activities-page .tabs-below .controllers{
 	background-color: #eeeeee;
 	border-top: 1px solid #aaa;
-	padding: 10px 0px 1px 24px;
+	padding: 10px 0px 1px 15px;
 	margin-left: 0px;
 	width: 8%;
 	box-shadow: -7px 4px 10px #888888;
+	height: 42px;
+}
+
+.activities-page .tabs-below .controllers a.span3{
+	margin: 0px;
+	min-height: 20px;
+	padding: 0px 9px;
+	padding-right: 15px;
+}
+
+.activities-page .tabs-below .controllers a:hover{
+	border: 1px solid rgb(206, 204, 204);
 }
 
 .activities-page .tabs-below .tabs-container > .nav-tabs{

@@ -27,6 +27,8 @@ import com.wira.pmgt.client.ui.events.ProcessingEvent;
 import com.wira.pmgt.client.ui.objective.CreateObjectivePresenter;
 import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
 import com.wira.pmgt.client.util.AppContext;
+import com.wira.pmgt.shared.model.OrgEntity;
+import com.wira.pmgt.shared.model.ParticipantType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.program.FundDTO;
@@ -141,6 +143,12 @@ public class ActivitiesPresenter extends
 						assignActivity.getWidget(), new OptionControl() {
 							@Override
 							public void onSelect(String name) {
+								if (name.equals("Cancel")) {
+									hide();
+									return;
+								}
+
+								assignActivity.addItems();
 								TaskInfo taskInfo = assignActivity
 										.getTaskInfo();
 
@@ -514,12 +522,23 @@ public class ActivitiesPresenter extends
 		loadData(programId, programDetailId);
 	}
 
-	private void assignTask(TaskInfo taskInfo) {
+	private void assignTask(final TaskInfo taskInfo) {
 		requestHelper.execute(new AssignTaskRequest(taskInfo),
 				new TaskServiceCallback<AssignTaskResponse>() {
 					@Override
 					public void processResult(AssignTaskResponse aResponse) {
 						fireEvent(new LoadAlertsEvent());
+
+						List<OrgEntity> assigned = taskInfo
+								.getParticipants(ParticipantType.ASSIGNEE);
+						String allocatedPeople = "";
+
+						for (OrgEntity entity : assigned) {
+							allocatedPeople = allocatedPeople+entity.getDisplayName() + ",";
+						}
+
+						fireEvent(new ActivitySavedEvent(
+								"You successfully assigned "+taskInfo.getApprovalTaskName()+" "+ allocatedPeople));
 					}
 				});
 	}

@@ -48,7 +48,6 @@
 
 			<g:HTMLPanel ui:field="activityContainer"
 				styleName="content-right span10 no-overflow-y no-overflow-x">
-
 			</g:HTMLPanel>
 
 			<g:HTMLPanel ui:field="taskContainer"
