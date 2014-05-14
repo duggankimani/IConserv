@@ -27,6 +27,9 @@ public class AssignActivityView extends ViewImpl implements
 	@UiField
 	Anchor aAdd;
 	@UiField
+	Anchor aCreateForm;
+	
+	@UiField
 	AutoCompleteField<OrgEntity> allocatedToUsers;
 	@UiField
 	HTMLPanel divAllocations;
@@ -161,4 +164,11 @@ public class AssignActivityView extends ViewImpl implements
 		
 		return taskInfo;
 	}
+	
+	@Override
+	public void setActivityId(Long activityId) {
+		aCreateForm.setHref("#adminhome;page=formbuilder;create="+activityId);
+		
+	}
+	
 }
