@@ -154,6 +154,7 @@ public class AssignActivityView extends ViewImpl implements
 		if (!txtMessage.getValue().isEmpty())
 			taskInfo.setMessage(txtMessage.getValue());
 
+		
 		return taskInfo;
 	}
 	
