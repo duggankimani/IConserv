@@ -14,7 +14,14 @@ public class DataOracle<T extends Listable> extends SuggestOracle {
 	public void requestSuggestions(Request request, Callback callback) {
 		Response resp = new Response();
 		
-		resp.setSuggestions(suggestions);
+		String query = request.getQuery();
+		List<Suggestion> sublist = new ArrayList<Suggestion>();
+		for(Suggestion suggest: suggestions){
+			if(suggest.getDisplayString().toLowerCase().contains(query.toLowerCase())){
+				sublist.add(suggest);
+			}
+		}
+		resp.setSuggestions(sublist);
 		callback.onSuggestionsReady(request, resp);
 	}
 	
