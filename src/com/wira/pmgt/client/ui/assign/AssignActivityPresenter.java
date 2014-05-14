@@ -29,6 +29,8 @@ public class AssignActivityPresenter extends
 		void clear();
 
 		TaskInfo getTaskInfo();
+		
+		void setActivityId(Long activityId);
 
 		void addAllItems();
 	}
@@ -53,7 +55,8 @@ public class AssignActivityPresenter extends
 		getView().addAllItems();
 	}
 	
-	public void load() {
+	public void load(Long activityId){
+		getView().setActivityId(activityId);
 		getView().clear();
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetUsersRequest());

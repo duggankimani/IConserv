@@ -1,11 +1,13 @@
 package com.wira.pmgt.server.dao.helper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.wira.pmgt.client.ui.activities.ActivitiesPresenter;
 import com.wira.pmgt.server.dao.ProgramDaoImpl;
 import com.wira.pmgt.server.dao.biz.model.Fund;
 import com.wira.pmgt.server.dao.biz.model.FundAllocation;
@@ -14,7 +16,13 @@ import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
 import com.wira.pmgt.server.dao.biz.model.ProgramFund;
 import com.wira.pmgt.server.dao.biz.model.TargetAndOutcome;
 import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
+import com.wira.pmgt.shared.model.StringValue;
+import com.wira.pmgt.shared.model.TaskInfo;
+import com.wira.pmgt.shared.model.form.Form;
+import com.wira.pmgt.shared.model.form.FormModel;
+import com.wira.pmgt.shared.model.form.Property;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramActivity;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
@@ -427,5 +435,76 @@ public class ProgramDaoHelper {
 		Period period = dao.getActivePeriod();
 		
 		return get(period);
+	}
+
+	/**
+	 * This method generates taskName for the Task to be performed
+	 * and approvalTaskName for the Task Approvers Form
+	 * {@link ActivitiesPresenter#assignTask} and see how this is created {@link TaskInfo}
+	 * 
+	 * @param activityId
+	 * @return
+	 */
+	public static Long generateFormFor(Long activityId) {
+
+		if(activityId==null){
+			return null;
+		}
+		
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		ProgramDetail detail = dao.getProgramDetail(activityId);
+		
+		String taskName = "Program-"+ detail.getId();		
+		String taskFormCaption ="Task Form - "+detail.getName();
+
+		FormModel form = FormDaoHelper.getFormByName(taskName);
+		if(form!=null){
+			return form.getId();
+		}
+				
+		//Approval Form
+//		String approvalTaskName = taskName+"-Approval";
+//		String approvalTaskForm = "Task Approval Form - "+detail.getName(); 
+		
+		//Clone Default Form
+		Form model = (Form)FormDaoHelper.getFormByName("TASK_TEMPLATE_FORM");
+		if(model!=null){
+			model = model.clone();
+			model.setCaption(taskFormCaption);
+			model.setName(taskName);
+			for(Property prop: model.getProperties()){
+				if(prop.getName().equals("NAME")){
+					prop.setValue(new StringValue(taskName));
+				}
+				
+				if(prop.getName().equals("CAPTION")){
+					prop.setValue(new StringValue(taskFormCaption));
+				}
+				
+				if(prop.getName().equals("HELP")){
+					prop.setValue(new StringValue(detail.getDescription()));
+				}
+			}
+		}else{
+			model = generateForm(taskName,taskFormCaption, detail.getDescription());
+		}
+		
+		model = FormDaoHelper.createForm(model, Boolean.FALSE);
+		
+		return model.getId();
+	}
+
+	private static Form generateForm(String taskName, String taskFormCaption, String description) {
+
+		Form form = new Form();
+		form.setName(taskName);
+		form.setCaption(taskFormCaption);
+		
+		form.setProperties(Arrays.asList(
+				new Property("NAME", "Name", DataType.STRING, new StringValue(taskName)),
+				new Property("CAPTION", "Caption", DataType.STRING,new StringValue(taskFormCaption)),
+				new Property("HELP", "Help", DataType.STRING,new StringValue(description))));
+		
+		return form;
 	}
 }

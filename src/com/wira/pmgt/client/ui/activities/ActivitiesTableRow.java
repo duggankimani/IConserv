@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
-import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -225,7 +224,6 @@ public class ActivitiesTableRow extends RowWidget {
 
 	private void highlight(boolean status) {
 		if (status) {
-			System.err.println(">>>hovered");
 			timer.schedule(2000);
 			row.addStyleName("hovered");
 		} else {
