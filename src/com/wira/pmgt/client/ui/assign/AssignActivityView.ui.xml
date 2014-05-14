@@ -42,8 +42,7 @@
 				<g:HTMLPanel styleName="row-fluid hidden" ui:field="divMessage">
 					<d:TextArea styleName="message-compose" ui:field="txtMessage"
 						placeholder="Optional Message sent to Assignee"></d:TextArea>
-				</g:HTMLPanel>
-
+				</g:HTMLPanel>				
 			</div>
 			<g:Anchor href="#adminhome;page=formbuilder;formid=1"
 				target="_blank">Create/Edit task form</g:Anchor>
