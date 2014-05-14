@@ -136,7 +136,9 @@ public class ActivitiesPresenter extends
 
 			@Override
 			public void onClick(ClickEvent event) {
-				assignActivity.load();
+				if(selected!=null){
+					assignActivity.load(selected.getId());
+				}
 				AppManager.showPopUp("Assign Activity",
 						assignActivity.getWidget(), new OptionControl() {
 							@Override

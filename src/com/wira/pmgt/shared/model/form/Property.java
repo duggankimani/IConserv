@@ -30,6 +30,13 @@ public class Property extends FormModel{
 		this.type = type;
 	}
 	
+	public Property(String name, String caption, DataType type, Value value) {
+		this.name = name;
+		this.caption = caption;
+		this.type = type;
+		this.value = value;
+	}
+	
 	public Property(String name, String caption, DataType type,KeyValuePair... pairs) {
 		this.name = name;
 		this.caption = caption;

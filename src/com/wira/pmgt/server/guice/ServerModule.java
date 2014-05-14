@@ -124,6 +124,8 @@ import com.wira.pmgt.shared.requests.GetPeriodRequest;
 import com.wira.pmgt.server.actionhandlers.GetPeriodRequestHandler;
 import com.wira.pmgt.shared.requests.AssignTaskRequest;
 import com.wira.pmgt.server.actionhandlers.AssignTaskRequestHandler;
+import com.wira.pmgt.shared.requests.CreateActivityFormRequest;
+import com.wira.pmgt.server.actionhandlers.CreateActivityFormRequestHandler;
 
 
 
@@ -325,5 +327,9 @@ public class ServerModule extends HandlerModule {
 
 		bindHandler(AssignTaskRequest.class,
 				AssignTaskRequestHandler.class, SessionValidator.class);
+
+		bindHandler(CreateActivityFormRequest.class,
+				CreateActivityFormRequestHandler.class,
+				SessionValidator.class);
 	}
 }

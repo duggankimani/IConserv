@@ -32,6 +32,8 @@ public class AssignActivityView extends ViewImpl implements
 	@UiField HTMLPanel divMessage;
 	@UiField TextArea txtMessage;
 	
+	@UiField Anchor aCreateForm;
+	
 	Boolean isShowMessage =false;
 
 	public interface Binder extends UiBinder<Widget, AssignActivityView> {
@@ -146,5 +148,9 @@ public class AssignActivityView extends ViewImpl implements
 			taskInfo.setMessage(txtMessage.getValue());
 		
 		return taskInfo;
+	}
+	
+	public void setActivityId(Long activityId){
+		aCreateForm.setHref("#adminhome;page=formbuilder;create="+activityId);
 	}
 }

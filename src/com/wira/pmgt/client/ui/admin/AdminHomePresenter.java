@@ -11,6 +11,7 @@ import com.gwtplatform.mvp.client.annotations.ContentSlot;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.annotations.UseGatekeeper;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.client.proxy.RevealContentEvent;
@@ -33,7 +34,9 @@ import com.wira.pmgt.client.ui.events.LoadUsersEvent;
 import com.wira.pmgt.client.ui.login.LoginGateKeeper;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.HTUser;
+import com.wira.pmgt.shared.requests.CreateActivityFormRequest;
 import com.wira.pmgt.shared.requests.GetContextRequest;
+import com.wira.pmgt.shared.responses.CreateActivityFormResponse;
 import com.wira.pmgt.shared.responses.GetContextRequestResult;
 
 public class AdminHomePresenter extends
@@ -74,6 +77,8 @@ public class AdminHomePresenter extends
 	@Inject DataSourcePresenter datasources;
 	@Inject SettingsPresenter settings;
 	@Inject DispatchAsync dispatcher;
+	
+	@Inject PlaceManager placeMgr;
 	
 	enum ADMINPAGES {
 		DASHBOARD("Dashboard", "icon-dashboard"), 
@@ -175,9 +180,14 @@ public class AdminHomePresenter extends
 
 		case FORMBUILDER:
 			String value = request.getParameter("formid", "");
+			String action= request.getParameter("create", null);
+			if(action!=null){
+				createFormForActivity(new Long(action));
+				//break flow here-- redirect on feedback
+				return;
+			}
 			
 			Long formId=null;
-			
 			if(!value.isEmpty() && value.matches("[0-9]+")){
 				formId = new Long(value);
 			}
@@ -204,6 +214,21 @@ public class AdminHomePresenter extends
 			break;
 		}
 
+	}
+
+	private void createFormForActivity(Long activityId) {
+		dispatcher.execute(new CreateActivityFormRequest(activityId),
+				new TaskServiceCallback<CreateActivityFormResponse>() {
+			@Override
+			public void processResult(
+					CreateActivityFormResponse aResponse) {
+				System.err.println("Generated FormId = "+aResponse.getFormId());
+				PlaceRequest place = new PlaceRequest("adminhome")
+						.with("page", "formbuilder")
+						.with("formid", aResponse.getFormId()+"");
+				placeMgr.revealPlace(place);
+			}
+		});
 	}
 
 	private void showSettingsPanel() {
