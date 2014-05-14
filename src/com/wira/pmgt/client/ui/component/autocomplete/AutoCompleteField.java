@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
 import com.wira.pmgt.shared.model.Listable;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
 
 public class AutoCompleteField<T extends Listable> extends Composite {
 

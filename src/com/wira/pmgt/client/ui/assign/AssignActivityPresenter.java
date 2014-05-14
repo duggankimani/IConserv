@@ -21,7 +21,7 @@ import com.wira.pmgt.shared.responses.GetUsersResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
 public class AssignActivityPresenter extends
-		PresenterWidget<AssignActivityPresenter.MyView>{
+		PresenterWidget<AssignActivityPresenter.MyView> {
 
 	public interface MyView extends View {
 		void setSelection(List<OrgEntity> entities);
@@ -31,10 +31,13 @@ public class AssignActivityPresenter extends
 		TaskInfo getTaskInfo();
 		
 		void setActivityId(Long activityId);
+
+		void addAllItems();
 	}
 
-	@Inject DispatchAsync requestHelper;
-	
+	@Inject
+	DispatchAsync requestHelper;
+
 	@Inject
 	public AssignActivityPresenter(final EventBus eventBus, final MyView view) {
 		super(eventBus, view);
@@ -45,6 +48,12 @@ public class AssignActivityPresenter extends
 		super.onBind();
 	}
 	
+	/*
+	 * Add Items the Autocomplete List
+	 */
+	public void addItems() {
+		getView().addAllItems();
+	}
 	
 	public void load(Long activityId){
 		getView().setActivityId(activityId);
@@ -52,31 +61,33 @@ public class AssignActivityPresenter extends
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetUsersRequest());
 		action.addRequest(new GetGroupsRequest());
-		
-		requestHelper.execute(action, new TaskServiceCallback<MultiRequestActionResult>() {
-			@Override
-			public void processResult(MultiRequestActionResult aResponse) {
-				int i=0;
-				List<OrgEntity> entities = new ArrayList<OrgEntity>();
-				GetUsersResponse getUsers = (GetUsersResponse)aResponse.get(i++);
-				for(HTUser user: getUsers.getUsers()){
-					entities.add(user);
-				}
-				
-				GetGroupsResponse getGroups = (GetGroupsResponse)aResponse.get(i++);
-				for(UserGroup group: getGroups.getGroups()){
-					entities.add(group);
-				}
-				
-				getView().setSelection(entities);
-				
-			}
-			
-		});
+
+		requestHelper.execute(action,
+				new TaskServiceCallback<MultiRequestActionResult>() {
+					@Override
+					public void processResult(MultiRequestActionResult aResponse) {
+						int i = 0;
+						List<OrgEntity> entities = new ArrayList<OrgEntity>();
+						GetUsersResponse getUsers = (GetUsersResponse) aResponse
+								.get(i++);
+						for (HTUser user : getUsers.getUsers()) {
+							entities.add(user);
+						}
+
+						GetGroupsResponse getGroups = (GetGroupsResponse) aResponse
+								.get(i++);
+						for (UserGroup group : getGroups.getGroups()) {
+							entities.add(group);
+						}
+
+						getView().setSelection(entities);
+
+					}
+
+				});
 	}
 
 	public TaskInfo getTaskInfo() {
-		
 		return getView().getTaskInfo();
 	}
 }

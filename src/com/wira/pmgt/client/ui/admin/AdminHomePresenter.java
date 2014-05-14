@@ -58,6 +58,8 @@ public class AdminHomePresenter extends
 		public void SetFormBuilderLinks(boolean b, ADMINPAGES page);
 
 		public void SetSettingsLink(boolean b, ADMINPAGES page);
+
+		public void limitToForm(boolean b);
 	}
 
 	@ProxyCodeSplit
@@ -134,11 +136,11 @@ public class AdminHomePresenter extends
 	}
 
 	protected void revealMeToUser(HTUser user) {
+		RevealContentEvent.fire(this, MainPagePresenter.CONTENT_SLOT, this);
 		if(AppContext.isCurrentUserAdmin()){
-			RevealContentEvent.fire(this, MainPagePresenter.CONTENT_SLOT, this);
+			getView().limitToForm(false);
 		}else{
-			//redirect
-			History.newItem("#home");
+			getView().limitToForm(true);
 		}
 	}
 
@@ -158,6 +160,10 @@ public class AdminHomePresenter extends
 			return;
 		}
 
+		if(!AppContext.isCurrentUserAdmin() && pages!=ADMINPAGES.FORMBUILDER){
+			History.newItem("#home");
+		}
+		
 		//reload alerts
 		fireEvent(new LoadAlertsEvent());
 		
