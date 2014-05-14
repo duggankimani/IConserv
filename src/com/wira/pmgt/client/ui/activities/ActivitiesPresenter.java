@@ -158,7 +158,7 @@ public class ActivitiesPresenter extends
 									taskInfo.setActivityId(selected.getId());
 									String taskName = "Program-"
 											+ selected.getId();
-									String approvalTaskName = taskName;
+									String approvalTaskName = taskName+"-Approval";
 									taskInfo.setTaskName(taskName);
 									taskInfo.setApprovalTaskName(approvalTaskName);
 

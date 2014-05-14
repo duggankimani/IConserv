@@ -70,6 +70,8 @@ public class ActivitiesTableRow extends RowWidget {
 	long programId=0;
 	IsProgramActivity activity;
 	List<FundDTO> funding = null;
+	
+	boolean showChildren=true;
 
 	List<HTMLPanel> allocations = new ArrayList<HTMLPanel>();
 	
@@ -238,7 +240,7 @@ public class ActivitiesTableRow extends RowWidget {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				collapse();
+				collapse(!showChildren);
 			}
 		});	
 	}
@@ -257,8 +259,9 @@ public class ActivitiesTableRow extends RowWidget {
 		showAllocations(hasChildren);
 	}
 	
-	boolean showChildren=true;
-	public void collapse(){
+	//default toggle
+	public void collapse(boolean isShowChildren){
+		this.showChildren= isShowChildren;
 		HTMLPanel panel = (HTMLPanel)this.getParent();
 		int idx = panel.getWidgetIndex(this);
 		assert idx!=-1;
@@ -269,7 +272,7 @@ public class ActivitiesTableRow extends RowWidget {
 			childCount = activity.getObjectives()==null?0 :activity.getObjectives().size();
 		}
 		
-		setHasChildren(showChildren=!showChildren);
+		setHasChildren(isShowChildren);
 		if(childCount==0){
 			return;
 		}
@@ -280,8 +283,8 @@ public class ActivitiesTableRow extends RowWidget {
 			ActivitiesTableRow row = (ActivitiesTableRow)panel.getWidget(i);
 			if(row.getActivity().getParentId()==activity.getId()){
 				childrenCollapsed++;
-				row.collapse();
-				row.hide(!showChildren);								
+				row.collapse(showChildren);
+				row.show(showChildren);
 			}
 			
 		}
@@ -292,9 +295,9 @@ public class ActivitiesTableRow extends RowWidget {
 	 * 
 	 * @param hide
 	 */
-	public void hide(boolean hide){		
-		showChildren=!hide; //Synchronize states with caller
-		row.setStyleName(hide? "hide":"tr");
+	public void show(boolean show){
+		showChildren=show; //Synchronize states with caller
+		row.setStyleName(show? "tr":"hide");
 	}
 
 	private void showAllocations(boolean showChildren) {
