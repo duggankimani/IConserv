@@ -49,14 +49,14 @@
 					<ul class="dropdown-menu">
 						<div class="user-details row-fluid">
 							<div class="span1">
-								<g:Image ui:field="img" width="70px" height="90px" />
+								<g:Image ui:field="img" width="90px" height="90px" />
 								<!-- img class="" data-src="img/blueman.png" src="img/blueman.png" 
 									width="70px" height="90px"/ -->
 							</div>
 							<div class="span2">
 								<span class="text" ui:field="spnUserPull"></span>
 								<br />
-								<span class="ellipsis" style="width: 90%;" ui:field="spnUserGroup"></span>
+								<span class="ellipsis label" style="width: 90%;" ui:field="spnUserGroup"></span>
 							</div>
 
 						</div>

@@ -5,7 +5,7 @@ insert into BUser(created,createdBy,updated,updatedBy,firstName,isArchived,lastN
 insert into BUser(created,createdBy,updated,updatedBy,firstName,isArchived,lastName,userId,email,password) values (now(),'Administrator',now(), 'Administrator', 'Esteban', false, 'Ti','esteban','mdkimani@gmail.com','pass');
 insert into BUser(created,createdBy,updated,updatedBy,firstName,isArchived,lastName,userId,email,password) values (now(),'Administrator',now(), 'Administrator', 'Salaboy', false, 'Sb','salaboy','mdkimani@gmail.com','pass');
 insert into BUser(created,createdBy,updated,updatedBy,firstName,isArchived,lastName,userId,email,password) values (now(),'Administrator',now(), 'Administrator', 'Gatheru', false, 'Joseph','gatheru','tosh0948@gmail.com','pass');
-insert into BUser(created,createdBy,updated,updatedBy,firstName,isArchived,lastName,userId,email,password) values (now(),'Administrator',now(), 'Administrator', 'TomKim', false, 'Tom','Kimani','tosh0948@gmail.com','pass');
+insert into BUser(created,createdBy,updated,updatedBy,firstName,isArchived,lastName,userId,email,password) values (now(),'Administrator',now(), 'Administrator', 'Kimani', false, 'Tom','TomKim','tosh0948@gmail.com','pass');
 insert into BUser(created,createdBy,updated,updatedBy,firstName,isArchived,lastName,userId,email,password) values (now(),'Administrator',now(), 'Administrator', 'Njenga', false, 'Patrick','pnjenga','mdkimani@gmail.com','pass');
 insert into BUser(created,createdBy,updated,updatedBy,firstName,isArchived,lastName,userId,email,password) values (now(),'Administrator',now(), 'Administrator', 'Odonya', false, 'Japheth','jodonya','mdkimani@gmail.com','pass');
 insert into BUser(created,createdBy,updated,updatedBy,firstName,isArchived,lastName,userId,email,password) values (now(),'Administrator',now(), 'Administrator', 'Lumumba', false, 'Patrice','plumumba','mdkimani@gmail.com','pass');
@@ -32,18 +32,6 @@ insert into UserGroup(userid,groupid) values(9,7);
 insert into UserGroup(userid,groupid) values(10,8);
 insert into UserGroup(userid,groupid) values(11,9);
 
- insert into ADDocType(created, createdBy, updated, updatedBy,className, display, name, lastnum, subjectformat) values (now(),'Administrator',null,null,'color-green','Invoice', 'INVOICE',0,'INV/{No}/{YY}');
- insert into ADDocType(created, createdBy, updated, updatedBy,className, display, name, lastnum, subjectformat) values (now(),'Administrator',null,null,'color-blue','Contract', 'CONTRACT',0,'CNT/{No}/{YY}');
- insert into ADDocType(created, createdBy, updated, updatedBy,className, display, name, lastnum, subjectformat) values (now(),'Administrator',null,null,'color-win8','Requisition', 'REQUISITION',0,'REQ/{No}/{YY}');
- insert into ADDocType(created, createdBy, updated, updatedBy,className, display, name, lastnum, subjectformat) values (now(),'Administrator',null,null,'color-silver-dark','LPO', 'LPO',0,'LPO/{No}/{YY}');
- insert into ADDocType(created, createdBy, updated, updatedBy,className, display, name, lastnum, subjectformat) values (now(),'Administrator',null,null,'color-teal','Leave Application', 'LEAVEAPP',0,'Leave/{No}/{MM}/{YY}');
- insert into ADDocType(created, createdBy, updated, updatedBy,className, display, name, lastnum, subjectformat) values (now(),'Administrator',null,null,'color-silver-dark','RFQ', 'RFQ',0,'RFQ/{No}/{YY}');
- insert into ADDocType(created, createdBy, updated, updatedBy,className, display, name, lastnum, subjectformat) values (now(),'Administrator',null,null,'color-blue','Form8', 'FORM8',0,'REG/FRM8/{No}/{YY}');
- insert into ADDocType(created, createdBy, updated, updatedBy,className, display, name, lastnum, subjectformat) values (now(),'Administrator',null,null,'color-win8','Loan Application', 'FACILITYAPPLICATIONFORM',0,'L51/CBLC/{No}/{YY}');
- insert into ADDocType(created, createdBy, updated, updatedBy,className, display, name, lastnum, subjectformat) values (now(),'Administrator',null,null,'color-win8','Account Application', 'AccountApplication',0,'ACC/CBLC/{No}/{YY}');
- insert into ADDocType(created, createdBy, updated, updatedBy,className, display, name, lastnum, subjectformat) values (now(),'Administrator',null,null,'color-win8','Asset Finance Application', 'ASSETFINANCE',0,'AFN/CBLC/{No}/{YY}');
- insert into ADDocType(created, createdBy, updated, updatedBy,className, display, name, lastnum, subjectformat) values (now(),'Administrator',null,null,'color-win8','Requisition -WD', 'WDRequisition',0,'Req/WD/{No}/{YY}');
- insert into ADDocType(created, createdBy, updated, updatedBy,className, display, name, lastnum, subjectformat) values (now(),'Administrator',null,null,'color-win8','Student Leave', 'StudentLeave',0,'BUS-AFI-{No}/{YYYY}');
  insert into ADDocType(created, createdBy, updated, updatedBy,className, display, name, lastnum, subjectformat) values (now(),'Administrator',null,null,'color-win8','Task', 'TASK',0,'Task#{No}');
 
  
@@ -56,11 +44,6 @@ create index on localdocument (lower(subject));
 create index on localdocument (lower(description));
 alter table adfield alter column formid drop not null;
 
-update addoctype set subjectformat='INV/{No}/{YY}' where id=(select id from addoctype where name='INVOICE');
-update addoctype set subjectformat='CNT/{No}/{YY}' where id=(select id from addoctype where name='CONTRACT');
-update addoctype set subjectformat='REQ/{No}/{YY}' where id=(select id from addoctype where name='REQUISITION');
-update addoctype set subjectformat='LPO/{No}/{YY}' where id=(select id from addoctype where name='LPO');
-update addoctype set subjectformat='Leave/{No}/{MM}/{YY}' where id=(select id from addoctype where name='LEAVEAPP');
 update addoctype set subjectformat='RFQ/{No}/{YY}' where id=(select id from addoctype where name='RFQ');
 
 /*A fix for ADProperties Bug - Multiple Repeated properties for a single Field specifically grid columns - Repeated as the grid is moved around*/
@@ -70,3 +53,7 @@ delete from advalue where documentid is not null and fieldname is not null and i
 
 create index idx_propertyid on advalue(propertyid);
 create index idx_documentid on advalue(documentid);
+
+
+
+insert into fund(id,created,createdby,isactive,updatedby,description,name) values(1,NOW(),NOW(),NULL,NULL,'EKN','EKN');

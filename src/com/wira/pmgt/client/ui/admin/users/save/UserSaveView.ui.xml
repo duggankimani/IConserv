@@ -1,11 +1,9 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-	xmlns:g='urn:import:com.google.gwt.user.client.ui' 
-	xmlns:d='urn:import:com.wira.pmgt.client.ui.component'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:d='urn:import:com.wira.pmgt.client.ui.component'
 	xmlns:a='urn:import:com.wira.pmgt.client.ui.component.autocomplete'
-	xmlns:c='urn:import:com.wira.pmgt.client.ui.admin.component'	
-	xmlns:up='urn:import:com.wira.pmgt.client.ui.upload.custom'
+	xmlns:c='urn:import:com.wira.pmgt.client.ui.admin.component' xmlns:up='urn:import:com.wira.pmgt.client.ui.upload.custom'
 	ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
 	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
 	ui:generateLocales='default'>
@@ -32,10 +30,10 @@
 							<label for="Names">
 								<b>Names:</b>
 							</label>
-							<d:TextField ui:field="txtLastname" type="text"
-								class="input-medium" placeholder="Last Name" />
 							<d:TextField ui:field="txtFirstname" type="text"
 								class="input-medium" placeholder="First Name" />
+							<d:TextField ui:field="txtLastname" type="text"
+								class="input-medium" placeholder="Last Name" />
 						</div>
 					</div>
 

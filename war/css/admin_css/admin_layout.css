@@ -1,5 +1,11 @@
 .body-admin {
 	margin-top: -5px;
+	height: 100%;
+}
+
+.body-admin .span11{
+	margin-left:0px;
+	width: 94%;
 }
 
 .overflow-y{
@@ -25,7 +31,6 @@
 	position: absolute;
 	display: block;
 	height: 100%;
-	top: 48px;
 	background: #333333;
 	border: 1px solid #2E2E2E;
 	width: 6.382978723404255%;
@@ -123,8 +128,8 @@
 /* content */
 #main-content .content {
 	margin-top: 0px;
-	margin-left: -2.2%;
-	margin-bottom: -62px;
+	margin-left: 0px;
+	/* margin-bottom: -62px; */
 	display: block;
 	background: #EDEDED;
 	border: 1px solid #CDCDCD;

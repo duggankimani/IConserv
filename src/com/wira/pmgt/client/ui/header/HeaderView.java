@@ -199,6 +199,6 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 
 	public void setImage(HTUser user) {
 		imgSmall.setUrl(AppContext.getUserImageUrl(user, 48.0, 48.0));
-		img.setUrl(AppContext.getUserImageUrl(user, 70.0, 70.0));
+		img.setUrl(AppContext.getUserImageUrl(user, 90.0, 90.0));
 	}
 }

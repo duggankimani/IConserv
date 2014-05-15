@@ -145,12 +145,13 @@ public class ActivitiesPresenter extends
 						assignActivity.getWidget(), new OptionControl() {
 							@Override
 							public void onSelect(String name) {
+							
 								if (name.equals("Cancel")) {
 									hide();
 									return;
 								}
 
-								assignActivity.addItems();
+								assignActivity.addItems(); //Add all users
 								TaskInfo taskInfo = assignActivity
 										.getTaskInfo();
 
@@ -232,7 +233,7 @@ public class ActivitiesPresenter extends
 	}
 
 	protected void showEditPopup(ProgramDetailType type, boolean edit) {
-		IsProgramActivity activity = selected != null ? selected : detail;
+		IsProgramActivity activity = (selected != null) ? selected : detail;
 
 		showEditPopup(type, activity, edit);
 	}
@@ -327,7 +328,7 @@ public class ActivitiesPresenter extends
 
 			// in case you selected an Program from summary view and clicked New
 			// Objective
-			parentId = parentId != null ? parentId
+			parentId = (parentId != null) ? parentId
 					: activity != null ? activity.getId() : null;
 			objectivePresenter.load(parentId);// Parent Id Passed here
 
@@ -398,9 +399,10 @@ public class ActivitiesPresenter extends
 								aResponse.getProgram().getId());
 						loadData(programId);
 						fireEvent(new ProcessingCompletedEvent());
+						
 						fireEvent(new ActivitySavedEvent(activity.getType()
 								.name().toLowerCase()
-								+ " change(s) successfully saved"));
+								+ " successfully saved"));
 					}
 				});
 	}

@@ -573,7 +573,7 @@ class BPMSessionManager {
 		@Override
 		public void taskClaimed(TaskUserEvent event) {
 			//when do we use this?
-			logger.debug("Task Claimed ");
+			logger.debug("Task Claimed............ ");
 			onTaskCreated(event.getTaskId());
 		}
 		

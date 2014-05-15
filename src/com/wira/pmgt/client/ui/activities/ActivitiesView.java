@@ -176,29 +176,12 @@ public class ActivitiesView extends ViewImpl implements
 		
 		spnDates.getElement().setAttribute("data-toggle", "dropdown");
 		
+		
+		show(aBack,false);
 		aBack.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				History.back();
-			}
-		});
-	}
-
-	private void registerEditFocus() {
-		show(aProgramEdit, false);
-
-		panelTitle.addMouseOverHandler(new MouseOverHandler() {
-
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				show(aProgramEdit, true);
-			}
-		});
-
-		panelTitle.addMouseOutHandler(new MouseOutHandler() {
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				show(aProgramEdit, false);
 			}
 		});
 	}
@@ -356,7 +339,7 @@ public class ActivitiesView extends ViewImpl implements
 		show(aNewTask, false);
 		show(aEdit, true);
 		show(aAssign,false);
-		show(aBack, true);
+		show(aBack, false);
 		show(aDetail, false);
 		
 		if (type == ProgramDetailType.PROGRAM) {

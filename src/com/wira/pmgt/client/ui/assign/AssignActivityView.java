@@ -13,11 +13,14 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
+import com.wira.pmgt.client.ui.component.BreadCrumbItem;
+import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.autocomplete.AutoCompleteField;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.OrgEntity;
 import com.wira.pmgt.shared.model.ParticipantType;
 import com.wira.pmgt.shared.model.TaskInfo;
+import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class AssignActivityView extends ViewImpl implements
 		AssignActivityPresenter.MyView {
@@ -28,9 +31,13 @@ public class AssignActivityView extends ViewImpl implements
 	Anchor aAdd;
 	@UiField
 	Anchor aCreateForm;
-	
+
 	@UiField
 	AutoCompleteField<OrgEntity> allocatedToUsers;
+
+	@UiField
+	BulletListPanel crumbContainer;
+
 	@UiField
 	HTMLPanel divAllocations;
 
@@ -53,7 +60,6 @@ public class AssignActivityView extends ViewImpl implements
 		widget = binder.createAndBindUi(this);
 
 		selectedSet.add(AppContext.getContextUser());
-		
 
 		aAdd.addClickHandler(new ClickHandler() {
 
@@ -161,14 +167,34 @@ public class AssignActivityView extends ViewImpl implements
 		if (!txtMessage.getValue().isEmpty())
 			taskInfo.setMessage(txtMessage.getValue());
 
-		
 		return taskInfo;
 	}
-	
+
 	@Override
 	public void setActivityId(Long activityId) {
-		aCreateForm.setHref("#adminhome;page=formbuilder;create="+activityId);
-		
+		aCreateForm.setHref("#adminhome;page=formbuilder;create=" + activityId);
 	}
-	
+
+	public void createCrumb(String text, String title, Long id, Boolean isActive) {
+		BreadCrumbItem crumb = new BreadCrumbItem();
+		crumb.setActive(isActive);
+		crumb.setTitle(title);
+		if (text.length() > 25) {
+			text = text.substring(0, 25) + "...";
+		}
+		crumb.setLinkText(text);
+		crumb.setHref("#home;page=activities;activity=" + id);
+		crumbContainer.add(crumb);
+	}
+
+	public void setBreadCrumbs(List<ProgramSummary> summaries) {
+		crumbContainer.clear();
+		for (int i = summaries.size() - 1; i > -1; i--) {
+			ProgramSummary summary = summaries.get(i);
+			createCrumb(summary.getName(), summary.getDescription(),
+					summary.getId(), i == 0);
+		}
+
+	}
+
 }
