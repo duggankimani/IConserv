@@ -27,7 +27,7 @@ public class TestProgramActivityTask {
 	
 	@Test
 	public void createTask(){
-		long activityId = 39L;
+		long activityId = 19L;
 		ProgramDetail detail = DB.getProgramDaoImpl().getProgramDetail(activityId);
 		
 		String taskName = "Program-"+activityId;

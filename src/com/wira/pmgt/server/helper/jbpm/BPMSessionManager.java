@@ -474,6 +474,8 @@ class BPMSessionManager {
 		}
 
 		
+		System.err.println(instance.getId());
+		assert instance.getId()!=0;
 		session.startProcessInstance(instance.getId());
 		
 		return instance;

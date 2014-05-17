@@ -30,7 +30,14 @@
 }
 .modal .users-container .name-box .names{
 	margin-left:10px;
-	margin-top:10px
+	margin-top: 10px;}
+
+.modal .users-container .name-box .participant-type{
+	margin-top: 5px;
+}
+
+.modal .users-container .name-box .icon-remove{
+	margin-top: 13px;
 }
 
 .modal .actions-box{

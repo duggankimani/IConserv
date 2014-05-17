@@ -21,7 +21,7 @@
 					<div class="span3 hide">
 						<g:Anchor ui:field="aBack" styleName="btn btn-default"
 							title="Back">
-							<i class="icon-arrow-left"></i>
+							<i class="icon-google-back icon-button"></i>
 						</g:Anchor>
 					</div>
 
@@ -60,28 +60,28 @@
 					<div class="span3 hide">
 						<g:Anchor ui:field="aEdit" styleName="btn btn-default"
 							title="Edit">
-							<i class="icon-pencil"></i>
+							<i class="icon-pencil icon-button"></i>
 						</g:Anchor>
 					</div>
 					
 					<div class="span3 hide">
 						<g:Anchor ui:field="aDetail" styleName="btn btn-default"
 							title="Detailed view" href="#home;page=detailed">
-							<i class="icon-tasks"></i>
+							<i class="icon-tasks icon-button"></i>
 						</g:Anchor>
 					</div>
 	
 					<div class="span3 hide">
 						<g:Anchor ui:field="aDelete" styleName="btn btn-danger"
 							title="Delete">
-							<i class="icon-trash"></i>
+							<i class="icon-trash icon-button"></i>
 						</g:Anchor>
 					</div>
 					
 					<div class="span3 hide">
 						<g:Anchor ui:field="aAssign" styleName="btn btn-default"
 							title="Assign">
-							<i class="icon-group"></i>
+							<i class="icon-google-share icon-button"></i>
 						</g:Anchor>
 					</div>
 					
