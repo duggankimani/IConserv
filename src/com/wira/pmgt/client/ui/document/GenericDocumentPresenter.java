@@ -40,6 +40,7 @@ import com.wira.pmgt.client.ui.events.ActivitiesLoadEvent;
 import com.wira.pmgt.client.ui.events.AfterAttachmentReloadedEvent;
 import com.wira.pmgt.client.ui.events.AfterDocumentLoadEvent;
 import com.wira.pmgt.client.ui.events.AfterSaveEvent;
+import com.wira.pmgt.client.ui.events.ButtonClickEvent;
 import com.wira.pmgt.client.ui.events.CompleteDocumentEvent;
 import com.wira.pmgt.client.ui.events.DeleteLineEvent;
 import com.wira.pmgt.client.ui.events.ExecTaskEvent;
@@ -50,6 +51,7 @@ import com.wira.pmgt.client.ui.events.ReloadDocumentEvent;
 import com.wira.pmgt.client.ui.events.ReloadEvent;
 import com.wira.pmgt.client.ui.events.WorkflowProcessEvent;
 import com.wira.pmgt.client.ui.events.ActivitiesLoadEvent.ActivitiesLoadHandler;
+import com.wira.pmgt.client.ui.events.ButtonClickEvent.ButtonClickHandler;
 import com.wira.pmgt.client.ui.events.DeleteLineEvent.DeleteLineHandler;
 import com.wira.pmgt.client.ui.events.ReloadAttachmentsEvent.ReloadAttachmentsHandler;
 import com.wira.pmgt.client.ui.events.ReloadDocumentEvent.ReloadDocumentHandler;
@@ -116,7 +118,7 @@ import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 public class GenericDocumentPresenter extends
 		PresenterWidget<GenericDocumentPresenter.MyView> 
 		implements ReloadDocumentHandler, ActivitiesLoadHandler,
-		ReloadAttachmentsHandler,DeleteLineHandler{
+		ReloadAttachmentsHandler,DeleteLineHandler,ButtonClickHandler{
 
 	public interface MyView extends View {
 		void setValues(HTUser createdBy, Date created, String type, String subject,
@@ -211,6 +213,7 @@ public class GenericDocumentPresenter extends
 		addRegisteredHandler(ActivitiesLoadEvent.TYPE, this);
 		addRegisteredHandler(ReloadAttachmentsEvent.TYPE, this);
 		addRegisteredHandler(DeleteLineEvent.TYPE, this);
+		addRegisteredHandler(ButtonClickEvent.TYPE, this);
 		
 		getView().getUploadLink2().addClickHandler(new ClickHandler() {
 			@Override
@@ -419,6 +422,49 @@ public class GenericDocumentPresenter extends
 		});
 		
 	}
+	
+	public void complete(Map<String, Value> withValues, boolean validateForm){
+		if(validateForm){
+			if(getView().isValid()){
+				completeIt(withValues);
+			}
+		}else{
+			completeIt(withValues);
+		}
+	}
+
+
+	private void completeIt(Map<String, Value> withValues) {
+		Map<String, Value> values = getView().getValues();
+		if(values==null){
+				values = new HashMap<String, Value>();
+		}
+		
+		if(withValues!=null)
+			values.putAll(withValues);
+		
+		assert !values.isEmpty();
+		values.remove(null);
+		
+		fireEvent(new CompleteDocumentEvent(taskId, values));
+	}
+
+	protected void forwardForApproval() {
+		if(getView().isValid()){
+			fireEvent(new ProcessingEvent());
+			requestHelper.execute(new ApprovalRequest(AppContext.getUserId(), (Document)doc), new TaskServiceCallback<ApprovalRequestResult>(){
+				@Override
+				public void processResult(ApprovalRequestResult result) {
+					GenericDocumentPresenter.this.getView().asWidget().removeFromParent();
+					fireEvent(new ProcessingCompletedEvent());
+					//clear selected document
+					fireEvent(new AfterSaveEvent());
+					fireEvent(new WorkflowProcessEvent(doc.getSubject(), "You have forwarded for Approval",doc));
+				}
+			});
+		}
+	}
+
 
 
 	protected void showUpload() {
@@ -964,5 +1010,36 @@ public class GenericDocumentPresenter extends
 				AppContext.fireEvent(new ProcessingCompletedEvent());
 			}
 		});
+	}
+	
+
+	@Override
+	public void onButtonClick(ButtonClickEvent event) {
+		String requestType = event.getRequestType();
+		
+		if(requestType==null && event.getCustomHandlerClass()==null){
+			return;
+		}
+		
+		if(requestType!=null){
+			if(requestType.equals("StartProcess")){
+				forwardForApproval();
+			}else if(requestType.equals("CompleteProcess")){
+				complete(event.getValues(),event.isValidateForm());
+			}
+		}
+		else{
+			executeGenericCode(event.getValues(), event.getCustomHandlerClass());
+		}
+	}
+
+	private void executeGenericCode(Map<String, Value> values,
+			String customHandlerClass) {
+//		requestHelper.execute(new GenericRequest(values, customHandlerClass), 
+//				new TaskServiceCallback<GenericResponse>() {
+//			@Override
+//			public void processResult(GenericResponse aResponse) {	
+//			}
+//		});
 	}
 }

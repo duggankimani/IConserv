@@ -79,6 +79,7 @@ class BPMSessionManager {
 
 	public BPMSessionManager() {
 
+		GenericHTWorkItemHandler j;
 		service = new TaskService(DB.getEntityManagerFactory(),
 				SystemEventListenerFactory.getSystemEventListener(),
 				new DefaultEscalatedDeadlineHandler(EmailServiceHelper.getProperties()));

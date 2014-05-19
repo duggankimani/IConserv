@@ -108,11 +108,12 @@ public class NoteView extends ViewImpl implements NotePresenter.MyView {
 
 		SafeHtml safeHtml = null;
 		SafeHtml safeHtml2 = null;
+		// System.err.println("NotificationType: "+notificationType+": Subject="+subject+": isNotification="+isNotification);
 		switch (notificationType) {
 		case APPROVALREQUEST_APPROVERNOTE:
 			safeHtml = Template1.render(subject, owner, time);
 			break;
-		case TASKASSIGNMENT_ASSIGNEENOTE:
+		case TASKASSIGNMENT_ASSIGNORNOTE:
 			safeHtml = taskAssignmentAssigneeTemplate.render(subject, owner,
 					time);
 			break;
@@ -121,15 +122,16 @@ public class NoteView extends ViewImpl implements NotePresenter.MyView {
 			if (isNotification)
 				safeHtml = Template2.render(owner, subject, time);
 			else {
+				// activity
 				safeHtml2 = Template6.render(owner, subject, time);
 			}
 			break;
-		case TASKASSIGNMENT_ASSIGNORNOTE:
-			if (isNotification)
+		case TASKASSIGNMENT_ASSIGNEENOTE:
+			// System.err.println(">>>>>> Called for subject: "+subject+" isNotification ="+isNotification);
+			if (isNotification) {
 				safeHtml = taskAssignmentAssignorTemplate.render(owner,
 						subject, time);
-			else {
-				System.err.println(">>>>>> called");
+			} else {
 				safeHtml2 = Template6.render(owner, subject, time);
 			}
 			break;
@@ -167,7 +169,6 @@ public class NoteView extends ViewImpl implements NotePresenter.MyView {
 			} else {
 				safeHtml2 = Template8.render(approver, subject, target, time);
 			}
-
 			break;
 		default:
 			return;

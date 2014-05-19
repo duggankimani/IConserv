@@ -542,7 +542,7 @@ public class ActivitiesPresenter extends
 						}
 
 						fireEvent(new ActivitySavedEvent(
-								"You successfully assigned "+taskInfo.getApprovalTaskName()+" "+ allocatedPeople));
+								"You successfully assigned "+taskInfo.getDescription()+" "+ allocatedPeople));
 					}
 				});
 	}
