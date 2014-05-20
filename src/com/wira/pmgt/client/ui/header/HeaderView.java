@@ -29,13 +29,16 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 	public interface Binder extends UiBinder<Widget, HeaderView> {
 	}
 
-	@UiField SpanElement spnCompanyName;
-	
+	@UiField
+	SpanElement spnCompanyName;
 	@UiField
 	Image imgSmall;
 	@UiField
 	Image img;
-
+	@UiField
+	Image imgLogo;
+	@UiField
+	Anchor aBrand;
 	@UiField
 	SpanElement spnUser;
 	@UiField
@@ -50,10 +53,8 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 	HTMLPanel divNavbar;
 	@UiField
 	Anchor aAdmin;
-
 	@UiField
 	Anchor aProfile;
-
 	@UiField
 	FocusPanel popupContainer;
 	@UiField
@@ -72,6 +73,8 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 		aNotifications.getElement().setAttribute("data-toggle", "dropdown");
 		UIObject.setVisible(aAdmin.getElement(), false);
 
+		UIObject.setVisible(aBrand.getElement(), false);
+
 		imgSmall.addErrorHandler(new ErrorHandler() {
 			@Override
 			public void onError(ErrorEvent event) {
@@ -85,7 +88,7 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 				img.setUrl("img/blueman.png");
 			}
 		});
-		
+
 	}
 
 	@Override
@@ -129,8 +132,8 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 		if (userGroups != null) {
 			spnUserGroup.setInnerText(userGroups);
 		}
-		
-		if(orgName!=null){
+
+		if (orgName != null) {
 			spnCompanyName.setInnerText(orgName);
 		}
 	}

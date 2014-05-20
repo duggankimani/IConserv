@@ -7,9 +7,15 @@
 
 	<g:HTMLPanel styleName="navbar" ui:field="divNavbar">
 		<div class="navbar-inner">
-			<g:Anchor styleName="brand visible-desktop visible-tablet" href="#home" ui:field="aBrand">
-			    iConserve |&nbsp;<span ui:field="spnCompanyName">LWF</span></g:Anchor>
-
+			<g:Anchor styleName="brand hidden" href="#home"
+				ui:field="aBrand">
+				iConserve |&nbsp;
+				<span ui:field="spnCompanyName">LWF</span>
+			</g:Anchor>
+			<a href="#home" styleName="brand">
+				<g:Image ui:field="imgLogo" url="img/logo.png" width="180px"></g:Image>
+			</a>
+			
 			<ul class="nav pull-right">
 				<li class="home">
 					<g:Anchor href="#home" ui:field="aHome" styleName="close-icon hand">
@@ -62,7 +68,8 @@
 						</div>
 						<div class="action-area">
 							<div class="version" ui:field="spnVersion"></div>
-							<g:Anchor styleName="btn btn-primary" ui:field="aProfile" href="#home;page=profile">View Profile</g:Anchor>
+							<g:Anchor styleName="btn btn-primary" ui:field="aProfile"
+								href="#home;page=profile">View Profile</g:Anchor>
 							<g:Anchor styleName="btn pull-right" ui:field="aLogout">Logout</g:Anchor>
 						</div>
 					</ul>
