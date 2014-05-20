@@ -216,7 +216,7 @@
 .activities-page .table-programs .tbody .name-container a:hover{
 	text-decoration:underline;
 	cursor:pointer;
-	color:#428bca;
+	color: #428bca !important;
 }
 
 .activities-page .color-strip {

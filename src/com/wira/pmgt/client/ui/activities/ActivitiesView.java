@@ -10,10 +10,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -30,6 +26,7 @@ import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
+import com.wira.pmgt.client.ui.component.ActionLink;
 import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
@@ -46,7 +43,7 @@ public class ActivitiesView extends ViewImpl implements
 	private final Widget widget;
 	
 	@UiField
-	Anchor aProgram;
+	ActionLink aProgram;
 	
 	@UiField
 	HTMLPanel divContent;
@@ -59,26 +56,26 @@ public class ActivitiesView extends ViewImpl implements
 	@UiField
 	InlineLabel spnDates;
 	@UiField
-	Anchor aNewOutcome;
+	ActionLink aNewOutcome;
 	@UiField
 	BulletListPanel crumbContainer;
 	@UiField
-	Anchor aNewActivity;
+	ActionLink aNewActivity;
 	@UiField
-	Anchor aNewObjective;
+	ActionLink aNewObjective;
 	@UiField
-	Anchor aNewTask;
+	ActionLink aNewTask;
 	@UiField
-	Anchor aEdit;
+	ActionLink aEdit;
 	@UiField
-	Anchor aBack;
+	ActionLink aBack;
 	@UiField
-	Anchor aAssign;
+	ActionLink aAssign;
 	@UiField
-	Anchor aDetail;
+	ActionLink aDetail;
 	
 	@UiField
-	Anchor aProgramEdit;
+	ActionLink aProgramEdit;
 	@UiField
 	FocusPanel panelTitle;
 	
@@ -90,9 +87,9 @@ public class ActivitiesView extends ViewImpl implements
 	@UiField
 	HeadingElement spnTitle;
 	@UiField
-	Anchor aLeft;
+	ActionLink aLeft;
 	@UiField
-	Anchor aRight;
+	ActionLink aRight;
 	Long lastUpdatedId;
 
 	@UiField
@@ -232,7 +229,7 @@ public class ActivitiesView extends ViewImpl implements
 
 	public void createTab(String text, long id, boolean active) {
 		BulletPanel li = new BulletPanel();
-		Anchor a = new Anchor(text);
+		ActionLink a = new ActionLink(text);
 		a.setHref("#home;page=activities;activity=" + id);
 		li.add(a);
 

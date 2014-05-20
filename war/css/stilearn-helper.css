@@ -146,7 +146,7 @@ body .main-body .alert a {
 	padding-left: 0px;
 }
 .breadcrumb a,a:hover{
-	color:grey;
+	 /* color:grey !important; */
 }
 .breadcrumb .active{
 	font-weight:bold;

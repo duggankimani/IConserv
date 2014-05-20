@@ -4,7 +4,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -13,7 +12,7 @@ public class BreadCrumbItem extends Composite {
 	private static BreadCrumbItemUiBinder uiBinder = GWT
 			.create(BreadCrumbItemUiBinder.class);
 	
-	@UiField Anchor aLink;
+	@UiField ActionLink aLink;
 	@UiField BulletPanel liItem;
 	@UiField SpanElement spnDivider;
 	
@@ -54,6 +53,11 @@ public class BreadCrumbItem extends Composite {
 	
 	public void setHref(String href){
 		aLink.setHref(href);
+	}
+	
+	@Override
+	public void setTitle(String title) {
+		aLink.setTitle(title);
 	}
 
 }
