@@ -38,6 +38,7 @@ public class CreateOutcomePresenter extends
 	@Inject
 	DispatchAsync requestHelper;
 	IsProgramActivity outcome;
+	private Long parentId;
 
 	@Inject
 	public CreateOutcomePresenter(final EventBus eventBus, final MyView view) {
@@ -50,6 +51,8 @@ public class CreateOutcomePresenter extends
 			viewoutcome.setId(outcome.getId());
 			viewoutcome.setParentId(outcome.getParentId());
 			viewoutcome.setPeriod(outcome.getPeriod());
+		}else{
+			viewoutcome.setParentId(parentId);
 		}
 		
 		return viewoutcome;
@@ -57,6 +60,7 @@ public class CreateOutcomePresenter extends
 
 	public void load(Long parentId) {
 		assert parentId!=null;
+		this.parentId = parentId;
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetFundsRequest());
 		action.addRequest(new GetPeriodRequest());

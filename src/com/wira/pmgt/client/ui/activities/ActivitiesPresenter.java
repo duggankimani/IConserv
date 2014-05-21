@@ -324,12 +324,10 @@ public class ActivitiesPresenter extends
 			objectivePresenter
 					.setObjective((edit && activity.getType() == ProgramDetailType.OBJECTIVE) ? activity
 							: null);
-			Long parentId = edit ? activity.getParentId() : programId;
-
-			// in case you selected an Program from summary view and clicked New
-			// Objective
-			parentId = (parentId != null) ? parentId
-					: activity != null ? activity.getId() : null;
+			
+			//if creating new, activity is the parent
+			final Long parentId = edit ? activity.getParentId() : activity.getId();
+			
 			objectivePresenter.load(parentId);// Parent Id Passed here
 
 			AppManager.showPopUp(edit ? "Edit Objective" : "Add Objective",
@@ -341,7 +339,6 @@ public class ActivitiesPresenter extends
 								if (objectivePresenter.getView().isValid()) {
 									IsProgramActivity objective = objectivePresenter
 											.getObjective();
-									objective.setParentId(programId);
 									save(objective);
 									hide();
 								}
@@ -356,7 +353,7 @@ public class ActivitiesPresenter extends
 
 		case OUTCOME:
 			createOutcome.setOutcome(edit ? activity : null);
-			createOutcome.load(edit ? activity.getParentId() : programId);
+			createOutcome.load(edit ? activity.getParentId() : activity.getId());
 			AppManager.showPopUp(edit ? "Edit Outcome" : "Create Outcome",
 					createOutcome.getWidget(), new OptionControl() {
 
@@ -367,7 +364,6 @@ public class ActivitiesPresenter extends
 								if (createOutcome.getView().isValid()) {
 									IsProgramActivity outcome = createOutcome
 											.getOutcome();
-									outcome.setParentId(programId);
 									save(outcome);
 									hide();
 								}
@@ -435,7 +431,15 @@ public class ActivitiesPresenter extends
 		}
 
 		if (programDetailId != null) {
-			action.addRequest(new GetProgramsRequest(programDetailId, true));
+			//Drill Down
+			if(programId==null){
+				//Summary Table Drill down - Load program and objectives only
+				action.addRequest(new GetProgramsRequest(programDetailId,false,true));
+			}else{
+				//Program Drill Down - Load program detail/ activity without the objectives
+				action.addRequest(new GetProgramsRequest(programDetailId,true,false));
+			}
+			
 		}
 
 		requestHelper.execute(action,

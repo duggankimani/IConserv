@@ -32,7 +32,7 @@ public class BaseDaoImpl {
 		try{
 			value = (T)query.getSingleResult();
 		}catch(Exception e){
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		return value;

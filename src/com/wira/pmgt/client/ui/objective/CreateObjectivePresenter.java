@@ -30,6 +30,7 @@ public class CreateObjectivePresenter extends
 	
 	@Inject DispatchAsync requestHelper;
 	IsProgramActivity objective;
+	Long parentId = null;
 	
 	@Inject
 	public CreateObjectivePresenter(final EventBus eventBus, final ICreateObjectiveView view) {
@@ -43,12 +44,13 @@ public class CreateObjectivePresenter extends
 			objective.setName(viewObjective.getName());
 			return objective;
 		}else{
+			viewObjective.setParentId(parentId);
 			return viewObjective;
 		}
 	}
 
 	public void load(Long parentId) {
-		
+		this.parentId = parentId;
 		assert parentId!=null;
 		
 		MultiRequestAction action = new MultiRequestAction();
