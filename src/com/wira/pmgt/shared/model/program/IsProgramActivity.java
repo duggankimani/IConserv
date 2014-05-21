@@ -29,7 +29,16 @@ public abstract class IsProgramActivity extends ProgramSummary implements Listab
 	private List<ProgramSummary> programSummary; //Used to build breadcrumb 
 	private List<HTUser> assignedUsers;
 	private List<UserGroup> assignedGroups;
+	private Long documentId;
 	
+	public Long getDocumentId() {
+		return documentId;
+	}
+
+	public void setDocumentId(Long documentId) {
+		this.documentId = documentId;
+	}
+
 	public IsProgramActivity() {
 	}
 

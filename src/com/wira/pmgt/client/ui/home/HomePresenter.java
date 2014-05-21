@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
@@ -290,16 +291,22 @@ public class HomePresenter extends
 		}else if(page!=null && page.equals("detailed")){
 //			String project = request.getParameter("activity","0");
 //			String detail = "0";
-
+			final String activityId = request.getParameter("activityid", null);
+			if(activityId==null){
+				History.back();
+			}
+			
 			Window.setTitle("Detailed Activity View");
 			docViewFactory.get(new ServiceCallback<GenericDocumentPresenter>() {
 				@Override
 				public void processResult(GenericDocumentPresenter docResponse) {
-					docResponse.loadData();
+					//docResponse.loadData();
+					docResponse.showDetailedView(new Long(activityId));
 					setInSlot(ACTIVITIES_SLOT, docResponse);
 					getView().setSelectedTab("Activities");
 				}
 			});
+			
 		}else if(name!=null){
 
 			TaskType type = TaskType.getTaskType(name);

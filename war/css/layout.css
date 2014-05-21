@@ -14,7 +14,7 @@
 .main-body .top-header .navbar-inner{
 	background-image: linear-gradient(to bottom, #ffffff, #eeeeee);
 	background-color:#eeeeee;
-	padding-left: 5px;
+	padding-left: 12px;
 }
 
 .main-body .sidebar-nav{
@@ -167,7 +167,7 @@ body .dateBoxPopup {
 
 .navbar .brand {
 	color: #1B1464;
-	margin-top: 10px;
+	/* margin-top: 10px; */
 	text-shadow: 1px 1px #1B1464;
 }
 /* Login Logo*/

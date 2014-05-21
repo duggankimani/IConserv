@@ -12,8 +12,8 @@
 				iConserve |&nbsp;
 				<span ui:field="spnCompanyName">LWF</span>
 			</g:Anchor>
-			<a href="#home" styleName="brand">
-				<g:Image ui:field="imgLogo" url="img/logo.png" width="180px"></g:Image>
+			<a href="#home" class="brand">
+				<g:Image ui:field="imgLogo" url="img/logo.png" width="163px"></g:Image>
 			</a>
 			
 			<ul class="nav pull-right">

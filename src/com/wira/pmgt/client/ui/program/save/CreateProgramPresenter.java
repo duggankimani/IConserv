@@ -15,6 +15,7 @@ import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.OptionControl;
 import com.wira.pmgt.client.ui.events.ActivitiesReloadEvent;
+import com.wira.pmgt.client.ui.events.ActivitySavedEvent;
 import com.wira.pmgt.client.ui.period.save.PeriodSaveView;
 import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.program.FundDTO;
@@ -119,6 +120,7 @@ public class CreateProgramPresenter extends
 									CreateProgramResponse aResponse) {
 								getView().hide();
 								
+								fireEvent(new ActivitySavedEvent("Program Successfully Changed"));
 								if(navigateOnSave){
 									History.newItem("home;page=activities;activity="+aResponse.getProgram().getId(),
 											true);

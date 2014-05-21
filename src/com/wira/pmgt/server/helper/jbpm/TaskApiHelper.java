@@ -10,7 +10,7 @@ import org.jbpm.task.User;
 
 import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
 import com.wira.pmgt.server.dao.helper.DocumentDaoHelper;
-import com.wira.pmgt.server.dao.helper.ProgramDaoHelper;
+import com.wira.pmgt.server.dao.model.DocumentModel;
 import com.wira.pmgt.server.db.DB;
 import com.wira.pmgt.shared.exceptions.IllegalApprovalRequestException;
 import com.wira.pmgt.shared.model.DocStatus;
@@ -62,12 +62,15 @@ public class TaskApiHelper {
 			try{
 				startWorkflow(document, initiator.getEntityId());
 				
+				Long processInstanceId = DB.getDocumentDao().getById(document.getId()).getProcessInstanceId();
+				
 				//Associate Program Detail with the process 
 				ProgramDetail program = DB.getProgramDaoImpl().getById(ProgramDetail.class, info.getActivityId());
-				program.setProcessInstanceId(document.getProcessInstanceId());
+				program.setProcessInstanceId(processInstanceId);
 				DB.getProgramDaoImpl().save(program);
 			}catch(Exception e){
 				e.printStackTrace();
+				throw new RuntimeException(e.getMessage());
 			}
 			
 		}

@@ -10,11 +10,15 @@ import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import com.gwtplatform.mvp.client.proxy.PlaceRequest;
+import com.wira.pmgt.client.place.NameTokens;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.OptionControl;
 import com.wira.pmgt.client.ui.assign.AssignActivityPresenter;
 import com.wira.pmgt.client.ui.detailedActivity.CreateActivityPresenter;
+import com.wira.pmgt.client.ui.document.activityview.ActivityDetailPresenter;
 import com.wira.pmgt.client.ui.events.ActivitiesReloadEvent;
 import com.wira.pmgt.client.ui.events.ActivitiesReloadEvent.ActivitiesReloadHandler;
 import com.wira.pmgt.client.ui.events.ActivitySavedEvent;
@@ -50,7 +54,9 @@ import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 public class ActivitiesPresenter extends
 		PresenterWidget<ActivitiesPresenter.IActivitiesView> implements
 		ActivitySelectionChangedHandler, ActivitiesReloadHandler {
-
+	
+	public static final Object DETAIL_SLOT = new Object();
+	
 	public interface IActivitiesView extends View {
 		void showContent(boolean show);
 
@@ -90,6 +96,8 @@ public class ActivitiesPresenter extends
 
 		HasClickHandlers getaAssign();
 
+		HasClickHandlers getDetailButton();
+
 	}
 
 	@Inject
@@ -104,6 +112,11 @@ public class ActivitiesPresenter extends
 	CreateActivityPresenter createTask;
 	@Inject
 	AssignActivityPresenter assignActivity;
+	
+	@Inject
+	ActivityDetailPresenter activityDetail;
+	
+	@Inject PlaceManager placeManager;
 
 	Long programId;
 
@@ -133,6 +146,18 @@ public class ActivitiesPresenter extends
 		// AppContext.fireEvent(new CreateProgramEvent(programId));
 		// }
 		// });
+		
+		getView().getDetailButton().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				placeManager.revealPlace(
+						new PlaceRequest(NameTokens.home)
+						.with("page", "detailed")
+						.with("activityid", selected.getId()+"")
+						);
+			}
+		});
 
 		getView().getaAssign().addClickHandler(new ClickHandler() {
 

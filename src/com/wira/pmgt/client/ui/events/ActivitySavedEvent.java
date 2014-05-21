@@ -1,9 +1,8 @@
 package com.wira.pmgt.client.ui.events;
 
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
-import com.wira.pmgt.shared.model.ProgramDetailType;
 
 public class ActivitySavedEvent extends
 		GwtEvent<ActivitySavedEvent.ActivitySavedHandler> {

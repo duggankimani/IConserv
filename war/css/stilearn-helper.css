@@ -160,7 +160,7 @@ body .main-body .alert a {
 	font-size: 15px;
 	padding-left: 20px;
 	padding-right: 20px;
-	opacity: .7;
+	/* opacity: .7; */
 }
 .action-buttons i.icon-button:hover{
 	opacity: 1;

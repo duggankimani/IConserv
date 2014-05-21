@@ -1,7 +1,6 @@
 package com.wira.pmgt.client.ui.document;
 
-import static com.wira.pmgt.client.ui.document.GenericDocumentPresenter.ACTIVITY_SLOT;
-import static com.wira.pmgt.client.ui.document.GenericDocumentPresenter.ATTACHMENTS_SLOT;
+import static com.wira.pmgt.client.ui.document.GenericDocumentPresenter.*;
 import static com.wira.pmgt.client.ui.util.DateUtils.DATEFORMAT;
 import static com.wira.pmgt.client.ui.util.DateUtils.TIMEFORMAT12HR;
 
@@ -108,8 +107,9 @@ public class GenericDocumentView extends ViewImpl implements
 	@UiField HTMLPanel fldForm;
 	@UiField HTMLPanel divContainer;
 	
-	FormPanel formPanel;
+	@UiField HTMLPanel divBody;
 	
+	FormPanel formPanel;
 	String url=null;
 	
 	List<Actions> validActions = null;
@@ -518,12 +518,19 @@ public class GenericDocumentView extends ViewImpl implements
 			if(content!=null){
 				panelActivity.add(content);
 			}
+		}if(slot==BODY_SLOT){
+			divBody.clear();	
+			if(content!=null){
+				divBody.add(content);
+			}
+		
 		}if(slot==ATTACHMENTS_SLOT){
 			panelAttachments.clear();	
 			if(content!=null){
 				panelAttachments.add(content);
 			}
-		}else{		
+		}
+		else{		
 			super.setInSlot(slot, content);
 		}
 	}

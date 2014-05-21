@@ -261,7 +261,6 @@ public class ProgramDaoHelper {
 		//detail.setTarget(String);
 		//detail.setTargets(Set<TargetAndOutcome>);
 		detail.setType(programDTO.getType());
-		
 		List<TargetAndOutcomeDTO> targets = programDTO.getTargetsAndOutcomes();
 		detail.setTargets(getTargets(targets));
 		
