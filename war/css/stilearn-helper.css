@@ -156,13 +156,14 @@ body .main-body .alert a {
 	margin-bottom:10px;
 }
 
-.action-buttons i.icon-button{
+.action-buttons a i.icon-button{
 	font-size: 15px;
 	padding-left: 20px;
 	padding-right: 20px;
-	/* opacity: .7; */
+	opacity: 0.6;
 }
-.action-buttons i.icon-button:hover{
+
+.action-buttons a:hover i.icon-button{
 	opacity: 1;
 }
 

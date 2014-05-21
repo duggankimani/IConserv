@@ -176,6 +176,9 @@ public class ActivitiesView extends ViewImpl implements
 		spnDates.getElement().setAttribute("data-toggle", "dropdown");
 
 		show(aBack, false);
+		show(aDetail, false);
+		show(aAssign, false);
+
 		aBack.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -223,7 +226,6 @@ public class ActivitiesView extends ViewImpl implements
 			divNoContent.removeStyleName("hidden");
 		}
 	}
-
 
 	public void createDefaultTab() {
 		createTab("Summary", 0, true);
@@ -323,52 +325,58 @@ public class ActivitiesView extends ViewImpl implements
 
 	@Override
 	public void setSelection(ProgramDetailType type) {
-		setSelection(type, true);
+		setSelection(type, false);
 	}
-
+	
 	/**
+	 * Programs, objectives, activities etc can be selected from the Activities table
+	 * (by ticking the checkbox beside them) or by drilling down on any of them
 	 * 
-	 * @param type
-	 * @param isRowData
+	 *<p>
+	 * Some actions are available based on whether the element selected is actually part of 
+	 * the details (rows of the table) or it is the parent element whose details are displayed 
+	 * on the table.
+	 * <p>
+	 * e.g. Creation of Objectives is only provided when a program is selected in the Summary Tab
+	 * since the summary tab shows The program and its objectives, whereas, Creation of outcomes is 
+	 * not permitted; again since outcomes are not included here.
+	 * 
+	 * <p>
+	 * @param type {@link ProgramDetailType} Type of ProgramDetail (Program/ Activity/ Outcome/Task etc) 
+	 * @param isRowData true if the element was selected from one of the rows in the table or not
 	 */
 	public void setSelection(ProgramDetailType type, boolean isRowData) {
+		show(aProgram, false);
 		show(aNewOutcome, false);
 		show(aNewObjective, false);
 		show(aNewActivity, false);
 		show(aNewTask, false);
 		show(aEdit, true);
-		show(aAssign, false);
-		show(aBack, false);
-		show(aDetail, false);
+		show(aAssign, isRowData);
+		show(aDetail, isRowData);
 
 		if (type == ProgramDetailType.PROGRAM) {
 			show(aProgram, false);
 			show(aNewOutcome, !isRowData);
-			show(aNewObjective, true);
-			show(aAssign, true);
-			show(aDetail, true);
+			show(aNewObjective, isRowData);
 			// Program can be selected from the SummaryTab == isRowData
 			// or When A Program Tab e.g Wildlife Program is selected
-			show(aEdit, isRowData);
+			show(aEdit, true);
 		} else if (type == ProgramDetailType.OBJECTIVE) {
-			show(aProgram, false);
+			show(aDetail, false);
 			show(aAssign, false);
 		} else if (type == ProgramDetailType.OUTCOME) {
 			show(aProgram, false);
 			show(aNewActivity, true);
-			show(aAssign, true);
-			show(aDetail, true);
 		} else if (type == ProgramDetailType.ACTIVITY) {
 			show(aProgram, false);
 			show(aNewTask, true);
-			show(aAssign, true);
-			show(aDetail, true);
 		} else if (type == ProgramDetailType.TASK) {
 			show(aProgram, false);
 			show(aNewTask, true);
-			show(aAssign, true);
-			show(aDetail, true);
 		} else {
+			show(aDetail, false);
+			show(aAssign, false);
 			show(aProgram, true);
 			show(aEdit, false);
 		}
@@ -392,7 +400,7 @@ public class ActivitiesView extends ViewImpl implements
 	public HasClickHandlers getProgramEdit() {
 		return aProgramEdit;
 	}
-	
+
 	public HasClickHandlers getDetailButton() {
 		return aDetail;
 	}

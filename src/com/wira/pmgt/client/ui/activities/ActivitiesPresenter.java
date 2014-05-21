@@ -93,7 +93,7 @@ public class ActivitiesPresenter extends
 
 		void setProgramId(Long programId);
 
-		void setSelection(ProgramDetailType programType, boolean b);
+		void setSelection(ProgramDetailType programType, boolean isRowData);
 
 		HasClickHandlers getAddButton();
 
@@ -547,7 +547,7 @@ public class ActivitiesPresenter extends
 	public void onActivitySelectionChanged(ActivitySelectionChangedEvent event) {
 		if (event.isSelected()) {
 			this.selected = event.getProgramActivity();
-			getView().setSelection(event.getProgramActivity().getType());
+			getView().setSelection(event.getProgramActivity().getType(),true);
 		} else {
 			this.selected = null;
 			if (programId == null || programId == 0) {
