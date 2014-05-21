@@ -2,6 +2,7 @@ package com.wira.pmgt.client.ui.detailedActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -250,6 +251,13 @@ public class CreateActivityView extends ViewImpl implements
 		List<DataModel> models = targetAndOutcomeMapper.getDataModels(targets); 
 		gridTargets.setData(models);
 		
+		Collections.sort(activity.getFunding(), new Comparator<ProgramFundDTO>() {
+			@Override
+			public int compare(ProgramFundDTO o1, ProgramFundDTO o2) {
+				
+				return o1.getFund().getName().compareTo(o2.getFund().getName());
+			}
+		});
 		//Program Funds
 		List<Object> lst = new ArrayList<Object>();
 		for(ProgramFundDTO dto: activity.getFunding()){

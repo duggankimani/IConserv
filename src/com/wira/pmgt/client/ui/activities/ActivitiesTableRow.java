@@ -70,7 +70,11 @@ public class ActivitiesTableRow extends RowWidget {
 	IsProgramActivity activity;
 	List<FundDTO> funding = null;
 	
+	//Is the current status showing children or not
 	boolean showChildren=true;
+	
+	//Programs Summary Grid or Program Details
+	boolean isSummaryRow=false;
 
 	List<HTMLPanel> allocations = new ArrayList<HTMLPanel>();
 	
@@ -82,18 +86,53 @@ public class ActivitiesTableRow extends RowWidget {
 		}
 	};
 	
-	public ActivitiesTableRow(IsProgramActivity activity, Long programId, boolean isSummaryRow,
+	public ActivitiesTableRow(IsProgramActivity activity, List<FundDTO> sortedListOfFunding,
+			Long programId, boolean isSummaryRow,
 			int level) {
+				
 		initWidget(uiBinder.createAndBindUi(this));
-		row.getElement().setId("collapse-activity"+activity.getId());
+		this.isSummaryRow = isSummaryRow;
 		this.activity = activity;
 		this.programId= (programId==null? 0: programId);
 		this.level = level;
+		this.funding = sortedListOfFunding;
+		
+		//Show/ hide this details based on its level on load
+		if(!isSummaryRow){
+			
+			this.showChildren=(level==0);
+			
+			if(level>1){
+				//Only show level 0 and level 1 items - Hide all the rest
+				show(false);
+				setHasChildren(false);	
+			}else if(activity.getChildren()!=null && !activity.getChildren().isEmpty()){
+				setHasChildren(this.showChildren);
+			}
+		}else{
+			this.showChildren=true;
+			divRowCaret.setVisible(activity.getType()==ProgramDetailType.PROGRAM && activity.getObjectives().size()>0);
+		}
+		
+		
+		//Bind Row to Table
 		setRow(row);
-		setStatus("created", "info");
-		setActivityName();
-		setPadding();
+		
+		//Initialize table details
+		init();
 
+	}
+	
+	public void init(){
+		//Program/Task status - Created, Started, Done, Closed etc
+		setStatus("created", "info");
+		
+		//Name - Highlighting provided based on child level
+		setActivityName();
+		//Padding based on the child level
+		setPadding();
+		
+		//Show different cols based on whether this is a program summary listing or program details
 		if (isSummaryRow) {
 			divProgress.setStyleName("hide");
 			divRating.setStyleName("hide");
@@ -103,13 +142,13 @@ public class ActivitiesTableRow extends RowWidget {
 			divProgress.getElement().setInnerText("0%");
 			divRating.getElement().setInnerText("N/A");
 			if(activity.getChildren().isEmpty()){
-				divRowCaret.addStyleName("hide");
+					divRowCaret.addStyleName("hide");
 			}
 		}
 
+		//Budgeting & Allocations information
 		String budgetAmount = activity.getBudgetAmount() == null ? ""
 				: CURRENCYFORMAT.format(activity.getBudgetAmount());
-
 		divBudget.getElement().setInnerText(budgetAmount);
 
 		chkSelect.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -119,8 +158,10 @@ public class ActivitiesTableRow extends RowWidget {
 						ActivitiesTableRow.this.activity, event.getValue()));
 			}
 		});
+				
 
-
+		//Set Funding
+		setFunding();
 	}
 
 	private void setActivityName() {
@@ -158,7 +199,7 @@ public class ActivitiesTableRow extends RowWidget {
 		// divRowNo.getElement().setInnerText(""+number);
 	}
 
-	public void setPadding() {
+	private void setPadding() {
 		if (level > 0) {
 			
 			if (level == 2) {
@@ -173,8 +214,7 @@ public class ActivitiesTableRow extends RowWidget {
 		}
 	}
 
-	public void setFunding(List<FundDTO> funding) {
-		this.funding = funding;
+	private void setFunding() {
 		List<ProgramFundDTO> activityFunding = activity.getFunding();
 		List<FundDTO> activitySourceOfFunds = new ArrayList<FundDTO>();
 		for (ProgramFundDTO dto : activityFunding) {
@@ -210,6 +250,7 @@ public class ActivitiesTableRow extends RowWidget {
 							.setFontSize(0.8, Unit.EM);
 					amounts.add(allocationPanel);
 					allocations.add(allocationPanel);
+					allocationPanel.setVisible(showChildren);
 				}
 				createTd(amounts);
 			}
@@ -238,12 +279,13 @@ public class ActivitiesTableRow extends RowWidget {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				collapse(!showChildren);
+				//Toggle
+				toggle(!showChildren);
 			}
 		});	
 	}
 
-	public void setHasChildren(boolean hasChildren) {
+	private void setHasChildren(boolean hasChildren) {
 		//divRowCaret.setHref("#home;page=activities;activity="+programId+"d"+activity.getId());
 		if (hasChildren) {
 			divRowCaret.removeStyleName("icon-caret-right");
@@ -254,12 +296,13 @@ public class ActivitiesTableRow extends RowWidget {
 		}
 
 		if(level!=0)
-		showAllocations(hasChildren);
+		  showAllocations(hasChildren);
 	}
 	
 	//default toggle
-	public void collapse(boolean isShowChildren){
+	private void toggle(boolean isShowChildren){
 		this.showChildren= isShowChildren;
+		
 		HTMLPanel panel = (HTMLPanel)this.getParent();
 		int idx = panel.getWidgetIndex(this);
 		assert idx!=-1;
@@ -281,7 +324,10 @@ public class ActivitiesTableRow extends RowWidget {
 			ActivitiesTableRow row = (ActivitiesTableRow)panel.getWidget(i);
 			if(row.getActivity().getParentId()==activity.getId()){
 				childrenCollapsed++;
-				row.collapse(showChildren);
+				if(!showChildren){
+					//toggle children of children only when collapsing
+					row.toggle(showChildren);
+				}
 				row.show(showChildren);
 			}
 			
@@ -293,8 +339,8 @@ public class ActivitiesTableRow extends RowWidget {
 	 * 
 	 * @param hide
 	 */
-	public void show(boolean show){
-		showChildren=show; //Synchronize states with caller
+	private void show(boolean show){
+		//showChildren=show; //Synchronize states with caller
 		row.setStyleName(show? "tr":"hide");
 	}
 

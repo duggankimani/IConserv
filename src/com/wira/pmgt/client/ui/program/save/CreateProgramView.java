@@ -2,6 +2,7 @@ package com.wira.pmgt.client.ui.program.save;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -223,6 +224,15 @@ public class CreateProgramView extends PopupViewImpl implements
 		txtName.setValue(program.getName());
 		lstPeriod.setValue(program.getPeriod());
 		List<Object> lst = new ArrayList<Object>();
+		
+		Collections.sort(program.getFunding(), new Comparator<ProgramFundDTO>() {
+			@Override
+			public int compare(ProgramFundDTO o1, ProgramFundDTO o2) {
+				
+				return o1.getFund().getName().compareTo(o2.getFund().getName());
+			}
+		});
+		
 		for(ProgramFundDTO dto: program.getFunding()){
 			lst.add(dto);
 		}

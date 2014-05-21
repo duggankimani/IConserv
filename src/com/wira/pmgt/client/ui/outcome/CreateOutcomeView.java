@@ -2,6 +2,7 @@ package com.wira.pmgt.client.ui.outcome;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.gwt.uibinder.client.UiBinder;
@@ -219,7 +220,13 @@ public class CreateOutcomeView extends ViewImpl implements
 		
 		txtOutcome.setValue(outcome.getDescription());
 		autoComplete.select(outcome.getObjectives());
-		
+		Collections.sort(outcome.getFunding(), new Comparator<ProgramFundDTO>() {
+			@Override
+			public int compare(ProgramFundDTO o1, ProgramFundDTO o2) {
+				
+				return o1.getFund().getName().compareTo(o2.getFund().getName());
+			}
+		});
 		//program.setTargetsAndOutcomes(targetsAndOutcomes);
 		List<Object> lst = new ArrayList<Object>();
 		for(ProgramFundDTO dto: outcome.getFunding()){

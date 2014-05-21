@@ -5,6 +5,8 @@ import java.util.List;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
@@ -17,6 +19,7 @@ import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.OptionControl;
 import com.wira.pmgt.client.ui.assign.AssignActivityPresenter;
+import com.wira.pmgt.client.ui.component.Dropdown;
 import com.wira.pmgt.client.ui.detailedActivity.CreateActivityPresenter;
 import com.wira.pmgt.client.ui.document.activityview.ActivityDetailPresenter;
 import com.wira.pmgt.client.ui.events.ActivitiesReloadEvent;
@@ -98,6 +101,7 @@ public class ActivitiesPresenter extends
 
 		HasClickHandlers getDetailButton();
 
+		Dropdown<PeriodDTO> getPeriodDropDown();
 	}
 
 	@Inject
@@ -124,7 +128,10 @@ public class ActivitiesPresenter extends
 
 	ProgramDetailType programType = ProgramDetailType.PROGRAM; // last selected
 
+	PeriodDTO period;
+	
 	IsProgramActivity selected;
+	
 	IsProgramActivity detail;
 
 	@Inject
@@ -139,13 +146,16 @@ public class ActivitiesPresenter extends
 		addRegisteredHandler(ActivitySelectionChangedEvent.TYPE, this);
 		addRegisteredHandler(ActivitiesReloadEvent.TYPE, this);
 
-		// getView().getProgramEdit().addClickHandler(new ClickHandler() {
-		//
-		// @Override
-		// public void onClick(ClickEvent event) {
-		// AppContext.fireEvent(new CreateProgramEvent(programId));
-		// }
-		// });
+		getView().getPeriodDropDown().addValueChangeHandler(new ValueChangeHandler<PeriodDTO>() {
+			
+			@Override
+			public void onValueChange(ValueChangeEvent<PeriodDTO> event) {
+				PeriodDTO period =event.getValue();
+				//period changed - reload all
+				ActivitiesPresenter.this.period = period;
+				//periodChanged();
+			}
+		});
 		
 		getView().getDetailButton().addClickHandler(new ClickHandler() {
 			

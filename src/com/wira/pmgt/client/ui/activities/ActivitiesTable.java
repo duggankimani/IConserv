@@ -50,12 +50,11 @@ public class ActivitiesTable extends Composite {
 		level++;
 		sort(programActivities);
 		for (IsProgramActivity activity : programActivities) {
-			ActivitiesTableRow row = new ActivitiesTableRow(activity,programId,isSummaryTable, level);
+			ActivitiesTableRow row = new ActivitiesTableRow(activity,funds,programId,isSummaryTable, level);
 			if(activity.getId()==lastUpdatedId){
 				row.highlight();
 			}
 			
-			row.setFunding(funds);
 			row.setSelectionChangeHandler(handler);
 			tblView.addRow(row);
 			
@@ -68,10 +67,7 @@ public class ActivitiesTable extends Composite {
 			}
 			
 			if(activity.getChildren()!=null && !activity.getChildren().isEmpty()){
-				row.setHasChildren(true);
 				setActivities(activity.getChildren(),level);
-			}else{
-				row.setHasChildren(false);
 			}
 		}
 	}
@@ -133,6 +129,13 @@ public class ActivitiesTable extends Composite {
 	 */
 	public void setFunds(List<FundDTO> funds) {
 		this.funds= funds;
+		Collections.sort(funds, new Comparator<FundDTO>() {
+			@Override
+			public int compare(FundDTO o1, FundDTO o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+		
 		createGrid();
 		for(FundDTO fund: funds){
 			tblView.createHeader(fund.getName());

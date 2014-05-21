@@ -485,4 +485,10 @@ public class ActivitiesView extends ViewImpl implements
 		}
 	}
 
+	@Override
+	public Dropdown<PeriodDTO> getPeriodDropDown() {
+
+		return periodDropdown;
+	}
+
 }
