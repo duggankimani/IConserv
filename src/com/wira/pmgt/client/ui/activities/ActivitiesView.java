@@ -41,10 +41,10 @@ public class ActivitiesView extends ViewImpl implements
 		ActivitiesPresenter.IActivitiesView {
 
 	private final Widget widget;
-	
+
 	@UiField
 	ActionLink aProgram;
-	
+
 	@UiField
 	HTMLPanel divContent;
 	@UiField
@@ -73,13 +73,14 @@ public class ActivitiesView extends ViewImpl implements
 	ActionLink aAssign;
 	@UiField
 	ActionLink aDetail;
-	
+
 	@UiField
 	ActionLink aProgramEdit;
 	@UiField
 	FocusPanel panelTitle;
-	
-	@UiField HTMLPanel divPopup;
+
+	@UiField
+	HTMLPanel divPopup;
 
 	@UiField
 	BulletListPanel listPanel;
@@ -107,7 +108,7 @@ public class ActivitiesView extends ViewImpl implements
 					listPanel.getElement().getScrollLeft() + scrollDistancePX);
 		}
 	};
-	
+
 	int scrollDistancePX = 6; // 6px at a time
 	private Long programId;
 
@@ -162,19 +163,19 @@ public class ActivitiesView extends ViewImpl implements
 		aLeft.addClickHandler(clickHandler);
 
 		createCrumb("Home", "Home", 0L, false);
-		
-		periodDropdown.addValueChangeHandler(new ValueChangeHandler<PeriodDTO>() {
-			
-			@Override
-			public void onValueChange(ValueChangeEvent<PeriodDTO> event) {
-				setDates(event.getValue().getDescription());
-			}
-		});
-		
+
+		periodDropdown
+				.addValueChangeHandler(new ValueChangeHandler<PeriodDTO>() {
+
+					@Override
+					public void onValueChange(ValueChangeEvent<PeriodDTO> event) {
+						setDates(event.getValue().getDescription());
+					}
+				});
+
 		spnDates.getElement().setAttribute("data-toggle", "dropdown");
-		
-		
-		show(aBack,false);
+
+		show(aBack, false);
 		aBack.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -222,6 +223,7 @@ public class ActivitiesView extends ViewImpl implements
 			divNoContent.removeStyleName("hidden");
 		}
 	}
+
 
 	public void createDefaultTab() {
 		createTab("Summary", 0, true);
@@ -335,38 +337,39 @@ public class ActivitiesView extends ViewImpl implements
 		show(aNewActivity, false);
 		show(aNewTask, false);
 		show(aEdit, true);
-		show(aAssign,false);
+		show(aAssign, false);
 		show(aBack, false);
 		show(aDetail, false);
-		
+
 		if (type == ProgramDetailType.PROGRAM) {
-			show(aProgram,false);
+			show(aProgram, false);
 			show(aNewOutcome, !isRowData);
 			show(aNewObjective, true);
-			show(aAssign,true);
+			show(aAssign, true);
+			show(aDetail, true);
 			// Program can be selected from the SummaryTab == isRowData
 			// or When A Program Tab e.g Wildlife Program is selected
 			show(aEdit, isRowData);
 		} else if (type == ProgramDetailType.OBJECTIVE) {
-			show(aProgram,false);
-			show(aAssign,false);
+			show(aProgram, false);
+			show(aAssign, false);
 		} else if (type == ProgramDetailType.OUTCOME) {
-			show(aProgram,false);
+			show(aProgram, false);
 			show(aNewActivity, true);
-			show(aAssign,true);
-			show(aDetail,true);
+			show(aAssign, true);
+			show(aDetail, true);
 		} else if (type == ProgramDetailType.ACTIVITY) {
-			show(aProgram,false);
+			show(aProgram, false);
 			show(aNewTask, true);
-			show(aAssign,true);
-			show(aDetail,true);
+			show(aAssign, true);
+			show(aDetail, true);
 		} else if (type == ProgramDetailType.TASK) {
-			show(aProgram,false);
+			show(aProgram, false);
 			show(aNewTask, true);
-			show(aAssign,true);
-			show(aDetail,true);
+			show(aAssign, true);
+			show(aDetail, true);
 		} else {
-			show(aProgram,true);
+			show(aProgram, true);
 			show(aEdit, false);
 		}
 	}
@@ -389,6 +392,10 @@ public class ActivitiesView extends ViewImpl implements
 	public HasClickHandlers getProgramEdit() {
 		return aProgramEdit;
 	}
+	
+	public HasClickHandlers getDetailButton() {
+		return aDetail;
+	}
 
 	@Override
 	public void setFunds(List<FundDTO> funds) {
@@ -399,7 +406,7 @@ public class ActivitiesView extends ViewImpl implements
 	public HasClickHandlers getNewTaskLink() {
 		return aNewTask;
 	}
-	
+
 	public HasClickHandlers getaAssign() {
 		return aAssign;
 	}
@@ -433,25 +440,24 @@ public class ActivitiesView extends ViewImpl implements
 
 		crumbContainer.add(crumb);
 	}
-	
+
 	/*
 	 * Get href from Id
 	 */
 	private String getHref(Long id) {
-		String href="";
+		String href = "";
 		if (id == null || id == 0) {
-			href="#home;page=activities;activity=0";
+			href = "#home;page=activities;activity=0";
 		} else if (programId == null) {
-			href= "#home;page=activities;activity=0d" + id;
+			href = "#home;page=activities;activity=0d" + id;
 		} else if (id != programId) {
-			href ="#home;page=activities;activity=" + programId + "d"
-					+ id;
+			href = "#home;page=activities;activity=" + programId + "d" + id;
 		} else {
 			href = "#home;page=activities;activity=" + id;
 		}
 		return href;
 	}
-	
+
 	public void setBreadCrumbs(List<ProgramSummary> summaries) {
 		crumbContainer.clear();
 		createCrumb("Home", "Home", 0L, false);
@@ -460,24 +466,22 @@ public class ActivitiesView extends ViewImpl implements
 			createCrumb(summary.getName(), summary.getDescription(),
 					summary.getId(), i == 0);
 		}
-			showBackButton(true);
+		showBackButton(true);
 	}
 
 	public void setDates(String text) {
 		spnDates.getElement().setInnerText(text);
 	}
-	
-	
+
 	public HasClickHandlers getAddButton() {
 		return aProgram;
 	}
 
-	
 	public void showBackButton(boolean status) {
-		if(status){
+		if (status) {
 			show(aBack, true);
-		}else{
-			show(aBack,false);
+		} else {
+			show(aBack, false);
 		}
 	}
 

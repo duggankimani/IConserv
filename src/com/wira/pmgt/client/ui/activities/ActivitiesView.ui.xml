@@ -29,32 +29,32 @@
 					<div class="span3 hide">
 						<d:ActionLink ui:field="aNewOutcome" styleName="btn btn-primary"
 							dataToggle="tooltip" dataPlacement="bottom" title="Create outcome">
-							<i class="icon-plus icon-button"></i>
-							<!-- Add Outcome -->
+							<i class="icon-plus"></i>
+							Create Outcome
 						</d:ActionLink>
 					</div>
 
 					<div class="span3 hide">
 						<d:ActionLink ui:field="aNewObjective" styleName="btn btn-primary"
 							dataToggle="tooltip" dataPlacement="bottom" title="Create objective">
-							<i class="icon-plus icon-button"></i>
-							<!-- Add Objective -->
+							<i class="icon-plus-sign"></i>
+							Create Objective
 						</d:ActionLink>
 					</div>
 
 					<div class="span3 hide">
 						<d:ActionLink ui:field="aNewActivity" styleName="btn btn-primary"
 							dataToggle="tooltip" dataPlacement="bottom" title="Create activity">
-							<i class="icon-plus icon-button"></i>
-							<!-- Add Activity -->
+							<i class="icon-plus"></i>
+							Create Activity
 						</d:ActionLink>
 					</div>
 
 					<div class="span3 hide">
 						<d:ActionLink ui:field="aNewTask" styleName="btn btn-primary"
 							dataToggle="tooltip" dataPlacement="bottom" title="Create Task">
-							<i class="icon-plus icon-button"></i>
-							<!-- Add Task -->
+							<i class="icon-plus"></i>
+							Create Task
 						</d:ActionLink>
 					</div>
 
@@ -67,8 +67,7 @@
 
 					<div class="span3 hide">
 						<d:ActionLink ui:field="aDetail" styleName="btn btn-default"
-							dataToggle="tooltip" dataPlacement="bottom" title="Detailed view"
-							href="#home;page=detailed">
+							dataToggle="tooltip" dataPlacement="bottom" title="Detailed view">
 							<i class="icon-tasks icon-button"></i>
 						</d:ActionLink>
 					</div>
@@ -132,8 +131,10 @@
 					</span>
 				</g:HTMLPanel>
 
+
 				<g:HTMLPanel ui:field="divContent"
 					styleName="tabbable tabs-below hidden full-page no-overflow-x">
+
 					<div id="usercontent" class="tab-content">
 						<div ui:field="divTab1Content" class="tab-pane fade in active">
 							<activities:ActivitiesTable ui:field="tblView"></activities:ActivitiesTable>

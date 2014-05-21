@@ -1,10 +1,9 @@
 package com.wira.pmgt.client.ui.events;
 
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.EventHandler;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
-import java.lang.Boolean;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HasHandlers;
+import com.wira.pmgt.shared.model.program.IsProgramActivity;
 
 public class ActivitySelectionChangedEvent extends
 		GwtEvent<ActivitySelectionChangedEvent.ActivitySelectionChangedHandler> {

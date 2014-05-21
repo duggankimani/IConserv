@@ -113,6 +113,8 @@ import com.wira.pmgt.client.ui.detailedActivity.CreateActivityPresenter;
 import com.wira.pmgt.client.ui.detailedActivity.CreateActivityView;
 import com.wira.pmgt.client.ui.assign.AssignActivityPresenter;
 import com.wira.pmgt.client.ui.assign.AssignActivityView;
+import com.wira.pmgt.client.ui.document.activityview.ActivityDetailPresenter;
+import com.wira.pmgt.client.ui.document.activityview.ActivityDetailView;
 
 public class ClientModule extends AbstractPresenterModule {
 
@@ -291,5 +293,8 @@ public class ClientModule extends AbstractPresenterModule {
 
 		bindSingletonPresenterWidget(AssignActivityPresenter.class,
 				AssignActivityPresenter.MyView.class, AssignActivityView.class);
+
+		bindPresenterWidget(ActivityDetailPresenter.class,
+				ActivityDetailPresenter.MyView.class, ActivityDetailView.class);
 	}
 }

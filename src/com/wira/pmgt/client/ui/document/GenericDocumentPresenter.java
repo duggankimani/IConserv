@@ -36,6 +36,7 @@ import com.wira.pmgt.client.ui.OnOptionSelected;
 import com.wira.pmgt.client.ui.comments.CommentPresenter;
 import com.wira.pmgt.client.ui.delegate.DelegateTaskView;
 import com.wira.pmgt.client.ui.delegate.msg.DelegationMessageView;
+import com.wira.pmgt.client.ui.document.activityview.ActivityDetailPresenter;
 import com.wira.pmgt.client.ui.events.ActivitiesLoadEvent;
 import com.wira.pmgt.client.ui.events.AfterAttachmentReloadedEvent;
 import com.wira.pmgt.client.ui.events.AfterDocumentLoadEvent;
@@ -44,6 +45,8 @@ import com.wira.pmgt.client.ui.events.ButtonClickEvent;
 import com.wira.pmgt.client.ui.events.CompleteDocumentEvent;
 import com.wira.pmgt.client.ui.events.DeleteLineEvent;
 import com.wira.pmgt.client.ui.events.ExecTaskEvent;
+import com.wira.pmgt.client.ui.events.LoadActivitiesEvent;
+import com.wira.pmgt.client.ui.events.LoadActivitiesEvent.LoadActivitiesHandler;
 import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent;
 import com.wira.pmgt.client.ui.events.ProcessingEvent;
 import com.wira.pmgt.client.ui.events.ReloadAttachmentsEvent;
@@ -118,7 +121,7 @@ import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 public class GenericDocumentPresenter extends
 		PresenterWidget<GenericDocumentPresenter.MyView> 
 		implements ReloadDocumentHandler, ActivitiesLoadHandler,
-		ReloadAttachmentsHandler,DeleteLineHandler,ButtonClickHandler{
+		ReloadAttachmentsHandler,DeleteLineHandler,ButtonClickHandler,LoadActivitiesHandler{
 
 	public interface MyView extends View {
 		void setValues(HTUser createdBy, Date created, String type, String subject,
@@ -183,12 +186,15 @@ public class GenericDocumentPresenter extends
 	private IndirectProvider<AttachmentPresenter> attachmentPresenterFactory;
 	private IndirectProvider<NotePresenter> notePresenterFactory;
 	private IndirectProvider<UploadDocumentPresenter> uploaderFactory;
+	private IndirectProvider<ActivityDetailPresenter> activityDetailFactory;
+	
 	
 	//@Inject static MainPagePresenter mainPagePresenter;
 	@Inject static GenericPopupPresenter popupPresenter;
 	
 	public static final Object ACTIVITY_SLOT = new Object();
 	public static final Object ATTACHMENTS_SLOT = new Object();
+	public static final Object BODY_SLOT = new Object();
 	
 	@Inject
 	public GenericDocumentPresenter(final EventBus eventBus, final MyView view,
@@ -196,6 +202,7 @@ public class GenericDocumentPresenter extends
 			Provider<CommentPresenter> commentProvider,
 			Provider<AttachmentPresenter> attachmentProvider,
 			Provider<NotePresenter> noteProvider,
+			Provider<ActivityDetailPresenter> activityProvider,
 			Provider<UploadDocumentPresenter> uploaderProvider) {
 		super(eventBus, view);		
 		createDocProvider = new StandardProvider<CreateProgramPresenter>(docProvider);
@@ -203,6 +210,7 @@ public class GenericDocumentPresenter extends
 		attachmentPresenterFactory = new StandardProvider<AttachmentPresenter>(attachmentProvider);
 		notePresenterFactory = new StandardProvider<NotePresenter>(noteProvider);
 		uploaderFactory = new StandardProvider<UploadDocumentPresenter>(uploaderProvider);
+		activityDetailFactory  = new StandardProvider<ActivityDetailPresenter>(activityProvider);
 	}
 
 	@Override
@@ -213,6 +221,7 @@ public class GenericDocumentPresenter extends
 		addRegisteredHandler(ActivitiesLoadEvent.TYPE, this);
 		addRegisteredHandler(ReloadAttachmentsEvent.TYPE, this);
 		addRegisteredHandler(DeleteLineEvent.TYPE, this);
+		addRegisteredHandler(LoadActivitiesEvent.TYPE, this);
 		addRegisteredHandler(ButtonClickEvent.TYPE, this);
 		
 		getView().getUploadLink2().addClickHandler(new ClickHandler() {
@@ -683,9 +692,31 @@ public class GenericDocumentPresenter extends
 			});
 		}
 		
-		/*Temporary for UI testing*/
-		//getView().showDefaultFields(true);
-//		fireEvent(new ProcessingCompletedEvent());
+	}
+	
+	public void loadProgramData() {
+		MultiRequestAction requests = new MultiRequestAction();
+		requests.addRequest(new GetCommentsRequest(documentId));
+		requests.addRequest(new GetActivitiesRequest(documentId));
+		
+		fireEvent(new ProcessingEvent());
+		if(documentId != null){
+			requestHelper.execute(requests, 
+					new TaskServiceCallback<MultiRequestActionResult>() {
+				
+				public void processResult(MultiRequestActionResult results) {					
+					
+					GetCommentsResponse commentsResult = (GetCommentsResponse)results.get(0);
+					bindCommentsResult(commentsResult);
+					
+					GetActivitiesResponse getActivities = (GetActivitiesResponse)results.get(1);
+					bindActivities(getActivities);
+					
+					fireEvent(new ProcessingCompletedEvent());
+				}	
+			});
+		}
+		
 	}
 
 	protected void bindForm(Form form, Doc doc) {
@@ -1041,5 +1072,22 @@ public class GenericDocumentPresenter extends
 //			public void processResult(GenericResponse aResponse) {	
 //			}
 //		});
+	}
+
+	public void showDetailedView(final Long activityId) {
+		activityDetailFactory.get(new ServiceCallback<ActivityDetailPresenter>() {
+			@Override
+			public void processResult(ActivityDetailPresenter dResponse) {
+				dResponse.loadData(activityId);
+				setInSlot(BODY_SLOT, dResponse);
+				
+			}
+		});
+	}
+
+	@Override
+	public void onLoadActivities(LoadActivitiesEvent event) {
+		setDocId(event.getDocumentId(), null);
+		loadProgramData();
 	}
 }
