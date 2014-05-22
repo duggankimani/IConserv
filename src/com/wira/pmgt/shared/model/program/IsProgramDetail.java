@@ -15,6 +15,7 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private String code;
 	private ProgramDetailType type;
 	private Double budgetAmount; //Total budget amount (accumulation of source of funds)
 	private Double actualAmount; //Actual amount spent
@@ -158,6 +159,14 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 
 	public void setAssignedUsers(List<HTUser> assignedUsers) {
 		this.assignedUsers = assignedUsers;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 }

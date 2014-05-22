@@ -14,7 +14,6 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.History;
@@ -31,6 +30,7 @@ import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
 import com.wira.pmgt.client.ui.component.Dropdown;
+import com.wira.pmgt.client.ui.util.NumberUtils;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
@@ -202,8 +202,7 @@ public class ProgramsView extends ViewImpl implements
 
 	public void setBudget(Double number) {
 		if (number != null) {
-			spnBudget.setInnerHTML(NumberFormat.getCurrencyFormat().format(
-					number));
+			spnBudget.setInnerHTML(NumberUtils.CURRENCYFORMAT.format(number));
 		}
 	}
 
@@ -215,8 +214,8 @@ public class ProgramsView extends ViewImpl implements
 		return aNewActivity;
 	}
 
-	@Override
-	public void showContent(boolean status) {
+	private void showContent(boolean status) {
+		
 		if (status) {
 			divContent.removeStyleName("hidden");
 			divNoContent.addStyleName("hidden");
@@ -245,16 +244,20 @@ public class ProgramsView extends ViewImpl implements
 		listPanel.add(li);
 	}
 
+	/**
+	 * Bind Table data
+	 */
 	@Override
-	public void setProgramsList(List<IsProgramDetail> activities) {
+	public void setData(List<IsProgramDetail> activities) {
 		tblView.setLastUpdatedId(lastUpdatedId);
 		tblView.setData(activities);
 		lastUpdatedId = null;
 	}
 
 	@Override
-	public void setPrograms(List<IsProgramDetail> programs) {
+	public void createProgramTabs(List<IsProgramDetail> programs) {
 		showContent(!(programs == null || programs.isEmpty()));
+		
 		this.programs = programs;
 		listPanel.clear();
 		if (programs == null) {
@@ -273,20 +276,35 @@ public class ProgramsView extends ViewImpl implements
 	 * Sets Parent Activity
 	 */
 	public void setActivity(IsProgramDetail singleResult) {
+		if(singleResult==null){
+			return;
+		}
 		setSelection(singleResult.getType(), false);
-		setBudget(singleResult.getBudgetAmount());
+	
+		assert singleResult.getPeriod()!=null;
+		periodDropdown.setValue(singleResult.getPeriod());
 
 		if (singleResult.getProgramSummary() != null)
 			setBreadCrumbs(singleResult.getProgramSummary());
 
-		if (singleResult.getType() == ProgramDetailType.PROGRAM
-				&& !tblView.isSummaryTable) {
-			// select tab
-			selectTab(singleResult.getId());
-			setTitle(singleResult.getName());
-			setProgramsList(singleResult.getChildren());
+		if (singleResult.getType() == ProgramDetailType.PROGRAM) {
+			
+			if(singleResult.getBudgetAmount()==null || singleResult.getBudgetAmount()==0l){
+				spnBudget.setTitle("No budget allocated to '"+singleResult.getName()+"'");
+			}else{
+				spnBudget.setTitle("Total Budget for '"+singleResult.getName()+"'");
+			}
+			
+			setBudget(singleResult.getBudgetAmount());
+			
+			if(!tblView.isSummaryTable){
+				// select tab
+				selectTab(singleResult.getId());
+				setTitle(singleResult.getName());
+				setData(singleResult.getChildren());
+			}
 		} else {
-			setProgramsList(Arrays.asList(singleResult));
+			setData(Arrays.asList(singleResult));
 		}
 
 	}
@@ -299,7 +317,7 @@ public class ProgramsView extends ViewImpl implements
 		}
 	}
 
-	private void selectTab(Long id) {
+	public void selectTab(Long id) {
 		int size = listPanel.getWidgetCount();
 		for (int i = 0; i < size; i++) {
 			BulletPanel li = (BulletPanel) listPanel.getWidget(i);
@@ -389,11 +407,11 @@ public class ProgramsView extends ViewImpl implements
 
 	public void setPeriods(List<PeriodDTO> periods) {
 		periodDropdown.setValues(periods);
-
-		if (periods != null && !periods.isEmpty()) {
-			setDates("(" + periods.get(0).getDescription() + ")");
-		}
-
+		
+		
+//		if (periods != null && !periods.isEmpty()) {
+//			setDates("(" + periods.get(0).getDescription() + ")");
+//		}
 	}
 
 	@Override
@@ -497,6 +515,25 @@ public class ProgramsView extends ViewImpl implements
 	public Dropdown<PeriodDTO> getPeriodDropDown() {
 
 		return periodDropdown;
+	}
+	
+	@Override
+	public void setActivePeriod(PeriodDTO activePeriod) {
+		if(activePeriod==null){
+			List<PeriodDTO> periods = periodDropdown.getSelectionValues();
+			
+			if(periods!=null){
+				for(PeriodDTO period:periods){
+					if(period.isCurrentPeriod()){
+						periodDropdown.setValue(period);
+						setDates("(" + periods.get(0).getDescription() + ")");
+						break;
+					}
+				}
+			}
+		}else{
+			periodDropdown.setValue(activePeriod);
+		}
 	}
 
 }

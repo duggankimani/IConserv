@@ -34,8 +34,9 @@ import com.wira.pmgt.shared.model.ProgramDetailType;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="ProgramDetail.findByType", query="FROM ProgramDetail p where p.isActive=:isActive and p.type=:type and p.period=:period order by name"), 
-	@NamedQuery(name="ProgramDetail.findAll", query="FROM ProgramDetail p where p.isActive=:isActive order by name"),
-	@NamedQuery(name="ProgramDetail.findById", query="FROM ProgramDetail p where p.id=:id")
+	@NamedQuery(name="ProgramDetail.findAll", query="FROM ProgramDetail p where p.isActive=:isActive and p.period=:period order by name"),
+	@NamedQuery(name="ProgramDetail.findById", query="FROM ProgramDetail p where p.id=:id"),
+	@NamedQuery(name="ProgramDetail.findByCodeAndPeriod", query="FROM ProgramDetail p where p.code=:code and p.period=:period")
 })
 public class ProgramDetail 	extends ProgramBasicDetail{
 	

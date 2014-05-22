@@ -19,24 +19,61 @@ public class GetProgramsRequestHandler extends
 	public GetProgramsRequestHandler() {
 	}
 
+	/**
+	 * Programs can be loaded by Ids or program codes;
+	 * Program Codes are important when loading programs based on periods
+	 * <p>
+	 * Wildlife program 2013 and Wildlife Program in 2014 are two different 
+	 * programs associated by code
+	 * 
+	 */
 	@Override
 	public void execute(GetProgramsRequest action, BaseResponse actionResult,
 			ExecutionContext execContext) throws ActionException {
 		GetProgramsResponse response = (GetProgramsResponse)actionResult;
 		List<IsProgramDetail> activities = new ArrayList<>();
+		
+		if(action.getCode()==null && action.getPeriodId()==null){
+			loadById(action,activities);
+		}else{
+			loadByCode(action, activities);
+		}
+		
+		response.setPrograms(activities);
+		
+	}
+
+	private void loadByCode(GetProgramsRequest action,
+			List<IsProgramDetail> activities) {
+		if(action.getCode()!=null){
+			IsProgramDetail activity = ProgramDaoHelper.getProgramByCode(action.getCode(), action.getPeriodId(),
+					action.isLoadChildren(),action.isLoadObjectives());
+			
+			if(activity!=null){
+				activities.add(activity);
+			}
+		}else if(action.getType()!=null){
+			activities.addAll(ProgramDaoHelper.getProgramByTypeAndPeriod(action.getType(), action.getPeriodId(),
+					action.isLoadChildren(),action.isLoadObjectives()));
+		}else{
+			activities.addAll(ProgramDaoHelper.getProgramsByPeriod(action.getPeriodId(),
+					action.isLoadChildren(),action.isLoadObjectives()));
+		}
+	}
+
+	private void loadById(GetProgramsRequest action,
+			List<IsProgramDetail> activities) {
+
 		if(action.getId()!=null){
 			IsProgramDetail activity = ProgramDaoHelper.getProgramById(action.getId(), action.isLoadChildren(),action.isLoadObjectives());
 			if(activity!=null){
 				activities.add(activity);
 			}
 		}else if(action.getType()!=null){
-			activities = ProgramDaoHelper.getPrograms(action.getType(), action.isLoadChildren(),action.isLoadObjectives());
+			activities.addAll(ProgramDaoHelper.getProgramsByType(action.getType(), action.isLoadChildren(),action.isLoadObjectives()));
 		}else{
-			activities = ProgramDaoHelper.getPrograms(action.isLoadChildren(),action.isLoadObjectives());
+			activities.addAll(ProgramDaoHelper.getPrograms(action.isLoadChildren(),action.isLoadObjectives()));
 		}
-		
-		response.setPrograms(activities);
-		
 	}
 
 	@Override

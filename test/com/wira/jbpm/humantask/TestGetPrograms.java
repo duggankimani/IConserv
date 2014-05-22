@@ -25,7 +25,7 @@ public class TestGetPrograms {
 	@Test
 	public void createFunds(){
 		
-		List<IsProgramDetail> activities = ProgramDaoHelper.getPrograms(ProgramDetailType.PROGRAM,false,true);
+		List<IsProgramDetail> activities = ProgramDaoHelper.getProgramsByType(ProgramDetailType.PROGRAM,false,true);
 		
 		for(IsProgramDetail a: activities){
 			System.err.println(a.getName()+" >> "+a.getObjectives());
