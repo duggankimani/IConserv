@@ -10,7 +10,7 @@ import com.wira.pmgt.server.dao.helper.ProgramDaoHelper;
 import com.wira.pmgt.server.db.DB;
 import com.wira.pmgt.server.db.DBTrxProvider;
 import com.wira.pmgt.shared.model.ProgramDetailType;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 
 public class TestGetPrograms {
 
@@ -25,9 +25,9 @@ public class TestGetPrograms {
 	@Test
 	public void createFunds(){
 		
-		List<IsProgramActivity> activities = ProgramDaoHelper.getPrograms(ProgramDetailType.PROGRAM,false,true);
+		List<IsProgramDetail> activities = ProgramDaoHelper.getPrograms(ProgramDetailType.PROGRAM,false,true);
 		
-		for(IsProgramActivity a: activities){
+		for(IsProgramDetail a: activities){
 			System.err.println(a.getName()+" >> "+a.getObjectives());
 		}
 	}

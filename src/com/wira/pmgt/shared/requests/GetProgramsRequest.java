@@ -10,11 +10,15 @@ import java.lang.Long;
 public class GetProgramsRequest extends BaseRequest<GetProgramsResponse> {
 
 	private Long id;
+	
+	//if null, use id
 	private String code;
+	//if null, assume current period
 	private Long periodId;
-	ProgramDetailType type;
-	boolean loadChildren;
-	boolean loadObjectives;
+	
+	private ProgramDetailType type;
+	private boolean loadChildren;
+	private boolean loadObjectives;
 	
 	public GetProgramsRequest() {
 	}
