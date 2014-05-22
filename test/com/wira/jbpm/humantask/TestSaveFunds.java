@@ -12,7 +12,7 @@ import com.wira.pmgt.server.dao.helper.ProgramDaoHelper;
 import com.wira.pmgt.server.db.DB;
 import com.wira.pmgt.server.db.DBTrxProvider;
 import com.wira.pmgt.shared.model.program.FundDTO;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 
 public class TestSaveFunds {
@@ -25,7 +25,7 @@ public class TestSaveFunds {
 	
 	@Test
 	public void updateFund(){
-		IsProgramActivity fund= ProgramDaoHelper.getProgramById(11L, false,false);
+		IsProgramDetail fund= ProgramDaoHelper.getProgramById(11L, false,false);
 		List<ProgramFundDTO> programFunds = fund.getFunding();
 		
 		ProgramFundDTO programFundDto = programFunds.get(0);
