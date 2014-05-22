@@ -22,8 +22,8 @@ import com.wira.pmgt.client.ui.assign.AssignActivityPresenter;
 import com.wira.pmgt.client.ui.component.Dropdown;
 import com.wira.pmgt.client.ui.detailedActivity.CreateActivityPresenter;
 import com.wira.pmgt.client.ui.document.activityview.ActivityDetailPresenter;
-import com.wira.pmgt.client.ui.events.ActivitiesReloadEvent;
-import com.wira.pmgt.client.ui.events.ActivitiesReloadEvent.ActivitiesReloadHandler;
+import com.wira.pmgt.client.ui.events.ProgramsReloadEvent;
+import com.wira.pmgt.client.ui.events.ProgramsReloadEvent.ProgramsReloadHandler;
 import com.wira.pmgt.client.ui.events.ActivitySavedEvent;
 import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent;
 import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent.ActivitySelectionChangedHandler;
@@ -56,7 +56,7 @@ import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
 public class ProgramsPresenter extends
 		PresenterWidget<ProgramsPresenter.IActivitiesView> implements
-		ActivitySelectionChangedHandler, ActivitiesReloadHandler {
+		ActivitySelectionChangedHandler, ProgramsReloadHandler {
 	
 	public static final Object DETAIL_SLOT = new Object();
 	
@@ -144,7 +144,7 @@ public class ProgramsPresenter extends
 	protected void onBind() {
 		super.onBind();
 		addRegisteredHandler(ActivitySelectionChangedEvent.TYPE, this);
-		addRegisteredHandler(ActivitiesReloadEvent.TYPE, this);
+		addRegisteredHandler(ProgramsReloadEvent.TYPE, this);
 
 		getView().getPeriodDropDown().addValueChangeHandler(new ValueChangeHandler<PeriodDTO>() {
 			
@@ -153,7 +153,7 @@ public class ProgramsPresenter extends
 				PeriodDTO period =event.getValue();
 				//period changed - reload all
 				ProgramsPresenter.this.period = period;
-				//periodChanged();
+				periodChanged();
 			}
 		});
 		
@@ -520,11 +520,12 @@ public class ProgramsPresenter extends
 	protected void setActivity(IsProgramDetail activity) {
 		getView().setActivity(activity);
 
-		if (activity.getType() != ProgramDetailType.PROGRAM
-				|| programId == null) {
-			// this is a detail activity
-			this.detail = activity;
-		}
+//		if (activity.getType() != ProgramDetailType.PROGRAM
+//				|| programId == null) {
+//			// this is a detail activity
+//			this.detail = activity;
+//		}
+		this.detail = activity;
 		programType = activity.getType();
 	}
 
@@ -561,7 +562,7 @@ public class ProgramsPresenter extends
 	}
 
 	@Override
-	public void onActivitiesReload(ActivitiesReloadEvent event) {
+	public void onProgramsReload(ProgramsReloadEvent event) {
 		loadData(programId, programDetailId);
 	}
 
@@ -586,4 +587,15 @@ public class ProgramsPresenter extends
 				});
 	}
 
+
+	/**
+	 * On period change
+	 * <br>
+	 * Reload the currently selected program with details for the selected year
+	 * <br>
+	 * The program is identified by 
+	 */
+	protected void periodChanged() {
+		
+	}
 }

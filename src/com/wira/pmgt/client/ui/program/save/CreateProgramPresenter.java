@@ -14,7 +14,7 @@ import com.gwtplatform.mvp.client.PresenterWidget;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.OptionControl;
-import com.wira.pmgt.client.ui.events.ActivitiesReloadEvent;
+import com.wira.pmgt.client.ui.events.ProgramsReloadEvent;
 import com.wira.pmgt.client.ui.events.ActivitySavedEvent;
 import com.wira.pmgt.client.ui.period.save.PeriodSaveView;
 import com.wira.pmgt.shared.model.UserGroup;
@@ -125,7 +125,7 @@ public class CreateProgramPresenter extends
 									History.newItem("home;page=activities;activity="+aResponse.getProgram().getId(),
 											true);
 								}else{
-									fireEvent(new ActivitiesReloadEvent());
+									fireEvent(new ProgramsReloadEvent());
 								}
 							}
 						});
