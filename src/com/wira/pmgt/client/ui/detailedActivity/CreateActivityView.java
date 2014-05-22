@@ -29,7 +29,7 @@ import com.wira.pmgt.shared.model.Listable;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.program.FundDTO;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
@@ -44,7 +44,7 @@ public class CreateActivityView extends ViewImpl implements
 	public interface Binder extends UiBinder<Widget, CreateActivityView> {
 	}
 
-	IsProgramActivity Outcome; //The outcome under which this activity is created
+	IsProgramDetail Outcome; //The outcome under which this activity is created
 
 	@UiField DivElement divActivityName;
 	@UiField IssuesPanel issues;
@@ -55,7 +55,7 @@ public class CreateActivityView extends ViewImpl implements
 	@UiField AggregationGrid gridTargets;
 	@UiField AutoCompleteField<HTUser> allocatedToUsers;
 	@UiField AutoCompleteField<UserGroup> allocatedToGroups;
-	@UiField AutoCompleteField<IsProgramActivity> objectivesAutoComplete;
+	@UiField AutoCompleteField<IsProgramDetail> objectivesAutoComplete;
 	@UiField DivElement divTargetsAndIndicators;
 	@UiField DivElement divObjectives;
 	
@@ -133,7 +133,7 @@ public class CreateActivityView extends ViewImpl implements
 	}
 	
 	@Override
-	public void setObjectives(List<IsProgramActivity> objectives) {
+	public void setObjectives(List<IsProgramDetail> objectives) {
 		if(objectives!=null){
 			objectivesAutoComplete.setValues(objectives);
 		}
@@ -161,7 +161,7 @@ public class CreateActivityView extends ViewImpl implements
 	}
 	
 	@Override
-	public void setParentProgram(IsProgramActivity isProgramActivity) {
+	public void setParentProgram(IsProgramDetail isProgramActivity) {
 		if(isProgramActivity.getStartDate()!=null && isProgramActivity.getEndDate()!=null){
 			dtRange.setDates(isProgramActivity.getStartDate(), isProgramActivity.getEndDate());
 			dtRange.setRangeValidation(isProgramActivity.getStartDate(), isProgramActivity.getEndDate());
@@ -203,7 +203,7 @@ public class CreateActivityView extends ViewImpl implements
 	}
 
 	@Override
-	public IsProgramActivity getActivity() {
+	public IsProgramDetail getActivity() {
 		ProgramDTO program = new ProgramDTO();
 		program.setDescription(txtActivity.getValue());
 		program.setName(txtActivity.getValue());
@@ -233,7 +233,7 @@ public class CreateActivityView extends ViewImpl implements
 	}
 
 	@Override
-	public void setActivity(IsProgramActivity activity) {
+	public void setActivity(IsProgramDetail activity) {
 		if(activity==null){
 			return;		
 		}

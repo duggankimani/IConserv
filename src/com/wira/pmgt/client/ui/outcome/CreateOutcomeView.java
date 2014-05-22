@@ -24,7 +24,7 @@ import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.Listable;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
@@ -43,7 +43,7 @@ public class CreateOutcomeView extends ViewImpl implements
 	@UiField AggregationGrid gridView;
 	@UiField BulletListPanel crumbContainer;
 	@UiField InlineLabel spnPeriod;
-	@UiField AutoCompleteField<IsProgramActivity> autoComplete;
+	@UiField AutoCompleteField<IsProgramDetail> autoComplete;
 
 	List<Listable> donors = new ArrayList<Listable>();
 	ColumnConfig donorField = new ColumnConfig("donor", "Donor Name", DataType.SELECTBASIC);
@@ -137,7 +137,7 @@ public class CreateOutcomeView extends ViewImpl implements
 	}
 	
 	@Override
-	public void setObjectives(List<IsProgramActivity> objectives) {
+	public void setObjectives(List<IsProgramDetail> objectives) {
 		if(objectives!=null){
 			autoComplete.setValues(objectives);
 		}
@@ -160,7 +160,7 @@ public class CreateOutcomeView extends ViewImpl implements
 	}
 	
 	@Override
-	public void setParentProgram(IsProgramActivity isProgramActivity) {
+	public void setParentProgram(IsProgramDetail isProgramActivity) {
 		setBreadCrumbs(isProgramActivity.getProgramSummary());
 	}
 	
@@ -191,7 +191,7 @@ public class CreateOutcomeView extends ViewImpl implements
 	}
 
 	@Override
-	public IsProgramActivity getOutcome() {
+	public IsProgramDetail getOutcome() {
 		ProgramDTO program = new ProgramDTO();
 		program.setDescription(txtOutcome.getValue());
 		program.setName(txtOutcome.getValue());
@@ -213,7 +213,7 @@ public class CreateOutcomeView extends ViewImpl implements
 	}
 
 	@Override
-	public void setOutcome(IsProgramActivity outcome) {
+	public void setOutcome(IsProgramDetail outcome) {
 		if(outcome==null){
 			return;		
 		}

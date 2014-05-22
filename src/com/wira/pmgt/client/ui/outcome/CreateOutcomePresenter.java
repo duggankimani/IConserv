@@ -10,7 +10,7 @@ import com.gwtplatform.mvp.client.View;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.requests.GetFundsRequest;
 import com.wira.pmgt.shared.requests.GetPeriodRequest;
@@ -27,17 +27,17 @@ public class CreateOutcomePresenter extends
 	public interface MyView extends View {
 		void setFunds(List<FundDTO> funds);
 		void setPeriod(PeriodDTO period);
-		void setObjectives(List<IsProgramActivity> objectives);
-		void setParentProgram(IsProgramActivity isProgramActivity);
+		void setObjectives(List<IsProgramDetail> objectives);
+		void setParentProgram(IsProgramDetail isProgramActivity);
 		boolean isValid();
-		IsProgramActivity getOutcome();
-		void setOutcome(IsProgramActivity outcome);
+		IsProgramDetail getOutcome();
+		void setOutcome(IsProgramDetail outcome);
 		void clear();
 	}
 
 	@Inject
 	DispatchAsync requestHelper;
-	IsProgramActivity outcome;
+	IsProgramDetail outcome;
 	private Long parentId;
 
 	@Inject
@@ -45,8 +45,8 @@ public class CreateOutcomePresenter extends
 		super(eventBus, view);
 	}
 
-	public IsProgramActivity getOutcome(){
-		IsProgramActivity viewoutcome= getView().getOutcome();
+	public IsProgramDetail getOutcome(){
+		IsProgramDetail viewoutcome= getView().getOutcome();
 		if(outcome!=null){
 			viewoutcome.setId(outcome.getId());
 			viewoutcome.setParentId(outcome.getParentId());
@@ -86,7 +86,7 @@ public class CreateOutcomePresenter extends
 		});
 	}
 
-	public void setOutcome(IsProgramActivity selected) {
+	public void setOutcome(IsProgramDetail selected) {
 		this.outcome = selected;	
 		getView().clear();
 	}

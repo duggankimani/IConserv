@@ -19,7 +19,7 @@ import com.wira.pmgt.client.ui.events.ActivitySavedEvent;
 import com.wira.pmgt.client.ui.period.save.PeriodSaveView;
 import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.program.FundDTO;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.requests.CreatePeriodRequest;
@@ -50,12 +50,12 @@ public class CreateProgramPresenter extends
 		void setGroups(List<UserGroup> groups);
 		ProgramDTO getProgram();
 		void setFunds(List<FundDTO> funds);
-		void setProgram(IsProgramActivity program);
+		void setProgram(IsProgramDetail program);
 	}
 
 	@Inject DispatchAsync requestHelper;
 	private Long programId;
-	private IsProgramActivity program;
+	private IsProgramDetail program;
 	private boolean navigateOnSave;
 	
 	@Inject
@@ -111,7 +111,7 @@ public class CreateProgramPresenter extends
 			@Override
 			public void onClick(ClickEvent event) {
 				if(getView().isValid()){
-					IsProgramActivity newProgram = getView().getProgram();
+					IsProgramDetail newProgram = getView().getProgram();
 					newProgram.setId(programId);					
 					requestHelper.execute(new CreateProgramRequest(newProgram),
 							new TaskServiceCallback<CreateProgramResponse>() {

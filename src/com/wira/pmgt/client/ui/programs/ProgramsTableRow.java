@@ -1,4 +1,4 @@
-package com.wira.pmgt.client.ui.activities;
+package com.wira.pmgt.client.ui.programs;
 
 import static com.wira.pmgt.client.ui.util.NumberUtils.CURRENCYFORMAT;
 import static com.wira.pmgt.client.ui.util.NumberUtils.NUMBERFORMAT;
@@ -26,16 +26,16 @@ import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 
-public class ActivitiesTableRow extends RowWidget {
+public class ProgramsTableRow extends RowWidget {
 
 	private static ActivitiesTableRowUiBinder uiBinder = GWT
 			.create(ActivitiesTableRowUiBinder.class);
 
 	interface ActivitiesTableRowUiBinder extends
-			UiBinder<Widget, ActivitiesTableRow> {
+			UiBinder<Widget, ProgramsTableRow> {
 	}
 
 	@UiField
@@ -67,7 +67,7 @@ public class ActivitiesTableRow extends RowWidget {
 
 	int level = 0;
 	long programId=0;
-	IsProgramActivity activity;
+	IsProgramDetail activity;
 	List<FundDTO> funding = null;
 	
 	//Is the current status showing children or not
@@ -86,7 +86,7 @@ public class ActivitiesTableRow extends RowWidget {
 		}
 	};
 	
-	public ActivitiesTableRow(IsProgramActivity activity, List<FundDTO> sortedListOfFunding,
+	public ProgramsTableRow(IsProgramDetail activity, List<FundDTO> sortedListOfFunding,
 			Long programId, boolean isSummaryRow,
 			int level) {
 				
@@ -155,7 +155,7 @@ public class ActivitiesTableRow extends RowWidget {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
 				AppContext.fireEvent(new ActivitySelectionChangedEvent(
-						ActivitiesTableRow.this.activity, event.getValue()));
+						ProgramsTableRow.this.activity, event.getValue()));
 			}
 		});
 				
@@ -178,7 +178,7 @@ public class ActivitiesTableRow extends RowWidget {
 
 	}
 
-	public IsProgramActivity getActivity() {
+	public IsProgramDetail getActivity() {
 		return activity;
 	}
 
@@ -321,7 +321,7 @@ public class ActivitiesTableRow extends RowWidget {
 		int childrenCollapsed=0;
 		//loop until you count n children
 		for(int i=idx+1;(i<panel.getWidgetCount() && childrenCollapsed<childCount); i++){
-			ActivitiesTableRow row = (ActivitiesTableRow)panel.getWidget(i);
+			ProgramsTableRow row = (ProgramsTableRow)panel.getWidget(i);
 			if(row.getActivity().getParentId()==activity.getId()){
 				childrenCollapsed++;
 				if(!showChildren){

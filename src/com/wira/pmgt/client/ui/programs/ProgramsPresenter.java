@@ -1,4 +1,4 @@
-package com.wira.pmgt.client.ui.activities;
+package com.wira.pmgt.client.ui.programs;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ import com.wira.pmgt.shared.model.ParticipantType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.program.FundDTO;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.requests.AssignTaskRequest;
 import com.wira.pmgt.shared.requests.CreateProgramRequest;
@@ -54,8 +54,8 @@ import com.wira.pmgt.shared.responses.GetPeriodsResponse;
 import com.wira.pmgt.shared.responses.GetProgramsResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
-public class ActivitiesPresenter extends
-		PresenterWidget<ActivitiesPresenter.IActivitiesView> implements
+public class ProgramsPresenter extends
+		PresenterWidget<ProgramsPresenter.IActivitiesView> implements
 		ActivitySelectionChangedHandler, ActivitiesReloadHandler {
 	
 	public static final Object DETAIL_SLOT = new Object();
@@ -73,11 +73,11 @@ public class ActivitiesPresenter extends
 
 		HasClickHandlers getEditLink();
 
-		void setActivities(List<IsProgramActivity> programs);
+		void setProgramsList(List<IsProgramDetail> programs);
 
-		void setPrograms(List<IsProgramActivity> programs);
+		void setPrograms(List<IsProgramDetail> programs);
 
-		void setActivity(IsProgramActivity singleResult);
+		void setActivity(IsProgramDetail singleResult);
 
 		void setSelection(ProgramDetailType type);
 
@@ -130,12 +130,12 @@ public class ActivitiesPresenter extends
 
 	PeriodDTO period;
 	
-	IsProgramActivity selected;
+	IsProgramDetail selected;
 	
-	IsProgramActivity detail;
+	IsProgramDetail detail;
 
 	@Inject
-	public ActivitiesPresenter(final EventBus eventBus,
+	public ProgramsPresenter(final EventBus eventBus,
 			final IActivitiesView view) {
 		super(eventBus, view);
 	}
@@ -152,7 +152,7 @@ public class ActivitiesPresenter extends
 			public void onValueChange(ValueChangeEvent<PeriodDTO> event) {
 				PeriodDTO period =event.getValue();
 				//period changed - reload all
-				ActivitiesPresenter.this.period = period;
+				ProgramsPresenter.this.period = period;
 				//periodChanged();
 			}
 		});
@@ -268,7 +268,7 @@ public class ActivitiesPresenter extends
 	}
 
 	protected void showEditPopup(ProgramDetailType type, boolean edit) {
-		IsProgramActivity activity = (selected != null) ? selected : detail;
+		IsProgramDetail activity = (selected != null) ? selected : detail;
 
 		showEditPopup(type, activity, edit);
 	}
@@ -284,7 +284,7 @@ public class ActivitiesPresenter extends
 	 * @param edit
 	 */
 	protected void showEditPopup(ProgramDetailType type,
-			IsProgramActivity activity, boolean edit) {
+			IsProgramDetail activity, boolean edit) {
 
 		switch (type) {
 		case TASK:
@@ -308,7 +308,7 @@ public class ActivitiesPresenter extends
 
 							if (name.equals("Save")) {
 								if (createTask.getView().isValid()) {
-									IsProgramActivity activity = createTask
+									IsProgramDetail activity = createTask
 											.getActivity();
 									// System.err.println("")
 									save(activity);
@@ -341,7 +341,7 @@ public class ActivitiesPresenter extends
 
 							if (name.equals("Save")) {
 								if (createActivity.getView().isValid()) {
-									IsProgramActivity activity = createActivity
+									IsProgramDetail activity = createActivity
 											.getActivity();
 									// System.err.println("")
 									save(activity);
@@ -372,7 +372,7 @@ public class ActivitiesPresenter extends
 						public void onSelect(String name) {
 							if (name.equals("Save")) {
 								if (objectivePresenter.getView().isValid()) {
-									IsProgramActivity objective = objectivePresenter
+									IsProgramDetail objective = objectivePresenter
 											.getObjective();
 									save(objective);
 									hide();
@@ -397,7 +397,7 @@ public class ActivitiesPresenter extends
 
 							if (name.equals("Save")) {
 								if (createOutcome.getView().isValid()) {
-									IsProgramActivity outcome = createOutcome
+									IsProgramDetail outcome = createOutcome
 											.getOutcome();
 									save(outcome);
 									hide();
@@ -420,7 +420,7 @@ public class ActivitiesPresenter extends
 		}
 	}
 
-	private void save(final IsProgramActivity activity) {
+	private void save(final IsProgramDetail activity) {
 		// program.setParentId(programId);
 		requestHelper.execute(new CreateProgramRequest(activity),
 				new TaskServiceCallback<CreateProgramResponse>() {
@@ -498,12 +498,12 @@ public class ActivitiesPresenter extends
 
 						// activities under a program
 						// && programDetailId==null
-						if (ActivitiesPresenter.this.programId != null) {
+						if (ProgramsPresenter.this.programId != null) {
 							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
 									.get(i++);
 							setActivity(response2.getSingleResult());
 						} else {
-							getView().setActivities(response.getPrograms());
+							getView().setProgramsList(response.getPrograms());
 						}
 
 						if (programDetailId != null) {
@@ -517,7 +517,7 @@ public class ActivitiesPresenter extends
 				});
 	}
 
-	protected void setActivity(IsProgramActivity activity) {
+	protected void setActivity(IsProgramDetail activity) {
 		getView().setActivity(activity);
 
 		if (activity.getType() != ProgramDetailType.PROGRAM

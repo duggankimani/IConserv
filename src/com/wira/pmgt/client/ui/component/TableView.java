@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
-import com.wira.pmgt.client.ui.activities.TableHeader;
+import com.wira.pmgt.client.ui.programs.TableHeader;
 
 public class TableView extends Composite {
 

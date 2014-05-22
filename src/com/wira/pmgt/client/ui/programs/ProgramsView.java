@@ -1,4 +1,4 @@
-package com.wira.pmgt.client.ui.activities;
+package com.wira.pmgt.client.ui.programs;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,12 +33,12 @@ import com.wira.pmgt.client.ui.component.BulletPanel;
 import com.wira.pmgt.client.ui.component.Dropdown;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 
-public class ActivitiesView extends ViewImpl implements
-		ActivitiesPresenter.IActivitiesView {
+public class ProgramsView extends ViewImpl implements
+		ProgramsPresenter.IActivitiesView {
 
 	private final Widget widget;
 
@@ -50,7 +50,7 @@ public class ActivitiesView extends ViewImpl implements
 	@UiField
 	HTMLPanel divNoContent;
 	@UiField
-	ActivitiesTable tblView;
+	ProgramsTable tblView;
 	@UiField
 	SpanElement spnBudget;
 	@UiField
@@ -96,9 +96,9 @@ public class ActivitiesView extends ViewImpl implements
 	@UiField
 	Dropdown<PeriodDTO> periodDropdown;
 
-	List<IsProgramActivity> programs = null;
+	List<IsProgramDetail> programs = null;
 
-	public interface Binder extends UiBinder<Widget, ActivitiesView> {
+	public interface Binder extends UiBinder<Widget, ProgramsView> {
 	}
 
 	Timer scrollTimer = new Timer() {
@@ -113,7 +113,7 @@ public class ActivitiesView extends ViewImpl implements
 	private Long programId;
 
 	@Inject
-	public ActivitiesView(final Binder binder) {
+	public ProgramsView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
 		listPanel.setId("mytab");
 		// registerEditFocus();
@@ -246,14 +246,14 @@ public class ActivitiesView extends ViewImpl implements
 	}
 
 	@Override
-	public void setActivities(List<IsProgramActivity> activities) {
+	public void setProgramsList(List<IsProgramDetail> activities) {
 		tblView.setLastUpdatedId(lastUpdatedId);
 		tblView.setData(activities);
 		lastUpdatedId = null;
 	}
 
 	@Override
-	public void setPrograms(List<IsProgramActivity> programs) {
+	public void setPrograms(List<IsProgramDetail> programs) {
 		showContent(!(programs == null || programs.isEmpty()));
 		this.programs = programs;
 		listPanel.clear();
@@ -263,7 +263,7 @@ public class ActivitiesView extends ViewImpl implements
 
 		createDefaultTab();
 		// System.err.println("Size = " + programs.size());
-		for (IsProgramActivity activity : programs) {
+		for (IsProgramDetail activity : programs) {
 			// boolean first = programs.indexOf(activity) == 0;
 			createTab(activity.getName(), activity.getId(), false);
 		}
@@ -272,7 +272,7 @@ public class ActivitiesView extends ViewImpl implements
 	/**
 	 * Sets Parent Activity
 	 */
-	public void setActivity(IsProgramActivity singleResult) {
+	public void setActivity(IsProgramDetail singleResult) {
 		setSelection(singleResult.getType(), false);
 		setBudget(singleResult.getBudgetAmount());
 
@@ -284,9 +284,9 @@ public class ActivitiesView extends ViewImpl implements
 			// select tab
 			selectTab(singleResult.getId());
 			setTitle(singleResult.getName());
-			setActivities(singleResult.getChildren());
+			setProgramsList(singleResult.getChildren());
 		} else {
-			setActivities(Arrays.asList(singleResult));
+			setProgramsList(Arrays.asList(singleResult));
 		}
 
 	}

@@ -12,7 +12,7 @@ import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.program.FundDTO;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.requests.GetFundsRequest;
 import com.wira.pmgt.shared.requests.GetGroupsRequest;
@@ -33,12 +33,12 @@ public class CreateActivityPresenter extends
 	public interface MyView extends View {
 		void setFunds(List<FundDTO> funds);
 		void setPeriod(PeriodDTO period);
-		void setObjectives(List<IsProgramActivity> objectives);
-		void setParentProgram(IsProgramActivity outcome);
+		void setObjectives(List<IsProgramDetail> objectives);
+		void setParentProgram(IsProgramDetail outcome);
 		boolean isValid();
-		void setActivity(IsProgramActivity activity);
+		void setActivity(IsProgramDetail activity);
 		void clear();
-		IsProgramActivity getActivity();
+		IsProgramDetail getActivity();
 		void setGroups(List<UserGroup> groups);
 		void setUsers(List<HTUser> users);
 		void setType(ProgramDetailType type);
@@ -46,7 +46,7 @@ public class CreateActivityPresenter extends
 
 	@Inject DispatchAsync requestHelper;
 	
-	private IsProgramActivity activity;
+	private IsProgramDetail activity;
 	private Long parentId;
 	
 	@Inject
@@ -54,8 +54,8 @@ public class CreateActivityPresenter extends
 		super(eventBus, view);
 	}
 
-	public IsProgramActivity getActivity(){
-		IsProgramActivity viewactivity= getView().getActivity();
+	public IsProgramDetail getActivity(){
+		IsProgramDetail viewactivity= getView().getActivity();
 		viewactivity.setParentId(parentId);
 		if(activity!=null){
 			//update
@@ -106,7 +106,7 @@ public class CreateActivityPresenter extends
 		});
 	}
 
-	public void setActivity(IsProgramActivity selected) {
+	public void setActivity(IsProgramDetail selected) {
 		this.activity = selected;	
 		getView().clear();
 	}

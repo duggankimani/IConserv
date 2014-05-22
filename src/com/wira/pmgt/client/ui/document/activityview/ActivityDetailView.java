@@ -4,7 +4,7 @@ import com.gwtplatform.mvp.client.ViewImpl;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 
 public class ActivityDetailView extends ViewImpl implements
 		ActivityDetailPresenter.MyView {
@@ -25,7 +25,7 @@ public class ActivityDetailView extends ViewImpl implements
 	}
 
 	@Override
-	public void bind(IsProgramActivity singleActivity) {
+	public void bind(IsProgramDetail singleActivity) {
 		
 	}
 }

@@ -1,4 +1,4 @@
-package com.wira.pmgt.client.ui.activities;
+package com.wira.pmgt.client.ui.programs;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,14 +16,14 @@ import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.TableView;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 
-public class ActivitiesTable extends Composite {
+public class ProgramsTable extends Composite {
 
 	private static ActivitiesTableUiBinder uiBinder = GWT
 			.create(ActivitiesTableUiBinder.class);
 
-	interface ActivitiesTableUiBinder extends UiBinder<Widget, ActivitiesTable> {
+	interface ActivitiesTableUiBinder extends UiBinder<Widget, ProgramsTable> {
 	}
 
 	@UiField TableView tblView;
@@ -34,11 +34,11 @@ public class ActivitiesTable extends Composite {
 	private Long programId=null;
 
 	
-	public ActivitiesTable() {
+	public ProgramsTable() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
-	public void setData(List<IsProgramActivity> programActivities) {
+	public void setData(List<IsProgramDetail> programActivities) {
 		tblView.clearRows();
 		if(programActivities==null){
 			return;
@@ -46,11 +46,11 @@ public class ActivitiesTable extends Composite {
 		setActivities(programActivities,-1);
 	}
 	
-	private void setActivities(List<IsProgramActivity> programActivities, int level){
+	private void setActivities(List<IsProgramDetail> programActivities, int level){
 		level++;
 		sort(programActivities);
-		for (IsProgramActivity activity : programActivities) {
-			ActivitiesTableRow row = new ActivitiesTableRow(activity,funds,programId,isSummaryTable, level);
+		for (IsProgramDetail activity : programActivities) {
+			ProgramsTableRow row = new ProgramsTableRow(activity,funds,programId,isSummaryTable, level);
 			if(activity.getId()==lastUpdatedId){
 				row.highlight();
 			}
@@ -72,10 +72,10 @@ public class ActivitiesTable extends Composite {
 		}
 	}
 
-	private void sort(List<IsProgramActivity> objectives) {
-		Collections.sort(objectives, new Comparator<IsProgramActivity>(){
+	private void sort(List<IsProgramDetail> objectives) {
+		Collections.sort(objectives, new Comparator<IsProgramDetail>(){
 			@Override
-			public int compare(IsProgramActivity o1, IsProgramActivity o2) {
+			public int compare(IsProgramDetail o1, IsProgramDetail o2) {
 				return o1.getName().compareTo(o2.getName());
 			}
 		});

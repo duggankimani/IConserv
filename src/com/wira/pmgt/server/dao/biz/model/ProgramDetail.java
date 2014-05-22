@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -43,6 +44,7 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@Column(nullable=false)
 	@Enumerated(EnumType.STRING)
 	private ProgramDetailType type;
 	
@@ -295,5 +297,13 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 
 	public void setProcessInstanceId(Long processInstanceId) {
 		this.processInstanceId = processInstanceId;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 }

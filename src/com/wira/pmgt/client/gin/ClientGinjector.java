@@ -7,7 +7,6 @@ import com.google.gwt.inject.client.Ginjector;
 import com.gwtplatform.dispatch.client.gin.DispatchAsyncModule;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.wira.pmgt.client.ui.MainPagePresenter;
-import com.wira.pmgt.client.ui.activities.ActivitiesPresenter;
 import com.wira.pmgt.client.ui.admin.AdminHomePresenter;
 import com.wira.pmgt.client.ui.admin.settings.SettingsPresenter;
 import com.wira.pmgt.client.ui.error.ErrorPagePresenter;
@@ -15,6 +14,7 @@ import com.wira.pmgt.client.ui.error.NotfoundPresenter;
 import com.wira.pmgt.client.ui.home.HomePresenter;
 import com.wira.pmgt.client.ui.login.LoginGateKeeper;
 import com.wira.pmgt.client.ui.login.LoginPresenter;
+import com.wira.pmgt.client.ui.programs.ProgramsPresenter;
 
 @GinModules({ DispatchAsyncModule.class, ClientModule.class })
 public interface ClientGinjector extends Ginjector {
@@ -31,7 +31,7 @@ public interface ClientGinjector extends Ginjector {
 
 	AsyncProvider<LoginPresenter> getLoginPresenter();
 	
-	AsyncProvider<ActivitiesPresenter> getActivitiesPresenter();
+	AsyncProvider<ProgramsPresenter> getActivitiesPresenter();
 	
 	LoginGateKeeper getLoggedInGateKeeper();
 	

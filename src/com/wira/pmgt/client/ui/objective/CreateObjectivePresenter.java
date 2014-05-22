@@ -8,7 +8,7 @@ import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.wira.pmgt.client.service.TaskServiceCallback;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 import com.wira.pmgt.shared.requests.GetProgramsRequest;
@@ -22,14 +22,14 @@ public class CreateObjectivePresenter extends
 	public interface ICreateObjectiveView extends View {
 		void setPeriod(PeriodDTO period);
 		void setBreadCrumbs(List<ProgramSummary> programSummary);
-		void setObjective(IsProgramActivity objective);
-		IsProgramActivity getObjective();
+		void setObjective(IsProgramDetail objective);
+		IsProgramDetail getObjective();
 		boolean isValid();
 		void clear();
 	}
 	
 	@Inject DispatchAsync requestHelper;
-	IsProgramActivity objective;
+	IsProgramDetail objective;
 	Long parentId = null;
 	
 	@Inject
@@ -37,8 +37,8 @@ public class CreateObjectivePresenter extends
 		super(eventBus, view);
 	}
 
-	public IsProgramActivity getObjective(){
-		IsProgramActivity viewObjective = getView().getObjective();
+	public IsProgramDetail getObjective(){
+		IsProgramDetail viewObjective = getView().getObjective();
 		if(objective!=null){
 			objective.setDescription(viewObjective.getDescription());
 			objective.setName(viewObjective.getName());
@@ -60,7 +60,7 @@ public class CreateObjectivePresenter extends
 			public void processResult(MultiRequestActionResult aResponse) {				
 				
 				GetProgramsResponse response = (GetProgramsResponse)aResponse.get(0);
-				IsProgramActivity parent = response.getSingleResult();
+				IsProgramDetail parent = response.getSingleResult();
 				getView().setPeriod(parent.getPeriod());
 				getView().setBreadCrumbs(parent.getProgramSummary());
 				getView().setObjective(objective);
@@ -68,7 +68,7 @@ public class CreateObjectivePresenter extends
 		});
 	}
 
-	public void setObjective(IsProgramActivity selected) {
+	public void setObjective(IsProgramDetail selected) {
 		this.objective = selected;
 		getView().clear();
 	}

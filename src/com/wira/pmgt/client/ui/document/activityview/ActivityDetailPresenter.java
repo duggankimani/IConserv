@@ -7,7 +7,7 @@ import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.events.LoadActivitiesEvent;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.requests.GetProgramsRequest;
 import com.wira.pmgt.shared.requests.GetTaskInfoRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
@@ -20,7 +20,7 @@ public class ActivityDetailPresenter extends
 
 	public interface MyView extends View {
 
-		void bind(IsProgramActivity singleActivity);
+		void bind(IsProgramDetail singleActivity);
 	}
 
 	@Inject

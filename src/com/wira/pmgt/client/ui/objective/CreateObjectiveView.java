@@ -18,7 +18,7 @@ import com.wira.pmgt.client.ui.component.grid.DataMapper;
 import com.wira.pmgt.client.ui.component.grid.DataModel;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
@@ -52,7 +52,7 @@ public class CreateObjectiveView extends ViewImpl implements
 	}
 	
 	@Override
-	public void setObjective(IsProgramActivity objective) {
+	public void setObjective(IsProgramDetail objective) {
 		if(objective==null){
 			return;
 		}

@@ -1,19 +1,19 @@
-package com.wira.pmgt.client.ui.activities;
+package com.wira.pmgt.client.ui.programs;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ActivityHeader extends Composite {
+public class ProgramHeader extends Composite {
 
 	private static ActivityHeaderUiBinder uiBinder = GWT
 			.create(ActivityHeaderUiBinder.class);
 
-	interface ActivityHeaderUiBinder extends UiBinder<Widget, ActivityHeader> {
+	interface ActivityHeaderUiBinder extends UiBinder<Widget, ProgramHeader> {
 	}
 
-	public ActivityHeader() {
+	public ProgramHeader() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 

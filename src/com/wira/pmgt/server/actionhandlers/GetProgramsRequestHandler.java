@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wira.pmgt.server.dao.helper.ProgramDaoHelper;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.requests.GetProgramsRequest;
 import com.wira.pmgt.shared.responses.BaseResponse;
 import com.wira.pmgt.shared.responses.GetProgramsResponse;
@@ -23,9 +23,9 @@ public class GetProgramsRequestHandler extends
 	public void execute(GetProgramsRequest action, BaseResponse actionResult,
 			ExecutionContext execContext) throws ActionException {
 		GetProgramsResponse response = (GetProgramsResponse)actionResult;
-		List<IsProgramActivity> activities = new ArrayList<>();
+		List<IsProgramDetail> activities = new ArrayList<>();
 		if(action.getId()!=null){
-			IsProgramActivity activity = ProgramDaoHelper.getProgramById(action.getId(), action.isLoadChildren(),action.isLoadObjectives());
+			IsProgramDetail activity = ProgramDaoHelper.getProgramById(action.getId(), action.isLoadChildren(),action.isLoadObjectives());
 			if(activity!=null){
 				activities.add(activity);
 			}

@@ -31,7 +31,6 @@ import com.wira.pmgt.client.place.NameTokens;
 import com.wira.pmgt.client.service.ServiceCallback;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.MainPagePresenter;
-import com.wira.pmgt.client.ui.activities.ActivitiesPresenter;
 import com.wira.pmgt.client.ui.addDoc.DocumentPopupPresenter;
 import com.wira.pmgt.client.ui.document.GenericDocumentPresenter;
 import com.wira.pmgt.client.ui.events.ActivitiesSelectedEvent;
@@ -62,6 +61,7 @@ import com.wira.pmgt.client.ui.login.LoginGateKeeper;
 import com.wira.pmgt.client.ui.newsfeed.NewsFeedPresenter;
 import com.wira.pmgt.client.ui.profile.ProfilePresenter;
 import com.wira.pmgt.client.ui.program.save.CreateProgramPresenter;
+import com.wira.pmgt.client.ui.programs.ProgramsPresenter;
 import com.wira.pmgt.client.ui.save.form.GenericFormPresenter;
 import com.wira.pmgt.client.ui.tasklistitem.DateGroupPresenter;
 import com.wira.pmgt.client.ui.util.DateUtils;
@@ -123,7 +123,7 @@ public class HomePresenter extends
 	private IndirectProvider<GenericDocumentPresenter> docViewFactory;
 	private IndirectProvider<DateGroupPresenter> dateGroupFactory;
 	private IndirectProvider<NewsFeedPresenter> newsFeedFactory;
-	private IndirectProvider<ActivitiesPresenter> activitiesFactory;
+	private IndirectProvider<ProgramsPresenter> activitiesFactory;
 	private IndirectProvider<ProfilePresenter> profileFactory;
 	
 	private TaskType currentTaskType;
@@ -162,7 +162,7 @@ public class HomePresenter extends
 			Provider<DateGroupPresenter> dateGroupProvider,
 			Provider<NewsFeedPresenter> newsfeedProvider,
 			Provider<ProfilePresenter> profileProvider,
-			Provider<ActivitiesPresenter> activitiesProvider)	{
+			Provider<ProgramsPresenter> activitiesProvider)	{
 		super(eventBus, view, proxy);
 		
 		createDocProvider = new StandardProvider<CreateProgramPresenter>(docProvider);
@@ -170,7 +170,7 @@ public class HomePresenter extends
 		dateGroupFactory = new StandardProvider<DateGroupPresenter>(dateGroupProvider);
 		newsFeedFactory = new StandardProvider<NewsFeedPresenter>(newsfeedProvider);
 		profileFactory = new StandardProvider<ProfilePresenter>(profileProvider);
-		activitiesFactory = new StandardProvider<ActivitiesPresenter>(activitiesProvider);
+		activitiesFactory = new StandardProvider<ProgramsPresenter>(activitiesProvider);
 	}
 
 	protected void search() {
@@ -280,9 +280,9 @@ public class HomePresenter extends
 			final Long activityId = new Long(project);
 			final Long detailId = new Long(detail);
 			Window.setTitle("Activities");
-			activitiesFactory.get(new ServiceCallback<ActivitiesPresenter>() {
+			activitiesFactory.get(new ServiceCallback<ProgramsPresenter>() {
 				@Override
-				public void processResult(ActivitiesPresenter aResponse) {
+				public void processResult(ProgramsPresenter aResponse) {
 					aResponse.loadData(activityId, detailId);
 					setInSlot(ACTIVITIES_SLOT, aResponse);
 					getView().setSelectedTab("Activities");

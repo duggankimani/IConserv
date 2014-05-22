@@ -8,7 +8,7 @@ import com.wira.pmgt.shared.model.Listable;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
 
-public abstract class IsProgramActivity extends ProgramSummary implements Listable{
+public abstract class IsProgramDetail extends ProgramSummary implements Listable{
 	
 	/**
 	 * 
@@ -24,8 +24,8 @@ public abstract class IsProgramActivity extends ProgramSummary implements Listab
 	private List<TargetAndOutcomeDTO> targetsAndOutcomes;
 	private PeriodDTO period;
 	private Long parentId; //Parent Activity or Task
-	private List<IsProgramActivity> children;
-	private List<IsProgramActivity> objectives; //Objectives of an outcome
+	private List<IsProgramDetail> children;
+	private List<IsProgramDetail> objectives; //Objectives of an outcome
 	private List<ProgramSummary> programSummary; //Used to build breadcrumb 
 	private List<HTUser> assignedUsers;
 	private List<UserGroup> assignedGroups;
@@ -39,7 +39,7 @@ public abstract class IsProgramActivity extends ProgramSummary implements Listab
 		this.documentId = documentId;
 	}
 
-	public IsProgramActivity() {
+	public IsProgramDetail() {
 	}
 
 	public ProgramDetailType getType() {
@@ -114,11 +114,11 @@ public abstract class IsProgramActivity extends ProgramSummary implements Listab
 		this.parentId = parentId;
 	}
 
-	public List<IsProgramActivity> getChildren() {
+	public List<IsProgramDetail> getChildren() {
 		return children;
 	}
 
-	public void setChildren(List<IsProgramActivity> children) {
+	public void setChildren(List<IsProgramDetail> children) {
 		this.children = children;
 	}
 
@@ -130,11 +130,11 @@ public abstract class IsProgramActivity extends ProgramSummary implements Listab
 		this.programSummary = programSummary;
 	}
 
-	public List<IsProgramActivity> getObjectives() {
+	public List<IsProgramDetail> getObjectives() {
 		return objectives;
 	}
 
-	public void setObjectives(List<IsProgramActivity> objectives) {
+	public void setObjectives(List<IsProgramDetail> objectives) {
 		this.objectives = objectives;
 	}
 	

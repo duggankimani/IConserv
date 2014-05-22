@@ -9,8 +9,6 @@ import com.wira.pmgt.client.place.NameTokens;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.MainPagePresenter;
 import com.wira.pmgt.client.ui.MainPageView;
-import com.wira.pmgt.client.ui.activities.ActivitiesPresenter;
-import com.wira.pmgt.client.ui.activities.ActivitiesView;
 import com.wira.pmgt.client.ui.addDoc.DocumentPopupPresenter;
 import com.wira.pmgt.client.ui.addDoc.DocumentPopupView;
 import com.wira.pmgt.client.ui.addDoc.doctypeitem.DocTypeItemPresenter;
@@ -85,6 +83,8 @@ import com.wira.pmgt.client.ui.profile.ProfilePresenter;
 import com.wira.pmgt.client.ui.profile.ProfileView;
 import com.wira.pmgt.client.ui.program.save.CreateProgramPresenter;
 import com.wira.pmgt.client.ui.program.save.CreateProgramView;
+import com.wira.pmgt.client.ui.programs.ProgramsPresenter;
+import com.wira.pmgt.client.ui.programs.ProgramsView;
 import com.wira.pmgt.client.ui.save.form.GenericFormPresenter;
 import com.wira.pmgt.client.ui.save.form.GenericFormView;
 import com.wira.pmgt.client.ui.tasklist.tabs.TabsPresenter;
@@ -265,8 +265,8 @@ public class ClientModule extends AbstractPresenterModule {
 		bindPresenterWidget(ProfilePresenter.class, ProfilePresenter.IProfileView.class,
 				ProfileView.class);
 		
-		bindPresenterWidget(ActivitiesPresenter.class, ActivitiesPresenter.IActivitiesView.class,
-				ActivitiesView.class);
+		bindPresenterWidget(ProgramsPresenter.class, ProgramsPresenter.IActivitiesView.class,
+				ProgramsView.class);
 		
 		
 		bindPresenterWidget(PieChartPresenter.class, PieChartPresenter.IPieChartView.class,

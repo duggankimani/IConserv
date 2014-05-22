@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.wira.pmgt.client.ui.activities.ActivitiesPresenter;
+import com.wira.pmgt.client.ui.programs.ProgramsPresenter;
 import com.wira.pmgt.server.dao.ProgramDaoImpl;
 import com.wira.pmgt.server.dao.biz.model.Fund;
 import com.wira.pmgt.server.dao.biz.model.FundAllocation;
@@ -24,7 +24,7 @@ import com.wira.pmgt.shared.model.form.Form;
 import com.wira.pmgt.shared.model.form.FormModel;
 import com.wira.pmgt.shared.model.form.Property;
 import com.wira.pmgt.shared.model.program.FundDTO;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
@@ -85,7 +85,7 @@ public class ProgramDaoHelper {
 		return dtos;
 	}
 
-	public static ProgramDTO save(IsProgramActivity programDTO) {
+	public static ProgramDTO save(IsProgramDetail programDTO) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		ProgramDetail program = get(programDTO);
 		ProgramDetail parent = program.getParent();
@@ -148,7 +148,7 @@ public class ProgramDaoHelper {
 		if(program.getType()==ProgramDetailType.PROGRAM){
 			//Objectives are saved a children of program
 			//Load program objectives here
-			List<IsProgramActivity> objectives = new ArrayList<>();
+			List<IsProgramDetail> objectives = new ArrayList<>();
 			for(ProgramDetail obj: program.getChildren()){					
 				if(obj.getType()==ProgramDetailType.OBJECTIVE){
 					objectives.add(get(obj, false));
@@ -188,8 +188,8 @@ public class ProgramDaoHelper {
 //		return getActivity(children, loadChildren, false);
 //	}
 	
-	private static List<IsProgramActivity> getActivity(Collection<ProgramDetail> children, boolean loadChildren, boolean loadObjectives) {
-		List<IsProgramActivity> activity = new ArrayList<>();
+	private static List<IsProgramDetail> getActivity(Collection<ProgramDetail> children, boolean loadChildren, boolean loadObjectives) {
+		List<IsProgramDetail> activity = new ArrayList<>();
 		if(children!=null)
 			for(ProgramDetail detail: children){
 				if(!loadObjectives && detail.getType()==ProgramDetailType.OBJECTIVE){
@@ -234,7 +234,7 @@ public class ProgramDaoHelper {
 		return dto;
 	}
 		
-	private static ProgramDetail get(IsProgramActivity programDTO) {
+	private static ProgramDetail get(IsProgramDetail programDTO) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		ProgramDetail detail = new ProgramDetail();
 		if(programDTO.getId()!=null){
@@ -288,14 +288,14 @@ public class ProgramDaoHelper {
 	}
 
 	private static Set<ProgramDetail> getProgramChildren(
-			List<IsProgramActivity> objectives) {
+			List<IsProgramDetail> objectives) {
 		
 		if(objectives==null){
 			return new HashSet<>();
 		}
 		
 		Set<ProgramDetail> details = new HashSet<>();
-		for(IsProgramActivity activity: objectives){
+		for(IsProgramDetail activity: objectives){
 			ProgramDetail detail = get(activity);
 			details.add(detail);
 		}
@@ -354,10 +354,10 @@ public class ProgramDaoHelper {
 		return fund;
 	}
 
-	public static IsProgramActivity getProgramById(Long id, boolean loadChildren,boolean loadObjectives) {
+	public static IsProgramDetail getProgramById(Long id, boolean loadChildren,boolean loadObjectives) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		ProgramDetail detail = dao.getById(ProgramDetail.class, id);
-		IsProgramActivity activity = get(detail, loadChildren,loadObjectives);
+		IsProgramDetail activity = get(detail, loadChildren,loadObjectives);
 		activity.setProgramSummary(getProgramSummary(detail));
 		
 		return activity;
@@ -387,9 +387,9 @@ public class ProgramDaoHelper {
 		}
 	}
 
-	public static List<IsProgramActivity> getPrograms(boolean loadChildren, boolean loadObjectives) {
+	public static List<IsProgramDetail> getPrograms(boolean loadChildren, boolean loadObjectives) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
-		List<IsProgramActivity> activities = new ArrayList<>();
+		List<IsProgramDetail> activities = new ArrayList<>();
 		
 		List<ProgramDetail> details = dao.getProgramDetails();
 		
@@ -400,7 +400,7 @@ public class ProgramDaoHelper {
 		return activities;
 	}
 
-	public static List<IsProgramActivity> getPrograms(ProgramDetailType type,
+	public static List<IsProgramDetail> getPrograms(ProgramDetailType type,
 			boolean loadChildren, boolean loadObjectives) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		
@@ -439,7 +439,7 @@ public class ProgramDaoHelper {
 	/**
 	 * This method generates taskName for the Task to be performed
 	 * and approvalTaskName for the Task Approvers Form
-	 * {@link ActivitiesPresenter#assignTask} and see how this is created {@link TaskInfo}
+	 * {@link ProgramsPresenter#assignTask} and see how this is created {@link TaskInfo}
 	 * 
 	 * @param activityId
 	 * @return

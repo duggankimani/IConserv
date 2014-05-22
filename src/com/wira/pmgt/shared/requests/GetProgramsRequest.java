@@ -10,6 +10,8 @@ import java.lang.Long;
 public class GetProgramsRequest extends BaseRequest<GetProgramsResponse> {
 
 	private Long id;
+	private String code;
+	private Long periodId;
 	ProgramDetailType type;
 	boolean loadChildren;
 	boolean loadObjectives;
@@ -58,5 +60,21 @@ public class GetProgramsRequest extends BaseRequest<GetProgramsResponse> {
 
 	public void setLoadObjectives(boolean loadObjectives) {
 		this.loadObjectives = loadObjectives;
+	}
+
+	public Long getPeriodId() {
+		return periodId;
+	}
+
+	public void setPeriodId(Long periodId) {
+		this.periodId = periodId;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 }

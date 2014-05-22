@@ -1,4 +1,4 @@
-package com.wira.pmgt.client.ui.activities;
+package com.wira.pmgt.client.ui.programs;
 
 public class TableHeader{
 	String titleName;

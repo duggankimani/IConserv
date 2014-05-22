@@ -30,7 +30,7 @@ import com.wira.pmgt.shared.model.Listable;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.program.FundDTO;
-import com.wira.pmgt.shared.model.program.IsProgramActivity;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
@@ -219,7 +219,7 @@ public class CreateProgramView extends PopupViewImpl implements
 	}
 
 	@Override
-	public void setProgram(IsProgramActivity program) {
+	public void setProgram(IsProgramDetail program) {
 		txtDescription.setValue(program.getDescription());
 		txtName.setValue(program.getName());
 		lstPeriod.setValue(program.getPeriod());

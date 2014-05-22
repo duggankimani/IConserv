@@ -2,7 +2,7 @@ package com.wira.pmgt.shared.model.program;
 
 import java.util.List;
 
-public class ProgramDTO extends IsProgramActivity {
+public class ProgramDTO extends IsProgramDetail {
 	
 	/**
 	 * 

@@ -3,7 +3,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui' ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
 	xmlns:d='urn:import:com.wira.pmgt.client.ui.component' xmlns:up='urn:import:com.wira.pmgt.client.ui.upload.custom'
-	xmlns:activities='urn:import:com.wira.pmgt.client.ui.activities'
+	xmlns:programs='urn:import:com.wira.pmgt.client.ui.programs'
 	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
 	ui:generateLocales='default'>
 
@@ -137,7 +137,7 @@
 
 					<div id="usercontent" class="tab-content">
 						<div ui:field="divTab1Content" class="tab-pane fade in active">
-							<activities:ActivitiesTable ui:field="tblView"></activities:ActivitiesTable>
+							<programs:ProgramsTable ui:field="tblView"></programs:ProgramsTable>
 						</div>
 					</div>
 
