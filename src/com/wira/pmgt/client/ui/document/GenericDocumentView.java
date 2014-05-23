@@ -113,6 +113,9 @@ public class GenericDocumentView extends ViewImpl implements
 	String url=null;
 	
 	List<Actions> validActions = null;
+	boolean isBizProcessDisplayed=true;
+	boolean overrideDefaultComplete=false;
+	boolean overrideDefaultStart=false;
 	private String timeDiff;
 	
 	@Inject
@@ -366,14 +369,19 @@ public class GenericDocumentView extends ViewImpl implements
 				break;
 			case COMPLETE:
 				//target=aComplete;
-				show(aApprove);
-				show(aReject);
+				if(!overrideDefaultComplete){
+					show(aApprove);
+					show(aReject);
+				}
 				break;
 			case DELEGATE:
 				target=aDelegate;
 				break;
 			case FORWARD:
-				target=aForward;
+				if(!overrideDefaultStart){
+					target=aForward;
+				}
+				
 				break;
 			case RESUME:
 				target=aResume;
@@ -639,5 +647,19 @@ public class GenericDocumentView extends ViewImpl implements
 		moduleUrl =moduleUrl+"/getreport?ACTION=GetUser&userId="+user.getUserId();
 		img.setUrl(moduleUrl);
 	}
+	
+	@Override
+	public void overrideDefaultCompleteProcess() {
+		overrideDefaultComplete=true;
+		aApprove.addStyleName("hidden");
+		aReject.addStyleName("hidden");
+	}
+
+	@Override
+	public void overrideDefaultStartProcess() {
+		overrideDefaultStart=true;
+		aForward.addStyleName("hidden");
+	}
+
 
 }
