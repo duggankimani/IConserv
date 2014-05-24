@@ -126,7 +126,9 @@ public class ProgramDaoHelper {
 	}
 	
 	private static ProgramDTO get(ProgramDetail program, boolean loadChildren, boolean loadObjectives) {
-		
+		if(program==null){
+			return null;
+		}
 		ProgramDTO dto = new ProgramDTO();
 		dto.setActualAmount(program.getActualAmount());
 		dto.setBudgetAmount(program.getBudgetAmount());
@@ -138,6 +140,7 @@ public class ProgramDaoHelper {
 		dto.setParentId(program.getParent()==null? null: program.getParent().getId());
 		dto.setPeriod(get(program.getPeriod()));
 		dto.setStartDate(program.getStartDate());
+		dto.setCode(program.getCode());
 		//dto.setTargetsAndOutcomes(List<TargetAndOutcomeDTO>);
 		dto.setType(program.getType());
 		
@@ -357,6 +360,25 @@ public class ProgramDaoHelper {
 	public static IsProgramDetail getProgramById(Long id, boolean loadChildren,boolean loadObjectives) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		ProgramDetail detail = dao.getById(ProgramDetail.class, id);
+		if(detail==null){
+			return null;
+		}
+		
+		IsProgramDetail activity = get(detail, loadChildren,loadObjectives);
+		activity.setProgramSummary(getProgramSummary(detail));
+		
+		return activity;
+	}
+	
+	public static IsProgramDetail getProgramByCode(String code, Long periodId, 
+			boolean loadChildren, boolean loadObjectives){
+		
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		ProgramDetail detail = dao.getByCodeAndPeriod(code,periodId);
+		if(detail==null){
+			return null;
+		}
+		
 		IsProgramDetail activity = get(detail, loadChildren,loadObjectives);
 		activity.setProgramSummary(getProgramSummary(detail));
 		
@@ -388,10 +410,28 @@ public class ProgramDaoHelper {
 	}
 
 	public static List<IsProgramDetail> getPrograms(boolean loadChildren, boolean loadObjectives) {
-		ProgramDaoImpl dao = DB.getProgramDaoImpl();
-		List<IsProgramDetail> activities = new ArrayList<>();
 		
-		List<ProgramDetail> details = dao.getProgramDetails();
+		return getProgramsByPeriod(null,loadChildren,loadObjectives);
+	}
+	
+	public static List<IsProgramDetail> getProgramsByPeriod(Long periodId,boolean loadChildren, boolean loadObjectives) {
+		
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		
+		List<IsProgramDetail> activities = new ArrayList<>();
+		Period period = null;
+		
+		if(periodId==null){
+			 period= dao.getActivePeriod();
+		}else{
+			period = dao.getPeriod(periodId);
+		}
+		
+		List<ProgramDetail> details = new ArrayList<>();
+		
+		if(period!=null){
+			details = dao.getProgramDetails(period);
+		}
 		
 		for(ProgramDetail detail: details){
 			activities.add(get(detail, loadChildren,loadObjectives));
@@ -400,11 +440,27 @@ public class ProgramDaoHelper {
 		return activities;
 	}
 
-	public static List<IsProgramDetail> getPrograms(ProgramDetailType type,
+	public static List<IsProgramDetail> getProgramsByType(ProgramDetailType type,
 			boolean loadChildren, boolean loadObjectives) {
+		return getProgramByTypeAndPeriod(type,null, loadChildren, loadObjectives);
+	}
+	
+	public static List<IsProgramDetail> getProgramByTypeAndPeriod(ProgramDetailType type,
+			Long periodId, boolean loadChildren, boolean loadObjectives) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		Period period = null;
 		
-		List<ProgramDetail> details = dao.getProgramDetails(type);
+		if(periodId==null){
+			 period= dao.getActivePeriod();
+		}else{
+			period = dao.getPeriod(periodId);
+		}
+		
+		List<ProgramDetail> details = new ArrayList<>();
+		
+		if(period!=null){
+			details = dao.getProgramDetails(type, period);
+		}		
 		
 		return getActivity(details, loadChildren,loadObjectives|| type==ProgramDetailType.OBJECTIVE);
 	}

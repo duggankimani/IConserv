@@ -25,12 +25,15 @@ public class Dropdown<T extends Listable> extends Composite implements HasValue<
 	
 	@UiField BulletListPanel ulMenu;
 	private T selected=null;
-
+	private List<T> items=null;
+	
 	public Dropdown() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 	
 	public void setValues(List<T> values){
+		this.items = values;
+		
 		ulMenu.clear();
 		if(values!=null)
 		for(T value: values){
@@ -64,8 +67,16 @@ public class Dropdown<T extends Listable> extends Composite implements HasValue<
 		this.selected=value;
 	}
 	
-	
+	public List<T> getSelectionValues(){
+		return items;
+	}	
 
+	
+	/**
+	 * <li>
+	 * @author duggan
+	 *
+	 */
 	class DropdownItem extends BulletPanel{
 		T item;
 		final ActionLink link;

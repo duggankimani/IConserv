@@ -59,22 +59,25 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		return getResultList(query);
 	}
 	
-	public List<ProgramDetail> getProgramDetails(ProgramDetailType type){
+	public List<ProgramDetail> getProgramDetails(ProgramDetailType type, Period period){
 		Query query = em.createNamedQuery("ProgramDetail.findByType")
 				.setParameter("type", type)
-				.setParameter("period", getActivePeriod())
+				.setParameter("period", period)
 				.setParameter("isActive", 1);
 		
 		if(type==null){
-			return getProgramDetails();
+			return getProgramDetails(period);
 		}
 		
 		return getResultList(query);
 	}
 
-	public List<ProgramDetail> getProgramDetails() {
+	public List<ProgramDetail> getProgramDetails(Period period) {
+		
 		Query query = em.createNamedQuery("ProgramDetail.findAll")
-				.setParameter("isActive", 1);
+		.setParameter("isActive", 1)
+		.setParameter("period", period);
+		
 		return getResultList(query);
 	}
 
@@ -93,6 +96,25 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 				.setParameter(1, programFundId);
 		return ((Number) query.getSingleResult()).longValue();
 	}
-	
+
+	public ProgramDetail getByCodeAndPeriod(String code, Long periodId) {
+
+		Period period = null;
+		
+		if(periodId==null){
+			 period= getActivePeriod();
+		}else{
+			period = getPeriod(periodId);
+		}
+		
+		if(period==null)
+			return null;
+		
+		Query query = em.createNamedQuery("ProgramDetail.findByCodeAndPeriod")
+				.setParameter("code", code)
+				.setParameter("period", period);
+		
+		return getSingleResultOrNull(query);
+	}
 	
 }

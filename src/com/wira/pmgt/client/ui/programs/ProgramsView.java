@@ -11,6 +11,8 @@ import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.History;
@@ -24,6 +26,7 @@ import com.wira.pmgt.client.ui.component.ActionLink;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
 import com.wira.pmgt.client.ui.component.Dropdown;
+import com.wira.pmgt.client.ui.util.NumberUtils;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
@@ -141,8 +144,9 @@ public class ProgramsView extends ViewImpl implements
 		aRight.addClickHandler(clickHandler);
 		aLeft.addClickHandler(clickHandler);
 
-//		BreadCrumbItem item = headerContainer.createCrumb("Home", "Home", 0L, false);
-//		crumbContainer.add(item);
+		// BreadCrumbItem item = headerContainer.createCrumb("Home", "Home", 0L,
+		// false);
+		// crumbContainer.add(item);
 
 		show(aBack, false);
 		show(aDetail, false);
@@ -176,8 +180,8 @@ public class ProgramsView extends ViewImpl implements
 		return aNewActivity;
 	}
 
-	@Override
-	public void showContent(boolean status) {
+	private void showContent(boolean status) {
+
 		if (status) {
 			divContent.removeStyleName("hidden");
 			divNoContent.addStyleName("hidden");
@@ -206,16 +210,20 @@ public class ProgramsView extends ViewImpl implements
 		listPanel.add(li);
 	}
 
+	/**
+	 * Bind Table data
+	 */
 	@Override
-	public void setProgramsList(List<IsProgramDetail> activities) {
+	public void setData(List<IsProgramDetail> activities) {
 		tblView.setLastUpdatedId(lastUpdatedId);
 		tblView.setData(activities);
 		lastUpdatedId = null;
 	}
 
 	@Override
-	public void setPrograms(List<IsProgramDetail> programs) {
+	public void createProgramTabs(List<IsProgramDetail> programs) {
 		showContent(!(programs == null || programs.isEmpty()));
+
 		this.programs = programs;
 		listPanel.clear();
 		if (programs == null) {
@@ -234,24 +242,42 @@ public class ProgramsView extends ViewImpl implements
 	 * Sets Parent Activity
 	 */
 	public void setActivity(IsProgramDetail singleResult) {
+		if (singleResult == null) {
+			return;
+		}
 		setSelection(singleResult.getType(), false);
-		setBudget(singleResult.getBudgetAmount());
-		
-		if (singleResult.getProgramSummary() != null){
-			BulletListPanel breadCrumbs = headerContainer.setBreadCrumbs(singleResult.getProgramSummary());
+
+		assert singleResult.getPeriod() != null;
+		headerContainer.getPeriodDropdown().setValue(singleResult.getPeriod());
+
+		if (singleResult.getProgramSummary() != null) {
+			BulletListPanel breadCrumbs = headerContainer
+					.setBreadCrumbs(singleResult.getProgramSummary());
 			panelCrumbs.clear();
 			panelCrumbs.add(breadCrumbs);
 			showBackButton(true);
 		}
-		
-		if (singleResult.getType() == ProgramDetailType.PROGRAM
-				&& !tblView.isSummaryTable) {
-			// select tab
-			selectTab(singleResult.getId());
-			headerContainer.setTitle(singleResult.getName());
-			setProgramsList(singleResult.getChildren());
+		if (singleResult.getType() == ProgramDetailType.PROGRAM) {
+
+			if (singleResult.getBudgetAmount() == null
+					|| singleResult.getBudgetAmount() == 0l) {
+				headerContainer.setTitle("No budget allocated to '"
+						+ singleResult.getName() + "'");
+			} else {
+				headerContainer.setTitle("Total Budget for '"
+						+ singleResult.getName() + "'");
+			}
+
+			setBudget(singleResult.getBudgetAmount());
+
+			if (!tblView.isSummaryTable) {
+				// select tab
+				selectTab(singleResult.getId());
+				headerContainer.setTitle(singleResult.getName());
+				setData(singleResult.getChildren());
+			}
 		} else {
-			setProgramsList(Arrays.asList(singleResult));
+			setData(Arrays.asList(singleResult));
 		}
 
 	}
@@ -264,7 +290,7 @@ public class ProgramsView extends ViewImpl implements
 		}
 	}
 
-	private void selectTab(Long id) {
+	public void selectTab(Long id) {
 		int size = listPanel.getWidgetCount();
 		for (int i = 0; i < size; i++) {
 			BulletPanel li = (BulletPanel) listPanel.getWidget(i);
@@ -362,11 +388,9 @@ public class ProgramsView extends ViewImpl implements
 	public void setPeriods(List<PeriodDTO> periods) {
 		headerContainer.setPeriodDropdown(periods);
 
-		if (periods != null && !periods.isEmpty()) {
-			headerContainer.setDates("(" + periods.get(0).getDescription()
-					+ ")");
-		}
-
+		// if (periods != null && !periods.isEmpty()) {
+		// setDates("(" + periods.get(0).getDescription() + ")");
+		// }
 	}
 
 	public HasClickHandlers getDetailButton() {
@@ -399,7 +423,6 @@ public class ProgramsView extends ViewImpl implements
 		headerContainer.setProgramId(programId);
 	}
 
-
 	public HasClickHandlers getAddButton() {
 		return aProgram;
 	}
@@ -415,6 +438,27 @@ public class ProgramsView extends ViewImpl implements
 	@Override
 	public Dropdown<PeriodDTO> getPeriodDropDown() {
 		return headerContainer.getPeriodDropdown();
+	}
+
+	@Override
+	public void setActivePeriod(PeriodDTO activePeriod) {
+		if (activePeriod == null) {
+			List<PeriodDTO> periods = headerContainer.getPeriodDropdown()
+					.getSelectionValues();
+
+			if (periods != null) {
+				for (PeriodDTO period : periods) {
+					if (period.isCurrentPeriod()) {
+						headerContainer.getPeriodDropdown().setValue(period);
+						headerContainer.setDates("("
+								+ periods.get(0).getDescription() + ")");
+						break;
+					}
+				}
+			}
+		} else {
+			headerContainer.getPeriodDropdown().setValue(activePeriod);
+		}
 	}
 
 }

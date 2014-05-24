@@ -61,8 +61,7 @@ public class ProgramsPresenter extends
 	public static final Object DETAIL_SLOT = new Object();
 	
 	public interface IActivitiesView extends View {
-		void showContent(boolean show);
-
+		
 		HasClickHandlers getNewOutcome();
 
 		HasClickHandlers getNewActivityLink();
@@ -73,9 +72,9 @@ public class ProgramsPresenter extends
 
 		HasClickHandlers getEditLink();
 
-		void setProgramsList(List<IsProgramDetail> programs);
+		void setData(List<IsProgramDetail> programs);
 
-		void setPrograms(List<IsProgramDetail> programs);
+		void createProgramTabs(List<IsProgramDetail> programs);
 
 		void setActivity(IsProgramDetail singleResult);
 
@@ -101,6 +100,10 @@ public class ProgramsPresenter extends
 		HasClickHandlers getDetailButton();
 
 		Dropdown<PeriodDTO> getPeriodDropDown();
+
+		void setActivePeriod(PeriodDTO period);
+
+		void selectTab(Long l);
 	}
 
 	@Inject
@@ -122,8 +125,10 @@ public class ProgramsPresenter extends
 	@Inject PlaceManager placeManager;
 
 	Long programId;
-
+	String programCode;
+	
 	Long programDetailId; // Drill Down
+	String programDetailCode; //Drill Down
 
 	ProgramDetailType programType = ProgramDetailType.PROGRAM; // last selected
 
@@ -442,7 +447,20 @@ public class ProgramsPresenter extends
 	}
 
 	public void loadData(final Long programId, Long detailId) {
+		loadData(programId, detailId, null);
+	}
+	
+	/**
+	 * If PeriodId is null; current period is selected
+	 * 
+	 * @param programId
+	 * @param detailId
+	 * @param periodId
+	 */
+	public void loadData(Long programId, Long detailId, Long periodId) {
 		fireEvent(new ProcessingEvent());
+		System.err.println("programId, detailId, periodId ["+programId+", "+detailId+", "+periodId+"]");
+		
 		this.programId = (programId == null || programId == 0L) ? null
 				: programId;
 		programDetailId = detailId == null ? null : detailId == 0 ? null
@@ -452,26 +470,51 @@ public class ProgramsPresenter extends
 
 		MultiRequestAction action = new MultiRequestAction();
 		// List of Programs for tabs
-		action.addRequest(new GetProgramsRequest(ProgramDetailType.PROGRAM,
-				false));
+		if(periodId!=null){
+			GetProgramsRequest request = new GetProgramsRequest(ProgramDetailType.PROGRAM,false);
+			request.setPeriodId(periodId);
+			action.addRequest(request);
+		}else{
+			action.addRequest(new GetProgramsRequest(ProgramDetailType.PROGRAM,
+					false));
+		}
+		
 		action.addRequest(new GetPeriodsRequest());
 		action.addRequest(new GetFundsRequest());
 
 		if (this.programId != null) {
 			// Details of selected program
 			this.programId = programId;
-			action.addRequest(new GetProgramsRequest(programId,
-					programDetailId == null));
+			
+			if(periodId!=null){
+				//Period is not current period
+				action.addRequest(new GetProgramsRequest(programCode,periodId,programDetailId == null));
+			}else{
+				action.addRequest(new GetProgramsRequest(programId,
+						programDetailId == null));
+			}
+			
 		}
 
 		if (programDetailId != null) {
 			//Drill Down
 			if(programId==null){
 				//Summary Table Drill down - Load program and objectives only
-				action.addRequest(new GetProgramsRequest(programDetailId,false,true));
+				if(periodId!=null){
+					action.addRequest(new GetProgramsRequest(programCode,periodId,false,true));
+				}else{
+					action.addRequest(new GetProgramsRequest(programDetailId,false,true));
+				}
+				
 			}else{
-				//Program Drill Down - Load program detail/ activity without the objectives
-				action.addRequest(new GetProgramsRequest(programDetailId,true,false));
+				//We are loading details of an item under a program
+				//Program Table Drill Down - Load program detail/ activity without the objectives
+				if(periodId!=null){
+					action.addRequest(new GetProgramsRequest(programDetailCode,periodId,true,false));
+				}else{
+					action.addRequest(new GetProgramsRequest(programDetailId,true,false));
+				}
+				
 			}
 			
 		}
@@ -481,10 +524,10 @@ public class ProgramsPresenter extends
 					@Override
 					public void processResult(MultiRequestActionResult aResponse) {
 						int i = 0;
-						// Programs
+						// Programs (Presented as tabs below)
 						GetProgramsResponse response = (GetProgramsResponse) aResponse
 								.get(i++);
-						getView().setPrograms(response.getPrograms());
+						getView().createProgramTabs(response.getPrograms());
 
 						// Periods
 						GetPeriodsResponse getPeriod = (GetPeriodsResponse) aResponse
@@ -500,17 +543,35 @@ public class ProgramsPresenter extends
 						if (ProgramsPresenter.this.programId != null) {
 							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
 									.get(i++);
-							setActivity(response2.getSingleResult());
+							if(response2.getSingleResult()!=null){
+								//The program detail might not be available for the specified period
+								programCode = response2.getSingleResult().getCode();
+								ProgramsPresenter.this.programId = response2.getSingleResult().getId();
+								setActivity(response2.getSingleResult());
+							}
+							
 						} else {
-							getView().setProgramsList(response.getPrograms());
+					
+							//Data
+							getView().setData(response.getPrograms());
+							getView().selectTab(0L);
 						}
 
 						if (programDetailId != null) {
 							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
 									.get(i++);
-							setActivity(response2.getSingleResult());
+							
+							if(response2.getSingleResult()!=null){
+								//The program detail might not be available for the specified period
+								programDetailCode = response2.getSingleResult().getCode();
+								programDetailId = response2.getSingleResult().getId();
+								setActivity(response2.getSingleResult());
+							}							
+							
 						}
-
+						
+						getView().setActivePeriod(period);
+						
 						fireEvent(new ProcessingCompletedEvent());
 					}
 				});
@@ -592,9 +653,9 @@ public class ProgramsPresenter extends
 	 * <br>
 	 * Reload the currently selected program with details for the selected year
 	 * <br>
-	 * The program is identified by 
+	 * Programs from different years are related through a shared program code
 	 */
 	protected void periodChanged() {
-		
+		loadData(programId, programDetailId, period.getId());
 	}
 }

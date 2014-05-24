@@ -27,8 +27,20 @@ public class GetProgramsRequest extends BaseRequest<GetProgramsResponse> {
 		this.id = id;
 		this.loadChildren = loadChildren;
 	}
+	
 	public GetProgramsRequest(Long id, boolean loadChildren, boolean loadObjectives){
 		this(id,loadChildren);
+		this.loadObjectives=loadObjectives;
+	}
+	
+	public GetProgramsRequest(String code,Long periodId, boolean loadChildren) {
+		this.code = code;
+		this.periodId = periodId;
+		this.loadChildren = loadChildren;
+	}
+	
+	public GetProgramsRequest(String code,Long periodId, boolean loadChildren, boolean loadObjectives){
+		this(code,periodId,loadChildren);
 		this.loadObjectives=loadObjectives;
 	}
 	
