@@ -941,7 +941,7 @@ body .dateBoxPopup {
 	border-bottom: 1px solid #e5e5e5;
 }
 
-#detailed-info .title h4 {
+.recent-activity .title h4 {
 	font-family: 'Open Sans', 'trebuchet ms', arial, sans-serif;
 	font-size: 14px;
 }
@@ -1029,7 +1029,7 @@ body .dateBoxPopup {
 	margin-left: 57px;
 }
 
-#detailed-info .recent-activity {
+.recent-activity {
 	padding: 5px 0px;
 	border-left: none;
 	position: relative;
@@ -1037,36 +1037,36 @@ body .dateBoxPopup {
 	/* border-top: 1px dotted #CCCCCC; */
 }
 
-#detailed-info .recent-activity .title {
-	margin-bottom: 10px;
-}
 
-#detailed-info .comment-box .arrow {
+/*Styling for comment-Box Widget*/
+.comment-box{
+	position:relative;
+}
+.comment-box .arrow {
 	position: absolute;
 	left: 55px;
-	top: 51px;
+	top: 17px;
 	height: 0;
 	border: 5px solid transparent;
 	border-left-width: 0;
 	border-right-color: #b9b9b9;
 }
-
-#detailed-info .comment-box .arrow.reply {
-	top: 59px;
-	left: 111px;
+.comment-box .arrow.reply {
+	top: 2px;
+	/* left: 111px; */
 }
 
-#detailed-info .comment-box .image {
+.comment-box .image {
 	width: 45px;
 }
 
-#detailed-info .comment-box .textbox {
+.comment-box .textbox {
 	margin-left: 15px;
 	margin-top: 7px;
 	width: 90%;
 }
 
-#detailed-info .comment-box .button-post {
+.comment-box .button-post {
 	min-height: 20px;
 	padding: 1px 8px;
 	font-size: 11px;
@@ -1074,7 +1074,7 @@ body .dateBoxPopup {
 	margin-top: 5px;
 }
 
-#detailed-info .textarea-box {
+.comment-box .textarea-box {
 	margin: 0px;
 	border: 0;
 	resize: none;
@@ -1082,52 +1082,57 @@ body .dateBoxPopup {
 	width: 98.4%;
 	padding: 3px;
 }
-#detailed-info .textarea-box:focus {
+.comment-box .textarea-box:focus {
 	outline: none;
 	box-shadow: none;
 	border-color: #1b7fcc;
 }
-
-#detailed-info .comment-container {
+.comment-box .comment-container {
 	border: 1px solid #b4bbcd;
 	position: relative;
 	z-index: 0;
 	border-radius: 3px;
 }
 
-#detailed-info .recent-activity .comment-small {
+.comment-box .comment-small {
 	height: 31px;
 }
 
-#detailed-info .recent-activity .comment-big {
+.comment-box .comment-big {
 	height: 70px;
 	border-color: #1b7fcc;
 }
 
-#detailed-info .recent-activity .textarea-small {
+.comment-box .textarea-small {
 	height: 20px;
 }
 
-#detailed-info .recent-activity .textarea-big {
+.comment-box .textarea-big {
 	height: 64px;
 }
+/*End of Comment-Box Styling*/
 
-#detailed-info .recent-activity .span1 {
+
+/*Styling for Activity Feed*/
+.recent-activity .span1 {
 	padding-top: 4px;
 	width: 52px;
 	height: 50px;
 }
 
-#detailed-info .recent-activity .span8 {
+.recent-activity .span8 {
 	margin-left: 3px;
 }
 
-#detailed-info .recent-activity .name {
+.recent-activity .name {
 	font-weight: bold;
 	color: #419AB0;
 }
+.recent-activity .title {
+	margin-bottom: 10px;
+}
 
-#detailed-info .panel-activity .feed-item.well {
+.panel-activity .feed-item.well {
 	margin-left: 58px;
 	margin-top: 2px;
 	padding-top: 0px;
@@ -1136,51 +1141,51 @@ body .dateBoxPopup {
 	border: none;
 }
 
-#detailed-info .panel-activity .feed-item.well .feed-image {
+.panel-activity .feed-item.well .feed-image {
 	position: absolute;
 	top: 3px;
 	left: 5px;
 }
 
-#detailed-info .panel-activity .feed-item.activity {
-	padding-top: 8px;
+.panel-activity .feed-item.activity {
+	padding-top: 11px;
 }
 
-#detailed-info .panel-activity .feed-item {
+.panel-activity .feed-item {
 	position: relative;
 	padding: 0;
 	margin: 0;
 	padding-top: 10px;
 	font-size: 13px;
-	padding-bottom: 0px;
-	padding-left: 53px;
+	padding-bottom: 10px;
+	padding-left: 60px;
 	/* border-left: 2px solid #DDD;*/
 	border-bottom: 1px dotted #CCCCCC;
 	font-family: 'Open Sans', 'trebuchet ms', arial, sans-serif;
 }
 
-#detailed-info .panel-activity .feed-item .time {
+.panel-activity .feed-item .time {
 	color: #999;
 	font-size: 11px;
 }
 
-#detailed-info .panel-activity .feed-item .icon-time {
+.panel-activity .feed-item .icon-time {
 	margin-right: 5px;
 }
 
-#detailed-info .panel-activity .feed-item .time.comment {
+.panel-activity .feed-item .time.comment {
 	margin-left: 6px;
 }
 
-#detailed-info .panel-activity .feed-item:last-child {
+.panel-activity .feed-item:last-child {
 	padding-bottom: 4px;
 }
 
-#detailed-info .panel-activity .feed-item .feed-subject {
+.panel-activity .feed-item .feed-subject {
 	margin-bottom: 0px;
 }
 
-#detailed-info .panel-activity .feed-item .feed-subject p {
+.panel-activity .feed-item .feed-subject p {
 	font-size: 13px;
 	font-style: normal;
 	font-variant: normal;
@@ -1188,56 +1193,55 @@ body .dateBoxPopup {
 	margin-bottom: 0px;
 }
 
-#detailed-info .panel-activity .feed-item .feed-subject a {
+.panel-activity .feed-item .feed-subject a {
 	font-weight: 600;
 	color: #428bca;
 	text-decoration: none;
 }
 
-#detailed-info .panel-activity .feed-item .feed-content {
+.panel-activity .feed-item .feed-content {
 	padding-left: 0px;
 }
 
-#detailed-info .panel-activity .feed-item .feed-actions {
+.panel-activity .feed-item .feed-actions {
 	padding: 0px;
 	margin-top: 0px;
 }
 
-#detailed-info .panel-activity .feed-item .feed-actions:before,#detailed-info .panel-activity .feed-item .feed-actions:after
-	{
+.panel-activity .feed-item .feed-actions:before,#detailed-info .panel-activity .feed-item .feed-actions:after
+{
 	content: " ";
 	/* 1 */
 	display: table;
 	/* 2 */
 }
-
-#detailed-info .panel-activity .feed-item .feed-actions:after {
+.panel-activity .feed-item .feed-actions:after {
 	clear: both;
 }
 
-#detailed-info .panel-activity .feed-item .feed-actions a {
+.panel-activity .feed-item .feed-actions a {
 	color: #999;
 	font-size: 13px;
 }
 
-#detailed-info .panel-activity .feed-item .feed-actions a:hover {
+.panel-activity .feed-item .feed-actions a:hover {
 	text-decoration: underline;
 }
 
-#detailed-info .panel-activity .feed-item .feed-actions .pull-left {
+.panel-activity .feed-item .feed-actions .pull-left {
 	margin: 0 15px 0 0;
 }
 
-#detailed-info .panel-activity .feed-item .feed-actions .pull-right {
+.panel-activity .feed-item .feed-actions .pull-right {
 	margin: 0 0 0 15px;
 }
 
-#detailed-info .panel-activity .feed-item .reply {
+.panel-activity .feed-item .reply {
 	margin-bottom: 10px;
-	margin-top: 11px;
+	margin-top: 15px;
 }
 
-#detailed-info .panel-activity .feed-item .feed-icon {
+.panel-activity .feed-item .feed-icon {
 	position: absolute;
 	top: 9px;
 	left: 4px;
@@ -1258,29 +1262,29 @@ body .dateBoxPopup {
 	box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.35);
 }
 
-#detailed-info .panel-activity .feed-item .feed-image {
+.panel-activity .feed-item .feed-image {
 	position: absolute;
 	top: 13px;
 	left: 0px;
 }
 
-#detailed-info .panel-activity .feed-item-idea .feed-icon {
+.panel-activity .feed-item-idea .feed-icon {
 	background-color: #f0ad4e;
 }
 
-#detailed-info .panel-activity .feed-item-image .feed-icon {
+.panel-activity .feed-item-image .feed-icon {
 	background-color: #888888;
 }
 
-#detailed-info .panel-activity .feed-item-file .feed-icon {
+.panel-activity .feed-item-file .feed-icon {
 	background-color: #e5412d;
 }
 
-#detailed-info .panel-activity .feed-item-bookmark .feed-icon {
+.panel-activity .feed-item-bookmark .feed-icon {
 	background-color: #555;
 }
 
-#detailed-info .panel-activity .feed-item-question .feed-icon {
+.panel-activity .feed-item-question .feed-icon {
 	background-color: #428bca;
 }
 

@@ -7,6 +7,7 @@ import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.events.LoadActivitiesEvent;
+import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.requests.GetProgramsRequest;
 import com.wira.pmgt.shared.requests.GetTaskInfoRequest;
@@ -52,6 +53,8 @@ public class ActivityDetailPresenter extends
 						GetTaskInfoResponse taskResponse = (GetTaskInfoResponse) aResponse
 								.get(1);
 
+						fireEvent(new ProcessingCompletedEvent());
+						
 						if (taskResponse.getDocumentId() != null) {
 							fireEvent(new LoadActivitiesEvent(taskResponse
 									.getDocumentId()));

@@ -83,7 +83,6 @@ public class ProgramsPresenter extends
 
 		void setPeriods(List<PeriodDTO> periods);
 
-		HasClickHandlers getProgramEdit();
 
 		// void setSummaryView(boolean hasProgramId);
 
