@@ -1,8 +1,7 @@
 package com.wira.pmgt.server.actionhandlers;
 
-import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
-import com.wira.pmgt.server.dao.model.DocumentModel;
-import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.server.dao.helper.ProgramDaoHelper;
+import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.requests.GetTaskInfoRequest;
 import com.wira.pmgt.shared.responses.BaseResponse;
 import com.wira.pmgt.shared.responses.GetTaskInfoResponse;
@@ -20,20 +19,11 @@ public class GetTaskInfoRequestHandler extends
 	@Override
 	public void execute(GetTaskInfoRequest action, BaseResponse actionResult,
 			ExecutionContext execContext) throws ActionException {
-		long activityId = action.getActivityId();
-		ProgramDetail detail = DB.getProgramDaoImpl().getProgramDetail(activityId);
-		if(detail.getProcessInstanceId()==null){
-			return;
-		}
 		
-		DocumentModel model = DB.getDocumentDao().getDocumentByProcessInstanceId(detail.getProcessInstanceId());
-		if(model!=null){
-			GetTaskInfoResponse response = (GetTaskInfoResponse)actionResult;
-			response.setProcessInstanceId(detail.getProcessInstanceId());
-			response.setDocumentId( model.getId());
-		}
+		TaskInfo info = ProgramDaoHelper.getTaskInfo(action.getProgramId());
+		((GetTaskInfoResponse)actionResult).setTaskInfo(info);
 	}
-	
+
 	@Override
 	public Class<GetTaskInfoRequest> getActionType() {
 		return GetTaskInfoRequest.class;

@@ -14,9 +14,11 @@ import com.wira.pmgt.shared.model.OrgEntity;
 import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.requests.GetGroupsRequest;
+import com.wira.pmgt.shared.requests.GetTaskInfoRequest;
 import com.wira.pmgt.shared.requests.GetUsersRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
 import com.wira.pmgt.shared.responses.GetGroupsResponse;
+import com.wira.pmgt.shared.responses.GetTaskInfoResponse;
 import com.wira.pmgt.shared.responses.GetUsersResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
@@ -33,6 +35,8 @@ public class AssignActivityPresenter extends
 		void setActivityId(Long activityId);
 
 		void addAllItems();
+
+		void setTaskInfo(TaskInfo taskInfo);
 	}
 
 	@Inject
@@ -61,12 +65,14 @@ public class AssignActivityPresenter extends
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetUsersRequest());
 		action.addRequest(new GetGroupsRequest());
+		action.addRequest(new GetTaskInfoRequest(activityId));
 
 		requestHelper.execute(action,
 				new TaskServiceCallback<MultiRequestActionResult>() {
 					@Override
 					public void processResult(MultiRequestActionResult aResponse) {
 						int i = 0;
+						
 						List<OrgEntity> entities = new ArrayList<OrgEntity>();
 						GetUsersResponse getUsers = (GetUsersResponse) aResponse
 								.get(i++);
@@ -79,9 +85,11 @@ public class AssignActivityPresenter extends
 						for (UserGroup group : getGroups.getGroups()) {
 							entities.add(group);
 						}
-
 						getView().setSelection(entities);
 
+						GetTaskInfoResponse response = (GetTaskInfoResponse)aResponse.get(i++);
+						getView().setTaskInfo(response.getTaskInfo());
+						
 					}
 
 				});

@@ -1,5 +1,6 @@
 package com.wira.pmgt.server.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +12,11 @@ import org.apache.log4j.Logger;
 import com.wira.pmgt.server.dao.biz.model.Fund;
 import com.wira.pmgt.server.dao.biz.model.Period;
 import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
+import com.wira.pmgt.server.helper.auth.LoginHelper;
+import com.wira.pmgt.server.helper.session.SessionHelper;
+import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.ProgramDetailType;
+import com.wira.pmgt.shared.model.UserGroup;
 
 /**
  * Dao Implementation Class for managing
@@ -60,21 +65,62 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 	}
 	
 	public List<ProgramDetail> getProgramDetails(ProgramDetailType type, Period period){
-		Query query = em.createNamedQuery("ProgramDetail.findByType")
-				.setParameter("type", type)
-				.setParameter("period", period)
-				.setParameter("isActive", 1);
+		return getProgramDetails(type, period, getCurrentUserId(), getCurrentUserGroups());
+	}
+	
+	private String getCurrentUserId() {
+		HTUser user = SessionHelper.getCurrentUser();
+		assert user!=null;
 		
+		return user.getUserId();
+	}
+
+	private List<String> getCurrentUserGroups() {
+		String userId = getCurrentUserId();
+		List<UserGroup> groups = LoginHelper.get().getGroupsForUser(userId);
+		if(groups==null){
+			log.warn("Get Program Details- No Results Due To: User '"+userId+"'has no groups");
+			return new ArrayList<>();
+		}
+		
+		List<String> groupIds = new ArrayList<>();
+		for(UserGroup group: groups){
+			groupIds.add(group.getEntityId());
+		}
+		
+		return groupIds;
+	}
+
+	public List<ProgramDetail> getProgramDetails(ProgramDetailType type, Period period,String user, List<String> groups){
 		if(type==null){
 			return getProgramDetails(period);
 		}
 		
+		Query query = em.createNamedQuery("ProgramDetail.findByType")
+				.setParameter("isCurrentUserAdmin", groups.contains("ADMIN"))
+				.setParameter("userId", user)
+				.setParameter("groupIds", groups)
+				.setParameter("type", type)
+				.setParameter("period", period)
+				.setParameter("isActive", 1);
+		
 		return getResultList(query);
 	}
 
-	public List<ProgramDetail> getProgramDetails(Period period) {
+	public List<ProgramDetail> getProgramDetails(Period period) {		
+		return getProgramDetails(period,getCurrentUserId() , getCurrentUserGroups());
+	}
+	
+	public List<ProgramDetail> getProgramDetails(Period period, String user, List<String> groups) {
+		if(groups==null || groups.isEmpty()){
+			log.warn("Get Program Details- No Results Due To: User '"+user+"'has no groups");
+			return new ArrayList<>();
+		}
 		
 		Query query = em.createNamedQuery("ProgramDetail.findAll")
+		.setParameter("isCurrentUserAdmin", groups.contains("ADMIN"))
+		.setParameter("userId", user)
+		.setParameter("groupIds", groups)
 		.setParameter("isActive", 1)
 		.setParameter("period", period);
 		

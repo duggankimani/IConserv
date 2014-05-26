@@ -156,5 +156,9 @@ public class TaskInfo implements Serializable{
 	public void setTaskName(String taskName) {
 		this.taskName = taskName;
 	}
+
+	public boolean contains(ParticipantType type) {
+		return getParticipant(type)!=null;
+	}
 	
 }

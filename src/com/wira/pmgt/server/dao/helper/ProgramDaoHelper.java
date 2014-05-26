@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.wira.pmgt.client.ui.programs.ProgramsPresenter;
@@ -12,11 +13,16 @@ import com.wira.pmgt.server.dao.ProgramDaoImpl;
 import com.wira.pmgt.server.dao.biz.model.Fund;
 import com.wira.pmgt.server.dao.biz.model.FundAllocation;
 import com.wira.pmgt.server.dao.biz.model.Period;
+import com.wira.pmgt.server.dao.biz.model.ProgramAccess;
 import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
 import com.wira.pmgt.server.dao.biz.model.ProgramFund;
 import com.wira.pmgt.server.dao.biz.model.TargetAndOutcome;
 import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.server.helper.auth.LoginHelper;
 import com.wira.pmgt.shared.model.DataType;
+import com.wira.pmgt.shared.model.HTUser;
+import com.wira.pmgt.shared.model.OrgEntity;
+import com.wira.pmgt.shared.model.ParticipantType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.StringValue;
 import com.wira.pmgt.shared.model.TaskInfo;
@@ -561,5 +567,55 @@ public class ProgramDaoHelper {
 				new Property("HELP", "Help", DataType.STRING,new StringValue(description))));
 		
 		return form;
+	}
+	
+	/**
+	 * 
+	 * @param taskInfo
+	 */
+	public static void saveTaskInfo(TaskInfo taskInfo){
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		ProgramDetail detail = dao.getProgramDetail(taskInfo.getActivityId());
+		
+		Map<ParticipantType, List<OrgEntity>> accessAllocations = taskInfo.getParticipants();
+		
+		List<ProgramAccess> permissions = new ArrayList<>();
+		
+		if(accessAllocations!=null)
+		for(ParticipantType type: accessAllocations.keySet()){
+			List<OrgEntity> entities = accessAllocations.get(type);
+			for(OrgEntity entity: entities){
+				ProgramAccess access = new ProgramAccess();
+				access.setType(type);
+				if(entity instanceof HTUser){
+					access.setUserId(entity.getEntityId());
+				}else{
+					access.setGroupId(entity.getEntityId());
+				}
+				permissions.add(access);
+			}
+		}
+		
+		detail.setAccess(permissions);
+		dao.save(detail);
+	}
+	
+	public static TaskInfo getTaskInfo(Long programId){
+		TaskInfo info = new TaskInfo();
+		info.setActivityId(programId);
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		ProgramDetail detail = dao.getProgramDetail(programId);
+		Collection<ProgramAccess> permissions = detail.getProgramAccess();
+		if(permissions!=null)
+		for(ProgramAccess permission: permissions){
+			ParticipantType type = permission.getType();
+			OrgEntity entity = permission.getUserId()==null? 
+					LoginHelper.get().getGroupById(permission.getGroupId()):
+				LoginHelper.get().getUser(permission.getUserId());
+					
+			info.addParticipant(entity, type);
+		}		
+		
+		return info;
 	}
 }

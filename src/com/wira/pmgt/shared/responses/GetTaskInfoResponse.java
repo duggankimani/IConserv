@@ -1,34 +1,23 @@
 package com.wira.pmgt.shared.responses;
 
-import java.lang.Long;
+import com.wira.pmgt.shared.model.TaskInfo;
 
-public class GetTaskInfoResponse extends BaseResponse {
+public class GetTaskInfoResponse extends BaseResponse{
 
-	private Long documentId;
-	public void setDocumentId(Long documentId) {
-		this.documentId = documentId;
-	}
-
-	public void setProcessInstanceId(Long processInstanceId) {
-		this.processInstanceId = processInstanceId;
-	}
-
-	private Long processInstanceId;
+	private TaskInfo taskInfo;
 
 	public GetTaskInfoResponse() {
 	}
 
-	public GetTaskInfoResponse(Long documentId, Long processInstanceId) {
-		this.documentId = documentId;
-		this.processInstanceId = processInstanceId;
+	public GetTaskInfoResponse(TaskInfo taskInfo) {
+		this.taskInfo = taskInfo;
 	}
 
-	public Long getDocumentId() {
-		return documentId;
+	public TaskInfo getTaskInfo() {
+		return taskInfo;
 	}
 
-	public Long getProcessInstanceId() {
-		return processInstanceId;
+	public void setTaskInfo(TaskInfo taskInfo) {
+		this.taskInfo = taskInfo;
 	}
-	
 }

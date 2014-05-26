@@ -8,19 +8,18 @@ import java.lang.Long;
 
 public class GetTaskInfoRequest extends BaseRequest<GetTaskInfoResponse> {
 
-	private Long activityId;
+	private Long programId;
 
 	@SuppressWarnings("unused")
 	private GetTaskInfoRequest() {
-		// For serialization only
 	}
 
-	public GetTaskInfoRequest(Long activityId) {
-		this.activityId = activityId;
+	public GetTaskInfoRequest(Long programId) {
+		this.programId = programId;
 	}
 
-	public Long getActivityId() {
-		return activityId;
+	public Long getProgramId() {
+		return programId;
 	}
 	
 	@Override

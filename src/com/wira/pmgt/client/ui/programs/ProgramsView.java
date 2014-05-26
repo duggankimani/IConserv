@@ -233,6 +233,7 @@ public class ProgramsView extends ViewImpl implements
 	public void createTab(String text, long id, boolean active) {
 		BulletPanel li = new BulletPanel();
 		ActionLink a = new ActionLink(text);
+		
 		a.setHref("#home;page=activities;activity=" + id);
 		li.add(a);
 

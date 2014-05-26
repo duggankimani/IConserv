@@ -9,10 +9,10 @@ import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.events.LoadActivitiesEvent;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.requests.GetProgramsRequest;
-import com.wira.pmgt.shared.requests.GetTaskInfoRequest;
+import com.wira.pmgt.shared.requests.GetProcessInfoRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
 import com.wira.pmgt.shared.responses.GetProgramsResponse;
-import com.wira.pmgt.shared.responses.GetTaskInfoResponse;
+import com.wira.pmgt.shared.responses.GetProcessInfoResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
 public class ActivityDetailPresenter extends
@@ -39,7 +39,7 @@ public class ActivityDetailPresenter extends
 	public void loadData(Long activityId) {
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetProgramsRequest(activityId, false));
-		action.addRequest(new GetTaskInfoRequest(activityId));
+		action.addRequest(new GetProcessInfoRequest(activityId));
 
 		requestHelper.execute(action,
 				new TaskServiceCallback<MultiRequestActionResult>() {
@@ -49,7 +49,7 @@ public class ActivityDetailPresenter extends
 						GetProgramsResponse progResponse = (GetProgramsResponse) aResponse
 								.get(0);
 						getView().bind(progResponse.getSingleResult());
-						GetTaskInfoResponse taskResponse = (GetTaskInfoResponse) aResponse
+						GetProcessInfoResponse taskResponse = (GetProcessInfoResponse) aResponse
 								.get(1);
 
 						if (taskResponse.getDocumentId() != null) {
