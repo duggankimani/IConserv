@@ -68,6 +68,8 @@ public class CommentView extends ViewImpl implements CommentPresenter.ICommentVi
 			public void onClick(ClickEvent event) {
 				if(mode==MODE.VIEW){
 					setMode(MODE.EDIT);		
+				}else{
+					setMode(MODE.VIEW);	
 				}
 			}
 		});
@@ -138,13 +140,14 @@ public class CommentView extends ViewImpl implements CommentPresenter.ICommentVi
 			divSave.removeClassName(HIDDEN);
 			txtCommentBox.removeStyleName(HIDDEN);
 			aReply.setText("Cancel");
+			//((Widget)aReply).setTitle("Cancel");
 			divSave.addClassName("reply");
 			
 			txtCommentBox.getSpnArrow().addClassName("reply");
-			aReply.addStyleName(HIDDEN);
+			//aReply.addStyleName(HIDDEN);
 		}else{
-			aReply.removeStyleName(HIDDEN);
-			((Widget)aReply).setTitle("Cancel");
+			//aReply.removeStyleName(HIDDEN);
+			//((Widget)aReply).setTitle("Reply to this Comment");
 			aReply.setText("Reply");
 			divSave.addClassName(HIDDEN);
 			txtCommentBox.addStyleName(HIDDEN);
