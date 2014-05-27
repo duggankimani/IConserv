@@ -424,7 +424,7 @@ public class GenericDocumentPresenter extends
 					
 					@Override
 					public void onSelect(String name) {
-						if(name.equals("Reject")){
+						if(name.equals("Approve")){
 							//create comment
 							Map<String, Value> values= new HashMap<String, Value>();
 							values.put("isApproved", new BooleanValue(true));
@@ -434,7 +434,7 @@ public class GenericDocumentPresenter extends
 							}
 						}						
 					}
-				}, "Reject", "Cancel");		
+				}, "Approve", "Cancel");		
 				
 			}
 		});
