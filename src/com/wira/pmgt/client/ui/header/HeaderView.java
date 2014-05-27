@@ -155,6 +155,11 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 	}
 
 	public void setCount(Integer count) {
+		if(count==0){
+			lblCount.addClassName("hidden");
+		}else{
+			lblCount.removeClassName("hidden");
+		}
 		lblCount.setInnerText(count + "");
 	}
 

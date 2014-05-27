@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
@@ -22,15 +23,17 @@ import com.wira.pmgt.client.ui.assign.AssignActivityPresenter;
 import com.wira.pmgt.client.ui.component.Dropdown;
 import com.wira.pmgt.client.ui.detailedActivity.CreateActivityPresenter;
 import com.wira.pmgt.client.ui.document.activityview.ActivityDetailPresenter;
-import com.wira.pmgt.client.ui.events.ProgramsReloadEvent;
-import com.wira.pmgt.client.ui.events.ProgramsReloadEvent.ProgramsReloadHandler;
 import com.wira.pmgt.client.ui.events.ActivitySavedEvent;
 import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent;
 import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent.ActivitySelectionChangedHandler;
+import com.wira.pmgt.client.ui.events.AppResizeEvent;
+import com.wira.pmgt.client.ui.events.AppResizeEvent.ResizeHandler;
 import com.wira.pmgt.client.ui.events.CreateProgramEvent;
 import com.wira.pmgt.client.ui.events.LoadAlertsEvent;
 import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent;
 import com.wira.pmgt.client.ui.events.ProcessingEvent;
+import com.wira.pmgt.client.ui.events.ProgramsReloadEvent;
+import com.wira.pmgt.client.ui.events.ProgramsReloadEvent.ProgramsReloadHandler;
 import com.wira.pmgt.client.ui.objective.CreateObjectivePresenter;
 import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
 import com.wira.pmgt.client.util.AppContext;
@@ -56,7 +59,7 @@ import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
 public class ProgramsPresenter extends
 		PresenterWidget<ProgramsPresenter.IActivitiesView> implements
-		ActivitySelectionChangedHandler, ProgramsReloadHandler {
+		ActivitySelectionChangedHandler, ProgramsReloadHandler, ResizeHandler {
 	
 	public static final Object DETAIL_SLOT = new Object();
 	
@@ -104,6 +107,8 @@ public class ProgramsPresenter extends
 		void setActivePeriod(PeriodDTO period);
 
 		void selectTab(Long l);
+
+		void setMiddleHeight();
 	}
 
 	@Inject
@@ -149,7 +154,9 @@ public class ProgramsPresenter extends
 		super.onBind();
 		addRegisteredHandler(ActivitySelectionChangedEvent.TYPE, this);
 		addRegisteredHandler(ProgramsReloadEvent.TYPE, this);
-
+		addRegisteredHandler(AppResizeEvent.TYPE, this);
+		
+		
 		getView().getPeriodDropDown().addValueChangeHandler(new ValueChangeHandler<PeriodDTO>() {
 			
 			@Override
@@ -657,5 +664,19 @@ public class ProgramsPresenter extends
 	 */
 	protected void periodChanged() {
 		loadData(programId, programDetailId, period.getId());
+	}
+	/*
+	 * on Window Resize - Position the middle section to occupy full width
+	 */
+	@Override
+	public void onResize(AppResizeEvent event) {
+		getView().setMiddleHeight();
+	}
+	
+	
+	@Override
+	protected void onReveal() {
+		super.onReveal();
+		getView().setMiddleHeight();
 	}
 }
