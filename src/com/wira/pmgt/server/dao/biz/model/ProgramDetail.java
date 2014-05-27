@@ -35,14 +35,14 @@ import com.wira.pmgt.shared.model.ProgramDetailType;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="ProgramDetail.findByType", 
-			query="SELECT p FROM ProgramDetail p left join p.programAccess access " +
+			query="SELECT distinct(p) FROM ProgramDetail p left join p.programAccess access " +
 					"where (true=:isCurrentUserAdmin or (access.userId=:userId or access.groupId in (:groupIds))) " +
-					"and p.isActive=:isActive and p.type=:type and p.period=:period order by name"), 
+					"and p.isActive=:isActive and p.type=:type and p.period=:period order by p.name"), 
 	
-	@NamedQuery(name="ProgramDetail.findAll", query="SELECT p FROM ProgramDetail p left join p.programAccess access " +
+	@NamedQuery(name="ProgramDetail.findAll", query="SELECT distinct(p) FROM ProgramDetail p left join p.programAccess access " +
 			"where (true=:isCurrentUserAdmin or (access.userId=:userId or access.groupId in (:groupIds))) " +
 			"and p.isActive=:isActive and p.period=:period " +
-			"order by name"),
+			"order by p.name"),
 			
 	@NamedQuery(name="ProgramDetail.findById", query="SELECT p FROM ProgramDetail p where p.id=:id"),
 	@NamedQuery(name="ProgramDetail.findByCodeAndPeriod", query="FROM ProgramDetail p where p.code=:code and p.period=:period")

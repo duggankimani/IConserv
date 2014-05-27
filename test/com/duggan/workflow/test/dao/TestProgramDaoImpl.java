@@ -58,10 +58,14 @@ public class TestProgramDaoImpl {
 	
 	@Test
 	public void loadProgramsByType(){
+		String userId = "Administrator";
+		String groupId = "ADMIN";
+		
 		List<ProgramDetail> details = dao.getProgramDetails(ProgramDetailType.PROGRAM, dao.getPeriod(1L),
-				"calcacuervo", Arrays.asList("USERS"));
+				userId, Arrays.asList(groupId));
+		
 		Assert.assertNotNull(details);
-		//Assert.assertNotSame(details.size(), 0);
+		Assert.assertSame(details.size(), 9);
 		System.out.println("Load All Size: "+details.size());
 	}
 	
