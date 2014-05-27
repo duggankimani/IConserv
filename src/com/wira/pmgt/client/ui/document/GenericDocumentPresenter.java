@@ -168,7 +168,8 @@ public class GenericDocumentPresenter extends
 
 		void setDeadline(Date endDateDue);
 
-		void displayDetailed(boolean show);
+		void displayTopHeader(boolean show);
+
 	}
 	
 	Long taskId;
@@ -659,7 +660,7 @@ public class GenericDocumentPresenter extends
 		if(isDetailedView){
 			return;
 		}
-		getView().displayDetailed(false);
+		getView().displayTopHeader(false);
 		MultiRequestAction requests = new MultiRequestAction();
 		System.err.println("docID= "+documentId+"; taskId="+taskId);
 		requests.addRequest(new GetDocumentRequest(documentId, taskId));
@@ -1089,9 +1090,10 @@ public class GenericDocumentPresenter extends
 		activityDetailFactory.get(new ServiceCallback<ActivityDetailPresenter>() {
 			@Override
 			public void processResult(ActivityDetailPresenter dResponse) {
+				getView().displayTopHeader(true);
 				dResponse.loadData(activityId);
 				setInSlot(BODY_SLOT, dResponse);
-				getView().displayDetailed(true);
+				getView().displayTopHeader(true);
 			}
 		});
 	}

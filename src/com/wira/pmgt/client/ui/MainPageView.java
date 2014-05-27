@@ -14,6 +14,8 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
+import com.wira.pmgt.client.ui.events.AppResizeEvent;
+import com.wira.pmgt.client.util.AppContext;
 
 public class MainPageView extends ViewImpl implements MainPagePresenter.MyView {
 
@@ -54,6 +56,7 @@ public class MainPageView extends ViewImpl implements MainPagePresenter.MyView {
 			    @Override
 			    public void run() {
 			      resize();
+			      AppContext.fireEvent(new AppResizeEvent());
 			    }
 
 			  };
@@ -71,7 +74,7 @@ public class MainPageView extends ViewImpl implements MainPagePresenter.MyView {
 	private void resize() {
 		int height = Window.getClientHeight();
 		divBody.setHeight((height-50)+"px");
-		System.out.println("client height >>>"+height);
+		//System.out.println("client height >>>"+height);
 		
 	}
 

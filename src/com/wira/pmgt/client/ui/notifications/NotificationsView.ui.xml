@@ -14,7 +14,7 @@
               </g:HTMLPanel>
             </div>
           	<div class="footer">
-                <a href="#" class="logout">View all</a>
+                <a href="#home" class="logout">View all</a>
      		 </div>  
          </g:HTMLPanel>
 </ui:UiBinder>

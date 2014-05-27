@@ -590,13 +590,13 @@ public class GenericDocumentView extends ViewImpl implements
 		}
 	}
 
-	public void displayDetailed(boolean show) {
+	public void displayTopHeader(boolean show) {
 		if (show) {
 			divUpperContent.addStyleName("hide");
 			divUserInfo.addStyleName("hide");
 		} else {
-			divUpperContent.addStyleName("hide");
-			divUserInfo.addStyleName("hide");
+			divUpperContent.removeStyleName("hide");
+			divUserInfo.removeStyleName("hide");
 		}
 
 	}

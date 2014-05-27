@@ -1,22 +1,21 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-	xmlns:d='urn:import:com.wira.pmgt.client.ui.component'
-	xmlns:g='urn:import:com.google.gwt.user.client.ui' ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+	xmlns:d='urn:import:com.wira.pmgt.client.ui.component' xmlns:g='urn:import:com.google.gwt.user.client.ui'
+	ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
 	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
 	ui:generateLocales='default'>
 
 	<g:HTMLPanel styleName="navbar" ui:field="divNavbar">
 		<div class="navbar-inner">
-			<g:Anchor styleName="brand hidden" href="#home"
-				ui:field="aBrand">
+			<g:Anchor styleName="brand hidden" href="#home" ui:field="aBrand">
 				iConserve |&nbsp;
 				<span ui:field="spnCompanyName">LWF</span>
 			</g:Anchor>
 			<a href="#home" class="brand">
 				<g:Image ui:field="imgLogo" url="img/logo.png" width="163px"></g:Image>
 			</a>
-			
+
 			<ul class="nav pull-right">
 				<li class="home">
 					<g:Anchor href="#home" ui:field="aHome" styleName="close-icon hand">
@@ -29,7 +28,8 @@
 					</g:Anchor>
 				</li>
 				<li class="notification-dropdown">
-					<d:ActionLink ui:field="aNotifications" styleName="close-icon hand dropdown-toggle" title="Notifications"
+					<d:ActionLink ui:field="aNotifications"
+						styleName="close-icon hand dropdown-toggle" title="Notifications"
 						dataToggle="tooltip" dataPlacement="bottom">
 						<i class="icon-bell"></i>
 						<span ui:field="lblCount" class="label label-important"></span>
