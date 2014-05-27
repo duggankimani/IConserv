@@ -8,28 +8,36 @@
 	ui:generateLocales='default'>
 
 	<g:HTMLPanel styleName="full-page activities-page">
-		<div class="row-fluid content-top">
-			<programs:ProgramHeader ui:field="headerContainer" leftMargin="false"></programs:ProgramHeader>
-		</div>
+		<g:HTMLPanel styleName="row-fluid content-top" ui:field="divContentTop">
+			<programs:ProgramHeader ui:field="headerContainer"
+				leftMargin="false"></programs:ProgramHeader>
+		</g:HTMLPanel>
 
 		<g:HTMLPanel styleName="row-fluid" ui:field="panelCrumbs">
 		</g:HTMLPanel>
 
 		<div class="row-fluid activities-content">
 			<g:HTMLPanel styleName="span6">
+				<div class="row-fluid item">
+					<strong>Description:</strong>
+					<span ui:field="spnDescription" class="subject"></span>
+				</div>
+
+				<div class="row-fluid item">
+					<strong>Assigned To:</strong>
+					<span ui:field="spnAssigned" class="subject"></span>
+				</div>
+
 				<div class="row-fluid item" ui:field="divValue">
 					<strong>Budget:</strong>
-					<span ui:field="spnValue" class="subject"></span>
+					<span ui:field="spnBudget" class="subject"></span>
 				</div>
 				<div class="row-fluid item" ui:field="divPartner">
 					<strong>Targets and Outcomes:</strong>
-					<span ui:field="spnPartner" class="subject"></span>
-				</div>
-				<div class="row-fluid item" ui:field="divDesc">
-					<strong>Indicators:</strong>
-					<span ui:field="spnDescription"></span>
+					<span ui:field="spnTargets" class="subject"></span>
 				</div>
 			</g:HTMLPanel>
+			
 			<g:HTMLPanel styleName="span6">
 				<div class="row-fluid item" ui:field="divProgress">
 					<strong>Progress:</strong>
