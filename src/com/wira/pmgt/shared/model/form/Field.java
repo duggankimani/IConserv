@@ -194,6 +194,21 @@ public class Field extends FormModel{
 			});
 		}
 	}
+	
+	public String getPropertyValue(String key) {
+
+		Property property = getProperty(key);
+
+		if (property == null)
+			return null;
+
+		Value value = property.getValue();
+		if (value == null)
+			return null;
+
+		return value.getValue() == null ? null : value.getValue().toString();
+	}
+
 
 	public Property getProperty(String propertyName) {
 		

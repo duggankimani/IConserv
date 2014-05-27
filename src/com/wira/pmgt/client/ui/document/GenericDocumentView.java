@@ -166,6 +166,9 @@ public class GenericDocumentView extends ViewImpl implements
 	String url = null;
 
 	List<Actions> validActions = null;
+	boolean isBizProcessDisplayed=true;
+	boolean overrideDefaultComplete=false;
+	boolean overrideDefaultStart=false;
 	private String timeDiff;
 
 	@Inject
@@ -412,45 +415,50 @@ public class GenericDocumentView extends ViewImpl implements
 
 	public void setValidTaskActions(List<Actions> actions) {
 		this.validActions = actions;
-		if (actions != null)
-			for (Actions action : actions) {
-				Anchor target = null;
-				switch (action) {
-				case CLAIM:
-					target = aClaim;
-					break;
-				case COMPLETE:
-					// target=aComplete;
+		if(actions!=null)
+		for(Actions action : actions){		
+			Anchor target=null;
+			switch(action){
+			case CLAIM:
+				target=aClaim;
+				break;
+			case COMPLETE:
+				//target=aComplete;
+				if(!overrideDefaultComplete){
 					show(aApprove);
 					show(aReject);
-					break;
-				case DELEGATE:
-					target = aDelegate;
-					break;
-				case FORWARD:
-					target = aForward;
-					break;
-				case RESUME:
-					target = aResume;
-					break;
-				case REVOKE:
-					target = aRevoke;
-					break;
-				case START:
-					target = aStart;
-					break;
-				case STOP:
-					target = aStop;
-					break;
-				case SUSPEND:
-					target = aSuspend;
-					break;
 				}
-
-				if (target != null) {
-					show(target);
+				break;
+			case DELEGATE:
+				target=aDelegate;
+				break;
+			case FORWARD:
+				if(!overrideDefaultStart){
+					target=aForward;
 				}
+				
+				break;
+			case RESUME:
+				target=aResume;
+				break;
+			case REVOKE:
+				target=aRevoke;
+				break;
+			case START:
+				target=aStart;
+				break;
+			case STOP:
+				target=aStop;
+				break;
+			case SUSPEND:
+				target=aSuspend;
+				break;
 			}
+			
+			if(target!=null){
+				show(target);
+			}
+		}
 
 	}
 
@@ -707,5 +715,19 @@ public class GenericDocumentView extends ViewImpl implements
 				+ user.getUserId();
 		img.setUrl(moduleUrl);
 	}
+	
+	@Override
+	public void overrideDefaultCompleteProcess() {
+		overrideDefaultComplete=true;
+		aApprove.addStyleName("hidden");
+		aReject.addStyleName("hidden");
+	}
+
+	@Override
+	public void overrideDefaultStartProcess() {
+		overrideDefaultStart=true;
+		aForward.addStyleName("hidden");
+	}
+
 
 }

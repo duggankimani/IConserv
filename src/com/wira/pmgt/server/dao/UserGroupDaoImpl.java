@@ -97,5 +97,4 @@ public class UserGroupDaoImpl extends BaseDaoImpl{
 		return group.getMembers();
 	}
 	
-
 }

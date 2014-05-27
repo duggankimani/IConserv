@@ -2,6 +2,7 @@ package com.wira.pmgt.client.ui.assign;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -98,7 +99,8 @@ public class AssignActivityView extends ViewImpl implements
 	}
 
 	protected void addAllocations(List<OrgEntity> entities) {
-		divAllocations.clear();
+		
+		//Nothing previously selected
 		if (selectedSet.isEmpty()) {
 			entities.add(AppContext.getContextUser());
 		}
@@ -106,29 +108,40 @@ public class AssignActivityView extends ViewImpl implements
 		for (OrgEntity entity : entities) {
 			if (!selectedSet.contains(entity)) {
 				selectedSet.add(entity);
+				ParticipantType type = ParticipantType.STAKEHOLDER;
+				if (entity.equals(AppContext.getContextUser())) {
+					type = ParticipantType.INITIATOR;
+				}
+				createTaskAllocation(entity,type);
 			}
 		}
 
 		// loop and create widgets
-		for (OrgEntity entity : selectedSet) {
-			ParticipantType type = ParticipantType.ASSIGNEE;
-			if (entity.equals(AppContext.getContextUser())) {
-				type = ParticipantType.INITIATOR;
+//		for (OrgEntity entity : selectedSet) {
+//			ParticipantType type = ParticipantType.ASSIGNEE;
+//			if (entity.equals(AppContext.getContextUser())) {
+//				type = ParticipantType.INITIATOR;
+//			}
+//			
+//			createTaskAllocation(entity,type);
+//		}
+	}
+
+	private void createTaskAllocation(OrgEntity entity, ParticipantType type) {
+
+		final TaskAllocation allocation = new TaskAllocation(entity, type);
+		divAllocations.add(allocation);
+
+		allocation.getRemoveLink().addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				// event.getSource();
+				OrgEntity entity = allocation.getOrgEntity();
+				selectedSet.remove(entity);
+				divAllocations.remove(allocation);
 			}
-			final TaskAllocation allocation = new TaskAllocation(entity, type);
-			divAllocations.add(allocation);
-
-			allocation.getRemoveLink().addClickHandler(new ClickHandler() {
-
-				@Override
-				public void onClick(ClickEvent event) {
-					// event.getSource();
-					OrgEntity entity = allocation.getOrgEntity();
-					selectedSet.remove(entity);
-					divAllocations.remove(allocation);
-				}
-			});
-		}
+		});
 	}
 
 	/**
@@ -149,6 +162,7 @@ public class AssignActivityView extends ViewImpl implements
 	public void clear() {
 		selectedSet.clear();
 		allocatedToUsers.clearSelection();
+		divAllocations.clear();
 	}
 
 	@Override
@@ -195,6 +209,23 @@ public class AssignActivityView extends ViewImpl implements
 					summary.getId(), i == 0);
 		}
 
+	}
+
+	@Override
+	public void setTaskInfo(TaskInfo taskInfo) {
+		Map<ParticipantType, List<OrgEntity>> participants = taskInfo.getParticipants();
+		if(!participants.isEmpty()){
+			for(ParticipantType type: participants.keySet()){
+				List<OrgEntity> entities = participants.get(type);
+				for(OrgEntity entity: entities){
+					if (!selectedSet.contains(entity)){
+						selectedSet.add(entity);
+						createTaskAllocation(entity, type);
+					}
+					
+				}
+			}
+		}
 	}
 
 }

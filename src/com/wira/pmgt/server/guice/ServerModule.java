@@ -126,6 +126,8 @@ import com.wira.pmgt.shared.requests.AssignTaskRequest;
 import com.wira.pmgt.server.actionhandlers.AssignTaskRequestHandler;
 import com.wira.pmgt.shared.requests.CreateActivityFormRequest;
 import com.wira.pmgt.server.actionhandlers.CreateActivityFormRequestHandler;
+import com.wira.pmgt.shared.requests.GetProcessInfoRequest;
+import com.wira.pmgt.server.actionhandlers.GetProcessInfoRequestHandler;
 import com.wira.pmgt.shared.requests.GetTaskInfoRequest;
 import com.wira.pmgt.server.actionhandlers.GetTaskInfoRequestHandler;
 
@@ -333,6 +335,9 @@ public class ServerModule extends HandlerModule {
 		bindHandler(CreateActivityFormRequest.class,
 				CreateActivityFormRequestHandler.class,
 				SessionValidator.class);
+
+		bindHandler(GetProcessInfoRequest.class,
+				GetProcessInfoRequestHandler.class, SessionValidator.class);
 
 		bindHandler(GetTaskInfoRequest.class,
 				GetTaskInfoRequestHandler.class, SessionValidator.class);

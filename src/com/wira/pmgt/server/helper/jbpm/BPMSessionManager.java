@@ -473,9 +473,7 @@ class BPMSessionManager {
 			logger.debug("## Setting SessionId : " + summary.getSessionId());
 			DocumentDaoHelper.save(summary);
 		}
-
 		
-		System.err.println(instance.getId());
 		assert instance.getId()!=0;
 		session.startProcessInstance(instance.getId());
 		

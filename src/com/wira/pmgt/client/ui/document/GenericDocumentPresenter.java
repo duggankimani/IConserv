@@ -33,6 +33,8 @@ import com.wira.pmgt.client.service.ServiceCallback;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.OnOptionSelected;
+import com.wira.pmgt.client.ui.admin.formbuilder.HasProperties;
+import com.wira.pmgt.client.ui.admin.formbuilder.component.SingleButton;
 import com.wira.pmgt.client.ui.comments.CommentPresenter;
 import com.wira.pmgt.client.ui.delegate.DelegateTaskView;
 import com.wira.pmgt.client.ui.delegate.msg.DelegationMessageView;
@@ -94,6 +96,7 @@ import com.wira.pmgt.shared.model.Value;
 import com.wira.pmgt.shared.model.form.Field;
 import com.wira.pmgt.shared.model.form.Form;
 import com.wira.pmgt.shared.model.form.FormModel;
+import com.wira.pmgt.shared.model.form.Property;
 import com.wira.pmgt.shared.requests.ApprovalRequest;
 import com.wira.pmgt.shared.requests.CreateDocumentRequest;
 import com.wira.pmgt.shared.requests.DeleteDocumentRequest;
@@ -167,6 +170,10 @@ public class GenericDocumentPresenter extends
 		HasClickHandlers getUploadLink2();
 
 		void setDeadline(Date endDateDue);
+		
+		void overrideDefaultCompleteProcess();
+
+		void overrideDefaultStartProcess();
 
 		void displayTopHeader(boolean show);
 
@@ -747,7 +754,7 @@ public class GenericDocumentPresenter extends
 			if(name==null || name.isEmpty()){
 				continue;
 			}
-			
+						
 			if(field.getType()==DataType.GRID){
 				List<DocumentLine> lines=doc.getDetails().get(field.getName());
 				if(lines!=null){
@@ -758,6 +765,27 @@ public class GenericDocumentPresenter extends
 					field.setValue(value);
 				}
 				continue;
+			}else if(field.getType()==DataType.BUTTON){
+				String submitType = field.getPropertyValue(SingleButton.SUBMITTYPE);
+				if(submitType!=null){
+					if(submitType.equals("CompleteProcess")){
+						//Override default complete
+						getView().overrideDefaultCompleteProcess();
+					}else if(submitType.equals("StartProcess")){
+						//Override default start
+						getView().overrideDefaultStartProcess();
+					}
+					
+				}
+				
+				if(doc instanceof Document){
+					DocStatus status = ((Document)doc).getStatus();
+					if(status==DocStatus.DRAFTED){
+						Property prop = new Property(HasProperties.READONLY, "Read only", DataType.BOOLEAN);
+						prop.setValue(new BooleanValue(null, HasProperties.READONLY, false));
+						field.getProperties().add(prop);
+					}
+				}
 			}
 			
 			Value value = values.get(name);
@@ -778,8 +806,7 @@ public class GenericDocumentPresenter extends
 				field.setValue(value);
 			}
 				
-		}
-		getView().setForm(form);
+		}		getView().setForm(form);
 	}
 
 	protected void bindActivities(GetActivitiesResponse response) {

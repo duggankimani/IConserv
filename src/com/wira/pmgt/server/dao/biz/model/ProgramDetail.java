@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -33,11 +34,24 @@ import com.wira.pmgt.shared.model.ProgramDetailType;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name="ProgramDetail.findByType", query="FROM ProgramDetail p where p.isActive=:isActive and p.type=:type and p.period=:period order by name"), 
-	@NamedQuery(name="ProgramDetail.findAll", query="FROM ProgramDetail p where p.isActive=:isActive and p.period=:period order by name"),
-	@NamedQuery(name="ProgramDetail.findById", query="FROM ProgramDetail p where p.id=:id"),
+	@NamedQuery(name="ProgramDetail.findByType", 
+			query="SELECT distinct(p) FROM ProgramDetail p left join p.programAccess access " +
+					"where (true=:isCurrentUserAdmin or (access.userId=:userId or access.groupId in (:groupIds))) " +
+					"and p.isActive=:isActive and p.type=:type and p.period=:period order by p.name"), 
+	
+	@NamedQuery(name="ProgramDetail.findAll", query="SELECT distinct(p) FROM ProgramDetail p left join p.programAccess access " +
+			"where (true=:isCurrentUserAdmin or (access.userId=:userId or access.groupId in (:groupIds))) " +
+			"and p.isActive=:isActive and p.period=:period " +
+			"order by p.name"),
+			
+	@NamedQuery(name="ProgramDetail.findById", query="SELECT p FROM ProgramDetail p where p.id=:id"),
 	@NamedQuery(name="ProgramDetail.findByCodeAndPeriod", query="FROM ProgramDetail p where p.code=:code and p.period=:period")
 })
+/*
+ * select d.id,d.name,a.userid,a.groupid,a.type from programdetail d 
+inner join programaccess a on (a.programdetailid=d.id)
+where (a.userid='calcacuervo' or a.groupid in ('USERS'));
+ */
 public class ProgramDetail 	extends ProgramBasicDetail{
 	
 	/**
@@ -104,6 +118,18 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	private Set<ProgramDetail> outcomes = new HashSet<>();
 	
 	private Long processInstanceId;
+	
+	@OneToMany(mappedBy="programDetail",fetch=FetchType.LAZY)
+	@Cascade(value={org.hibernate.annotations.CascadeType.DELETE_ORPHAN,
+			org.hibernate.annotations.CascadeType.SAVE_UPDATE,
+			org.hibernate.annotations.CascadeType.PERSIST,
+			org.hibernate.annotations.CascadeType.MERGE,
+			org.hibernate.annotations.CascadeType.DELETE,
+			org.hibernate.annotations.CascadeType.EVICT,
+			org.hibernate.annotations.CascadeType.REMOVE,
+			org.hibernate.annotations.CascadeType.REFRESH
+			})
+	private Set<ProgramAccess> programAccess = new HashSet<>();
 	
 	public ProgramDetail() {
 	}
@@ -306,5 +332,20 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public void setAccess(Collection<ProgramAccess> permissions) {
+		this.programAccess.clear();
+		
+		if(permissions!=null)
+		for(ProgramAccess access: permissions){
+			//this has to be done first
+			this.programAccess.add(access);
+			access.setProgramDetail(this);
+		}
+	}
+	
+	public Collection<ProgramAccess> getProgramAccess(){
+		return programAccess;
 	}
 }

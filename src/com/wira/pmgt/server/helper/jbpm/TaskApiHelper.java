@@ -10,6 +10,7 @@ import org.jbpm.task.User;
 
 import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
 import com.wira.pmgt.server.dao.helper.DocumentDaoHelper;
+import com.wira.pmgt.server.dao.helper.ProgramDaoHelper;
 import com.wira.pmgt.server.dao.model.DocumentModel;
 import com.wira.pmgt.server.db.DB;
 import com.wira.pmgt.shared.exceptions.IllegalApprovalRequestException;
@@ -30,7 +31,14 @@ public class TaskApiHelper {
 	 * 
 	 * @param activity
 	 */
-	public static void createTask(TaskInfo info){		
+	public static void createTask(TaskInfo info){	
+
+		//Save permissions
+		ProgramDaoHelper.saveTaskInfo(info);
+		if(!info.contains(ParticipantType.ASSIGNEE)){
+			return;
+		}
+		
 		Document document = createDocument(info);
 		if(document.getId()==null){
 			//new request
@@ -60,14 +68,14 @@ public class TaskApiHelper {
 			assert initiator!=null;
 			
 			try{
+				
 				startWorkflow(document, initiator.getEntityId());
-				
 				Long processInstanceId = DB.getDocumentDao().getById(document.getId()).getProcessInstanceId();
-				
 				//Associate Program Detail with the process 
 				ProgramDetail program = DB.getProgramDaoImpl().getById(ProgramDetail.class, info.getActivityId());
 				program.setProcessInstanceId(processInstanceId);
 				DB.getProgramDaoImpl().save(program);
+			
 			}catch(Exception e){
 				e.printStackTrace();
 				throw new RuntimeException(e.getMessage());

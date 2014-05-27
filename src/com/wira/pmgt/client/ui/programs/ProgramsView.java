@@ -187,8 +187,7 @@ public class ProgramsView extends ViewImpl implements
 
 	public void setBudget(Double number) {
 		if (number != null) {
-			headerContainer.setBudget(NumberFormat.getCurrencyFormat().format(
-					number));
+			headerContainer.setBudget(NumberUtils.CURRENCYFORMAT.format(number));
 		}
 	}
 
@@ -219,6 +218,7 @@ public class ProgramsView extends ViewImpl implements
 	public void createTab(String text, long id, boolean active) {
 		BulletPanel li = new BulletPanel();
 		ActionLink a = new ActionLink(text);
+		
 		a.setHref("#home;page=activities;activity=" + id);
 		li.add(a);
 
