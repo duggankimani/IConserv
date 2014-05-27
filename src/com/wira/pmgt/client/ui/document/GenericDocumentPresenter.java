@@ -416,16 +416,24 @@ public class GenericDocumentPresenter extends
 			
 			@Override
 			public void onClick(ClickEvent event) {
+				final ConfirmAction confirm = new ConfirmAction("Do you want to approve this request?",
+						"Approval comments");
 				
-				if(getView().isValid()){
+				AppManager.showPopUp("Approval Comments", confirm, new OnOptionSelected() {
 					
-					Map<String, Value> values = getView().getValues();
-					if(values==null){
-							values = new HashMap<String, Value>();
+					@Override
+					public void onSelect(String name) {
+						if(name.equals("Reject")){
+							//create comment
+							Map<String, Value> values= new HashMap<String, Value>();
+							values.put("isApproved", new BooleanValue(true));
+							complete(values, true);	
+							if(confirm.getComment()!=null && !confirm.getComment().isEmpty()){
+								save(confirm.getComment());
+							}
+						}						
 					}
-					values.put("isApproved", new BooleanValue(true));
-					fireEvent(new CompleteDocumentEvent(taskId, values));
-				}
+				}, "Reject", "Cancel");		
 				
 			}
 		});
@@ -433,15 +441,30 @@ public class GenericDocumentPresenter extends
 		getView().getRejectLink().addClickHandler(new ClickHandler() {
 			
 			@Override
-			public void onClick(ClickEvent event) {				
-				Map<String, Value> values = getView().getValues();
-				if(values==null){
-						values = new HashMap<String, Value>();
-				}
-				values.put("isApproved", new BooleanValue(false));
-				fireEvent(new CompleteDocumentEvent(taskId, values));
+			public void onClick(ClickEvent event) {							
+				final ConfirmAction confirm = new ConfirmAction("Do you want to reject this request?",
+						"Rejection reason or comments");
+				
+				AppManager.showPopUp("Rejection Comments", confirm, new OnOptionSelected() {
+					
+					@Override
+					public void onSelect(String name) {
+						if(name.equals("Reject")){
+							//create comment
+							Map<String, Value> values = new HashMap<String, Value>();
+							values.put("isApproved", new BooleanValue(false));
+							complete(values, false);		
+							
+							if(confirm.getComment()!=null && !confirm.getComment().isEmpty()){
+								save(confirm.getComment());
+							}
+						}						
+					}
+				}, "Reject", "Cancel");		
+				
 			}
 		});
+		
 		
 	}
 	
