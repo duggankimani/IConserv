@@ -1,10 +1,9 @@
 package com.wira.pmgt.client.ui.comments;
 
-import static com.wira.pmgt.client.ui.util.DateUtils.*;
+import static com.wira.pmgt.client.ui.util.DateUtils.getTimeDifferenceAsString;
 
 import java.util.Date;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style.Unit;

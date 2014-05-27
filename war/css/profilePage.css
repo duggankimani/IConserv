@@ -87,16 +87,22 @@
 	padding-top:0px;
 	padding-left:0px;
 }
+/*--Activities Page	: Detailed Presentation --*/
+.activities-page .activities-content{
+	margin-bottom: 25px;
+	margin-top: 11px;
+}
 
 
-/*--Action Buttons --*/
-.main-container .activities-page{
+
+/*--Activities Page	: Activities Presentation --*/
+.activities-page{
 	padding: 0px 0px;
 	height: 100%;
 	width: 100%;
 	right: 0px;
 }
-.main-container .activities-page .tab-content{
+.activities-page .tab-content{
     padding: 0px 0px 0px 5px;
     height: 73%;
     overflow-x: hidden;
@@ -106,7 +112,7 @@
 	width: 100%;
 	/* position:absolute; */
 	top:0px;
-	height: 108px;
+	/* height: 108px; */
 }
 
 .activities-page .content-top .breadcrumb{
@@ -149,8 +155,8 @@
 }
 .activities-page .content-top .budget{
 	/* position:absolute; */
-	right:2%;
-	top: 4%;
+	/* right:2%; */
+	/* top: 4%; */
 }
 
 .activities-page .content-body{

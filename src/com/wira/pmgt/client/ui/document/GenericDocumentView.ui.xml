@@ -8,7 +8,7 @@
 	ui:generateLocales='default'>
 
 	<g:HTMLPanel styleName="full-page" ui:field="divContainer">
-		<g:HTMLPanel styleName="upper-content">
+		<g:HTMLPanel styleName="upper-content" ui:field="divUpperContent">
 			<div class="action-area row-fluid">
 				<g:HTMLPanel styleName="span1 priority" ui:field="spnPriority"></g:HTMLPanel>
 				<div class="generic-doc-title span7">
@@ -128,11 +128,10 @@
 					</div>
 				</div>
 			</div>
-
 		</g:HTMLPanel>
 
 		<g:HTMLPanel styleName="overflow-y">
-			<div class="personal_info row-fluid span12">
+			<g:HTMLPanel styleName="personal_info row-fluid span12" ui:field="divUserInfo">
 				<div class="span9">
 					<div class="span2 image">
 						<g:Image ui:field="img" width="32px" />
@@ -150,7 +149,7 @@
 						<span ui:field="spnDeadline" class="tasktimelines hidden"></span>
 					</div>
 				</div>
-			</div>
+			</g:HTMLPanel>
 
 
 			<div class="row-fluid content-area span12" ui:field="divContent">

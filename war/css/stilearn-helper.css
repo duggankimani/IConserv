@@ -192,6 +192,10 @@ body .main-body .alert a {
 	overflow-y:hidden;
 }
 
+.no-margin-left{
+	margin-left:0px !important;
+}
+
 /*End of my Utility helpers*/
 
 /** font size helper **/

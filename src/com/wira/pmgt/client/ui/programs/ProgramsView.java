@@ -3,8 +3,6 @@ package com.wira.pmgt.client.ui.programs;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.dom.client.HeadingElement;
-import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -12,6 +10,7 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -19,14 +18,11 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.component.ActionLink;
-import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
 import com.wira.pmgt.client.ui.component.Dropdown;
@@ -35,7 +31,6 @@ import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
-import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class ProgramsView extends ViewImpl implements
 		ProgramsPresenter.IActivitiesView {
@@ -51,14 +46,11 @@ public class ProgramsView extends ViewImpl implements
 	HTMLPanel divNoContent;
 	@UiField
 	ProgramsTable tblView;
-	@UiField
-	SpanElement spnBudget;
-	@UiField
-	InlineLabel spnDates;
+
 	@UiField
 	ActionLink aNewOutcome;
 	@UiField
-	BulletListPanel crumbContainer;
+	HTMLPanel panelCrumbs;
 	@UiField
 	ActionLink aNewActivity;
 	@UiField
@@ -75,26 +67,16 @@ public class ProgramsView extends ViewImpl implements
 	ActionLink aDetail;
 
 	@UiField
-	ActionLink aProgramEdit;
-	@UiField
-	FocusPanel panelTitle;
-
-	@UiField
-	HTMLPanel divPopup;
+	ProgramHeader headerContainer;
 
 	@UiField
 	BulletListPanel listPanel;
 
 	@UiField
-	HeadingElement spnTitle;
-	@UiField
 	ActionLink aLeft;
 	@UiField
 	ActionLink aRight;
 	Long lastUpdatedId;
-
-	@UiField
-	Dropdown<PeriodDTO> periodDropdown;
 
 	List<IsProgramDetail> programs = null;
 
@@ -162,18 +144,9 @@ public class ProgramsView extends ViewImpl implements
 		aRight.addClickHandler(clickHandler);
 		aLeft.addClickHandler(clickHandler);
 
-		createCrumb("Home", "Home", 0L, false);
-
-		periodDropdown
-				.addValueChangeHandler(new ValueChangeHandler<PeriodDTO>() {
-
-					@Override
-					public void onValueChange(ValueChangeEvent<PeriodDTO> event) {
-						setDates(event.getValue().getDescription());
-					}
-				});
-
-		spnDates.getElement().setAttribute("data-toggle", "dropdown");
+		// BreadCrumbItem item = headerContainer.createCrumb("Home", "Home", 0L,
+		// false);
+		// crumbContainer.add(item);
 
 		show(aBack, false);
 		show(aDetail, false);
@@ -192,17 +165,10 @@ public class ProgramsView extends ViewImpl implements
 		return widget;
 	}
 
-	public void setTitle(String text) {
-		if (text != null) {
-			spnTitle.setInnerText(text);
-		} else {
-			spnTitle.setInnerText("Programs & Activities");
-		}
-	}
-
 	public void setBudget(Double number) {
 		if (number != null) {
-			spnBudget.setInnerHTML(NumberUtils.CURRENCYFORMAT.format(number));
+			headerContainer.setBudget(NumberFormat.getCurrencyFormat().format(
+					number));
 		}
 	}
 
@@ -215,11 +181,11 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	private void showContent(boolean status) {
-		
+
 		if (status) {
 			divContent.removeStyleName("hidden");
 			divNoContent.addStyleName("hidden");
-			spnTitle.setInnerText("Programs Management");
+			headerContainer.setTitle("Programs Management");
 		} else {
 			divContent.addStyleName("hidden");
 			divNoContent.removeStyleName("hidden");
@@ -258,7 +224,7 @@ public class ProgramsView extends ViewImpl implements
 	@Override
 	public void createProgramTabs(List<IsProgramDetail> programs) {
 		showContent(!(programs == null || programs.isEmpty()));
-		
+
 		this.programs = programs;
 		listPanel.clear();
 		if (programs == null) {
@@ -277,31 +243,38 @@ public class ProgramsView extends ViewImpl implements
 	 * Sets Parent Activity
 	 */
 	public void setActivity(IsProgramDetail singleResult) {
-		if(singleResult==null){
+		if (singleResult == null) {
 			return;
 		}
 		setSelection(singleResult.getType(), false);
-	
-		assert singleResult.getPeriod()!=null;
-		periodDropdown.setValue(singleResult.getPeriod());
 
-		if (singleResult.getProgramSummary() != null)
-			setBreadCrumbs(singleResult.getProgramSummary());
+		assert singleResult.getPeriod() != null;
+		headerContainer.getPeriodDropdown().setValue(singleResult.getPeriod());
 
+		if (singleResult.getProgramSummary() != null) {
+			BulletListPanel breadCrumbs = headerContainer
+					.setBreadCrumbs(singleResult.getProgramSummary());
+			panelCrumbs.clear();
+			panelCrumbs.add(breadCrumbs);
+			showBackButton(true);
+		}
 		if (singleResult.getType() == ProgramDetailType.PROGRAM) {
-			
-			if(singleResult.getBudgetAmount()==null || singleResult.getBudgetAmount()==0l){
-				spnBudget.setTitle("No budget allocated to '"+singleResult.getName()+"'");
-			}else{
-				spnBudget.setTitle("Total Budget for '"+singleResult.getName()+"'");
+
+			if (singleResult.getBudgetAmount() == null
+					|| singleResult.getBudgetAmount() == 0l) {
+				headerContainer.setTitle("No budget allocated to '"
+						+ singleResult.getName() + "'");
+			} else {
+				headerContainer.setTitle("Total Budget for '"
+						+ singleResult.getName() + "'");
 			}
-			
+
 			setBudget(singleResult.getBudgetAmount());
-			
-			if(!tblView.isSummaryTable){
+
+			if (!tblView.isSummaryTable) {
 				// select tab
 				selectTab(singleResult.getId());
-				setTitle(singleResult.getName());
+				headerContainer.setTitle(singleResult.getName());
 				setData(singleResult.getChildren());
 			}
 		} else {
@@ -346,23 +319,30 @@ public class ProgramsView extends ViewImpl implements
 	public void setSelection(ProgramDetailType type) {
 		setSelection(type, false);
 	}
-	
+
 	/**
-	 * Programs, objectives, activities etc can be selected from the Activities table
-	 * (by ticking the checkbox beside them) or by drilling down on any of them
-	 * 
-	 *<p>
-	 * Some actions are available based on whether the element selected is actually part of 
-	 * the details (rows of the table) or it is the parent element whose details are displayed 
-	 * on the table.
-	 * <p>
-	 * e.g. Creation of Objectives is only provided when a program is selected in the Summary Tab
-	 * since the summary tab shows The program and its objectives, whereas, Creation of outcomes is 
-	 * not permitted; again since outcomes are not included here.
+	 * Programs, objectives, activities etc can be selected from the Activities
+	 * table (by ticking the checkbox beside them) or by drilling down on any of
+	 * them
 	 * 
 	 * <p>
-	 * @param type {@link ProgramDetailType} Type of ProgramDetail (Program/ Activity/ Outcome/Task etc) 
-	 * @param isRowData true if the element was selected from one of the rows in the table or not
+	 * Some actions are available based on whether the element selected is
+	 * actually part of the details (rows of the table) or it is the parent
+	 * element whose details are displayed on the table.
+	 * <p>
+	 * e.g. Creation of Objectives is only provided when a program is selected
+	 * in the Summary Tab since the summary tab shows The program and its
+	 * objectives, whereas, Creation of outcomes is not permitted; again since
+	 * outcomes are not included here.
+	 * 
+	 * <p>
+	 * 
+	 * @param type
+	 *            {@link ProgramDetailType} Type of ProgramDetail (Program/
+	 *            Activity/ Outcome/Task etc)
+	 * @param isRowData
+	 *            true if the element was selected from one of the rows in the
+	 *            table or not
 	 */
 	public void setSelection(ProgramDetailType type, boolean isRowData) {
 		show(aProgram, false);
@@ -407,17 +387,11 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	public void setPeriods(List<PeriodDTO> periods) {
-		periodDropdown.setValues(periods);
-		
-		
-//		if (periods != null && !periods.isEmpty()) {
-//			setDates("(" + periods.get(0).getDescription() + ")");
-//		}
-	}
+		headerContainer.setPeriodDropdown(periods);
 
-	@Override
-	public HasClickHandlers getProgramEdit() {
-		return aProgramEdit;
+		// if (periods != null && !periods.isEmpty()) {
+		// setDates("(" + periods.get(0).getDescription() + ")");
+		// }
 	}
 
 	public HasClickHandlers getDetailButton() {
@@ -447,57 +421,7 @@ public class ProgramsView extends ViewImpl implements
 	public void setProgramId(Long programId) {
 		this.programId = programId;
 		tblView.setProgramId(programId);
-	}
-
-	public void createCrumb(String text, String title, Long id, Boolean isActive) {
-		BreadCrumbItem crumb = new BreadCrumbItem();
-		if (text.equals("Home")) {
-			crumb.setHome(true);
-			crumb.setLinkText("");
-			crumb.setHref(getHref(id));
-		} else {
-			if (text.length() > 25) {
-				text = text.substring(0, 25) + "...";
-			}
-			crumb.setLinkText(text);
-			crumb.setHref(getHref(id));
-		}
-		crumb.setActive(isActive);
-		crumb.setTitle(title);
-
-		crumbContainer.add(crumb);
-	}
-
-	/*
-	 * Get href from Id
-	 */
-	private String getHref(Long id) {
-		String href = "";
-		if (id == null || id == 0) {
-			href = "#home;page=activities;activity=0";
-		} else if (programId == null) {
-			href = "#home;page=activities;activity=0d" + id;
-		} else if (id != programId) {
-			href = "#home;page=activities;activity=" + programId + "d" + id;
-		} else {
-			href = "#home;page=activities;activity=" + id;
-		}
-		return href;
-	}
-
-	public void setBreadCrumbs(List<ProgramSummary> summaries) {
-		crumbContainer.clear();
-		createCrumb("Home", "Home", 0L, false);
-		for (int i = summaries.size() - 1; i > -1; i--) {
-			ProgramSummary summary = summaries.get(i);
-			createCrumb(summary.getName(), summary.getDescription(),
-					summary.getId(), i == 0);
-		}
-		showBackButton(true);
-	}
-
-	public void setDates(String text) {
-		spnDates.getElement().setInnerText(text);
+		headerContainer.setProgramId(programId);
 	}
 
 	public HasClickHandlers getAddButton() {
@@ -514,26 +438,27 @@ public class ProgramsView extends ViewImpl implements
 
 	@Override
 	public Dropdown<PeriodDTO> getPeriodDropDown() {
-
-		return periodDropdown;
+		return headerContainer.getPeriodDropdown();
 	}
-	
+
 	@Override
 	public void setActivePeriod(PeriodDTO activePeriod) {
-		if(activePeriod==null){
-			List<PeriodDTO> periods = periodDropdown.getSelectionValues();
-			
-			if(periods!=null){
-				for(PeriodDTO period:periods){
-					if(period.isCurrentPeriod()){
-						periodDropdown.setValue(period);
-						setDates("(" + periods.get(0).getDescription() + ")");
+		if (activePeriod == null) {
+			List<PeriodDTO> periods = headerContainer.getPeriodDropdown()
+					.getSelectionValues();
+
+			if (periods != null) {
+				for (PeriodDTO period : periods) {
+					if (period.isCurrentPeriod()) {
+						headerContainer.getPeriodDropdown().setValue(period);
+						headerContainer.setDates("("
+								+ periods.get(0).getDescription() + ")");
 						break;
 					}
 				}
 			}
-		}else{
-			periodDropdown.setValue(activePeriod);
+		} else {
+			headerContainer.getPeriodDropdown().setValue(activePeriod);
 		}
 	}
 

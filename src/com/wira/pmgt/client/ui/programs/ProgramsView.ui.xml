@@ -3,7 +3,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui' ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
 	xmlns:d='urn:import:com.wira.pmgt.client.ui.component' xmlns:up='urn:import:com.wira.pmgt.client.ui.upload.custom'
-	xmlns:programs='urn:import:com.wira.pmgt.client.ui.programs'
+	 xmlns:programs='urn:import:com.wira.pmgt.client.ui.programs'
 	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
 	ui:generateLocales='default'>
 
@@ -87,38 +87,13 @@
 					</div>
 
 				</div>
-				<div class="row-fluid header">
-					<div class="span10">
-						<g:FocusPanel ui:field='panelTitle'>
-							<g:HTMLPanel styleName="row-fluid">
-								<g:HTMLPanel styleName="title-container span3">
-									<h4 ui:field="spnTitle" class="title"></h4>
-								</g:HTMLPanel>
-								<g:HTMLPanel styleName="edit span1 btn-group"
-									ui:field="divPopup">
-									<g:InlineLabel ui:field="spnDates"
-										styleName="text-info helper-font-small dropdown-toggle"></g:InlineLabel>
-
-									<d:ActionLink styleName="icon-caret-down dropdown-toggle"
-										title="Select Period" ui:field="aProgramEdit" dataToggle="dropdown"></d:ActionLink>
-
-									<d:Dropdown ui:field="periodDropdown"></d:Dropdown>
-								</g:HTMLPanel>
-
-							</g:HTMLPanel>
-						</g:FocusPanel>
-					</div>
-					<div class="span2">
-						<span class="muted pull-right budget" ui:field="spnBudget"></span>
-					</div>
-				</div>
-
 				<div class="row-fluid">
-					<!-- BreadCrumb -->
-					<d:BulletListPanel styleName="breadcrumb"
-						ui:field="crumbContainer">
-					</d:BulletListPanel>
+					<programs:ProgramHeader ui:field="headerContainer" leftMargin="true"></programs:ProgramHeader>
 				</div>
+				
+				<!-- BreadCrumb Panel -->
+				<g:HTMLPanel styleName="row-fluid" ui:field="panelCrumbs">
+				</g:HTMLPanel>
 			</div>
 
 			<div class="row-fluid full-page content-body">
