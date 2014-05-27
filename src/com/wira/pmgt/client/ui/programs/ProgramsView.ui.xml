@@ -99,6 +99,7 @@
 			
 
 			<div class="row-fluid full-page content-body">
+				
 				<g:HTMLPanel ui:field="divNoContent" styleName="hidden">
 					<i class="icon-warning-sign helper-font-16"></i>
 					<span class="helper-font-16">
