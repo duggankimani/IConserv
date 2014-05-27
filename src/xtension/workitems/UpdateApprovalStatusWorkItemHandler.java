@@ -6,6 +6,7 @@ import org.drools.runtime.process.WorkItemHandler;
 import org.drools.runtime.process.WorkItemManager;
 
 import com.wira.pmgt.server.dao.helper.DocumentDaoHelper;
+import com.wira.pmgt.shared.model.Document;
 
 /**
  * This work item handler updates the approval status
@@ -22,7 +23,22 @@ public class UpdateApprovalStatusWorkItemHandler implements WorkItemHandler{
 
 	@Override
 	public void executeWorkItem(WorkItem workItem, WorkItemManager manager) {
-		Long documentId = new Long(workItem.getParameter("DocumentId").toString());
+		Long documentId = null;
+		
+		if(workItem.getParameter("DocumentId")!=null){
+			documentId = new Long(workItem.getParameter("DocumentId").toString());
+		}else if(workItem.getParameter("document")!=null){
+			Document document = (Document)workItem.getParameter("document");
+			documentId = document.getId();
+			assert document!=null;
+		}else{
+			log.error("UpdateApprovalStatusWorkItemHandler: 'DocumentId' cannot be null;" +
+					" please ensure you've declared a input called DocumentId, or document and " +
+					" that you've mapped it appropriately in your BPMN File");
+			throw new IllegalArgumentException("UpdateApprovalStatusWorkItemHandler: 'documentId' cannot be null;" +
+					" please ensure you've declared a input called documentId, or document and " +
+					" that you've mapped it appropriately in your BPMN File");
+		}
 		
 		Object isApproved = workItem.getParameter("isApproved");
 		

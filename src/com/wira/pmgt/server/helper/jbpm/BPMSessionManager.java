@@ -738,9 +738,7 @@ class BPMSessionManager {
 				assert doc.getId()!=null;
 				newValues.put("DocumentId", doc.getId());
 
-
 				String processId = "aftertask-notification";
-
 				//
 				startProcess(processId, newValues);
 

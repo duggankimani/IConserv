@@ -138,7 +138,13 @@ public class TaskItemView extends ViewImpl implements TaskItemPresenter.ITaskIte
 				spnDocIcon.addStyleName("icon-play");
 			}
 			
-			spnSubject.setInnerText(summ.getName());
+			if(summ.getName()==null){
+				spnSubject.setInnerText(summ.getSubject());
+			}else{
+				spnSubject.setInnerText(summ.getName());
+			}
+			
+			
 			String desc =summ.getSubject()+" - "+ (summ.getDescription()==null? "": summ.getDescription());
 			spnDescription.setText(desc);
 			setTaskAction(summ.getStatus().getValidActions());
@@ -157,12 +163,6 @@ public class TaskItemView extends ViewImpl implements TaskItemPresenter.ITaskIte
 			setDocumentActions(doc.getStatus());
 			spnDocIcon.addStyleName("icon-file-alt color-silver-dark");
 		}
-		
-		
-		
-		aDoc.getId();
-		
-		//System.err.println("Priority :: "+summaryTask.getPriority());
 		
 		Priority priority = Priority.get(aDoc.getPriority());
 		
