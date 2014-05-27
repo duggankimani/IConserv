@@ -167,8 +167,7 @@ public class ProgramsView extends ViewImpl implements
 
 	public void setBudget(Double number) {
 		if (number != null) {
-			headerContainer.setBudget(NumberFormat.getCurrencyFormat().format(
-					number));
+			headerContainer.setBudget(NumberUtils.CURRENCYFORMAT.format(number));
 		}
 	}
 
