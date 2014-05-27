@@ -10,7 +10,6 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.History;
@@ -24,6 +23,7 @@ import com.wira.pmgt.client.ui.component.ActionLink;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
 import com.wira.pmgt.client.ui.component.Dropdown;
+import com.wira.pmgt.client.ui.util.NumberUtils;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
@@ -173,11 +173,14 @@ public class ProgramsView extends ViewImpl implements
 	
 	public void setMiddleHeight(){
 		int totalHeight = divMainContainer.getElement().getOffsetHeight();
-//		int topHeight= divContentTop.getElement().getOffsetHeight();
+		int topHeight= divContentTop.getElement().getOffsetHeight();
 //		int bottomHeight = divContentBottom.getElement().getOffsetHeight();
-		int middleHeight = totalHeight - 43 - 92;
+		int middleHeight = totalHeight - topHeight - 43;
 		
-		divMiddleContent.setHeight(middleHeight+"px");
+		System.err.println("Total Height>>>"+totalHeight);
+		System.err.println("Top Height>>>"+topHeight);
+		
+		divProgramsTable.setHeight(middleHeight+"px");
 	}
 
 	@Override

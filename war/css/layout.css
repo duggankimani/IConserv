@@ -819,10 +819,6 @@ body .dateBoxPopup {
 	text-shadow: none;
 }
 
-
-
-
-
 /*---Detailed-Info - Displays the Document---*/
 #detailed-info {
 	background-color: #ffffff;
@@ -1166,7 +1162,7 @@ body .dateBoxPopup {
 	/* border-left: 2px solid #DDD;*/
 	/* border-bottom: 1px dotted #CCCCCC; */
 	font-family: 'Open Sans', 'trebuchet ms', arial, sans-serif;
-	min-height: 60px;
+	min-height: 40px;
 }
 
 .panel-activity .feed-item .time {
