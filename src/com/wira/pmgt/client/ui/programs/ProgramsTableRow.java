@@ -28,6 +28,7 @@ import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
+import com.wira.pmgt.shared.model.program.ProgramStatus;
 
 public class ProgramsTableRow extends RowWidget {
 
@@ -125,7 +126,7 @@ public class ProgramsTableRow extends RowWidget {
 	
 	public void init(){
 		//Program/Task status - Created, Started, Done, Closed etc
-		setStatus("created", "info");
+		setStatus();
 		
 		//Name - Highlighting provided based on child level
 		setActivityName();
@@ -189,9 +190,34 @@ public class ProgramsTableRow extends RowWidget {
 	/*
 	 * Sets the status var statusType: danger-red, warning-golden, info - bluish
 	 */
-	public void setStatus(String text, String statusType) {
-		spnStatus.setInnerText(text);
-		spnStatus.addClassName("label-" + statusType);
+	public void setStatus() {
+		ProgramStatus status = activity.getStatus();
+		if(status==null){
+			status=ProgramStatus.CREATED;
+		}
+		
+		spnStatus.setInnerText(status.getDisplayName());
+		
+		String type="info";
+		switch (status) {
+		case CREATED:
+			type="default";
+			break;
+		case OPENED:
+			type="warning";
+			break;
+		case COMPLETED:
+			type="info";
+			break;
+		case REOPENED:
+			type="danger";
+			break;
+		case CLOSED:
+			type="success";
+			break;
+
+		}
+		spnStatus.addClassName("label-" + type);
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import com.wira.pmgt.shared.exceptions.IllegalApprovalRequestException;
 import com.wira.pmgt.shared.model.DocStatus;
 import com.wira.pmgt.shared.model.Document;
 import com.wira.pmgt.shared.model.HTUser;
+import com.wira.pmgt.shared.model.LongValue;
 import com.wira.pmgt.shared.model.OrgEntity;
 import com.wira.pmgt.shared.model.ParticipantType;
 import com.wira.pmgt.shared.model.StringValue;
@@ -46,7 +47,7 @@ public class TaskApiHelper {
 			document.setValue("approvalTaskName", new StringValue(info.getApprovalTaskName()));
 			document.setDescription(info.getDescription());
 			document.setValue("description", new StringValue(info.getDescription()));
-			
+			document.setValue("programId",new LongValue(info.getActivityId()));
 		}
 		document = DocumentDaoHelper.save(document);
 				

@@ -34,6 +34,7 @@ import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
+import com.wira.pmgt.shared.model.program.ProgramStatus;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 import com.wira.pmgt.shared.model.program.TargetAndOutcomeDTO;
 
@@ -147,6 +148,7 @@ public class ProgramDaoHelper {
 		dto.setPeriod(get(program.getPeriod()));
 		dto.setStartDate(program.getStartDate());
 		dto.setCode(program.getCode());
+		dto.setStatus(program.getStatus());
 		//dto.setTargetsAndOutcomes(List<TargetAndOutcomeDTO>);
 		dto.setType(program.getType());
 		

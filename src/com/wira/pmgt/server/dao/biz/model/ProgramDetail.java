@@ -24,6 +24,7 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.Cascade;
 
 import com.wira.pmgt.shared.model.ProgramDetailType;
+import com.wira.pmgt.shared.model.program.ProgramStatus;
 
 /**
  * Setup Information
@@ -130,6 +131,10 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 			org.hibernate.annotations.CascadeType.REFRESH
 			})
 	private Set<ProgramAccess> programAccess = new HashSet<>();
+	
+	
+	@Enumerated(EnumType.STRING)
+	private ProgramStatus status = ProgramStatus.CREATED;
 	
 	public ProgramDetail() {
 	}
@@ -347,5 +352,13 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	
 	public Collection<ProgramAccess> getProgramAccess(){
 		return programAccess;
+	}
+
+	public ProgramStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(ProgramStatus status) {
+		this.status = status;
 	}
 }
