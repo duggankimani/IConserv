@@ -17,6 +17,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ErrorEvent;
 import com.google.gwt.event.dom.client.ErrorHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
@@ -136,6 +137,8 @@ public class GenericDocumentView extends ViewImpl implements
 	Anchor aShowProcess;
 	@UiField
 	CommentBox commentPanel;
+	@UiField
+	HTMLPanel commentBox;
 
 	@UiField
 	DivElement btnGroup;
@@ -154,6 +157,9 @@ public class GenericDocumentView extends ViewImpl implements
 	HTMLPanel fldForm;
 	@UiField
 	HTMLPanel divContainer;
+	
+	@UiField
+	HTMLPanel divNocomments;
 
 	@UiField
 	HTMLPanel divBody;
@@ -184,7 +190,6 @@ public class GenericDocumentView extends ViewImpl implements
 		aApprove.getElement().setAttribute("type", "button");
 		aReject.getElement().setAttribute("type", "button");
 		aForward.getElement().setAttribute("type", "button");
-		panelActivity.getElement().setAttribute("id", "panelactivity");
 		aForward.getElement().setAttribute("alt", "Forward for Approval");
 		aShowProcess.setVisible(false);
 
@@ -568,8 +573,8 @@ public class GenericDocumentView extends ViewImpl implements
 		return aReject;
 	}
 
-	public Anchor getSaveCommentButton() {
-		return commentPanel.getaSaveComment();
+	public HasValueChangeHandlers<String> getCommentBox(){
+		return commentPanel;
 	}
 
 	@Override
@@ -598,7 +603,7 @@ public class GenericDocumentView extends ViewImpl implements
 		}
 	}
 
-	public void displayTopHeader(boolean show) {
+	public void hideTopHeader(boolean show) {
 		if (show) {
 			divUpperContent.addStyleName("hide");
 			divUserInfo.addStyleName("hide");
@@ -634,13 +639,8 @@ public class GenericDocumentView extends ViewImpl implements
 	}
 
 	@Override
-	public String getComment() {
-		return commentPanel.getCommentBox().getValue();
-	}
-
-	@Override
-	public void setComment(String string) {
-		commentPanel.getCommentBox().setText("");
+	public void setComment(String value) {
+		commentPanel.setValue(value);
 	}
 
 	public HasClickHandlers getUploadLink2() {
@@ -727,6 +727,17 @@ public class GenericDocumentView extends ViewImpl implements
 	public void overrideDefaultStartProcess() {
 		overrideDefaultStart=true;
 		aForward.addStyleName("hidden");
+	}
+
+	@Override
+	public void showCommentsPanel(boolean show) {
+		if(show){
+			divNocomments.addStyleName("hidden");
+			commentPanel.removeStyleName("hidden"); 
+		}else{
+			divNocomments.removeStyleName("hidden");
+			commentPanel.addStyleName("hidden"); 
+		}
 	}
 
 

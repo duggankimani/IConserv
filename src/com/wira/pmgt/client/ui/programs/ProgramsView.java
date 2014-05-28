@@ -11,7 +11,6 @@ import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 
-
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.History;
@@ -40,24 +39,24 @@ public class ProgramsView extends ViewImpl implements
 	ActionLink aProgram;
 
 	@UiField
-	HTMLPanel  divMainContainer;
-	
+	HTMLPanel divMainContainer;
+
 	@UiField
 	HTMLPanel divMiddleContent;
-	
+
 	@UiField
 	HTMLPanel divContentBottom;
-	
+
 	@UiField
 	HTMLPanel divContentTop;
-	
+
 	@UiField
 	HTMLPanel divNoContent;
 	@UiField
 	ProgramsTable tblView;
-	
-	@UiField com.wira.pmgt.client.ui.component.HTMLPanel
-	divProgramsTable;
+
+	@UiField
+	com.wira.pmgt.client.ui.component.HTMLPanel divProgramsTable;
 
 	@UiField
 	ActionLink aNewOutcome;
@@ -110,7 +109,7 @@ public class ProgramsView extends ViewImpl implements
 	public ProgramsView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
 		listPanel.setId("mytab");
-		
+
 		// registerEditFocus()
 		MouseDownHandler downHandler = new MouseDownHandler() {
 			@Override
@@ -170,19 +169,19 @@ public class ProgramsView extends ViewImpl implements
 				History.back();
 			}
 		});
-		
+
 	}
-	
-	public void setMiddleHeight(){
+
+	public void setMiddleHeight() {
 		int totalHeight = divMainContainer.getElement().getOffsetHeight();
-		int topHeight= divContentTop.getElement().getOffsetHeight();
-//		int bottomHeight = divContentBottom.getElement().getOffsetHeight();
+		int topHeight = divContentTop.getElement().getOffsetHeight();
+		// int bottomHeight = divContentBottom.getElement().getOffsetHeight();
 		int middleHeight = totalHeight - topHeight - 43;
-		
-		System.err.println("Total Height>>>"+totalHeight);
-		System.err.println("Top Height>>>"+topHeight);
-		
-		divProgramsTable.setHeight(middleHeight+"px");
+
+		System.err.println("Total Height>>>" + totalHeight);
+		System.err.println("Top Height>>>" + topHeight);
+
+		divProgramsTable.setHeight(middleHeight + "px");
 	}
 
 	@Override
@@ -192,7 +191,8 @@ public class ProgramsView extends ViewImpl implements
 
 	public void setBudget(Double number) {
 		if (number != null) {
-			headerContainer.setBudget(NumberUtils.CURRENCYFORMAT.format(number));
+			headerContainer
+					.setBudget(NumberUtils.CURRENCYFORMAT.format(number));
 		}
 	}
 
@@ -223,7 +223,7 @@ public class ProgramsView extends ViewImpl implements
 	public void createTab(String text, long id, boolean active) {
 		BulletPanel li = new BulletPanel();
 		ActionLink a = new ActionLink(text);
-		
+
 		a.setHref("#home;page=activities;activity=" + id);
 		li.add(a);
 
@@ -391,9 +391,11 @@ public class ProgramsView extends ViewImpl implements
 		} else if (type == ProgramDetailType.OUTCOME) {
 			show(aProgram, false);
 			show(aNewActivity, true);
+			show(aAssign, false);
 		} else if (type == ProgramDetailType.ACTIVITY) {
 			show(aProgram, false);
 			show(aNewTask, true);
+			show(aAssign, false);
 		} else if (type == ProgramDetailType.TASK) {
 			show(aProgram, false);
 			show(aNewTask, true);
@@ -485,5 +487,5 @@ public class ProgramsView extends ViewImpl implements
 			headerContainer.getPeriodDropdown().setValue(activePeriod);
 		}
 	}
-	
+
 }

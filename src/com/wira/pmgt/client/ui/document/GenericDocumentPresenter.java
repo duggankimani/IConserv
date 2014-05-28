@@ -14,6 +14,9 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.inject.Inject;
@@ -40,28 +43,26 @@ import com.wira.pmgt.client.ui.delegate.DelegateTaskView;
 import com.wira.pmgt.client.ui.delegate.msg.DelegationMessageView;
 import com.wira.pmgt.client.ui.document.activityview.ActivityDetailPresenter;
 import com.wira.pmgt.client.ui.events.ActivitiesLoadEvent;
+import com.wira.pmgt.client.ui.events.ActivitiesLoadEvent.ActivitiesLoadHandler;
 import com.wira.pmgt.client.ui.events.AfterAttachmentReloadedEvent;
 import com.wira.pmgt.client.ui.events.AfterDocumentLoadEvent;
 import com.wira.pmgt.client.ui.events.AfterSaveEvent;
 import com.wira.pmgt.client.ui.events.ButtonClickEvent;
-import com.wira.pmgt.client.ui.events.CommentSaveEvent;
+import com.wira.pmgt.client.ui.events.ButtonClickEvent.ButtonClickHandler;
 import com.wira.pmgt.client.ui.events.CompleteDocumentEvent;
 import com.wira.pmgt.client.ui.events.DeleteLineEvent;
+import com.wira.pmgt.client.ui.events.DeleteLineEvent.DeleteLineHandler;
 import com.wira.pmgt.client.ui.events.ExecTaskEvent;
 import com.wira.pmgt.client.ui.events.LoadActivitiesEvent;
 import com.wira.pmgt.client.ui.events.LoadActivitiesEvent.LoadActivitiesHandler;
 import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent;
 import com.wira.pmgt.client.ui.events.ProcessingEvent;
 import com.wira.pmgt.client.ui.events.ReloadAttachmentsEvent;
+import com.wira.pmgt.client.ui.events.ReloadAttachmentsEvent.ReloadAttachmentsHandler;
 import com.wira.pmgt.client.ui.events.ReloadDocumentEvent;
+import com.wira.pmgt.client.ui.events.ReloadDocumentEvent.ReloadDocumentHandler;
 import com.wira.pmgt.client.ui.events.ReloadEvent;
 import com.wira.pmgt.client.ui.events.WorkflowProcessEvent;
-import com.wira.pmgt.client.ui.events.ActivitiesLoadEvent.ActivitiesLoadHandler;
-import com.wira.pmgt.client.ui.events.ButtonClickEvent.ButtonClickHandler;
-import com.wira.pmgt.client.ui.events.CommentSaveEvent.CommentSaveHandler;
-import com.wira.pmgt.client.ui.events.DeleteLineEvent.DeleteLineHandler;
-import com.wira.pmgt.client.ui.events.ReloadAttachmentsEvent.ReloadAttachmentsHandler;
-import com.wira.pmgt.client.ui.events.ReloadDocumentEvent.ReloadDocumentHandler;
 import com.wira.pmgt.client.ui.notifications.note.NotePresenter;
 import com.wira.pmgt.client.ui.popup.GenericPopupPresenter;
 import com.wira.pmgt.client.ui.program.save.CreateProgramPresenter;
@@ -126,7 +127,7 @@ import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 public class GenericDocumentPresenter extends
 		PresenterWidget<GenericDocumentPresenter.MyView> 
 		implements ReloadDocumentHandler, ActivitiesLoadHandler,
-		ReloadAttachmentsHandler,DeleteLineHandler,ButtonClickHandler,LoadActivitiesHandler,CommentSaveHandler{
+		ReloadAttachmentsHandler,DeleteLineHandler,ButtonClickHandler,LoadActivitiesHandler{
 
 	public interface MyView extends View {
 		void setValues(HTUser createdBy, Date created, String type, String subject,
@@ -152,8 +153,7 @@ public class GenericDocumentPresenter extends
 		HasClickHandlers getStopLink();
 		HasClickHandlers getApproveLink();
 		HasClickHandlers getRejectLink();
-		HasClickHandlers getSaveCommentButton();
-		String getComment();
+		HasValueChangeHandlers<String> getCommentBox();
 		Uploader getUploader();
 		void setComment(String string);
 		SpanElement getSpnAttachmentNo();
@@ -175,8 +175,9 @@ public class GenericDocumentPresenter extends
 
 		void overrideDefaultStartProcess();
 
-		void displayTopHeader(boolean show);
+		void hideTopHeader(boolean show);
 
+		void showCommentsPanel(boolean b);
 	}
 	
 	Long taskId;
@@ -229,7 +230,7 @@ public class GenericDocumentPresenter extends
 
 	@Override
 	protected void onBind() {
-		super.onBind();		
+		super.onBind();
 		
 		addRegisteredHandler(ReloadDocumentEvent.TYPE, this);
 		addRegisteredHandler(ActivitiesLoadEvent.TYPE, this);
@@ -237,7 +238,6 @@ public class GenericDocumentPresenter extends
 		addRegisteredHandler(DeleteLineEvent.TYPE, this);
 		addRegisteredHandler(LoadActivitiesEvent.TYPE, this);
 		addRegisteredHandler(ButtonClickEvent.TYPE, this);
-		addRegisteredHandler(CommentSaveEvent.TYPE, this);
 		
 		getView().getUploadLink2().addClickHandler(new ClickHandler() {
 			@Override
@@ -289,11 +289,11 @@ public class GenericDocumentPresenter extends
 			}
 		});
 		
-		getView().getSaveCommentButton().addClickHandler(new ClickHandler() {
+		getView().getCommentBox().addValueChangeHandler(new ValueChangeHandler<String>() {
+			
 			@Override
-			public void onClick(ClickEvent event) {
-				String comment = getView().getComment();
-				save(comment);
+			public void onValueChange(ValueChangeEvent<String> event) {
+				save(event.getValue());
 			}
 		});
 		
@@ -690,7 +690,7 @@ public class GenericDocumentPresenter extends
 		if(isDetailedView){
 			return;
 		}
-		getView().displayTopHeader(false);
+		getView().hideTopHeader(false);
 		MultiRequestAction requests = new MultiRequestAction();
 		System.err.println("docID= "+documentId+"; taskId="+taskId);
 		requests.addRequest(new GetDocumentRequest(documentId, taskId));
@@ -741,12 +741,13 @@ public class GenericDocumentPresenter extends
 		requests.addRequest(new GetActivitiesRequest(documentId));
 		
 		fireEvent(new ProcessingEvent());
+		
+		System.err.println("Doc Id >>"+documentId);
 		if(documentId != null){
 			requestHelper.execute(requests, 
 					new TaskServiceCallback<MultiRequestActionResult>() {
 				
 				public void processResult(MultiRequestActionResult results) {					
-					
 					GetCommentsResponse commentsResult = (GetCommentsResponse)results.get(0);
 					bindCommentsResult(commentsResult);
 					
@@ -1140,23 +1141,24 @@ public class GenericDocumentPresenter extends
 		activityDetailFactory.get(new ServiceCallback<ActivityDetailPresenter>() {
 			@Override
 			public void processResult(ActivityDetailPresenter dResponse) {
-				getView().displayTopHeader(true);
+				getView().hideTopHeader(true);
 				dResponse.loadData(activityId);
 				setInSlot(BODY_SLOT, dResponse);
-				getView().displayTopHeader(true);
 			}
 		});
 	}
 
 	@Override
 	public void onLoadActivities(LoadActivitiesEvent event) {
-		setDocId(event.getDocumentId(), null);
-		loadProgramData();
+		if (event.getDocumentId() != null) {
+			setDocId(event.getDocumentId(), null);
+			loadProgramData();
+			getView().showCommentsPanel(true);
+		}else{
+			//hide comments
+			getView().showCommentsPanel(false);
+		}
+		
 	}
 	
-	@Override
-	public void onCommentSave(CommentSaveEvent event) {
-		String comment = getView().getComment();
-		save(comment);
-	}
 }

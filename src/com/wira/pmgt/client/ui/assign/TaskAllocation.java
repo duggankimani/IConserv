@@ -1,7 +1,5 @@
 package com.wira.pmgt.client.ui.assign;
 
-import java.util.Arrays;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ErrorEvent;
@@ -20,6 +18,7 @@ import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.OrgEntity;
 import com.wira.pmgt.shared.model.ParticipantType;
+import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
 
 public class TaskAllocation extends Composite {
@@ -41,9 +40,8 @@ public class TaskAllocation extends Composite {
 	@UiField Anchor aRemove;
 	ParticipantType type;
 	
-	public TaskAllocation(){
+	private TaskAllocation(){
 		initWidget(uiBinder.createAndBindUi(this));
-		participantDropdown.setValues(Arrays.asList(ParticipantType.values()));
 		participantDropdown.addValueChangeHandler(new ValueChangeHandler<ParticipantType>() {
 			
 			@Override
@@ -61,8 +59,9 @@ public class TaskAllocation extends Composite {
 		});
 	}
 	
-	public TaskAllocation(OrgEntity entity, ParticipantType type) {
+	public TaskAllocation(ProgramDetailType detailType,OrgEntity entity, ParticipantType type) {
 		this();
+		participantDropdown.setValues(ParticipantType.getTypes(detailType));
 		setEntity(entity);
 		setParticipantType(type);
 	}

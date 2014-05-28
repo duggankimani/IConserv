@@ -11,13 +11,11 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ErrorEvent;
 import com.google.gwt.event.dom.client.ErrorHandler;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -154,15 +152,12 @@ public class CommentView extends ViewImpl implements CommentPresenter.ICommentVi
 		}
 	}
 	
-	public TextArea getCommentBox(){
-		return txtCommentBox.getCommentBox();
+	public CommentBox getCommentBox(){
+		return txtCommentBox;
 	}
 	
-	public HasClickHandlers getSaveCommentsLink(){
-		return txtCommentBox.getaSaveComment();
-	}
-
 	private void setImage(HTUser user) {
 		img.setUrl(AppContext.getUserImageUrl(user));
 	}
+	
 }

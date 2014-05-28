@@ -101,7 +101,7 @@ input:focus {
 	width: 100px;
 	margin: 0px;
 	position: absolute;
-	right: 648px;
+	right: 50%;
 	top: 0px;
 	height: 20px;
 	z-index: 10;
@@ -120,7 +120,7 @@ input:focus {
 
 .main-body .alert {
 	position: absolute;
-	right: 38%;
+	right: 50%;
 	top: 1%;
 	padding-right: 18px;
 	z-index: 10;
@@ -176,7 +176,7 @@ body .main-body .alert a {
 .overflow-y{
 	overflow-y:auto;
 	overflow-x:hidden;
-	max-height: 91%;
+	/* max-height: 91%; */
 }
 
 .overflow-x{

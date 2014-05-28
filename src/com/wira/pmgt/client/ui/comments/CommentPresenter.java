@@ -2,17 +2,16 @@ package com.wira.pmgt.client.ui.comments;
 
 import java.util.Date;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.wira.pmgt.client.model.MODE;
 import com.wira.pmgt.client.service.TaskServiceCallback;
+import com.wira.pmgt.client.ui.component.CommentBox;
 import com.wira.pmgt.client.ui.events.ActivitiesLoadEvent;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.Comment;
@@ -23,15 +22,13 @@ import com.wira.pmgt.shared.requests.SaveCommentRequest;
 import com.wira.pmgt.shared.responses.GetActivitiesResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
-public class CommentPresenter extends PresenterWidget<CommentPresenter.ICommentView> {
+public class CommentPresenter extends PresenterWidget<CommentPresenter.ICommentView>{
 
 	public interface ICommentView extends View {
-		TextArea getCommentBox();
+		CommentBox getCommentBox();
 
 		void setComment(Long commentId, String comment, HTUser createdBy,
 				Date created, String updatedby, Date updated, long documentId, boolean isChild);
-
-		HasClickHandlers getSaveCommentsLink();
 
 		void setMode(MODE mode);
 
@@ -50,11 +47,12 @@ public class CommentPresenter extends PresenterWidget<CommentPresenter.ICommentV
 	@Override
 	protected void onBind() {
 		super.onBind();
-
-		getView().getSaveCommentsLink().addClickHandler(new ClickHandler() {
+		
+		getView().getCommentBox().addValueChangeHandler(new ValueChangeHandler<String>() {
+			
 			@Override
-			public void onClick(ClickEvent event) {
-				String commentText = getView().getCommentBox().getText();
+			public void onValueChange(ValueChangeEvent<String> event) {
+				String commentText = event.getValue();
 
 				if (commentText == null || commentText.trim().isEmpty()) {
 					if (comment.getId() == null) {
@@ -74,6 +72,7 @@ public class CommentPresenter extends PresenterWidget<CommentPresenter.ICommentV
 				}
 			}
 		});
+
 	}
 
 	private void bind(Comment comment) {
@@ -124,4 +123,5 @@ public class CommentPresenter extends PresenterWidget<CommentPresenter.ICommentV
 		this.comment = comment;
 		bind(comment);
 	}
+
 }

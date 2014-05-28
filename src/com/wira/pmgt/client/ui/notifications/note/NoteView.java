@@ -136,7 +136,7 @@ public class NoteView extends ViewImpl implements NotePresenter.MyView {
 				safeHtml = taskAssignmentAssignorTemplate.render(owner,
 						subject, time);
 			} else {
-				safeHtml2 = taskAssignedAssignorNote.render(owner, subject+" "+target, time);
+				safeHtml2 = taskAssignedAssignorNote.render(owner,target, subject, time);
 				//safeHtml2 = Template6.render(owner, subject, time);
 			}
 			break;
@@ -270,12 +270,12 @@ public class NoteView extends ViewImpl implements NotePresenter.MyView {
 	interface TASKASSIGNED_OWNERNOTE_ACTIVITY_TEMPATE extends SafeHtmlTemplates {
 	@Template("<div class=\"feed-icon\"><i class=\"icon-signin\"></i></div>"
 			+ "<div class=\"feed-subject\"><a><span>{0}</span></a>"
-			+ " assigned <a><span>{1}</span></a>"
+			+ " assigned <a><span>{1}</span></a> <a><span>{2}</span></a>"
 			+ " </div>"
 			+ "<div class=\"feed-actions\">"
-			+ "<span class=\"time\"><i class=\"icon-time\">{2}</span>"
+			+ "<span class=\"time\"><i class=\"icon-time\">{3}</span>"
 			+ "</div>")
-	public SafeHtml render(String owner, String subject, String time);
+	public SafeHtml render(String owner,String target, String subject, String time);
 	
 	// e.g You have successfuly submitted Invoice INV/001/2013 for approval
 	// (10 seconds ago)

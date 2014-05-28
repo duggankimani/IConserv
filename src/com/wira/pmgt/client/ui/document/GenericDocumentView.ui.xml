@@ -159,11 +159,11 @@
 						<strong>Document Date:</strong>
 						<span ui:field="spnDate" class="subject"></span>
 					</div>
-					<div class="row-fluid item" ui:field="divValue">
+					<div class="row-fluid item hidden" ui:field="divValue">
 						<strong>Value:</strong>
 						<span ui:field="spnValue" class="subject"></span>
 					</div>
-					<div class="row-fluid item" ui:field="divPartner">
+					<div class="row-fluid item hidden" ui:field="divPartner">
 						<strong>Business Partner:</strong>
 						<span ui:field="spnPartner" class="subject"></span>
 					</div>
@@ -198,9 +198,12 @@
 							<span ui:field="spnActivityNo"></span>
 						</h4>
 					</div>
-					<div class="row-fluid comment-box">
-						<d:CommentBox ui:field="commentPanel"></d:CommentBox>
-					</div>
+					<g:HTMLPanel styleName="row-fluid comment-box" ui:field="commentBox">
+						<d:CommentBox ui:field="commentPanel" styleName="hidden"></d:CommentBox>
+						<g:HTMLPanel styleName="alert alert-info hidden" ui:field="divNocomments">
+							<strong>Heads Up!</strong>There no comments/Activity since this has not been assigned yet
+						</g:HTMLPanel>
+					</g:HTMLPanel>
 					<g:HTMLPanel ui:field="panelActivity" styleName="panel-activity">
 					</g:HTMLPanel>
 				</g:HTMLPanel>

@@ -14,20 +14,23 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
-import com.wira.pmgt.client.ui.events.CommentSaveEvent;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.HTUser;
 
-public class CommentBox extends Composite {
+public class CommentBox extends Composite implements HasValue<String>{
 	
 	@UiField Image img;
 	@UiField Anchor aSaveComment;
@@ -36,6 +39,8 @@ public class CommentBox extends Composite {
 	@UiField TextArea commentBox;
 	@UiField SpanElement spnArrow;
 	@UiField FocusPanel commentPanel;
+	
+	private String initialValue = "";
 	
 	private static CommentBoxUiBinder uiBinder = GWT
 			.create(CommentBoxUiBinder.class);
@@ -88,8 +93,7 @@ public class CommentBox extends Composite {
 			public void onKeyDown(KeyDownEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 					event.preventDefault();
-					AppContext.fireEvent(new CommentSaveEvent());
-					collapseComment();
+					valueChanged();
 				}
 			}
 		};
@@ -100,7 +104,7 @@ public class CommentBox extends Composite {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				collapseComment();
+				valueChanged();
 			}
 		});
 		commentBox.addFocusHandler(handler);
@@ -109,14 +113,13 @@ public class CommentBox extends Composite {
 		setImage(AppContext.getContextUser());
 	}
 	
-	public TextArea getCommentBox() {
-		return commentBox;
+
+	protected void valueChanged() {
+		collapseComment();
+		setValue(commentBox.getValue(), !commentBox.getValue().equals(initialValue));
+		commentBox.setValue("");
 	}
-	
-	public Anchor getaSaveComment() {
-		return aSaveComment;
-	}
-	
+
 	public SpanElement getSpnArrow() {
 		return spnArrow;
 	}
@@ -139,4 +142,33 @@ public class CommentBox extends Composite {
 		aSaveComment.addStyleName("hidden");
 
 	}
+
+
+	@Override
+	public HandlerRegistration addValueChangeHandler(
+			ValueChangeHandler<String> handler) {
+		
+		return this.addHandler(handler, ValueChangeEvent.getType());
+	}
+
+	@Override
+	public String getValue() {
+		return commentBox.getValue();
+	}
+
+	@Override
+	public void setValue(String value) {
+		initialValue = value;
+		setValue(value, false);
+	}
+
+	@Override
+	public void setValue(String value, boolean fireEvents) {
+		if(fireEvents){
+			ValueChangeEvent.fire(CommentBox.this, value);
+		}
+		
+		commentBox.setValue(value);
+	}
+
 }

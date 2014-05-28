@@ -11,6 +11,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.OrgEntity;
+import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.requests.GetGroupsRequest;
@@ -32,7 +33,7 @@ public class AssignActivityPresenter extends
 
 		TaskInfo getTaskInfo();
 		
-		void setActivityId(Long activityId);
+		void setActivityId(Long activityId, ProgramDetailType type);
 
 		void addAllItems();
 
@@ -59,8 +60,8 @@ public class AssignActivityPresenter extends
 		getView().addAllItems();
 	}
 	
-	public void load(Long activityId){
-		getView().setActivityId(activityId);
+	public void load(Long activityId, ProgramDetailType type){
+		getView().setActivityId(activityId,type);
 		getView().clear();
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetUsersRequest());

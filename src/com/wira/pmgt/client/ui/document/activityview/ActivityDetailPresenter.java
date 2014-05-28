@@ -55,10 +55,9 @@ public class ActivityDetailPresenter extends
 
 						fireEvent(new ProcessingCompletedEvent());
 						
-						if (taskResponse.getDocumentId() != null) {
+						
 							fireEvent(new LoadActivitiesEvent(taskResponse
 									.getDocumentId()));
-						}
 					}
 				});
 	}

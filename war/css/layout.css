@@ -1148,21 +1148,21 @@ body .dateBoxPopup {
 }
 
 .panel-activity .feed-item.activity {
-	padding-top: 11px;
+	padding-top: 7px;
 }
 
 .panel-activity .feed-item {
 	position: relative;
 	padding: 0;
 	margin: 0;
-	padding-top: 15px;
+	padding-top: 5px;
 	font-size: 13px;
 	padding-bottom: 0px;
-	padding-left: 53px;
+	padding-left: 54px;
 	/* border-left: 2px solid #DDD;*/
 	/* border-bottom: 1px dotted #CCCCCC; */
 	font-family: 'Open Sans', 'trebuchet ms', arial, sans-serif;
-	min-height: 40px;
+	min-height: 42px;
 }
 
 .panel-activity .feed-item .time {
@@ -1268,7 +1268,7 @@ body .dateBoxPopup {
 
 .panel-activity .feed-item .feed-image {
 	position: absolute;
-	top: 18px;
+	top: 6px;
 	left: 0px;
 }
 

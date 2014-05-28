@@ -184,7 +184,7 @@ public class ProgramsPresenter extends
 			@Override
 			public void onClick(ClickEvent event) {
 				if(selected!=null){
-					assignActivity.load(selected.getId());
+					assignActivity.load(selected.getId(),selected.getType());
 				}
 				AppManager.showPopUp("Assign Activity",
 						assignActivity.getWidget(), new OptionControl() {
@@ -648,7 +648,7 @@ public class ProgramsPresenter extends
 						}
 
 						fireEvent(new ActivitySavedEvent(
-								"You successfully assigned "+taskInfo.getDescription()+" "+ allocatedPeople));
+								"You successfully assigned '"+taskInfo.getDescription()+"' "+ allocatedPeople));
 					}
 				});
 	}

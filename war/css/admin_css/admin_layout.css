@@ -8,25 +8,6 @@
 	width: 94%;
 }
 
-.overflow-y{
-	overflow-y:auto;
-	overflow-x:hidden;
-	max-height: 91%;
-}
-
-.overflow-x{
-	overflow-x:auto;
-	overflow-y:hidden;
-}
-
-.no-overflow-x{
-	overflow-x:hidden;
-}
-
-.no-overflow-y{
-	overflow-y:hidden;
-}
-
 #side-left {
 	position: absolute;
 	display: block;

@@ -20,6 +20,7 @@ import com.wira.pmgt.client.ui.component.autocomplete.AutoCompleteField;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.OrgEntity;
 import com.wira.pmgt.shared.model.ParticipantType;
+import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 
@@ -55,6 +56,8 @@ public class AssignActivityView extends ViewImpl implements
 	}
 
 	List<OrgEntity> selectedSet = new ArrayList<OrgEntity>();
+
+	private ProgramDetailType detailType;
 
 	@Inject
 	public AssignActivityView(final Binder binder) {
@@ -108,7 +111,9 @@ public class AssignActivityView extends ViewImpl implements
 		for (OrgEntity entity : entities) {
 			if (!selectedSet.contains(entity)) {
 				selectedSet.add(entity);
-				ParticipantType type = ParticipantType.STAKEHOLDER;
+				ParticipantType type = detailType==ProgramDetailType.PROGRAM?
+					ParticipantType.STAKEHOLDER : ParticipantType.ASSIGNEE;
+				
 				if (entity.equals(AppContext.getContextUser())) {
 					type = ParticipantType.INITIATOR;
 				}
@@ -129,7 +134,7 @@ public class AssignActivityView extends ViewImpl implements
 
 	private void createTaskAllocation(OrgEntity entity, ParticipantType type) {
 
-		final TaskAllocation allocation = new TaskAllocation(entity, type);
+		final TaskAllocation allocation = new TaskAllocation(detailType,entity, type);
 		divAllocations.add(allocation);
 
 		allocation.getRemoveLink().addClickHandler(new ClickHandler() {
@@ -185,7 +190,8 @@ public class AssignActivityView extends ViewImpl implements
 	}
 
 	@Override
-	public void setActivityId(Long activityId) {
+	public void setActivityId(Long activityId, ProgramDetailType type) {
+		this.detailType = type;
 		aCreateForm.setHref("#adminhome;page=formbuilder;create=" + activityId);
 	}
 
