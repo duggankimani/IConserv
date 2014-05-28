@@ -70,4 +70,8 @@ public class BooleanValue implements Value, Serializable{
 		return bvalue;
 	}
 
+	@Override
+	public String toString() {
+		return value==null? "NULL": value.toString();
+	}
 }

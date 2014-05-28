@@ -370,8 +370,22 @@ public class DocumentDaoHelper {
 		Document doc = new Document();
 
 		if(content.get("documentOut") != null){
-			
 			doc = (Document) content.get("documentOut");
+			Document inputDoc = null;
+			if(content.get("document")!=null){
+				inputDoc=(Document) content.get("document");
+			}
+			
+			if(inputDoc!=null){
+				doc.getValues().putAll(inputDoc.getValues());
+//				//Issues with readonly mode returning null
+//				for(String key: inputDoc.getValues().keySet()){
+//					if(inputDoc.getValues().get(key)!=null && doc.getValues().get(key)==null){
+//						doc.getValues().put(key, inputDoc.getValues().get(key));
+//					}
+//				}
+			}
+			
 			
 		}else if (content.get("document") != null) {
 			

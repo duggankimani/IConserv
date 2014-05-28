@@ -35,7 +35,7 @@ public class TestGetProcessData {
 //		ProcessMigrationHelper.start(4L);
 	}
 	
-	@Test
+	@Ignore
 	public void load(){
 		EmailServiceHelper.getProperties();
 	}
@@ -107,15 +107,21 @@ public class TestGetProcessData {
 		//Assert.assertTrue(summary.getDetails().size()>0);
 	}
 	
-	@Ignore
+	@Test
 	public void getParameters(){
-		Long taskId = 1518L;
-		HTask summary = JBPMHelper.get().getTask(taskId);
-		Map<String,Value> vls = summary.getValues();
+		Long taskId = 290L;
+		
+		Map<String,Object> vls = JBPMHelper.getMappedData(JBPMHelper.get().getSysTask(taskId));//summary.getValues();
 		for(String key: vls.keySet()){
-			Value v = vls.get(key);
-			System.err.println(key+" - "+v.getValue());
+			Object v = vls.get(key);
+			System.err.println(key+" - "+v);
+			if(key.equals("documentOut")){
+				Document doc = (Document)v;
+				System.err.println(doc.getValues());
+			}
 		}
+		
+		HTask summary = JBPMHelper.get().getTask(taskId);
 		Map<String, Value> values = summary.getValues();
 		Assert.assertNotNull(values);
 		Assert.assertNotSame(values.size(), 0);

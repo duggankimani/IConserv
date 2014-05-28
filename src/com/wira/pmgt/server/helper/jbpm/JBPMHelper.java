@@ -631,18 +631,21 @@ public class JBPMHelper implements Closeable {
 		Map<String, Object> map = new HashMap<>();
 		
 		if(task.getTaskData() != null){
-			if(task.getTaskData().getStatus()==Status.Completed){
-				outputId=task.getTaskData().getOutputContentId();
-				if(outputId!=null){
-					map = getMappedDataByContentId(outputId);
-				}
-			}
-		
 			Long contentId=null;
-			if(contentId==null && !map.containsKey("documentOut")){
+			if(contentId==null){				
 				contentId = task.getTaskData().getDocumentContentId();
 				map.putAll(getMappedDataByContentId(contentId));
 			}
+			System.err.println("ContentId = "+contentId);
+			
+			//Merge input & output Maps for a clear picture
+			if(task.getTaskData().getStatus()==Status.Completed){
+				outputId=task.getTaskData().getOutputContentId();
+				if(outputId!=null){
+					map.putAll(getMappedDataByContentId(outputId));
+				}
+			}
+			System.err.println("OutputContentId = "+outputId);
 			
 		}
 		
