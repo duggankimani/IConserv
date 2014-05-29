@@ -64,4 +64,9 @@ public class IntValue implements Value{
 		IntValue ivalue = new IntValue(identify, key, value);
 		return ivalue;
 	}
+	
+	@Override
+	public String toString() {
+		return value==null? "NULL": value.toString();
+	}
 }

@@ -9,9 +9,7 @@ import com.google.inject.Inject;
 import com.gwtplatform.dispatch.server.ExecutionContext;
 import com.gwtplatform.dispatch.shared.ActionException;
 import com.wira.pmgt.server.dao.helper.DocumentDaoHelper;
-import com.wira.pmgt.server.db.DB;
 import com.wira.pmgt.server.helper.jbpm.JBPMHelper;
-import com.wira.pmgt.shared.model.BooleanValue;
 import com.wira.pmgt.shared.model.Document;
 import com.wira.pmgt.shared.model.Value;
 import com.wira.pmgt.shared.model.form.ProcessMappings;
@@ -52,6 +50,7 @@ public class ExecuteWorkflowActionHandler extends
 					document.setValue(key,value);
 				}
 			}
+			
 			vals.put("documentOut", document);
 		}
 		
