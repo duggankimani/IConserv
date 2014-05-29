@@ -298,7 +298,7 @@ public class ProgramsView extends ViewImpl implements
 			if (!tblView.isSummaryTable) {
 				// select tab
 				selectTab(singleResult.getId());
-				headerContainer.setTitle(singleResult.getName());
+				headerContainer.setText(singleResult.getName());
 				setData(singleResult.getChildren());
 			}
 		} else {

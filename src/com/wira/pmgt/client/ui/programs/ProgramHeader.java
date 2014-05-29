@@ -68,13 +68,23 @@ public class ProgramHeader extends Composite {
 		spnDates.getElement().setInnerText(text);
 	}
 	
-	public void setTitle(String text) {
+	public void setTitle(String title) {
+		if (title != null) {
+			spnTitle.setTitle(title);
+		} else {
+			spnTitle.setTitle("Programs & Activities");
+		}
+	}
+	
+	public void setText(String text) {
 		if (text != null) {
 			spnTitle.setInnerText(text);
 		} else {
 			spnTitle.setInnerText("Programs & Activities");
 		}
 	}
+	
+	
 	
 	public void setBudget(String text){
 		spnBudget.setInnerHTML(text);

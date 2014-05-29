@@ -60,9 +60,14 @@ public class ActivityDetailView extends ViewImpl implements
 
 	@Override
 	public void bind(IsProgramDetail singleActivity) {
-		headerContainer.setTitle(singleActivity.getDisplayName());
+		headerContainer.setText(singleActivity.getDisplayName());
+		if(singleActivity.getStartDate()!=null){
 		headerContainer.setDates("(" + DateUtils.MONTHDAYFORMAT.format(singleActivity.getStartDate()) + " to "
 				+ DateUtils.MONTHDAYFORMAT.format(singleActivity.getEndDate()) + ")");
+		}else if(singleActivity.getPeriod()!=null){
+			headerContainer.setDates("(" + DateUtils.MONTHDAYFORMAT.format(singleActivity.getPeriod().getStartDate()) + " to "
+					+ DateUtils.MONTHDAYFORMAT.format(singleActivity.getPeriod().getEndDate()) + ")");
+		}
 		//headerContainer.setBudget(Double.toString(singleActivity.getBudgetAmount()));
 		
 		BulletListPanel breadCrumbs = headerContainer.setBreadCrumbs(singleActivity.getProgramSummary());
