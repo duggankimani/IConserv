@@ -25,6 +25,7 @@ import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
 import com.wira.pmgt.client.ui.component.Dropdown;
 import com.wira.pmgt.client.ui.util.NumberUtils;
+import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
@@ -300,7 +301,11 @@ public class ProgramsView extends ViewImpl implements
 				selectTab(singleResult.getId());
 				headerContainer.setTitle(singleResult.getName());
 				setData(singleResult.getChildren());
+			}else{
+				setData(Arrays.asList(singleResult));
 			}
+			
+			
 		} else {
 			setData(Arrays.asList(singleResult));
 		}
@@ -384,7 +389,7 @@ public class ProgramsView extends ViewImpl implements
 			show(aNewObjective, isRowData);
 			// Program can be selected from the SummaryTab == isRowData
 			// or When A Program Tab e.g Wildlife Program is selected
-			show(aEdit, true);
+			show(aEdit, AppContext.isCurrentUserAdmin());
 		} else if (type == ProgramDetailType.OBJECTIVE) {
 			show(aDetail, false);
 			show(aAssign, false);
@@ -402,7 +407,7 @@ public class ProgramsView extends ViewImpl implements
 		} else {
 			show(aDetail, false);
 			show(aAssign, false);
-			show(aProgram, true);
+			show(aProgram, AppContext.isCurrentUserAdmin());
 			show(aEdit, false);
 		}
 	}

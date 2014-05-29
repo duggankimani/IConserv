@@ -504,10 +504,11 @@ public class ProgramsPresenter extends
 
 		if (programDetailId != null) {
 			//Drill Down
-			if(programId==null){
+			if(this.programId==null){
 				//Summary Table Drill down - Load program and objectives only
 				if(periodId!=null){
-					action.addRequest(new GetProgramsRequest(programCode,periodId,false,true));
+					assert programDetailCode!=null;
+					action.addRequest(new GetProgramsRequest(programDetailCode,periodId,false,true));
 				}else{
 					action.addRequest(new GetProgramsRequest(programDetailId,false,true));
 				}
@@ -524,7 +525,7 @@ public class ProgramsPresenter extends
 			}
 			
 		}
-
+		
 		requestHelper.execute(action,
 				new TaskServiceCallback<MultiRequestActionResult>() {
 					@Override
@@ -540,6 +541,7 @@ public class ProgramsPresenter extends
 								.get(i++);
 						getView().setPeriods(getPeriod.getPeriods());
 
+						//Funds
 						GetFundsResponse getFundsReq = (GetFundsResponse) aResponse
 								.get(i++);
 						getView().setFunds(getFundsReq.getFunds());
@@ -556,10 +558,12 @@ public class ProgramsPresenter extends
 								setActivity(response2.getSingleResult());
 							}
 							
-						} else {
+						} else{
 					
-							//Data
-							getView().setData(response.getPrograms());
+							if(programDetailId == null){
+								//This is a summary table with no program selecte
+								getView().setData(response.getPrograms());
+							}
 							getView().selectTab(0L);
 						}
 
