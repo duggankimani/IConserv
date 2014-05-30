@@ -13,18 +13,20 @@
 				<span ui:field="spnCompanyName">LWF</span>
 			</g:Anchor>
 			<a href="#home" class="brand">
-				<g:Image ui:field="imgLogo" url="img/logo.png" width="163px"></g:Image>
+				<g:Image ui:field="imgLogo" url="img/logo.png"></g:Image>
 			</a>
 
 			<ul class="nav pull-right">
 				<li class="home">
 					<g:Anchor href="#home" ui:field="aHome" styleName="close-icon hand">
-						<i class="icon-home"> &nbsp; Home</i>
+						<i class="icon-home"></i>
+						<span class="hidden-phone"> &nbsp;Home</span>
 					</g:Anchor>
 				</li>
 				<li class="home">
-					<g:Anchor href="#adminhome" ui:field="aAdmin" styleName="close-icon hand">
-						<i class="icon-bar-chart"> &nbsp;Admin</i>
+					<g:Anchor href="#adminhome" ui:field="aAdmin" styleName="close-icon hand hidden-phone">
+						<i class="icon-bar-chart"></i>
+						<span class="hidden-phone"> &nbsp;Home</span>
 					</g:Anchor>
 				</li>
 				<li class="notification-dropdown">
@@ -37,10 +39,8 @@
 
 					<g:FocusPanel ui:field="popupContainer"
 						styleName="notification-dialog dropdown-menu">
-						<g:HTMLPanel>
 							<g:HTMLPanel ui:field="notificationsContainer">
 							</g:HTMLPanel>
-						</g:HTMLPanel>
 					</g:FocusPanel>
 
 				</li>
