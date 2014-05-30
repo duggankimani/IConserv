@@ -564,6 +564,7 @@ public class ProgramsPresenter extends
 								//This is a summary table with no program selecte
 								getView().setData(response.getPrograms());
 							}
+							getView().setSelection(null);
 							getView().selectTab(0L);
 						}
 
