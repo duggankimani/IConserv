@@ -10,7 +10,7 @@
 	<g:HTMLPanel styleName="full-page">
 		<g:FocusPanel ui:field="parentPanel">
 			<g:HTMLPanel>
-				<div class="bootcamp js-notice" ui:field="divTutorial">
+				<div class="bootcamp js-notice visible-desktop" ui:field="divTutorial">
 					<h1>
 						Welcome to Wira BPM
 						<span>Here is a Walk-through to get you started</span>
@@ -92,7 +92,7 @@
 				</div>
 			</div>
 
-			<div class="span6 activities-box">
+			<div class="span6 activities-box visible-desktop visible-tablet">
 				<div class="portlet">
 					<div class="portlet-header">
 						<h3>

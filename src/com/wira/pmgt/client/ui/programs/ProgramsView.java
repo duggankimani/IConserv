@@ -176,11 +176,10 @@ public class ProgramsView extends ViewImpl implements
 	public void setMiddleHeight() {
 		int totalHeight = divMainContainer.getElement().getOffsetHeight();
 		int topHeight = divContentTop.getElement().getOffsetHeight();
-		// int bottomHeight = divContentBottom.getElement().getOffsetHeight();
 		int middleHeight = totalHeight - topHeight - 43;
 
-		System.err.println("Total Height>>>" + totalHeight);
-		System.err.println("Top Height>>>" + topHeight);
+//		System.err.println("Total Height>>>" + totalHeight);
+//		System.err.println("Top Height>>>" + topHeight);
 
 		if(middleHeight<0){
 			divProgramsTable.setHeight(middleHeight + "px");

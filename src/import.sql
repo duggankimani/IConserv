@@ -84,4 +84,6 @@ create index idx_documentid on advalue(documentid);
 
 
 
-insert into fund(id,created,createdby,isactive,updatedby,description,name) values(1,NOW(),NOW(),NULL,1,'EKN','EKN');
+insert into fund(id,created,createdby,isactive,updatedby,description,name) values(nextval('fund_id_seq'),NOW(),NOW(),1,NULL,'EKN','EKN');
+insert into fund(id,created,createdby,isactive,updatedby,description,name) values(nextval('fund_id_seq'),NOW(),NOW(),1,NULL,'Trade Finance','Trade Finance');
+insert into fund(id,created,createdby,isactive,updatedby,description,name) values(nextval('fund_id_seq'),NOW(),NOW(),1,NULL,'USAID','USAID');

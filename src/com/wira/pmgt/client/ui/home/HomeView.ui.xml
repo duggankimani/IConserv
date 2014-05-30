@@ -7,9 +7,10 @@
 
 	<g:HTMLPanel styleName="row-fluid main-container no-overflow-x">
 		<g:HTMLPanel ui:field="mainContainer" styleName="full-page">
+			
 			<div class="span2 sidebar-nav hidden-phone" id="sidebar-nav">
 				<ul class="nav nav-tabs nav-stacked" id="dashboard-menu">
-					<li class="side-user hidden-xs">
+					<li class="side-user">
 						<g:Image styleName="img-circle" ui:field="imgUser"></g:Image>
 						<!-- img class="img-circle" src="img/me.jpg" alt=""/ -->
 						<!--p class="welcome"> <i class="fa fa-key"></i> Logged in as </p -->
@@ -69,7 +70,7 @@
 					</div>
 				</div>
 
-				<!--Detailed Info -->
+				<!--Detailed Info(Generic document View) -->
 				<d:HTMLPanel ui:field="docContainer" styleName="full-page span10" cssId="detailed-info">
 				</d:HTMLPanel>
 			</g:HTMLPanel>

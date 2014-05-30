@@ -70,9 +70,7 @@ public class ProgramHeader extends Composite {
 	
 	public void setTitle(String title) {
 		if (title != null) {
-			spnTitle.setTitle(title);
-		} else {
-			spnTitle.setTitle("Programs & Activities");
+			spnBudget.setTitle(title);
 		}
 	}
 	
