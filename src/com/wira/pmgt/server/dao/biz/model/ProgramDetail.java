@@ -47,12 +47,12 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 			
 	@NamedQuery(name="ProgramDetail.findById", query="SELECT p FROM ProgramDetail p where p.id=:id"),
 	@NamedQuery(name="ProgramDetail.findByCodeAndPeriod", query="FROM ProgramDetail p where p.code=:code and p.period=:period"),
-	@NamedQuery(name="ProgramDetail.findByDates",query="select distinct(p), p.name,p.description,p.startDate,p.endDate " +
-			"from ProgramDetail p " +
-			"where (p.startDate is not null and p.endDate is not null) and " +
-				"(((p.status is null or p.status=:statusCreated) and p.startDate<(:currentDate + interval '1' day)) " +
-			"or (p.status is not null and p.status!=:statusClosed and endDate<:currentDate)) " +
-			"and (p.programId in (:mainProgramIds) or p.id in (:mainProgramIds))")
+//	@NamedQuery(name="ProgramDetail.findByDates",query="select distinct(p), p.name,p.description,p.startDate,p.endDate " +
+//			"from ProgramDetail p " +
+//			"where (p.startDate is not null and p.endDate is not null) and " +
+//				"(((p.status is null or p.status=:statusCreated) and p.startDate<(:currentDate + interval '1' day)) " +
+//			"or (p.status is not null and p.status!=:statusClosed and endDate<:currentDate)) " +
+//			"and (p.programId in (:mainProgramIds) or p.id in (:mainProgramIds))")
 })
 public class ProgramDetail 	extends ProgramBasicDetail{
 	

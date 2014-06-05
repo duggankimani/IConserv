@@ -54,7 +54,7 @@ public class CreateProgramView extends PopupViewImpl implements
 	@UiField AutoCompleteField<UserGroup> autoComplete;
 	@UiField AggregationGrid gridView;
 	@UiField Image imgAdd;
-	@UiField ActionLink btnEdit;
+	@UiField ActionLink btnEditPeriod;
 	List<Listable> donors = new ArrayList<Listable>();
 	ColumnConfig donorField = new ColumnConfig("donor", "Donor Name", DataType.SELECTBASIC);
 	
@@ -250,7 +250,7 @@ public class CreateProgramView extends PopupViewImpl implements
 	@Override
 	public HasClickHandlers getEditPeriodLink() {
 
-		return null;
+		return btnEditPeriod;
 	} 
 
 }

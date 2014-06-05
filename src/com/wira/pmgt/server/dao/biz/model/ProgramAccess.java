@@ -13,7 +13,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.hibernate.annotations.Index;
-import org.slf4j.LoggerFactory;
 
 import com.wira.pmgt.server.dao.model.PO;
 import com.wira.pmgt.shared.model.ParticipantType;
@@ -33,7 +32,7 @@ import com.wira.pmgt.shared.model.ParticipantType;
 })
 
 public class ProgramAccess extends PO{
-	LoggerFactory l;
+
 	/**
 	 * 
 	 */

@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.DateBox;
-import com.google.gwt.user.datepicker.client.DatePicker;
 import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
 import com.wira.pmgt.client.ui.util.DateUtils;
 
@@ -31,8 +30,8 @@ public class DateRangeWidget extends Composite {
 	}
 
 
-	@UiField(provided=true) DateBox dateInput1;
-	@UiField DateBox dateInput2;
+	@UiField DateBoxEx dateInput1;
+	@UiField DateBoxEx dateInput2;
 	@UiField InlineLabel spnCalendar1;
 	@UiField InlineLabel spnCalendar2;
 	Date rangeStart;
