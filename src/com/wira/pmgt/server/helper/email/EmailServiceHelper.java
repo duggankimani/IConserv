@@ -1,5 +1,6 @@
 package com.wira.pmgt.server.helper.email;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
@@ -92,6 +93,11 @@ public class EmailServiceHelper {
 
 	public static void sendEmail(String body, String subject, String recipient)
 			throws MessagingException, UnsupportedEncodingException {
+		sendEmail(body, subject, recipient, null);
+	}
+	
+	public static void sendEmail(String body, String subject, String recipient, String initiatorId)
+			throws MessagingException, UnsupportedEncodingException {
 
 		assert session!=null;
 		MimeMessage message = new MimeMessage(session);
@@ -111,24 +117,19 @@ public class EmailServiceHelper {
     		MimeBodyPart messageBodyPart = new MimeBodyPart();
     		messageBodyPart.setContent(body, "text/html;charset=utf-8");
     		multipart.addBodyPart(messageBodyPart);
-    		
-    		//Image
-    		MimeBodyPart imageBodyPart = new MimeBodyPart();
-            LocalAttachment attachment = DB.getAttachmentDao().getSettingImage(SETTINGNAME.ORGLOGO);
-            DataSource fds = null;
-            if(attachment!=null){
-            	fds =  new ByteArrayDataSource(attachment.getAttachment(), "image/png");            	
+    		    		        
+            multipart.addBodyPart(
+            		getBodyType(DB.getAttachmentDao().getSettingImage(SETTINGNAME.ORGLOGO),
+            		"<imageLogo>",
+            		"logo.png"));
+            
+            if(initiatorId!=null){
+            	multipart.addBodyPart(
+            			getBodyType(DB.getAttachmentDao().getUserImage(initiatorId),"<userImage>","blueman.png"));
             }else{
-            	InputStream imageStream = 
-            			EmailServiceHelper.class.getClass().getResourceAsStream("/logo.png");
-            	assert imageStream!=null;
-            	
-            	fds =  new ByteArrayDataSource(IOUtils.toByteArray(imageStream), "image/png");
-            	assert fds!=null;
-            }            
-            imageBodyPart.setDataHandler(new DataHandler(fds));
-            imageBodyPart.setHeader("Content-ID","<image>");            
-            multipart.addBodyPart(imageBodyPart);
+            	multipart.addBodyPart(
+            			getBodyType(DB.getAttachmentDao().getUserImage(initiatorId),"<userImage>","blueman.png"));
+            }
             
     		message.setContent(multipart);
     		message.setSentDate(new java.util.Date());
@@ -142,6 +143,35 @@ public class EmailServiceHelper {
 
 		//Transport.send(message);
 	}
+	
+	public static MimeBodyPart getBodyType(LocalAttachment attachment, String imageId, String fallbackFileName) 
+			throws IOException, MessagingException{
+		return getBodyType(attachment==null?null: attachment.getAttachment(), imageId, fallbackFileName);
+	}
+	
+	public static MimeBodyPart getBodyType(byte[] attachment, String imageId, String fallbackImageName)
+			 throws IOException, MessagingException{
+		//Image
+		MimeBodyPart imageBodyPart = new MimeBodyPart();
+        DataSource fds = null;
+        if(attachment!=null){
+        	fds =  new ByteArrayDataSource(attachment, "image/png");            	
+        }else{
+        	InputStream imageStream = 
+        			EmailServiceHelper.class.getClass().getResourceAsStream("/"+fallbackImageName);
+        	assert imageStream!=null;
+        	
+        	fds =  new ByteArrayDataSource(IOUtils.toByteArray(imageStream), "image/png");
+        	assert fds!=null;
+        }  
+        
+        imageBodyPart.setDataHandler(new DataHandler(fds));
+        imageBodyPart.setHeader("Content-ID",imageId);
+        
+        return imageBodyPart;
+		
+	}
+		
 	
 	public static void main(String[] args) throws Exception{
 		sendEmail("Hello world", "Test 1", "mdkimani@gmail.com");
