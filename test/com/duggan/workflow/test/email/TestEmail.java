@@ -27,7 +27,7 @@ public class TestEmail {
 		String body = IOUtils.toString(is);
 		assert body!=null;
 		
-		EmailServiceHelper.sendEmail(body, "RE: Further Testing for size", "mdkimani@gmail.com", "mariano");
+		EmailServiceHelper.sendEmail(body, "RE: User Image", "mdkimani@gmail.com", "mariano");
 	}
 
 	@org.junit.After

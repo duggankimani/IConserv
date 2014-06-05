@@ -125,10 +125,10 @@ public class EmailServiceHelper {
             
             if(initiatorId!=null){
             	multipart.addBodyPart(
-            			getBodyType(DB.getAttachmentDao().getUserImage(initiatorId),"<userImage>","blueman.png"));
+            			getBodyType(DB.getAttachmentDao().getUserImage(initiatorId),"<imageUser>","blueman(small).png"));
             }else{
             	multipart.addBodyPart(
-            			getBodyType(DB.getAttachmentDao().getUserImage(initiatorId),"<userImage>","blueman.png"));
+            			getBodyType(DB.getAttachmentDao().getUserImage(initiatorId),"<imageUser>","blueman(small).png"));
             }
             
     		message.setContent(multipart);

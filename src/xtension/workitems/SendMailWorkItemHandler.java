@@ -184,6 +184,13 @@ public class SendMailWorkItemHandler implements WorkItemHandler {
 		 * Schedule async
 		 */
 		CommandContext context = new CommandContext();
+		String initiatorId = doc.getOwner()==null? null: doc.getOwner().getUserId();
+		if(initiatorId==null){
+			log.warn("Request initiator ID is null; Email will not contain user image");
+		}
+		params.put("ownerId", initiatorId);
+		
+		
 		params.put("callbacks", CommandCodes.SendEmailCallback.name());
 		params.put("To", recipient.toString());
 		params.put("From", params.get("From")==null? "ebpm.mgr@gmail.com": params.get("From"));
