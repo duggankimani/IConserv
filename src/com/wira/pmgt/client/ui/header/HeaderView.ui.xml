@@ -19,14 +19,14 @@
 			<ul class="nav pull-right">
 				<li class="home">
 					<g:Anchor href="#home" ui:field="aHome" styleName="close-icon hand">
-						<i class="icon-home"></i>
-						<span class="hidden-phone"> &nbsp;Home</span>
+						<i class="icon-home">&nbsp;Home</i>
+						<span class="hidden-phone hidden"> &nbsp;Home</span>
 					</g:Anchor>
 				</li>
 				<li class="home">
 					<g:Anchor href="#adminhome" ui:field="aAdmin" styleName="close-icon hand hidden-phone">
-						<i class="icon-bar-chart"></i>
-						<span class="hidden-phone"> &nbsp;Home</span>
+						<i class="icon-bar-chart">&nbsp;Admin</i>
+						<span class="hidden-phone hidden"> &nbsp;Admin</span>
 					</g:Anchor>
 				</li>
 				<li class="notification-dropdown">
