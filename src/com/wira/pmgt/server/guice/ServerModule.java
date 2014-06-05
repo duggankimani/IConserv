@@ -130,6 +130,8 @@ import com.wira.pmgt.shared.requests.GetProcessInfoRequest;
 import com.wira.pmgt.server.actionhandlers.GetProcessInfoRequestHandler;
 import com.wira.pmgt.shared.requests.GetTaskInfoRequest;
 import com.wira.pmgt.server.actionhandlers.GetTaskInfoRequestHandler;
+import com.wira.pmgt.shared.requests.CreateDonorRequest;
+import com.wira.pmgt.server.actionhandlers.CreateDonorRequestHandler;
 
 
 
@@ -341,5 +343,8 @@ public class ServerModule extends HandlerModule {
 
 		bindHandler(GetTaskInfoRequest.class,
 				GetTaskInfoRequestHandler.class, SessionValidator.class);
+
+		bindHandler(CreateDonorRequest.class,
+				CreateDonorRequestHandler.class, SessionValidator.class);
 	}
 }

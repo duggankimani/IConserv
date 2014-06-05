@@ -34,6 +34,7 @@ import com.wira.pmgt.client.ui.component.IssuesPanel;
 import com.wira.pmgt.client.ui.component.PasswordField;
 import com.wira.pmgt.client.ui.component.TextField;
 import com.wira.pmgt.client.ui.upload.custom.Uploader;
+import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.BooleanValue;
 import com.wira.pmgt.shared.model.LongValue;
 import com.wira.pmgt.shared.model.StringValue;
@@ -256,12 +257,8 @@ public class SettingsView extends ViewImpl implements SettingsPresenter.ISetting
 	}
 
 	private void setLogoImage() {
-		String moduleUrl = GWT.getModuleBaseURL().replace("/gwtht", "");
-		if (moduleUrl.endsWith("/")) {
-			moduleUrl = moduleUrl.substring(0, moduleUrl.length() - 1);
-		}
-		String url = moduleUrl
-				+ "/getreport?ACTION=GetLogo&width=179&settingName="+SETTINGNAME.ORGLOGO.name();
+		String url = AppContext.getBaseURL()+
+				"/getreport?ACTION=GetLogo&width=179&settingName="+SETTINGNAME.ORGLOGO.name();
 		imgLogo.setUrl(url);
 	}
 	

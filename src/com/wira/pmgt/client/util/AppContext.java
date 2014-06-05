@@ -182,13 +182,15 @@ public class AppContext {
 		return getUserImageUrl(user);
 	}
 	
-	public static String getUserImageUrl(HTUser htUser){
+	public static String getBaseURL(){
 		String moduleUrl = GWT.getModuleBaseURL().replace("/iconserv", "");
 		if (moduleUrl.endsWith("/")) {
 			moduleUrl = moduleUrl.substring(0, moduleUrl.length() - 1);
 		}
-		String url = moduleUrl
-				+ "/getreport?ACTION=GetUser&userId="
+		return moduleUrl;
+	}
+	public static String getUserImageUrl(HTUser htUser){
+		String url = getBaseURL()+ "/getreport?ACTION=GetUser&userId="
 				+ htUser.getUserId();
 		return url;
 	}

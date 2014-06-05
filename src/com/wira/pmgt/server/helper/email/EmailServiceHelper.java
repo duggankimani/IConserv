@@ -1,9 +1,13 @@
 package com.wira.pmgt.server.helper.email;
 
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.mail.Authenticator;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -14,11 +18,17 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import com.wira.pmgt.server.dao.helper.SettingsDaoHelper;
+import com.wira.pmgt.server.dao.model.LocalAttachment;
+import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.shared.model.LongValue;
 import com.wira.pmgt.shared.model.settings.SETTINGNAME;
+import com.wira.pmgt.shared.model.settings.Setting;
 
 public class EmailServiceHelper {
 
@@ -58,7 +68,7 @@ public class EmailServiceHelper {
 			for(Object prop: props.keySet()){
 				log.debug(prop+" : "+props.getProperty(prop.toString()));
 			}
-			session = Session.getDefaultInstance(props,new Authenticator() {
+			session = Session.getInstance(props,new Authenticator() {
 	            @Override
 	            protected PasswordAuthentication getPasswordAuthentication() {
 	                return new PasswordAuthentication(props.getProperty("mail.smtp.from"),
@@ -83,8 +93,10 @@ public class EmailServiceHelper {
 	public static void sendEmail(String body, String subject, String recipient)
 			throws MessagingException, UnsupportedEncodingException {
 
+		assert session!=null;
 		MimeMessage message = new MimeMessage(session);
 		message.setFrom(new InternetAddress(getProperties().getProperty("mail.smtp.from")));
+		
 		String[] emails = recipient.split(",");
 		InternetAddress dests[] = new InternetAddress[emails.length];
 		for (int i = 0; i < emails.length; i++) {
@@ -92,14 +104,43 @@ public class EmailServiceHelper {
 		}
 		message.setRecipients(Message.RecipientType.TO, dests);
 		message.setSubject(subject, "UTF-8");
-		Multipart mp = new MimeMultipart();
-		MimeBodyPart mbp = new MimeBodyPart();
-		mbp.setContent(body, "text/html;charset=utf-8");
-		mp.addBodyPart(mbp);
-		message.setContent(mp);
-		message.setSentDate(new java.util.Date());
+		
+        try {
+        	Multipart multipart = new MimeMultipart();
+        	//HTML
+    		MimeBodyPart messageBodyPart = new MimeBodyPart();
+    		messageBodyPart.setContent(body, "text/html;charset=utf-8");
+    		multipart.addBodyPart(messageBodyPart);
+    		
+    		//Image
+    		MimeBodyPart imageBodyPart = new MimeBodyPart();
+            LocalAttachment attachment = DB.getAttachmentDao().getSettingImage(SETTINGNAME.ORGLOGO);
+            DataSource fds = null;
+            if(attachment!=null){
+            	fds =  new ByteArrayDataSource(attachment.getAttachment(), "image/png");            	
+            }else{
+            	InputStream imageStream = 
+            			EmailServiceHelper.class.getClass().getResourceAsStream("/logo.png");
+            	assert imageStream!=null;
+            	
+            	fds =  new ByteArrayDataSource(IOUtils.toByteArray(imageStream), "image/png");
+            	assert fds!=null;
+            }            
+            imageBodyPart.setDataHandler(new DataHandler(fds));
+            imageBodyPart.setHeader("Content-ID","<image>");            
+            multipart.addBodyPart(imageBodyPart);
+            
+    		message.setContent(multipart);
+    		message.setSentDate(new java.util.Date());
+    		
+    		assert message!=null;
+            Transport.send(message);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-		Transport.send(message);
+		//Transport.send(message);
 	}
 	
 	public static void main(String[] args) throws Exception{

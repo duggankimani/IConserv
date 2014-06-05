@@ -7,6 +7,7 @@
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/activation-1.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/antlr-2.7.7.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/mail-1.4.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/antlr-3.3.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/antlr-runtime-3.3.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/aopalliance-1.0.jar"/>
@@ -48,7 +49,7 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/drools-persistence-jpa-5.5.0.Final.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/ecj-3.5.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/ejb3-persistence-1.0.2.GA.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/geronimo-javamail_1.4_spec-1.7.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/geronimo-javamail_1.4_spec-1.7.1.jar" sourcepath="/home/duggan/.m2/repository/org/apache/geronimo/specs/geronimo-javamail_1.4_spec/1.7.1/geronimo-javamail_1.4_spec-1.7.1-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/geronimo-jms_1.1_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/geronimo-jpa_3.0_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/geronimo-jta_1.1_spec-1.1.1.jar"/>
@@ -96,7 +97,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/knowledge-api-5.5.0.Final.jar" sourcepath="/home/duggan/.m2/repository/org/drools/knowledge-api/5.5.0.Final/knowledge-api-5.5.0.Final-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/knowledge-internal-api-5.5.0.Final.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/log4j-1.2.14.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/mail-1.4.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/mvel2-2.1.3.Final.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/mysql-connector-java-5.0.8-bin.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/neethi-3.0.2.jar"/>
