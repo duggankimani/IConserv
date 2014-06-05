@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -63,10 +65,20 @@ public class CreateProgramView extends PopupViewImpl implements
 	public CreateProgramView(final EventBus eventBus, final Binder binder) {
 		super(eventBus);
 		widget = binder.createAndBindUi(this);
+		
+		btnEditPeriod.setVisible(false);
 		//imgAdd.setResource(ImageResources.IMAGES.add());
 		
 		int[] position=AppManager.calculatePosition(5, 50);
 		popupView.setPopupPosition(position[1],position[0]);
+		
+		lstPeriod.addValueChangeHandler(new ValueChangeHandler<PeriodDTO>() {
+			
+			@Override
+			public void onValueChange(ValueChangeEvent<PeriodDTO> event) {
+				btnEditPeriod.setVisible(event.getValue()!=null);
+			}
+		});
 		loadGrid();
 	}
 
@@ -226,6 +238,8 @@ public class CreateProgramView extends PopupViewImpl implements
 		txtDescription.setValue(program.getDescription());
 		txtName.setValue(program.getName());
 		lstPeriod.setValue(program.getPeriod());
+		btnEditPeriod.setVisible(program.getPeriod()!=null);
+		
 		List<Object> lst = new ArrayList<Object>();
 		
 		Collections.sort(program.getFunding(), new Comparator<ProgramFundDTO>() {
