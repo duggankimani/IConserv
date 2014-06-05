@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.PopupViewImpl;
 import com.wira.pmgt.client.ui.AppManager;
+import com.wira.pmgt.client.ui.component.ActionLink;
 import com.wira.pmgt.client.ui.component.DropDownList;
 import com.wira.pmgt.client.ui.component.IssuesPanel;
 import com.wira.pmgt.client.ui.component.autocomplete.AutoCompleteField;
@@ -53,6 +54,7 @@ public class CreateProgramView extends PopupViewImpl implements
 	@UiField AutoCompleteField<UserGroup> autoComplete;
 	@UiField AggregationGrid gridView;
 	@UiField Image imgAdd;
+	@UiField ActionLink btnEdit;
 	List<Listable> donors = new ArrayList<Listable>();
 	ColumnConfig donorField = new ColumnConfig("donor", "Donor Name", DataType.SELECTBASIC);
 	
