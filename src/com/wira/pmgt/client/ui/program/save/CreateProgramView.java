@@ -237,6 +237,18 @@ public class CreateProgramView extends PopupViewImpl implements
 			lst.add(dto);
 		}
 		gridView.setData(programFundMapper.getDataModels(lst));
+	}
+
+	@Override
+	public PeriodDTO getPeriod() {
+		
+		return lstPeriod.getValue();
+	}
+
+	@Override
+	public HasClickHandlers getEditPeriodLink() {
+
+		return null;
 	} 
 
 }

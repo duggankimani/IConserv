@@ -7,13 +7,19 @@ import java.util.Date;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ShowRangeEvent;
+import com.google.gwt.event.logical.shared.ShowRangeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.DateBox;
+import com.google.gwt.user.datepicker.client.DatePicker;
+import com.google.gwt.user.datepicker.client.DateBox.DefaultFormat;
 import com.wira.pmgt.client.ui.util.DateUtils;
 
 public class DateRangeWidget extends Composite {
@@ -25,7 +31,7 @@ public class DateRangeWidget extends Composite {
 	}
 
 
-	@UiField DateBox dateInput1;
+	@UiField(provided=true) DateBox dateInput1;
 	@UiField DateBox dateInput2;
 	@UiField InlineLabel spnCalendar1;
 	@UiField InlineLabel spnCalendar2;
@@ -35,6 +41,12 @@ public class DateRangeWidget extends Composite {
 	public DateRangeWidget() {
 		initWidget(uiBinder.createAndBindUi(this));
 		createWidget();
+	}
+	
+	@UiFactory
+	public DateBox getDateBox(){
+		DefaultFormat DEFAULT_FORMAT = GWT.create(DefaultFormat.class);
+		return new DateBox(WiraDatePicker.newInstance(), null, DEFAULT_FORMAT); 
 	}
 
 
@@ -60,7 +72,50 @@ public class DateRangeWidget extends Composite {
 			}
 		});
 		
+		//date range
+		dateInput1.getDatePicker().addShowRangeHandler(new ShowRangeHandler<Date>() {
+			
+			@Override
+			public void onShowRange(ShowRangeEvent<Date> event) {
+				setValidDates(event);
+			}
+		});
+		
+		//date range
+		dateInput2.getDatePicker().addShowRangeHandler(new ShowRangeHandler<Date>() {
+			
+			@Override
+			public void onShowRange(ShowRangeEvent<Date> event) {
+				setValidDates(event);
+			}
+		});
+		
 	}
+	
+	protected void setValidDates(ShowRangeEvent<Date> dateShowRangeEvent) {
+		Date start = dateShowRangeEvent.getStart();
+        Date end = dateShowRangeEvent.getEnd();
+
+        Integer daysBetween = CalendarUtil.getDaysBetween(start, end);
+
+        WiraDatePicker picker = (WiraDatePicker)dateShowRangeEvent.getSource();
+        for (int i = 0; i < daysBetween; i++) {
+            Date date = new Date(start.getTime());
+            CalendarUtil.addDaysToDate(date, i);
+            setDatePickable(picker,date);
+        }
+	}
+
+	private void setDatePickable(WiraDatePicker picker,Date date) {
+        Boolean enabled = true;
+     
+        if (rangeStart!=null && date.before(rangeStart)) {
+            enabled = false;
+        } else if (rangeEnd!=null && date.after(rangeEnd)) {
+            enabled = false;
+        }
+        picker.getCalendarView().setEnabledOnDate(enabled, date);
+    }
 	
 	public Date getStartDate(){
 		return dateInput1.getValue();
