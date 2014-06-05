@@ -1,19 +1,30 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d='urn:import:com.wira.pmgt.client.ui.component'>
 	<g:HTMLPanel styleName="form-horizontal">
 		<div class="control-group">
-			<div class="control-label" ui:field="tdDocType">Donor Name:</div>
-			<div class="controls">
-				<g:TextBox ui:field="txtName" />
-			</div>
+			<d:ActionLink styleName="btn btn-default" ui:field="aCreateDonor">Create</d:ActionLink>
+			<d:ActionLink styleName="btn btn-default" ui:field="aEditDonor">Edit</d:ActionLink>
 		</div>
 
-		<div class="control-group">
-			<div class="control-label">Description:</div>
-			<div class="controls">
-				<g:TextArea ui:field="txtDescription" />
+		<g:HTMLPanel styleName="control-group hidden" ui:field="divDropdownContainer">
+			<d:DropDownList ui:field="lstDonors"></d:DropDownList>
+		</g:HTMLPanel>
+
+		<g:HTMLPanel ui:field="divCreateContainer" styleName="hidden">
+			<div class="control-group">
+				<div class="control-label" ui:field="divName">Donor Name:</div>
+				<div class="controls">
+					<g:TextBox ui:field="txtName" />
+				</div>
 			</div>
-		</div>
+
+			<div class="control-group">
+				<div class="control-label">Description:</div>
+				<div class="controls">
+					<g:TextArea ui:field="txtDescription" />
+				</div>
+			</div>
+		</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 

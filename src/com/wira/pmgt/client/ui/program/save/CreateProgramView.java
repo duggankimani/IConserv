@@ -53,8 +53,9 @@ public class CreateProgramView extends PopupViewImpl implements
 	@UiField DropDownList<PeriodDTO> lstPeriod;
 	@UiField AutoCompleteField<UserGroup> autoComplete;
 	@UiField AggregationGrid gridView;
-	@UiField Image imgAdd;
+	@UiField ActionLink imgAdd;
 	@UiField ActionLink btnEditPeriod;
+	@UiField ActionLink aManageDonors;
 	List<Listable> donors = new ArrayList<Listable>();
 	ColumnConfig donorField = new ColumnConfig("donor", "Donor Name", DataType.SELECTBASIC);
 	
@@ -62,7 +63,7 @@ public class CreateProgramView extends PopupViewImpl implements
 	public CreateProgramView(final EventBus eventBus, final Binder binder) {
 		super(eventBus);
 		widget = binder.createAndBindUi(this);
-		imgAdd.setResource(ImageResources.IMAGES.add());
+		//imgAdd.setResource(ImageResources.IMAGES.add());
 		
 		int[] position=AppManager.calculatePosition(5, 50);
 		popupView.setPopupPosition(position[1],position[0]);
@@ -249,8 +250,12 @@ public class CreateProgramView extends PopupViewImpl implements
 
 	@Override
 	public HasClickHandlers getEditPeriodLink() {
-
 		return btnEditPeriod;
 	} 
+	
+	
+	public HasClickHandlers getManageDonors() {
+		return aManageDonors;
+	}
 
 }

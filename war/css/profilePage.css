@@ -86,6 +86,7 @@
 .news-feed .news-box .portlet-content{
 	padding-top:0px;
 	padding-left:0px;
+	height:90%;
 }
 /*--Activities Page	: Detailed Presentation --*/
 .activities-page .activities-content{

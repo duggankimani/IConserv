@@ -39,7 +39,9 @@
 								<d:DropDownList ui:field="lstPeriod">
 								</d:DropDownList>
 								<span>
-									<g:Image ui:field="imgAdd" styleName="gwt-Anchor"></g:Image>
+									<d:ActionLink ui:field="imgAdd" styleName="icon-plus"
+									title="Add Period" dataToggle="tooltip"
+									></d:ActionLink>
 								</span>
 								<span>
 									<d:ActionLink ui:field="btnEditPeriod" styleName="icon-pencil"
@@ -52,6 +54,9 @@
 							<div class="control-label">Donors:</div>
 							<div class="controls">
 								<grid:AggregationGrid ui:field="gridView"></grid:AggregationGrid>
+								<d:ActionLink ui:field="aManageDonors">
+									<i class="icon-lightbulb helper-font-16"></i>
+								</d:ActionLink>
 							</div>
 						</div>
 
