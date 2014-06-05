@@ -1,6 +1,7 @@
 package com.wira.pmgt.server.dao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import com.wira.pmgt.server.helper.session.SessionHelper;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
+import com.wira.pmgt.shared.model.program.ProgramStatus;
 
 /**
  * Dao Implementation Class for managing
@@ -163,4 +165,28 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		return getSingleResultOrNull(query);
 	}
 	
+	public List<ProgramDetail> getProgramDetails(String userId){
+		Query query = em.createNamedQuery("ProgramDetail.findByDates")
+				.setParameter("statusCreated", ProgramStatus.CREATED)
+				.setParameter("currentDate", new Date())
+				.setParameter("statusClosed", ProgramStatus.CLOSED)
+				.setParameter("mainProgramIds", getProgramIds(userId));
+		
+		return getResultList(query);
+	}
+
+	/**
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	private List<Long> getProgramIds(String userId) {
+		Query query = em.createNamedQuery("ProgramDetail.findByDates")
+				.setParameter("isCurrentUserAdmin", false)
+				.setParameter("userId",userId)
+				.setParameter("groupIds","")
+				.setParameter("isActive",1);
+				
+		return getResultList(query);
+	}
 }

@@ -28,7 +28,9 @@ public class PeriodSaveView extends Composite {
 	@UiField IssuesPanel issues;
 	@UiField TextArea txtDescription;
 	@UiField DateRangeWidget dtRange;
-
+	
+	private PeriodDTO periodDTO;
+	
 	public PeriodSaveView() {
 		initWidget(uiBinder.createAndBindUi(this));
 		dtRange.addValueChangeHandler(new ValueChangeHandler<Date>() {
@@ -38,6 +40,13 @@ public class PeriodSaveView extends Composite {
 				setDescription();
 			}
 		});
+	}
+
+	public PeriodSaveView(PeriodDTO period) {
+		this();
+		this.periodDTO = period;
+		txtDescription.setValue(period.getDescription());
+		dtRange.setDates(period.getStartDate(), period.getStartDate());
 	}
 
 	protected void setDescription() {
@@ -88,10 +97,14 @@ public class PeriodSaveView extends Composite {
 
 	public PeriodDTO getPeriod() {
 		
-		PeriodDTO period = new PeriodDTO();
+		PeriodDTO period = periodDTO;
+		if(periodDTO==null){
+			period = new PeriodDTO();
+		}
+		
 		period.setDescription(txtDescription.getValue());
 		period.setStartDate(dtRange.getStartDate());
-		period.setEndDate(dtRange.getEndDate());		
+		period.setEndDate(dtRange.getEndDate());	
 		return period;
 	}
 

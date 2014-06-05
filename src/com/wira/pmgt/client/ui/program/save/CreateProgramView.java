@@ -54,7 +54,7 @@ public class CreateProgramView extends PopupViewImpl implements
 	@UiField AutoCompleteField<UserGroup> autoComplete;
 	@UiField AggregationGrid gridView;
 	@UiField Image imgAdd;
-	@UiField ActionLink btnEdit;
+	@UiField ActionLink btnEditPeriod;
 	List<Listable> donors = new ArrayList<Listable>();
 	ColumnConfig donorField = new ColumnConfig("donor", "Donor Name", DataType.SELECTBASIC);
 	
@@ -239,6 +239,18 @@ public class CreateProgramView extends PopupViewImpl implements
 			lst.add(dto);
 		}
 		gridView.setData(programFundMapper.getDataModels(lst));
+	}
+
+	@Override
+	public PeriodDTO getPeriod() {
+		
+		return lstPeriod.getValue();
+	}
+
+	@Override
+	public HasClickHandlers getEditPeriodLink() {
+
+		return btnEditPeriod;
 	} 
 
 }

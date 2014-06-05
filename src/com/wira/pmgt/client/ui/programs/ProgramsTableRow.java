@@ -4,6 +4,7 @@ import static com.wira.pmgt.client.ui.util.NumberUtils.CURRENCYFORMAT;
 import static com.wira.pmgt.client.ui.util.NumberUtils.NUMBERFORMAT;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -124,12 +125,13 @@ public class ProgramsTableRow extends RowWidget {
 
 	}
 	
-	public void init(){
+	public void init(){		
 		//Program/Task status - Created, Started, Done, Closed etc
 		setStatus();
 		
 		//Name - Highlighting provided based on child level
 		setActivityName();
+		
 		//Padding based on the child level
 		setPadding();
 		
@@ -163,6 +165,21 @@ public class ProgramsTableRow extends RowWidget {
 
 		//Set Funding
 		setFunding();
+
+		//Highlight expired 
+
+		Date startDate = activity.getStartDate();
+		Date endDate = activity.getEndDate();
+		if(startDate!=null && activity.getStatus()==ProgramStatus.CREATED){
+			//This should have started already (Hightlight warning)
+			divRowStrip.addClassName("label-warning");
+		}
+		
+		if(endDate!=null && endDate.before(new Date()) && activity.getStatus()!=ProgramStatus.CLOSED){
+			//This should have been closed by now (Highlight red)
+			divRowStrip.addClassName("label-important");
+		}
+	
 	}
 
 	private void setActivityName() {

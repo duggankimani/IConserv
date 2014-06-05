@@ -46,13 +46,14 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 			"order by p.name"),
 			
 	@NamedQuery(name="ProgramDetail.findById", query="SELECT p FROM ProgramDetail p where p.id=:id"),
-	@NamedQuery(name="ProgramDetail.findByCodeAndPeriod", query="FROM ProgramDetail p where p.code=:code and p.period=:period")
+	@NamedQuery(name="ProgramDetail.findByCodeAndPeriod", query="FROM ProgramDetail p where p.code=:code and p.period=:period"),
+//	@NamedQuery(name="ProgramDetail.findByDates",query="select distinct(p), p.name,p.description,p.startDate,p.endDate " +
+//			"from ProgramDetail p " +
+//			"where (p.startDate is not null and p.endDate is not null) and " +
+//				"(((p.status is null or p.status=:statusCreated) and p.startDate<(:currentDate + interval '1' day)) " +
+//			"or (p.status is not null and p.status!=:statusClosed and endDate<:currentDate)) " +
+//			"and (p.programId in (:mainProgramIds) or p.id in (:mainProgramIds))")
 })
-/*
- * select d.id,d.name,a.userid,a.groupid,a.type from programdetail d 
-inner join programaccess a on (a.programdetailid=d.id)
-where (a.userid='calcacuervo' or a.groupid in ('USERS'));
- */
 public class ProgramDetail 	extends ProgramBasicDetail{
 	
 	/**
@@ -135,6 +136,12 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	
 	@Enumerated(EnumType.STRING)
 	private ProgramStatus status = ProgramStatus.CREATED;
+	
+	/*for scheduled items (Items with start & end dates), we need a way to simplify
+	 * the complex query that loads a Program & all its children
+	 * for the logged in user that are either due in a few days or overdue 
+	 */
+	private Long programId; //ID of the Program(Main program) under which this detail lies (Not necessary its direct parent)
 	
 	public ProgramDetail() {
 	}
@@ -360,5 +367,13 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 
 	public void setStatus(ProgramStatus status) {
 		this.status = status;
+	}
+
+	public Long getProgramId() {
+		return programId;
+	}
+
+	public void setProgramId(Long programId) {
+		this.programId = programId;
 	}
 }

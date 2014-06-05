@@ -42,7 +42,7 @@
 									<g:Image ui:field="imgAdd" styleName="gwt-Anchor"></g:Image>
 								</span>
 								<span>
-									<d:ActionLink ui:field="btnEdit" styleName="icon-pencil"
+									<d:ActionLink ui:field="btnEditPeriod" styleName="icon-pencil"
 										title="Edit Period" dataToggle="tooltip"></d:ActionLink>
 								</span>
 							</div>

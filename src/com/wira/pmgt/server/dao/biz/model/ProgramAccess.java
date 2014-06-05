@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.hibernate.annotations.Index;
 
@@ -22,6 +24,13 @@ import com.wira.pmgt.shared.model.ParticipantType;
  *
  */
 @Entity
+@NamedQueries({
+@NamedQuery(name="ProgramAccess.findAll", query="SELECT distinct(p.id) FROM ProgramDetail p left join p.programAccess access " +
+		"where (true=:isCurrentUserAdmin or (access.userId=:userId or access.groupId in (:groupIds))) " +
+		"and p.isActive=:isActive " +
+		"order by p.name")
+})
+
 public class ProgramAccess extends PO{
 
 	/**

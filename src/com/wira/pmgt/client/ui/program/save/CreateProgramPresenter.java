@@ -45,12 +45,15 @@ public class CreateProgramPresenter extends
 		HasClickHandlers getAddPeriodLink();
 		HasClickHandlers getSave();
 		HasClickHandlers getCancel();
+		HasClickHandlers getEditPeriodLink();
 		boolean isValid();
 		void setPeriods(List<PeriodDTO> periods);
 		void setGroups(List<UserGroup> groups);
 		ProgramDTO getProgram();
 		void setFunds(List<FundDTO> funds);
+		PeriodDTO getPeriod();
 		void setProgram(IsProgramDetail program);
+		
 	}
 
 	@Inject DispatchAsync requestHelper;
@@ -73,13 +76,37 @@ public class CreateProgramPresenter extends
 	protected void onBind() {
 		super.onBind();
 
-		final PeriodSaveView periodSave = new PeriodSaveView();
-		
 		getView().getAddPeriodLink().addClickHandler(new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-
+				final PeriodSaveView periodSave = new PeriodSaveView();
+				
+				AppManager.showPopUp("Add Period",periodSave, new OptionControl() {
+					
+					@Override
+					public void onSelect(String name) {
+						if("Save".endsWith(name)){
+							//Save Period
+							if(periodSave.isValid()){
+								PeriodDTO period= periodSave.getPeriod();
+								savePeriod(period);
+								hide();
+							}
+						}else{
+							hide();
+						}
+					}
+					
+				}, "Save", "Cancel");
+			}
+		});
+		
+		getView().getEditPeriodLink().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				final PeriodSaveView periodSave = new PeriodSaveView(getView().getPeriod());
 				AppManager.showPopUp("Add Period",periodSave, new OptionControl() {
 					
 					@Override
