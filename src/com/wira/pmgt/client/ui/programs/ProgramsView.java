@@ -178,7 +178,12 @@ public class ProgramsView extends ViewImpl implements
 		int topHeight = divContentTop.getElement().getOffsetHeight();
 		int middleHeight = totalHeight - topHeight - 43;
 
-		divProgramsTable.setHeight(middleHeight + "px");
+//		System.err.println("Total Height>>>" + totalHeight);
+//		System.err.println("Top Height>>>" + topHeight);
+
+		if(middleHeight<0){
+			divProgramsTable.setHeight(middleHeight + "px");
+		}
 	}
 
 	@Override
@@ -380,25 +385,20 @@ public class ProgramsView extends ViewImpl implements
 		show(aDetail, isRowData);
 
 		if (type == ProgramDetailType.PROGRAM) {
-			show(aProgram, false);
 			show(aNewOutcome, !isRowData);
 			show(aNewObjective, isRowData);
 			// Program can be selected from the SummaryTab == isRowData
 			// or When A Program Tab e.g Wildlife Program is selected
 			show(aEdit, AppContext.isCurrentUserAdmin());
 		} else if (type == ProgramDetailType.OBJECTIVE) {
-			show(aDetail, false);
 			show(aAssign, false);
 		} else if (type == ProgramDetailType.OUTCOME) {
-			show(aProgram, false);
 			show(aNewActivity, true);
 			show(aAssign, false);
 		} else if (type == ProgramDetailType.ACTIVITY) {
-			show(aProgram, false);
 			show(aNewTask, true);
 			show(aAssign, false);
 		} else if (type == ProgramDetailType.TASK) {
-			show(aProgram, false);
 			show(aNewTask, true);
 		} else {
 			show(aDetail, false);
