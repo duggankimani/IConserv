@@ -55,7 +55,7 @@
 							<div class="controls">
 								<grid:AggregationGrid ui:field="gridView"></grid:AggregationGrid>
 								<d:ActionLink ui:field="aManageDonors">
-									<i class="icon-lightbulb helper-font-16"></i>
+									<i class="icon-lightbulb helper-font-16">Manage Donor</i>
 								</d:ActionLink>
 							</div>
 						</div>
