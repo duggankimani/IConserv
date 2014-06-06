@@ -54,7 +54,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/geronimo-jpa_3.0_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/geronimo-jta_1.1_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gin-1.5-post-gwt-2.2.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-3.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-assistedinject-3.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-servlet-3.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-dnd-3.2.3.jar" sourcepath="war/WEB-INF/lib/gwt-dnd-3.2.3.jar"/>
@@ -157,13 +156,9 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gxt-3.0.1.jar" sourcepath="/home/duggan/.m2/repository/com/sencha/gxt/gxt/3.0.1/gxt-3.0.1-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/sqljdbc4.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/sqljdbc.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/jsr305-2.0.3.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-17.0-sources.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-17.0.jar" sourcepath="war/WEB-INF/lib/guava-17.0-sources.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-gwt-17.0-sources.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-gwt-17.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gflot-3.2.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-servlet.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-3.0.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
