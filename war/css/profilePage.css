@@ -76,6 +76,7 @@
 	padding-top: 10px;
 	padding-left:10px;
 	height: 100%;
+	padding-bottom: 10px;
 }
 .news-feed .activities-box{
 	padding-right:10px;
@@ -86,7 +87,7 @@
 .news-feed .news-box .portlet-content{
 	padding-top:0px;
 	padding-left:0px;
-	height:90%;
+	height: 89%;
 }
 /*--Activities Page	: Detailed Presentation --*/
 .activities-page .activities-content{

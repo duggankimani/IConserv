@@ -12,7 +12,7 @@
 }
 
 .news-feed .name a, a:active,a:visited{
-  /* color: #428bca; */ 
+  color: #428bca; 
 }
 
 /* line 40, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
@@ -32,7 +32,7 @@
 	-moz-border-radius: 50%;
 	-ms-border-radius: 50%;
 	-o-border-radius: 50%;
-	border-radius: 50%;
+	border-radius: 0px;
 	-webkit-box-shadow: 0 1px 3px 0px rgba(0, 0, 0, 0.3);
 	-moz-box-shadow: 0 1px 3px 0px rgba(0, 0, 0, 0.3);
 	box-shadow: 0 1px 3px 0px rgba(0, 0, 0, 0.3);
@@ -58,6 +58,7 @@
 .chat-box.timeline .info,.chat-box.timeline .content {
 	background: #fafafa;
 	padding: 5px 10px;
+	/* font-size: 12px; */
 }
 /* line 43, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
 .chat-box.timeline .content { *
@@ -154,7 +155,7 @@
 /* line 114, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
 .chat-box .info { *
 	zoom: 1;
-	color: #949494;
+	color: #2C2C2C;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 	-ms-border-radius: 2px;
@@ -187,6 +188,7 @@
 /* line 132, /home/andrei/core-admin-release/core-admin/source/stylesheets/chat-box.scss */
 .chat-box .info .time {
 	float: right;
+	color: #929191;
 }
 
 /*
