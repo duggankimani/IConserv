@@ -2,6 +2,8 @@ package com.duggan.workflow.test.email;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.mail.MessagingException;
 
@@ -24,10 +26,20 @@ public class TestEmail {
 	@Test
 	public void sendEmail() throws IOException, MessagingException{
 		InputStream is = TestEmail.class.getClass().getResourceAsStream("/email.html");
-		String body = IOUtils.toString(is);
-		assert body!=null;
+		String html = IOUtils.toString(is);
+		assert html!=null;
 		
-		EmailServiceHelper.sendEmail(body, "RE: User Image", "mdkimani@gmail.com", "mariano");
+		html = html.replace("${Request}","Task Assignment");
+		html = html.replace("${OwnerId}", "calcacuervo");
+		html = html.replace("${Office}", "mariano");
+		html = html.replace("${Description}","Buy 200 Bags of Maize for Laikipia Primary");
+		html = html.replace("${DocSubject}", "Task-122");
+		html = html.replace("${DocumentDate}", SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(
+				new Date()));
+		html = html.replace("${DocType}","Task");
+		html = html.replace("${DocumentURL}", "www.wira.io");
+		System.err.println(html);
+		EmailServiceHelper.sendEmail(html, "Further Test", "mdkimani@gmail.com", "mariano");
 	}
 
 	@org.junit.After
