@@ -54,7 +54,7 @@
 			<g:HTMLPanel ui:field="taskContainer"
 				styleName="content-right span10 no-overflow-y no-overflow-x">
 				<!--middle navigation -->
-				<div class="span2" id="middle-nav">
+				<div class="span2 hidden-phone" id="middle-nav">
 					<div class="nav-top">
 						<i class="icon-tag"></i>
 						<h5 ui:field="hCategory">Completed</h5>

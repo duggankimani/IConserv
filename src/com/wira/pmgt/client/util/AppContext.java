@@ -37,7 +37,6 @@ public class AppContext {
 	private static final HTUser user = new HTUser();
 	
 	static Timer timer = new Timer() {
-		
 		@Override
 		public void run() {
 			reloadContext();

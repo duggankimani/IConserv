@@ -7,6 +7,15 @@
 	ui:generateLocales='default'>
 
 	<g:HTMLPanel styleName="navbar" ui:field="divNavbar">
+		<div class="navbar-header visible-phone">
+			<d:ActionLink styleName="btn btn-navbar navbar-toggle pull-left"
+				ui:field="aNavbarToggle" dataToggle="collapse" dataTarget=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</d:ActionLink>
+		</div>
+
 		<div class="navbar-inner">
 			<g:Anchor styleName="brand hidden" href="#home" ui:field="aBrand">
 				iConserve |&nbsp;
@@ -18,15 +27,15 @@
 
 			<ul class="nav pull-right">
 				<li class="home">
-					<g:Anchor href="#home" ui:field="aHome" styleName="close-icon hand">
-						<i class="icon-home">&nbsp;Home</i>
-						<span class="hidden-phone hidden"> &nbsp;Home</span>
+					<g:Anchor href="#home" ui:field="aHome" styleName="close-icon hand active">
+						<i class="icon-home hidden-phone">&nbsp;Home</i>
+						<i class="icon-home visible-phone helper-font-26"></i>
 					</g:Anchor>
 				</li>
-				<li class="home">
-					<g:Anchor href="#adminhome" ui:field="aAdmin" styleName="close-icon hand hidden-phone">
-						<i class="icon-bar-chart">&nbsp;Admin</i>
-						<span class="hidden-phone hidden"> &nbsp;Admin</span>
+				<li class="home hidden-phone">
+					<g:Anchor href="#adminhome" ui:field="aAdmin" styleName="close-icon hand">
+						<i class="icon-bar-chart hidden-phone">&nbsp;Admin</i>
+						<i class="icon-bar-chart visible-phone helper-font-26"></i>
 					</g:Anchor>
 				</li>
 				<li class="notification-dropdown">
@@ -39,8 +48,8 @@
 
 					<g:FocusPanel ui:field="popupContainer"
 						styleName="notification-dialog dropdown-menu">
-							<g:HTMLPanel ui:field="notificationsContainer">
-							</g:HTMLPanel>
+						<g:HTMLPanel ui:field="notificationsContainer">
+						</g:HTMLPanel>
 					</g:FocusPanel>
 
 				</li>
@@ -54,27 +63,7 @@
 						<b class="caret"></b>
 					</a>
 
-					<ul class="dropdown-menu">
-						<div class="user-details row-fluid">
-							<div class="span1">
-								<g:Image ui:field="img" width="90px" height="90px" />
-								<!-- img class="" data-src="img/blueman.png" src="img/blueman.png" 
-									width="70px" height="90px"/ -->
-							</div>
-							<div class="span2">
-								<span class="text" ui:field="spnUserPull"></span>
-								<br />
-								<span class="ellipsis label" style="width: 90%;" ui:field="spnUserGroup"></span>
-							</div>
-
-						</div>
-						<div class="action-area">
-							<div class="version" ui:field="spnVersion"></div>
-							<g:Anchor styleName="btn btn-primary" ui:field="aProfile"
-								href="#home;page=profile">View Profile</g:Anchor>
-							<g:Anchor styleName="btn pull-right" ui:field="aLogout">Logout</g:Anchor>
-						</div>
-					</ul>
+					<d:UserWidget ui:field="divUserContainer" mobile="false"></d:UserWidget>
 				</li>
 			</ul>
 		</div>

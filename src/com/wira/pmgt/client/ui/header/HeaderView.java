@@ -2,8 +2,9 @@ package com.wira.pmgt.client.ui.header;
 
 import java.util.Date;
 
-import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ErrorEvent;
 import com.google.gwt.event.dom.client.ErrorHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
@@ -18,6 +19,8 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
+import com.wira.pmgt.client.ui.component.UserWidget;
+import com.wira.pmgt.client.ui.events.NavbarToggleEvent;
 import com.wira.pmgt.client.ui.util.DateUtils;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.HTUser;
@@ -30,11 +33,13 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 	}
 
 	@UiField
+	Anchor aHome;
+	@UiField
+	Anchor aNavbarToggle;
+	@UiField
 	SpanElement spnCompanyName;
 	@UiField
 	Image imgSmall;
-	@UiField
-	Image img;
 	@UiField
 	Image imgLogo;
 	@UiField
@@ -42,11 +47,7 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 	@UiField
 	SpanElement spnUser;
 	@UiField
-	SpanElement spnUserPull;
-	@UiField
 	Anchor aNotifications;
-	@UiField
-	Anchor aLogout;
 	@UiField
 	HTMLPanel notificationsContainer;
 	@UiField
@@ -54,17 +55,15 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 	@UiField
 	Anchor aAdmin;
 	@UiField
-	Anchor aProfile;
-	@UiField
 	FocusPanel popupContainer;
 	@UiField
 	SpanElement lblCount;
 	@UiField
-	SpanElement spnUserGroup;
-	@UiField
-	DivElement spnVersion;
+	UserWidget divUserContainer;
 
 	boolean isSelected = false;
+
+	private Boolean isToggleClicked = true;
 
 	@Inject
 	public HeaderView(final Binder binder) {
@@ -82,13 +81,38 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 			}
 		});
 
-		img.addErrorHandler(new ErrorHandler() {
+		setAnchorHandlers();
+	}
+
+	private void setAnchorHandlers() {
+		aNavbarToggle.addClickHandler(new ClickHandler() {
 			@Override
-			public void onError(ErrorEvent event) {
-				img.setUrl("img/blueman.png");
+			public void onClick(ClickEvent event) {
+				AppContext.fireEvent(new NavbarToggleEvent(isToggleClicked));
+
+				if (isToggleClicked) {
+					isToggleClicked = false;
+				} else {
+					isToggleClicked = true;
+				}
 			}
 		});
 
+		aHome.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				aHome.addStyleName("active");
+				aAdmin.removeStyleName("active");
+			}
+		});
+
+		aAdmin.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				aAdmin.addStyleName("active");
+				aHome.removeStyleName("active");
+			}
+		});
 	}
 
 	@Override
@@ -96,9 +120,6 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 		return widget;
 	}
 
-	public HasClickHandlers getLogout() {
-		return aLogout;
-	}
 
 	public Anchor getNotificationsButton() {
 		return aNotifications;
@@ -120,23 +141,23 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 	}
 
 	public void setValues(String user_names, String userGroups, String orgName) {
-
+		setValues(user_names, userGroups); //Values to user Widget
+		
 		if (user_names != null) {
 			spnUser.setInnerText(user_names);
-			spnUserPull.setInnerText(user_names);
 		} else {
 			spnUser.setInnerText("");
-			spnUserPull.setInnerText("");
 		}
-
-		if (userGroups != null) {
-			spnUserGroup.setInnerText(userGroups);
-		}
-
 		if (orgName != null) {
 			spnCompanyName.setInnerText(orgName);
 		}
 	}
+	
+	public void setValues(String user_names, String userGroups) {
+		divUserContainer.setValues(user_names, userGroups);
+	}
+	
+	
 
 	public void removePopup() {
 		popupContainer.removeStyleName("is-visible");
@@ -155,9 +176,9 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 	}
 
 	public void setCount(Integer count) {
-		if(count==0){
+		if (count == 0) {
 			lblCount.addClassName("hidden");
-		}else{
+		} else {
 			lblCount.removeClassName("hidden");
 		}
 		lblCount.setInnerText(count + "");
@@ -200,13 +221,11 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 		if (created != null) {
 			versionDate = DateUtils.CREATEDFORMAT.format(created);
 		}
-
-		spnVersion.setInnerHTML("Version " + version
-				+ ", <span title=\"Build Date\">" + versionDate + "</span>");
+		divUserContainer.setVersion(versionDate, version);
 	}
 
 	public void setImage(HTUser user) {
 		imgSmall.setUrl(AppContext.getUserImageUrl(user, 48.0, 48.0));
-		img.setUrl(AppContext.getUserImageUrl(user, 90.0, 90.0));
+		divUserContainer.setImage(user);
 	}
 }

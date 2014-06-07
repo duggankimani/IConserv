@@ -13,12 +13,18 @@ import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
+import com.wira.pmgt.client.ui.events.ContextLoadedEvent;
+import com.wira.pmgt.client.ui.events.NavbarToggleEvent;
+import com.wira.pmgt.client.ui.events.ContextLoadedEvent.ContextLoadedHandler;
+import com.wira.pmgt.client.ui.events.NavbarToggleEvent.NavbarToggleHandler;
 import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent;
 import com.wira.pmgt.client.ui.events.ProcessingEvent;
 import com.wira.pmgt.client.ui.newsfeed.components.CommentActivity;
 import com.wira.pmgt.client.ui.newsfeed.components.TaskActivity;
+import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.Activity;
 import com.wira.pmgt.shared.model.Comment;
+import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.Notification;
 import com.wira.pmgt.shared.requests.GetActivitiesRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
@@ -27,85 +33,117 @@ import com.wira.pmgt.shared.responses.GetCommentsResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
 public class NewsFeedPresenter extends
-		PresenterWidget<NewsFeedPresenter.MyView> {
+		PresenterWidget<NewsFeedPresenter.MyView> implements
+		NavbarToggleHandler, ContextLoadedHandler {
 
 	public interface MyView extends View {
 		void bind();
 
 		BulletListPanel getPanelActivity();
-	}
 
-	@Inject DispatchAsync requestHelper;
+		void showLeftPanel(boolean show);
+
+		void setImage(HTUser currentUser);
+
+		void setValues(String surname, String groupsAsString);
+	}
 
 	@Inject
-	public NewsFeedPresenter(final EventBus eventBus, MyView view){
+	DispatchAsync requestHelper;
+
+	@Inject
+	public NewsFeedPresenter(final EventBus eventBus, MyView view) {
 		super(eventBus, view);
 	}
-	 
+
 	public void loadActivities() {
 		MultiRequestAction requests = new MultiRequestAction();
 		requests.addRequest(new GetActivitiesRequest(null));
-		
+
 		fireEvent(new ProcessingEvent());
-		requestHelper.execute(requests, 
+		requestHelper.execute(requests,
 				new TaskServiceCallback<MultiRequestActionResult>() {
-			
-			public void processResult(MultiRequestActionResult results) {
-				GetActivitiesResponse getActivities = (GetActivitiesResponse)results.get(0);
-				bindActivities(getActivities);
-				
-				fireEvent(new ProcessingCompletedEvent());
-			}
-		});
-		
-		
+
+					public void processResult(MultiRequestActionResult results) {
+						GetActivitiesResponse getActivities = (GetActivitiesResponse) results
+								.get(0);
+						bindActivities(getActivities);
+
+						fireEvent(new ProcessingCompletedEvent());
+					}
+				});
+
 	}
 
 	protected void bindActivities(GetActivitiesResponse response) {
-		//getView().getPanelActivity().clear();
-		
-		//Map<Activity, List<Activity>> activitiesMap = response.getActivityMap();
-		//setInSlot(ACTIVITY_SLOT, null);
+		// getView().getPanelActivity().clear();
+
+		// Map<Activity, List<Activity>> activitiesMap =
+		// response.getActivityMap();
+		// setInSlot(ACTIVITY_SLOT, null);
 		Map<Activity, List<Activity>> activitiesMap = response.getActivityMap();
-		//System.out.println(activitiesMap.size());
+		// System.out.println(activitiesMap.size());
 		Set<Activity> keyset = activitiesMap.keySet();
-		List<Activity> activities= new ArrayList<Activity>();
-		
+		List<Activity> activities = new ArrayList<Activity>();
+
 		activities.addAll(keyset);
 		Collections.sort(activities);
 		Collections.reverse(activities);
-		
-		for(Activity activity: activities){
-			bind(activity,false);	
-			//System.err.println(activity);
-			List<Activity> children = activitiesMap.get(activity);	
-			if(children!=null){
-				for(Activity child: children){
-					//System.err.println(child);
+
+		for (Activity activity : activities) {
+			bind(activity, false);
+			// System.err.println(activity);
+			List<Activity> children = activitiesMap.get(activity);
+			if (children != null) {
+				for (Activity child : children) {
+					// System.err.println(child);
 					bind(child, true);
 				}
-				
+
 			}
 		}
 	}
 
 	private void bind(Activity activity, boolean b) {
-		if(activity instanceof Notification){
-			TaskActivity activityView = new TaskActivity((Notification)activity);
+		if (activity instanceof Notification) {
+			TaskActivity activityView = new TaskActivity(
+					(Notification) activity);
 			getView().getPanelActivity().add(activityView);
-		}else{
-			CommentActivity activityView = new CommentActivity((Comment)activity);
+		} else {
+			CommentActivity activityView = new CommentActivity(
+					(Comment) activity);
 			getView().getPanelActivity().add(activityView);
 		}
 	}
 
 	protected void bindCommentsResult(GetCommentsResponse commentsResult) {
-		
+
 	}
 
 	@Override
 	protected void onBind() {
 		super.onBind();
+		this.addRegisteredHandler(NavbarToggleEvent.TYPE, this);
+		this.addRegisteredHandler(ContextLoadedEvent.TYPE, this);
 		getView().bind();
+	}
+
+	@Override
+	public void onNavbarToggle(NavbarToggleEvent event) {
+		if (event.getIsClicked()) {
+			getView().showLeftPanel(true);
+		} else {
+			getView().showLeftPanel(false);
+		}
+		
+		HTUser currentUser = AppContext.getContextUser();
+		getView().setImage(currentUser);
+		getView().setValues(currentUser.getSurname(), currentUser.getGroupsAsString());
+	}
+
+	@Override
+	public void onContextLoaded(ContextLoadedEvent event) {
+		System.err.println("Context Loaded Event Received by NewsFeedPresenter");
+		
 	}
 }

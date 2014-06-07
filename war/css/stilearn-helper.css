@@ -213,6 +213,15 @@ body .main-body .alert a {
 	font-size: 24px;
 	line-height: 1.2em;
 }
+.helper-font-24 {
+	font-size: 24px;
+	line-height: 1.2em;
+}
+
+.helper-font-26 {
+	font-size: 26px;
+	line-height: 1.2em;
+}
 
 .helper-font-32 {
 	font-size: 32px;

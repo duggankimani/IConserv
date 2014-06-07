@@ -23,6 +23,10 @@ public class ActionLink extends Anchor {
 	public void setDataToggle(String data) {
 		getElement().setAttribute("data-toggle", data);
 	}
+	
+	public void setDataTarget(String data) {
+		getElement().setAttribute("data-target", data);
+	}
 
 	@Override
 	public void setTitle(String title) {

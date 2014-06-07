@@ -75,10 +75,15 @@
 			</g:HTMLPanel>
 		</g:FocusPanel>
 
-		<div class="news-feed row-fluid">
-			<div class="span6 news-box">
+		<g:HTMLPanel styleName="news-feed row-fluid">
+			<g:HTMLPanel styleName="toggle-box in visible-phone" ui:field="divToggleContainer">
+					<d:UserWidget ui:field="divUserContainer" mobile="true"></d:UserWidget>
+			</g:HTMLPanel>	
+			
+			
+			<g:HTMLPanel styleName="span6 news-box"  ui:field="divNewsFeed">
 				<div class="portlet full-page">
-					<div class="portlet-header">
+					<div class="portlet-header hidden-phone">
 						<h3>
 							<i class="icon-bar-chart"></i>
 							News Feed
@@ -90,9 +95,9 @@
 						</d:BulletListPanel>
 					</g:HTMLPanel>
 				</div>
-			</div>
+			</g:HTMLPanel>
 
-			<div class="span6 activities-box visible-desktop visible-tablet">
+			<div class="span6 activities-box hidden-phone">
 				<div class="portlet">
 					<div class="portlet-header">
 						<h3>
@@ -105,6 +110,6 @@
 					</g:HTMLPanel>
 				</div>
 			</div>
-		</div>
+		</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder>

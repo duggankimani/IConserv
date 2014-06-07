@@ -9,23 +9,24 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
+import com.wira.pmgt.client.ui.component.UserWidget;
 import com.wira.pmgt.client.ui.events.CloseCarouselEvent;
 import com.wira.pmgt.client.ui.newsfeed.components.CarouselPopup;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.client.util.Definitions;
+import com.wira.pmgt.shared.model.HTUser;
 
 public class NewsFeedView extends ViewImpl implements
 		NewsFeedPresenter.MyView {
@@ -58,13 +59,16 @@ public class NewsFeedView extends ViewImpl implements
 	LIElement liReceive;
 	@UiField
 	LIElement liReview;
-	
-	
-
 	@UiField
 	DivElement imgReceive;
 	@UiField
 	DivElement imgReview;
+	@UiField
+	HTMLPanel divNewsFeed;
+	@UiField
+	HTMLPanel divToggleContainer;
+	@UiField
+	UserWidget divUserContainer;
 
 	@UiField FocusPanel parentPanel;
 	@UiField BulletListPanel panelActivity;
@@ -117,7 +121,6 @@ public class NewsFeedView extends ViewImpl implements
 				timer = new Timer() {
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
 						position[1] = liFollowUp.getAbsoluteRight();
 						AppManager.showCarouselPanel(popUp1, position, false);
 						popUp1.showFollowUp();
@@ -227,8 +230,27 @@ public class NewsFeedView extends ViewImpl implements
 			divTutorial.addClassName("hidden");
 		}
 		
-		// TODO: Remove this afterwards
-		// divTutorial.addClassName("hidden");
+	}
+
+	@Override
+	public void showLeftPanel(boolean show) {
+		if(show){
+			divToggleContainer.removeStyleName("in");
+			divNewsFeed.addStyleName("out");
+		}else{
+			divToggleContainer.addStyleName("in");
+			divNewsFeed.removeStyleName("out");
+		}
+	}
+
+	@Override
+	public void setImage(HTUser currentUser) {
+		divUserContainer.setImage(currentUser);
+	}
+
+	@Override
+	public void setValues(String userName, String userGroups) {
+		divUserContainer.setValues(userName, userGroups);
 	}
 	
 	

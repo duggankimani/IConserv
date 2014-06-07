@@ -131,7 +131,8 @@
 		</g:HTMLPanel>
 
 		<g:HTMLPanel styleName="overflow-y">
-			<g:HTMLPanel styleName="personal_info row-fluid span12" ui:field="divUserInfo">
+			<g:HTMLPanel styleName="personal_info row-fluid span12"
+				ui:field="divUserInfo">
 				<div class="span9">
 					<div class="span2 image">
 						<g:Image ui:field="img" width="32px" />
@@ -198,10 +199,13 @@
 							<span ui:field="spnActivityNo"></span>
 						</h4>
 					</div>
-					<g:HTMLPanel styleName="row-fluid comment-box" ui:field="commentBox">
+					<g:HTMLPanel styleName="row-fluid comment-box"
+						ui:field="commentBox">
 						<d:CommentBox ui:field="commentPanel" styleName="hidden"></d:CommentBox>
-						<g:HTMLPanel styleName="alert alert-info hidden" ui:field="divNocomments">
-							<strong>Heads Up!</strong>There no comments/Activity since this has not been assigned yet
+						<g:HTMLPanel styleName="alert alert-info hidden"
+							ui:field="divNocomments">
+							<strong>Heads Up!</strong>
+							There no comments/Activity since this has not been assigned yet
 						</g:HTMLPanel>
 					</g:HTMLPanel>
 					<g:HTMLPanel ui:field="panelActivity" styleName="panel-activity">

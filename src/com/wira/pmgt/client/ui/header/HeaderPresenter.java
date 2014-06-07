@@ -6,7 +6,6 @@ import java.util.HashMap;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasBlurHandlers;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.user.client.Timer;
@@ -25,11 +24,13 @@ import com.wira.pmgt.client.ui.events.AfterSaveEvent;
 import com.wira.pmgt.client.ui.events.AlertLoadEvent;
 import com.wira.pmgt.client.ui.events.ContextLoadedEvent;
 import com.wira.pmgt.client.ui.events.LoadAlertsEvent;
+import com.wira.pmgt.client.ui.events.LogoutEvent;
 import com.wira.pmgt.client.ui.events.NotificationsLoadEvent;
 import com.wira.pmgt.client.ui.events.AdminPageLoadEvent.AdminPageLoadHandler;
 import com.wira.pmgt.client.ui.events.AfterSaveEvent.AfterSaveHandler;
 import com.wira.pmgt.client.ui.events.ContextLoadedEvent.ContextLoadedHandler;
 import com.wira.pmgt.client.ui.events.LoadAlertsEvent.LoadAlertsHandler;
+import com.wira.pmgt.client.ui.events.LogoutEvent.LogoutHandler;
 import com.wira.pmgt.client.ui.notifications.NotificationsPresenter;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.HTUser;
@@ -44,10 +45,9 @@ import com.wira.pmgt.shared.responses.LogoutActionResult;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
 public class HeaderPresenter extends PresenterWidget<HeaderPresenter.IHeaderView> 
-implements AfterSaveHandler, AdminPageLoadHandler, ContextLoadedHandler, LoadAlertsHandler{
+implements AfterSaveHandler, AdminPageLoadHandler, ContextLoadedHandler, LoadAlertsHandler, LogoutHandler{
 
 	public interface IHeaderView extends View {
-		HasClickHandlers getLogout();
 		void setValues(String userNames, String userGroups, String orgName);
 		Anchor getNotificationsButton();
 		void setPopupVisible();
@@ -98,12 +98,7 @@ implements AfterSaveHandler, AdminPageLoadHandler, ContextLoadedHandler, LoadAle
 		this.addRegisteredHandler(AdminPageLoadEvent.TYPE, this);
 		this.addRegisteredHandler(ContextLoadedEvent.TYPE, this);
 		this.addRegisteredHandler(LoadAlertsEvent.TYPE, this);
-		getView().getLogout().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				logout();
-			}
-		});
+		this.addRegisteredHandler(LogoutEvent.TYPE, this);
 		
 		getView().getNotificationsButton().addClickHandler(new ClickHandler() {
 			
@@ -212,6 +207,11 @@ implements AfterSaveHandler, AdminPageLoadHandler, ContextLoadedHandler, LoadAle
 	@Override
 	public void onLoadAlerts(LoadAlertsEvent event) {
 		loadAlertCount();
+	}
+
+	@Override
+	public void onLogout(LogoutEvent event) {
+		logout();
 	}
 	
 	
