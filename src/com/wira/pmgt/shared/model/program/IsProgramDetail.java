@@ -1,11 +1,9 @@
 package com.wira.pmgt.shared.model.program;
 
-import java.util.Date;
 import java.util.List;
 
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.Listable;
-import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
 
 public abstract class IsProgramDetail extends ProgramSummary implements Listable{
@@ -16,22 +14,17 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 	private static final long serialVersionUID = 1L;
 	
 	private String code;
-	private ProgramDetailType type;
 	private Double budgetAmount; //Total budget amount (accumulation of source of funds)
 	private Double actualAmount; //Actual amount spent
-	private Date startDate; //For Activities & tasks - Start Date (Programs run for a whole year)
-	private Date endDate; //For Activities & tasks - End Date
 	private List<ProgramFundDTO> funding;
 	private List<TargetAndOutcomeDTO> targetsAndOutcomes;
 	private PeriodDTO period;
-	private Long parentId; //Parent Activity or Task
 	private List<IsProgramDetail> children;
 	private List<IsProgramDetail> objectives; //Objectives of an outcome
 	private List<ProgramSummary> programSummary; //Used to build breadcrumb 
 	private List<HTUser> assignedUsers;
 	private List<UserGroup> assignedGroups;
 	private Long documentId;
-	private ProgramStatus status;
 	
 	public Long getDocumentId() {
 		return documentId;
@@ -42,14 +35,6 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 	}
 
 	public IsProgramDetail() {
-	}
-
-	public ProgramDetailType getType() {
-		return type;
-	}
-
-	public void setType(ProgramDetailType type) {
-		this.type = type;
 	}
 
 	public Double getBudgetAmount() {
@@ -66,22 +51,6 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 
 	public void setActualAmount(Double actualAmount) {
 		this.actualAmount = actualAmount;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
 	}
 
 	public List<TargetAndOutcomeDTO> getTargetsAndOutcomes() {
@@ -106,14 +75,6 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 
 	public void setPeriod(PeriodDTO period) {
 		this.period = period;
-	}
-
-	public Long getParentId() {
-		return parentId;
-	}
-
-	public void setParentId(Long parentId) {
-		this.parentId = parentId;
 	}
 
 	public List<IsProgramDetail> getChildren() {
@@ -169,13 +130,4 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 	public void setCode(String code) {
 		this.code = code;
 	}
-
-	public ProgramStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(ProgramStatus status) {
-		this.status = status;
-	}
-
 }

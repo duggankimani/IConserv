@@ -32,6 +32,19 @@ public class TestProgramDaoImpl {
 		dao= DB.getProgramDaoImpl();
 	}
 	
+	
+	@Test
+	public void getCalendar(){
+		
+		List<ProgramDetail> details = dao.getProgramCalendar("Administrator");
+		//List<ProgramDetail> details = dao.getProgramCalendar("jodonya");
+		Assert.assertNotSame(0, details.size());
+		for(ProgramDetail d: details){
+			assert d!=null;
+			System.out.println(d.getId()+" "+d.getParent().getId()+" "+d.getStatus()+" "+d.getName()+" "+d.getType()+" "+d.getStartDate()+" "+d.getEndDate());
+		}
+	}
+	
 	@Ignore
 	public void assign(){
 		long activityId = 1L;
@@ -56,7 +69,7 @@ public class TestProgramDaoImpl {
 		ProgramDaoHelper.saveTaskInfo(info);
 	}
 	
-	@Test
+	@Ignore
 	public void loadProgramsByType(){
 		String userId = "Administrator";
 		String groupId = "ADMIN";

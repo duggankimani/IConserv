@@ -79,6 +79,11 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 
 	private List<String> getCurrentUserGroups() {
 		String userId = getCurrentUserId();
+		return getCurrentUserGroups(userId);
+	}
+	
+	private List<String> getCurrentUserGroups(String userId) {
+		
 		List<UserGroup> groups = LoginHelper.get().getGroupsForUser(userId);
 		if(groups==null){
 			log.warn("Get Program Details- No Results Due To: User '"+userId+"'has no groups");
@@ -165,13 +170,17 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		return getSingleResultOrNull(query);
 	}
 	
-	public List<ProgramDetail> getProgramDetails(String userId){
-		Query query = em.createNamedQuery("ProgramDetail.findByDates")
-				.setParameter("statusCreated", ProgramStatus.CREATED)
-				.setParameter("currentDate", new Date())
-				.setParameter("statusClosed", ProgramStatus.CLOSED)
-				.setParameter("mainProgramIds", getProgramIds(userId));
+	public List<ProgramDetail> getProgramCalendar(String userId){
+		List<Long> ids = getProgramIds(userId);
+		if(ids.isEmpty()){
+			return new ArrayList<>();
+		}
 		
+		Query query = em.createNamedQuery("ProgramDetail.getCalendar")
+				.setParameter("parentIds", ids)
+				.setParameter("statusCreated", ProgramStatus.CREATED.name())
+				.setParameter("currentDate", new Date())
+				.setParameter("statusClosed", ProgramStatus.CLOSED.name());		
 		return getResultList(query);
 	}
 
@@ -181,11 +190,17 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 	 * @return
 	 */
 	private List<Long> getProgramIds(String userId) {
-		Query query = em.createNamedQuery("ProgramDetail.findByDates")
-				.setParameter("isCurrentUserAdmin", false)
-				.setParameter("userId",userId)
-				.setParameter("groupIds","")
-				.setParameter("isActive",1);
+		List<String> groups = getCurrentUserGroups(userId);
+		if(groups==null || groups.isEmpty()){
+			return new ArrayList<>();
+		}
+		
+		Query query = em.createNamedQuery("ProgramDetail.findAll")
+		.setParameter("isCurrentUserAdmin", groups.contains("ADMIN"))
+		.setParameter("userId", userId)
+		.setParameter("groupIds", groups)
+		.setParameter("isActive", 1)
+		.setParameter("period", getActivePeriod());
 				
 		return getResultList(query);
 	}

@@ -1,0 +1,10 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" 
+    xmlns:g="urn:import:com.google.gwt.user.client.ui"
+    xmlns:d="urn:import:com.wira.pmgt.client.ui.component">
+	<g:HTMLPanel>
+	    <d:ActionLink ui:field="aProgram">
+	    	<span ui:field="spnDetail"></span>
+	    </d:ActionLink>
+	</g:HTMLPanel>
+</ui:UiBinder>

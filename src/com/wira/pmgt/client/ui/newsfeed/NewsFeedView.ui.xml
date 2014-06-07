@@ -100,7 +100,7 @@
 							Upcoming Activities
 						</h3>
 					</div>
-					<g:HTMLPanel styleName="portlet-content">
+					<g:HTMLPanel styleName="portlet-content" ui:field="panelUpcomingActivities">
 						 Upcoming Activities come here..
 					</g:HTMLPanel>
 				</div>

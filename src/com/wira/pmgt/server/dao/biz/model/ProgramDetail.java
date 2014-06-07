@@ -10,16 +10,21 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityResult;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.FieldResult;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SqlResultSetMapping;
 
 import org.hibernate.annotations.Cascade;
 
@@ -43,17 +48,53 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 	@NamedQuery(name="ProgramDetail.findAll", query="SELECT distinct(p) FROM ProgramDetail p left join p.programAccess access " +
 			"where (true=:isCurrentUserAdmin or (access.userId=:userId or access.groupId in (:groupIds))) " +
 			"and p.isActive=:isActive and p.period=:period " +
+			"order by p.name"),		
+	@NamedQuery(name="ProgramDetail.findAllIds", query="SELECT distinct(p.id) FROM ProgramDetail p left join p.programAccess access " +
+			"where (true=:isCurrentUserAdmin or (access.userId=:userId or access.groupId in (:groupIds))) " +
+			"and p.isActive=:isActive and p.period=:period " +
 			"order by p.name"),
-			
 	@NamedQuery(name="ProgramDetail.findById", query="SELECT p FROM ProgramDetail p where p.id=:id"),
-	@NamedQuery(name="ProgramDetail.findByCodeAndPeriod", query="FROM ProgramDetail p where p.code=:code and p.period=:period"),
-//	@NamedQuery(name="ProgramDetail.findByDates",query="select distinct(p), p.name,p.description,p.startDate,p.endDate " +
-//			"from ProgramDetail p " +
-//			"where (p.startDate is not null and p.endDate is not null) and " +
-//				"(((p.status is null or p.status=:statusCreated) and p.startDate<(:currentDate + interval '1' day)) " +
-//			"or (p.status is not null and p.status!=:statusClosed and endDate<:currentDate)) " +
-//			"and (p.programId in (:mainProgramIds) or p.id in (:mainProgramIds))")
+	@NamedQuery(name="ProgramDetail.findByCodeAndPeriod", query="FROM ProgramDetail p where p.code=:code and p.period=:period")
 })
+
+@NamedNativeQueries({
+	//TODO: LOOK FOR A LIGHT WEIGHT MECHANISM THAT ALLOWS A SUBSET OF FIELDS TO BE SELECTED
+	/**
+	 * This query loads the children of children starting from Outcome>Activity>Task>Task etc 
+	 * 
+	 * @author duggan
+	 *
+	 */
+	@NamedNativeQuery(name="ProgramDetail.getCalendar",
+			resultClass=ProgramDetail.class,
+			query="with recursive programdetail_tree as ( "+
+			"select *,array[id] as path_info "+
+			"from ProgramDetail where parentid in (:parentIds) and type!='OBJECTIVE' and isActive=1 "+
+			"union all "+
+			"select c.*, p.path_info||c.id "+
+			"from ProgramDetail c join programdetail_tree p on c.parentid=p.id " +
+			"where (c.startDate is not null and c.endDate is not null) and " +
+				"(((c.status is null or c.status=:statusCreated) and c.startDate<(:currentDate)) " +
+			"or (c.status is not null and c.status!=:statusClosed and c.endDate<:currentDate)) " +
+			") "+
+			"select * " +
+			"from programdetail_tree " +
+			"where startdate is not null and enddate is not null and status!='CLOSED'" +
+			"order by path_info ")
+})
+
+@SqlResultSetMapping(name="ProgramDetail.calendarMappings",
+	entities=@EntityResult(entityClass=ProgramDetail.class, fields={
+		@FieldResult(name="id",column="id"),
+		@FieldResult(name="name",column="name"),
+		@FieldResult(name="description",column="description"),
+		@FieldResult(name="type",column="type"),
+		@FieldResult(name="parentid",column="programParentId"),
+		@FieldResult(name="startDate",column="startDate"),
+		@FieldResult(name="endDate",column="endDate")
+	}
+	))
+	
 public class ProgramDetail 	extends ProgramBasicDetail{
 	
 	/**
@@ -133,15 +174,8 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 			})
 	private Set<ProgramAccess> programAccess = new HashSet<>();
 	
-	
 	@Enumerated(EnumType.STRING)
 	private ProgramStatus status = ProgramStatus.CREATED;
-	
-	/*for scheduled items (Items with start & end dates), we need a way to simplify
-	 * the complex query that loads a Program & all its children
-	 * for the logged in user that are either due in a few days or overdue 
-	 */
-	private Long programId; //ID of the Program(Main program) under which this detail lies (Not necessary its direct parent)
 	
 	public ProgramDetail() {
 	}
@@ -369,11 +403,4 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 		this.status = status;
 	}
 
-	public Long getProgramId() {
-		return programId;
-	}
-
-	public void setProgramId(Long programId) {
-		this.programId = programId;
-	}
 }

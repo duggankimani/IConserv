@@ -252,7 +252,8 @@ public class ProgramDaoHelper {
 		}
 		
 		if(programDTO.getParentId()!=null){
-			detail.setParent(dao.getProgramDetail(programDTO.getParentId()));
+			ProgramDetail parent = dao.getProgramDetail(programDTO.getParentId());
+			detail.setParent(parent);
 		}
 		
 		//detail.setActual(String);
@@ -619,5 +620,34 @@ public class ProgramDaoHelper {
 		}		
 		
 		return info;
+	}
+
+	public static List<ProgramSummary> getProgramCalendar(String userId) {
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		List<ProgramDetail> details = dao.getProgramCalendar(userId);
+		
+		List<ProgramSummary> summaries = new ArrayList<>();
+		for(ProgramDetail detail: details){
+			ProgramSummary summary = getSummary(detail);
+			summaries.add(summary);
+		}
+			
+		return summaries;
+	}
+
+	private static ProgramSummary getSummary(ProgramDetail detail) {
+		ProgramSummary summary = new ProgramSummary();
+		summary.setId(detail.getId());
+		summary.setName(detail.getName());
+		summary.setDescription(detail.getDescription());
+		summary.setStartDate(detail.getStartDate());
+		summary.setEndDate(detail.getEndDate());
+		summary.setStatus(detail.getStatus());
+		if(detail.getParent()!=null){
+			summary.setParentId(detail.getParent().getId());
+		}
+		
+		summary.setType(detail.getType());
+		return summary;
 	}
 }
