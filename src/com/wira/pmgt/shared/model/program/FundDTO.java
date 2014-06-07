@@ -19,6 +19,7 @@ public class FundDTO implements Serializable,Listable {
 	private Long id;
 	private String name; //Donor Name
 	private String description; // Any other details 
+	private boolean isActive= true;
 	
 	public FundDTO() {
 	}
@@ -58,6 +59,14 @@ public class FundDTO implements Serializable,Listable {
 		FundDTO other = (FundDTO)obj;
 		
 		return other.name.equals(name);
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }

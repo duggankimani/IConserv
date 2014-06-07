@@ -2,13 +2,19 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d='urn:import:com.wira.pmgt.client.ui.component'>
 	<g:HTMLPanel styleName="form-horizontal">
+    	<d:IssuesPanel ui:field="issues">
+		</d:IssuesPanel>
+	    
 		<div class="control-group">
 			<d:ActionLink styleName="btn btn-default" ui:field="aCreateDonor">Create</d:ActionLink>
 			<d:ActionLink styleName="btn btn-default" ui:field="aEditDonor">Edit</d:ActionLink>
 		</div>
 
 		<g:HTMLPanel styleName="control-group hidden" ui:field="divDropdownContainer">
-			<d:DropDownList ui:field="lstDonors"></d:DropDownList>
+		    <div class="control-label" ui:field="divDonor">Donors:</div>
+			<div class="controls">
+				<d:DropDownList ui:field="lstDonors"></d:DropDownList>
+			</div>			
 		</g:HTMLPanel>
 
 		<g:HTMLPanel ui:field="divCreateContainer" styleName="hidden">
@@ -18,11 +24,18 @@
 					<g:TextBox ui:field="txtName" />
 				</div>
 			</div>
-
+			
 			<div class="control-group">
 				<div class="control-label">Description:</div>
 				<div class="controls">
 					<g:TextArea ui:field="txtDescription" />
+				</div>
+			</div>
+			
+			<div class="control-group">
+				<div class="control-label">Active:</div>
+				<div class="controls">
+					<g:CheckBox ui:field="chkActive" value="true" title="This will activate/deactive the selected item"></g:CheckBox>
 				</div>
 			</div>
 		</g:HTMLPanel>

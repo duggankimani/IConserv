@@ -360,6 +360,7 @@ public class ProgramDaoHelper {
 		
 		fund.setDescription(dto.getDescription());
 		fund.setName(dto.getName());
+		fund.setIsActive(dto.isActive()?1: 0);
 		
 		return fund;
 	}

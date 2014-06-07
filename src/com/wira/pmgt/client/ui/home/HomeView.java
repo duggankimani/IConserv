@@ -180,6 +180,7 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 	}
 
 	public void showUserImg(HTUser currentUser) {
+		System.err.println(currentUser.getFullName());
 		imgUser.setUrl(AppContext.getUserImageUrl(currentUser, 175.0, 175.0));
 		spnUser.setInnerText(currentUser.getFullName());
 	}

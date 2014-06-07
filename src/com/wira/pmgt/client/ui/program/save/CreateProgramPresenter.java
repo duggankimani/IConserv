@@ -15,14 +15,16 @@ import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.OptionControl;
 import com.wira.pmgt.client.ui.donor.save.DonorSaveView;
-import com.wira.pmgt.client.ui.events.ProgramsReloadEvent;
 import com.wira.pmgt.client.ui.events.ActivitySavedEvent;
+import com.wira.pmgt.client.ui.events.ProgramsReloadEvent;
 import com.wira.pmgt.client.ui.period.save.PeriodSaveView;
 import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
+import com.wira.pmgt.shared.model.program.ProgramFundDTO;
+import com.wira.pmgt.shared.requests.CreateDonorRequest;
 import com.wira.pmgt.shared.requests.CreatePeriodRequest;
 import com.wira.pmgt.shared.requests.CreateProgramRequest;
 import com.wira.pmgt.shared.requests.GetFundsRequest;
@@ -102,7 +104,7 @@ public class CreateProgramPresenter extends
 
 							@Override
 							public void onSelect(String name) {
-								if ("Save".endsWith(name)) {
+								if ("Save".equals(name)) {
 									// Save Period
 									if (periodSave.isValid()) {
 										PeriodDTO period = periodSave
@@ -130,7 +132,7 @@ public class CreateProgramPresenter extends
 
 							@Override
 							public void onSelect(String name) {
-								if ("Save".endsWith(name)) {
+								if ("Save".equals(name)) {
 									// Save Period
 									if (periodSave.isValid()) {
 										PeriodDTO period = periodSave
@@ -146,23 +148,39 @@ public class CreateProgramPresenter extends
 						}, "Save", "Cancel");
 			}
 		});
+		
+		
 
 		getView().getManageDonors().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				final DonorSaveView donorSave = new DonorSaveView();
+				requestHelper.execute(new GetFundsRequest(), new TaskServiceCallback<GetFundsResponse>() {
+					@Override
+					public void processResult(GetFundsResponse aResponse) {
+						showDonorPopup(aResponse.getFunds());
+					}
 
+				});
+			}
+			
+			void showDonorPopup(List<FundDTO> funds) {
+				
+				final DonorSaveView donorSave = new DonorSaveView(funds);
+				
 				AppManager.showPopUp("Manage Donors", donorSave,
 						new OptionControl() {
 							@Override
 							public void onSelect(String name) {
-								if ("Save".endsWith(name)) {
+								if(name.equals("Save")){
+									if(donorSave.isValid()){
+										saveDonor(donorSave.getDonor());
+										hide();
+									}									
+								}else{
 									hide();
 								}
 							}
-
-						},"Save","Save & Close", "Cancel");
-
+						},"Save", "Cancel");
 			}
 		});
 
@@ -259,4 +277,24 @@ public class CreateProgramPresenter extends
 	public void setNavigateOnSave(boolean navigateOnSave) {
 		this.navigateOnSave = navigateOnSave;
 	}
+	
+	private void saveDonor(FundDTO donor) {
+	
+		final IsProgramDetail detail = getView().getProgram();
+		
+		MultiRequestAction requests = new MultiRequestAction();
+		requests.addRequest(new CreateDonorRequest(donor));
+		requests.addRequest(new GetFundsRequest());
+		requestHelper.execute(requests, new TaskServiceCallback<MultiRequestActionResult>() {
+			
+			@Override
+			public void processResult(MultiRequestActionResult aResponse) {
+				GetFundsResponse response = (GetFundsResponse)aResponse.get(1);
+				getView().setFunds(response.getFunds());
+				getView().setProgram(detail);
+			}
+		});
+	
+	}
+
 }

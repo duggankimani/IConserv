@@ -12,7 +12,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -27,7 +26,6 @@ import com.wira.pmgt.client.ui.component.grid.AggregationGrid;
 import com.wira.pmgt.client.ui.component.grid.ColumnConfig;
 import com.wira.pmgt.client.ui.component.grid.DataMapper;
 import com.wira.pmgt.client.ui.component.grid.DataModel;
-import com.wira.pmgt.client.ui.images.ImageResources;
 import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.Listable;
 import com.wira.pmgt.shared.model.ProgramDetailType;
@@ -37,6 +35,8 @@ import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
+
+import static com.wira.pmgt.client.ui.util.StringUtils.*;
 
 public class CreateProgramView extends PopupViewImpl implements
 		CreateProgramPresenter.ICreateDocView {
@@ -172,10 +172,6 @@ public class CreateProgramView extends PopupViewImpl implements
 		return isValid;
 	}
 
-	boolean isNullOrEmpty(String value) {
-		return value == null || value.trim().length() == 0;
-	}
-
 	@Override
 	public HasClickHandlers getAddPeriodLink() {
 		return imgAdd;
@@ -224,6 +220,7 @@ public class CreateProgramView extends PopupViewImpl implements
 
 	@Override
 	public void setFunds(List<FundDTO> funds) {
+		donors.clear();
 		if(funds!=null){
 			for(FundDTO dto: funds){
 				donors.add(dto);

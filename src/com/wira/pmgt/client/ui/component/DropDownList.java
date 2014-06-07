@@ -80,8 +80,11 @@ public class DropDownList<T extends Listable> extends Composite implements HasVa
 	}
 
 	public void setValue(T value) {
-		if(value==null)
+		if(value==null){
+			listBox.setSelectedIndex(0);
+			this.value = null;
 			return;
+		}
 		
 		for(int i=0; i<listBox.getItemCount(); i++){
 			
