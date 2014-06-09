@@ -20,9 +20,24 @@ public class ProgramSummary implements Serializable {
 	private Long parentId; 
 	private Date startDate;
 	private Date endDate; 
+	private Long programId; //Parent Program ID
 	
 	public ProgramSummary(){}
 	
+	public ProgramSummary(String name, String description, Long programId,
+			Long id, Long parentid, ProgramDetailType type, Date startDate,
+			Date endDate, ProgramStatus status) {
+		this.name = name;
+		this.description=description;
+		this.programId = programId;
+		this.id =id;
+		this.parentId = parentid;
+		this.type = type;
+		this.startDate=startDate;
+		this.endDate = endDate;
+		this.status = status;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -80,5 +95,9 @@ public class ProgramSummary implements Serializable {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public Long getProgramId() {
+		return programId;
 	}
 }

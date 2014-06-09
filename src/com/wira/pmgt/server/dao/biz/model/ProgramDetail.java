@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
 import javax.persistence.Entity;
 import javax.persistence.EntityResult;
 import javax.persistence.EnumType;
@@ -24,7 +25,10 @@ import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.SqlResultSetMapping;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 
@@ -49,51 +53,60 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 			"where (true=:isCurrentUserAdmin or (access.userId=:userId or access.groupId in (:groupIds))) " +
 			"and p.isActive=:isActive and p.period=:period " +
 			"order by p.name"),		
-	@NamedQuery(name="ProgramDetail.findAllIds", query="SELECT distinct(p.id) FROM ProgramDetail p left join p.programAccess access " +
-			"where (true=:isCurrentUserAdmin or (access.userId=:userId or access.groupId in (:groupIds))) " +
-			"and p.isActive=:isActive and p.period=:period " +
-			"order by p.name"),
+	@NamedQuery(name="ProgramDetail.findAllIds", query="SELECT distinct(p.id) FROM ProgramDetail p " +
+			"left join p.programAccess access " +
+			"where p.type=:type " +
+			"and (true=:isCurrentUserAdmin or (access.userId=:userId or access.groupId in (:groupIds))) " +
+			"and p.isActive=:isActive and p.period=:period "),
 	@NamedQuery(name="ProgramDetail.findById", query="SELECT p FROM ProgramDetail p where p.id=:id"),
 	@NamedQuery(name="ProgramDetail.findByCodeAndPeriod", query="FROM ProgramDetail p where p.code=:code and p.period=:period")
 })
 
 @NamedNativeQueries({
-	//TODO: LOOK FOR A LIGHT WEIGHT MECHANISM THAT ALLOWS A SUBSET OF FIELDS TO BE SELECTED
 	/**
 	 * This query loads the children of children starting from Outcome>Activity>Task>Task etc 
 	 * 
 	 * @author duggan
 	 *
-	 */
+	 */	
 	@NamedNativeQuery(name="ProgramDetail.getCalendar",
-			resultClass=ProgramDetail.class,
+			resultSetMapping="ProgramDetail.calendarMappings",
 			query="with recursive programdetail_tree as ( "+
-			"select *,array[id] as path_info "+
-			"from ProgramDetail where parentid in (:parentIds) and type!='OBJECTIVE' and isActive=1 "+
+			"select id as programId,id, parentid,type,startdate,enddate,status,name,description, array[id] as path_info "+
+			"from ProgramDetail where id in (:parentIds) and type!='OBJECTIVE' and isActive=1 " +
+			"and (status is null or status!=:statusClosed) "+
 			"union all "+
-			"select c.*, p.path_info||c.id "+
+			"select path_info[1] as programId,c.id,c.parentid,c.type,c.startdate,c.enddate,c.status,c.name,c.description, p.path_info||c.id "+
 			"from ProgramDetail c join programdetail_tree p on c.parentid=p.id " +
-			"where (c.startDate is not null and c.endDate is not null) and " +
-				"(((c.status is null or c.status=:statusCreated) and c.startDate<(:currentDate)) " +
-			"or (c.status is not null and c.status!=:statusClosed and c.endDate<:currentDate)) " +
+			"where (c.status is null or c.status!=:statusClosed) " +
 			") "+
-			"select * " +
+			"select " +
+			//"cast(path_info as varchar(30)) path," +
+			"programId,id,parentid,type,startdate,enddate,status,name,description " +
 			"from programdetail_tree " +
-			"where startdate is not null and enddate is not null and status!='CLOSED'" +
+			"where (startDate is not null and endDate is not null) " +
+			"and (" +
+			"((status is null or status=:statusCreated) and startDate<(:currentDate)) " +
+			"or ((status is null or status!=:statusClosed) and endDate<:currentDate)" +
+			") " +
 			"order by path_info ")
+	
 })
 
 @SqlResultSetMapping(name="ProgramDetail.calendarMappings",
-	entities=@EntityResult(entityClass=ProgramDetail.class, fields={
-		@FieldResult(name="id",column="id"),
-		@FieldResult(name="name",column="name"),
-		@FieldResult(name="description",column="description"),
-		@FieldResult(name="type",column="type"),
-		@FieldResult(name="parentid",column="programParentId"),
-		@FieldResult(name="startDate",column="startDate"),
-		@FieldResult(name="endDate",column="endDate")
+	columns={
+	//@ColumnResult(name="path"),
+	@ColumnResult(name="programId"),
+	@ColumnResult(name="id"),
+	@ColumnResult(name="parentid"),
+	@ColumnResult(name="type"),
+	@ColumnResult(name="startdate"),
+	@ColumnResult(name="enddate"),
+	@ColumnResult(name="status"),
+	@ColumnResult(name="name"),
+	@ColumnResult(name="description")
 	}
-	))
+)
 	
 public class ProgramDetail 	extends ProgramBasicDetail{
 	
@@ -177,7 +190,18 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	@Enumerated(EnumType.STRING)
 	private ProgramStatus status = ProgramStatus.CREATED;
 	
+	private Double progress=0.0;
+	
+	@Transient
+	private Long programId;
+	
 	public ProgramDetail() {
+	}
+	
+	//programId,id,parentid,type,startdate,enddate,status
+	public ProgramDetail(Long id, Long programId, Long parentId, String type, Date startDate,
+			Date endDate, String status){
+		
 	}
 
 	public ProgramDetailType getType() {
@@ -403,4 +427,35 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 		this.status = status;
 	}
 
+	public Long getProgramId() {
+		return programId;
+	}
+
+	public void setProgramId(Long programId) {
+		this.programId = programId;
+	}
+
+	public Double getProgress() {
+		return progress;
+	}
+	
+	/**
+	 * Update Task Progress based on status change
+	 * for leaf elements (Tasks with no children)
+	 * 
+	 * This update will update all the other parent elements 
+	 * using the trigger procedure: proc_updatestatus
+	 */
+	@PreUpdate
+	@PrePersist
+	public void calculateProgress(){
+		//Synchronize task status with progrss
+		if(status!=null 
+				&& type==ProgramDetailType.TASK
+				&& this.getChildren().isEmpty()){
+			//progress is either computed from status or the average completion of children items
+			progress= new Double(status.getPercCompletion());
+		}
+	}
+	
 }

@@ -148,6 +148,7 @@ public class ProgramDaoHelper {
 		dto.setStartDate(program.getStartDate());
 		dto.setCode(program.getCode());
 		dto.setStatus(program.getStatus());
+		dto.setProgress(program.getProgress());
 		//dto.setTargetsAndOutcomes(List<TargetAndOutcomeDTO>);
 		dto.setType(program.getType());
 		
@@ -624,30 +625,22 @@ public class ProgramDaoHelper {
 
 	public static List<ProgramSummary> getProgramCalendar(String userId) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
-		List<ProgramDetail> details = dao.getProgramCalendar(userId);
-		
-		List<ProgramSummary> summaries = new ArrayList<>();
-		for(ProgramDetail detail: details){
-			ProgramSummary summary = getSummary(detail);
-			summaries.add(summary);
-		}
-			
-		return summaries;
+		return dao.getProgramCalendar(userId);
 	}
 
-	private static ProgramSummary getSummary(ProgramDetail detail) {
-		ProgramSummary summary = new ProgramSummary();
-		summary.setId(detail.getId());
-		summary.setName(detail.getName());
-		summary.setDescription(detail.getDescription());
-		summary.setStartDate(detail.getStartDate());
-		summary.setEndDate(detail.getEndDate());
-		summary.setStatus(detail.getStatus());
-		if(detail.getParent()!=null){
-			summary.setParentId(detail.getParent().getId());
-		}
-		
-		summary.setType(detail.getType());
-		return summary;
-	}
+//	private static ProgramSummary getSummary(ProgramDetail detail) {
+//		ProgramSummary summary = new ProgramSummary();
+//		summary.setId(detail.getId());
+//		summary.setName(detail.getName());
+//		summary.setDescription(detail.getDescription());
+//		summary.setStartDate(detail.getStartDate());
+//		summary.setEndDate(detail.getEndDate());
+//		summary.setStatus(detail.getStatus());
+//		if(detail.getParent()!=null){
+//			summary.setParentId(detail.getParent().getId());
+//		}
+//		
+//		summary.setType(detail.getType());
+//		return summary;
+//	}
 }

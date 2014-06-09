@@ -19,6 +19,7 @@ import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.program.ProgramStatus;
+import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 /**
  * Dao Implementation Class for managing
@@ -170,18 +171,45 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		return getSingleResultOrNull(query);
 	}
 	
-	public List<ProgramDetail> getProgramCalendar(String userId){
+	public List<ProgramSummary> getProgramCalendar(String userId){
 		List<Long> ids = getProgramIds(userId);
 		if(ids.isEmpty()){
+			log.warn("No ids found......... Cannot load calendar for current user");
 			return new ArrayList<>();
 		}
+		
+		log.debug("Ids found >> "+ids);
 		
 		Query query = em.createNamedQuery("ProgramDetail.getCalendar")
 				.setParameter("parentIds", ids)
 				.setParameter("statusCreated", ProgramStatus.CREATED.name())
 				.setParameter("currentDate", new Date())
-				.setParameter("statusClosed", ProgramStatus.CLOSED.name());		
-		return getResultList(query);
+				.setParameter("statusClosed", ProgramStatus.CLOSED.name());	
+		
+		List<Object[]> rows = getResultList(query); 
+		
+		List<ProgramSummary> summaries = new ArrayList<>();
+		for(Object[] row: rows){
+			//programId,id,parentid,type,startdate,enddate,status
+			int i=0;
+			Object value=null;
+			Long programId= (value=row[i++])==null? null: new Long(value.toString());
+			Long id=(value=row[i++])==null? null: new Long(value.toString());
+			Long parentid=(value=row[i++])==null? null: new Long(value.toString());
+			String type=(value=row[i++])==null? null: value.toString();
+			Date startdate=(value=row[i++])==null? null: (Date)value;
+			Date enddate=(value=row[i++])==null? null: (Date)value;
+			String status=(value=row[i++])==null? ProgramStatus.CREATED.name(): value.toString();
+			String name = (value=row[i++])==null? null: value.toString();
+			String description=(value=row[i++])==null? null: value.toString();
+			
+			ProgramSummary summary = new ProgramSummary(name,description,
+					programId,id,parentid,ProgramDetailType.valueOf(type),startdate,enddate,
+					ProgramStatus.valueOf(status));
+			
+			summaries.add(summary);
+		}
+		return summaries;
 	}
 
 	/**
@@ -195,8 +223,9 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 			return new ArrayList<>();
 		}
 		
-		Query query = em.createNamedQuery("ProgramDetail.findAll")
+		Query query = em.createNamedQuery("ProgramDetail.findAllIds")
 		.setParameter("isCurrentUserAdmin", groups.contains("ADMIN"))
+		.setParameter("type", ProgramDetailType.PROGRAM)
 		.setParameter("userId", userId)
 		.setParameter("groupIds", groups)
 		.setParameter("isActive", 1)

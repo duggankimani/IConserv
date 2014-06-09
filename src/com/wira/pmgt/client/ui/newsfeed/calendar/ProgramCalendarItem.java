@@ -13,6 +13,7 @@ import com.wira.pmgt.client.place.NameTokens;
 import com.wira.pmgt.client.ui.component.ActionLink;
 import com.wira.pmgt.client.ui.util.DateUtils;
 import com.wira.pmgt.client.util.AppContext;
+import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class ProgramCalendarItem extends Composite {
@@ -36,9 +37,8 @@ public class ProgramCalendarItem extends Composite {
 			spnDetail.setInnerText("Not started yet: "+summary.getName()+" "+DateUtils.getTimeDifference(summary.getStartDate()));
 		}
 		
-		aProgram.setHref("#");
-//				home;page=activities;activity="
-//				+summary.getParentId()+"d"+summary.getId());
+		aProgram.setHref("#home;page=activities;activity="
+				+summary.getProgramId()+(summary.getType()==ProgramDetailType.PROGRAM? "": "d"+summary.getId()));
 	}
 
 }

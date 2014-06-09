@@ -25,6 +25,7 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 	private List<HTUser> assignedUsers;
 	private List<UserGroup> assignedGroups;
 	private Long documentId;
+	private Double progress; 
 	
 	public Long getDocumentId() {
 		return documentId;
@@ -129,5 +130,13 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public Double getProgress() {
+		return progress;
+	}
+
+	public void setProgress(Double progress) {
+		this.progress = progress;
 	}
 }

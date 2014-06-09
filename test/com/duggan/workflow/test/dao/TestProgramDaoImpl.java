@@ -20,6 +20,7 @@ import com.wira.pmgt.shared.model.ParticipantType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.UserGroup;
+import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class TestProgramDaoImpl {
 
@@ -36,12 +37,11 @@ public class TestProgramDaoImpl {
 	@Test
 	public void getCalendar(){
 		
-		List<ProgramDetail> details = dao.getProgramCalendar("Administrator");
+		List<ProgramSummary> details = dao.getProgramCalendar("Administrator");
 		//List<ProgramDetail> details = dao.getProgramCalendar("jodonya");
 		Assert.assertNotSame(0, details.size());
-		for(ProgramDetail d: details){
-			assert d!=null;
-			System.out.println(d.getId()+" "+d.getParent().getId()+" "+d.getStatus()+" "+d.getName()+" "+d.getType()+" "+d.getStartDate()+" "+d.getEndDate());
+		for(ProgramSummary d: details){
+			System.out.println(d.getProgramId()+" | "+d.getId()+" | "+d.getParentId()+" | "+d.getStatus()+" | "+d.getName()+" | "+d.getType()+" | "+d.getStartDate()+" | "+d.getEndDate());
 		}
 	}
 	
