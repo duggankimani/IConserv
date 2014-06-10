@@ -131,8 +131,7 @@
 		</g:HTMLPanel>
 
 		<g:HTMLPanel styleName="overflow-y">
-			<g:HTMLPanel styleName="personal_info row-fluid span12"
-				ui:field="divUserInfo">
+			<g:HTMLPanel styleName="personal_info row-fluid span12" ui:field="divUserInfo">
 				<div class="span9">
 					<div class="span2 image">
 						<g:Image ui:field="img" width="32px" />

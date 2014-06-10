@@ -181,7 +181,7 @@ public class ProgramsView extends ViewImpl implements
 //		System.err.println("Total Height>>>" + totalHeight);
 //		System.err.println("Top Height>>>" + topHeight);
 
-		if(middleHeight<0){
+		if(middleHeight>0){
 			divProgramsTable.setHeight(middleHeight + "px");
 		}
 	}
