@@ -216,13 +216,15 @@ body .dateBoxPopup {
 
 .navbar .nav>li>a {
 	/* -webkit-tap-highlight-color: rgba(0,0,0,0); */;
-	-webkit-tap-highlight-color: transparent; /* For some Androids */
+	-webkit-tap-highlight-color: inherit; /* For some Androids */
 	}
 
 .navbar .nav>li>a:focus,.navbar .nav>li>a:hover, 
 .navbar .nav>li>a.active {
 	color: #000000;
-	}
+	background-color: transparent;
+	background-color: transparent;
+}
 
 .navbar-admin .nav>li>a:focus,.navbar-admin .nav>li>a:hover,
 .navbar-admin .nav>li>a.active {
@@ -919,9 +921,8 @@ body .dateBoxPopup {
 }
 
 #detailed-info .content-area {
-	padding: 6px 25px 0 0px;
-	font-size: 12px;
-	margin-left: 15px;
+	padding: 6px 25px 0px 0px;
+	margin-left: 13px;
 	/* margin-right: 73px; */
 }
 
@@ -1599,6 +1600,91 @@ ul.icons-list.text-xl {
 	
 	#detailed-info {
 		width: 100%;
+	}
+	#detailed-info .overflow-y{
+		max-height: 80%;
+	}	
+	
+	#detailed-info .content-area {
+		margin-left:0px;
+		padding-left:13px;
+	
+		padding-top: 0px;
+	}
+	
+	#detailed-info .generic-doc-title{
+		margin-left:0px;
+		padding-left: 11px;
+		padding-bottom:8px;
+		border-bottom: 1px solid #CCCCCC;
+	}
+	
+	#detailed-info .form-horizontal legend{
+		line-height:1.5;
+	}
+	
+	#detailed-info .upper-content{
+		border-bottom:none;
+		height:auto;
+		border-bottom: 1px solid #CCCCCC;
+	}
+	
+	#detailed-info .action-buttons{
+		padding-left: 10px;
+		padding-bottom: 5px;
+		margin-bottom: 0px;
+		float: left;
+	}
+	
+	#detailed-info .personal_info{
+		height:auto;
+		display: inline-flex;
+		padding-bottom: 5px;
+		padding-top: 1px;
+	
+	}
+	
+	#detailed-info .personal_info .span9{
+		width: 57%;
+	
+		display: inline-flex;
+	}
+	
+	#detailed-info .personal_info .span3{
+		width: 43%;
+	}
+	
+	input[type="text"]:focus{
+		position:static;
+	}
+	
+	.comment-box .textbox {
+		position: fixed;
+		bottom: 2px;
+		width: 100%;
+		z-index: 1000;
+		margin-left: -12px;
+		background-color: #ffffff;
+	}
+	.comment-box .arrow,.comment-box .image{
+		display:none;
+	}
+	
+	.comment-box .comment-container{
+		width: 75%;
+		height: 31px;
+	}
+	.comment-box .textarea-box{
+		width: 97%;
+		height: 25px;
+	}
+	.comment-box .button-post{
+		position:fixed;
+		bottom:0;
+		right: 8px;
+		margin-bottom: 6px;	
+		display: block;
+		visibility: visible;
 	}
 }
 
