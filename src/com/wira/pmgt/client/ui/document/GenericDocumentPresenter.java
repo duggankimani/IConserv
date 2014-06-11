@@ -178,6 +178,8 @@ public class GenericDocumentPresenter extends
 		void hideTopHeader(boolean show);
 
 		void showCommentsPanel(boolean b);
+
+		void showAttachmentPanel(boolean show);
 	}
 	
 	Long taskId;
@@ -893,7 +895,7 @@ public class GenericDocumentPresenter extends
 		List<Attachment> attachments = attachmentsresponse.getAttachments();
 		
 		if(attachments.size()>0){
-			getView().getDivAttachment().removeClassName("hidden");
+			getView().showAttachmentPanel(false);
 			getView().getSpnAttachmentNo().setInnerText("Attachments (" + attachments.size() +")");
 			fireEvent(new AfterAttachmentReloadedEvent(documentId));
 		}
@@ -1150,6 +1152,7 @@ public class GenericDocumentPresenter extends
 
 	@Override
 	public void onLoadActivities(LoadActivitiesEvent event) {
+		getView().showCommentsPanel(true);
 		if (event.getDocumentId() != null) {
 			setDocId(event.getDocumentId(), null);
 			loadProgramData();

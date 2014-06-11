@@ -235,13 +235,13 @@ public class GenericDocumentView extends ViewImpl implements
 			public void onClick(ClickEvent event) {
 				if (isClicked) {
 					aProcess.addStyleName("disabled");
-					divProcess.removeStyleName("hidden");
+					divProcess.removeStyleName("hide");
 					divContent.removeClassName("span12");
 					divContent.addClassName("span9");
 					isClicked = false;
 				} else {
 					aProcess.removeStyleName("disabled");
-					divProcess.addStyleName("hidden");
+					divProcess.addStyleName("hide");
 					divContent.removeClassName("span9");
 					divContent.addClassName("span12");
 					isClicked = true;
@@ -523,7 +523,7 @@ public class GenericDocumentView extends ViewImpl implements
 
 	public void show(Anchor target, boolean isvisible) {
 		if (isvisible) {
-			target.removeStyleName("hidden");
+			target.removeStyleName("hide");
 		}
 		UIObject.setVisible(target.getElement(), isvisible);
 
@@ -694,11 +694,11 @@ public class GenericDocumentView extends ViewImpl implements
 		}
 
 		if (DateUtils.isOverdue(endDateDue)) {
-			spnDeadline.removeClassName("hidden");
+			spnDeadline.removeClassName("hide");
 			spnDeadline.getStyle().setColor("#DD4B39");
 			deadline = "Overdue " + deadline;
 		} else if (DateUtils.isDueInMins(30, endDateDue)) {
-			spnDeadline.removeClassName("hidden");
+			spnDeadline.removeClassName("hide");
 			spnDeadline.getStyle().setColor("#F89406");
 			deadline = "Due " + deadline;
 		}
@@ -719,24 +719,34 @@ public class GenericDocumentView extends ViewImpl implements
 	@Override
 	public void overrideDefaultCompleteProcess() {
 		overrideDefaultComplete=true;
-		aApprove.addStyleName("hidden");
-		aReject.addStyleName("hidden");
+		aApprove.addStyleName("hide");
+		aReject.addStyleName("hide");
 	}
 
 	@Override
 	public void overrideDefaultStartProcess() {
 		overrideDefaultStart=true;
-		aForward.addStyleName("hidden");
+		aForward.addStyleName("hide");
 	}
 
 	@Override
 	public void showCommentsPanel(boolean show) {
 		if(show){
-			divNocomments.addStyleName("hidden");
-			commentPanel.removeStyleName("hidden"); 
+			divNocomments.addStyleName("hide");
+			commentPanel.removeStyleName("hide"); 
 		}else{
-			divNocomments.removeStyleName("hidden");
-			commentPanel.addStyleName("hidden"); 
+			divNocomments.removeStyleName("hide");
+			commentPanel.addStyleName("hide"); 
+		}
+	}
+	
+	@Override
+	public void showAttachmentPanel(boolean show)
+	{
+		if(show){
+			divAttachment.addClassName("hide");
+		}else{
+			divAttachment.removeClassName("hide");
 		}
 	}
 

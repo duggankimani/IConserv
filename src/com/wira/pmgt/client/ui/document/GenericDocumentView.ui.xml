@@ -200,8 +200,8 @@
 					</div>
 					<g:HTMLPanel styleName="row-fluid comment-box"
 						ui:field="commentBox">
-						<d:CommentBox ui:field="commentPanel" styleName="hidden"></d:CommentBox>
-						<g:HTMLPanel styleName="alert alert-info hidden"
+						<d:CommentBox ui:field="commentPanel" styleName=""></d:CommentBox>
+						<g:HTMLPanel styleName="alert alert-info hide"
 							ui:field="divNocomments">
 							<strong>Heads Up!</strong>
 							There no comments/Activity since this has not been assigned yet
@@ -214,7 +214,7 @@
 
 			</div>
 
-			<g:HTMLPanel styleName="status-section span3 pull-right row-fluid well hidden"
+			<g:HTMLPanel styleName="status-section span3 pull-right row-fluid well hide"
 				ui:field="divProcess">
 				<div class="row-fluid">
 					<h5>Business Process</h5>

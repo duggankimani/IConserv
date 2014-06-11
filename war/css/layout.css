@@ -288,7 +288,7 @@ body .dateBoxPopup {
 .navbar  .notification-dialog .notifications {
 	width: 330px;
 	margin: 0px 0px 0px 0px;
-	max-height: 500px;
+	max-height: 34%;
 	overflow-y: auto;
 	overflow-x: hidden;
 }
@@ -1602,7 +1602,7 @@ ul.icons-list.text-xl {
 		width: 100%;
 	}
 	#detailed-info .overflow-y{
-		max-height: 80%;
+		max-height: 73%;
 	}	
 	
 	#detailed-info .content-area {
