@@ -26,10 +26,13 @@ import com.wira.pmgt.shared.model.Activity;
 import com.wira.pmgt.shared.model.Comment;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.Notification;
+import com.wira.pmgt.shared.model.program.ProgramSummary;
 import com.wira.pmgt.shared.requests.GetActivitiesRequest;
+import com.wira.pmgt.shared.requests.GetProgramCalendarRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
 import com.wira.pmgt.shared.responses.GetActivitiesResponse;
 import com.wira.pmgt.shared.responses.GetCommentsResponse;
+import com.wira.pmgt.shared.responses.GetProgramCalendarResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
 public class NewsFeedPresenter extends
@@ -46,6 +49,8 @@ public class NewsFeedPresenter extends
 		void setImage(HTUser currentUser);
 
 		void setValues(String surname, String groupsAsString);
+
+		void setCalendar(List<ProgramSummary> summary);
 	}
 
 	@Inject
@@ -59,6 +64,7 @@ public class NewsFeedPresenter extends
 	public void loadActivities() {
 		MultiRequestAction requests = new MultiRequestAction();
 		requests.addRequest(new GetActivitiesRequest(null));
+		requests.addRequest(new GetProgramCalendarRequest());
 
 		fireEvent(new ProcessingEvent());
 		requestHelper.execute(requests,
@@ -69,6 +75,9 @@ public class NewsFeedPresenter extends
 								.get(0);
 						bindActivities(getActivities);
 
+						GetProgramCalendarResponse calendar = (GetProgramCalendarResponse) results
+								.get(1);
+						getView().setCalendar(calendar.getSummary());
 						fireEvent(new ProcessingCompletedEvent());
 					}
 				});
@@ -135,15 +144,17 @@ public class NewsFeedPresenter extends
 		} else {
 			getView().showLeftPanel(false);
 		}
-		
+
 		HTUser currentUser = AppContext.getContextUser();
 		getView().setImage(currentUser);
-		getView().setValues(currentUser.getSurname(), currentUser.getGroupsAsString());
+		getView().setValues(currentUser.getSurname(),
+				currentUser.getGroupsAsString());
 	}
 
 	@Override
 	public void onContextLoaded(ContextLoadedEvent event) {
-		System.err.println("Context Loaded Event Received by NewsFeedPresenter");
-		
+		System.err
+				.println("Context Loaded Event Received by NewsFeedPresenter");
+
 	}
 }

@@ -128,10 +128,6 @@ public class HomePresenter extends
 	
 	private TaskType currentTaskType;
 	
-	/**
-	 * on select documentId
-	 */
-	private Long selectedDocumentId;
 	
 	/**
 	 * Url processInstanceId (pid) - required incase the use hits refresh
@@ -470,7 +466,6 @@ public class HomePresenter extends
 
 	@Override
 	public void onDocumentSelection(DocumentSelectionEvent event) {
-		this.selectedDocumentId=event.getDocumentId();
 		
 		displayDocument(event.getDocumentId(), event.getTaskId());
 	}

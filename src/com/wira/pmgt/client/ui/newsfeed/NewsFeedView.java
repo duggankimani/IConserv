@@ -1,5 +1,7 @@
 package com.wira.pmgt.client.ui.newsfeed;
 
+import java.util.List;
+
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.LIElement;
 import com.google.gwt.dom.client.Style.Unit;
@@ -16,6 +18,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -23,10 +26,12 @@ import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.UserWidget;
 import com.wira.pmgt.client.ui.events.CloseCarouselEvent;
+import com.wira.pmgt.client.ui.newsfeed.calendar.ProgramCalendarItem;
 import com.wira.pmgt.client.ui.newsfeed.components.CarouselPopup;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.client.util.Definitions;
 import com.wira.pmgt.shared.model.HTUser;
+import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class NewsFeedView extends ViewImpl implements
 		NewsFeedPresenter.MyView {
@@ -59,6 +64,7 @@ public class NewsFeedView extends ViewImpl implements
 	LIElement liReceive;
 	@UiField
 	LIElement liReview;
+	@UiField HTMLPanel panelUpcomingActivities;
 	@UiField
 	DivElement imgReceive;
 	@UiField
@@ -252,7 +258,13 @@ public class NewsFeedView extends ViewImpl implements
 	public void setValues(String userName, String userGroups) {
 		divUserContainer.setValues(userName, userGroups);
 	}
-	
-	
+
+	@Override
+	public void setCalendar(List<ProgramSummary> summaries) {
+		panelUpcomingActivities.clear();
+		for(ProgramSummary summary: summaries){
+			panelUpcomingActivities.add(new ProgramCalendarItem(summary));
+		}
+	}
 
 }

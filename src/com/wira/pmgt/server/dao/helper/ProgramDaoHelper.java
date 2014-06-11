@@ -148,6 +148,7 @@ public class ProgramDaoHelper {
 		dto.setStartDate(program.getStartDate());
 		dto.setCode(program.getCode());
 		dto.setStatus(program.getStatus());
+		dto.setProgress(program.getProgress());
 		//dto.setTargetsAndOutcomes(List<TargetAndOutcomeDTO>);
 		dto.setType(program.getType());
 		
@@ -252,7 +253,8 @@ public class ProgramDaoHelper {
 		}
 		
 		if(programDTO.getParentId()!=null){
-			detail.setParent(dao.getProgramDetail(programDTO.getParentId()));
+			ProgramDetail parent = dao.getProgramDetail(programDTO.getParentId());
+			detail.setParent(parent);
 		}
 		
 		//detail.setActual(String);
@@ -360,6 +362,7 @@ public class ProgramDaoHelper {
 		
 		fund.setDescription(dto.getDescription());
 		fund.setName(dto.getName());
+		fund.setIsActive(dto.isActive()?1: 0);
 		
 		return fund;
 	}
@@ -619,4 +622,25 @@ public class ProgramDaoHelper {
 		
 		return info;
 	}
+
+	public static List<ProgramSummary> getProgramCalendar(String userId) {
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		return dao.getProgramCalendar(userId);
+	}
+
+//	private static ProgramSummary getSummary(ProgramDetail detail) {
+//		ProgramSummary summary = new ProgramSummary();
+//		summary.setId(detail.getId());
+//		summary.setName(detail.getName());
+//		summary.setDescription(detail.getDescription());
+//		summary.setStartDate(detail.getStartDate());
+//		summary.setEndDate(detail.getEndDate());
+//		summary.setStatus(detail.getStatus());
+//		if(detail.getParent()!=null){
+//			summary.setParentId(detail.getParent().getId());
+//		}
+//		
+//		summary.setType(detail.getType());
+//		return summary;
+//	}
 }

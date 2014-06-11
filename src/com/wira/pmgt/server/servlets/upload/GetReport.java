@@ -44,6 +44,7 @@ public class GetReport extends HttpServlet {
 		} catch (Exception e) {
 			DB.rollback();
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		} finally {
 			DB.closeSession();
 		}
@@ -111,7 +112,7 @@ public class GetReport extends HttpServlet {
 	}
 
 	private void processSettingsImage(HttpServletRequest req,
-			HttpServletResponse resp) {
+			HttpServletResponse resp) throws IOException {
 		
 		String settingName = req.getParameter("settingName");
 		log.debug("Logging- SettingName "+settingName);
@@ -136,6 +137,7 @@ public class GetReport extends HttpServlet {
 		
 		if(attachment==null){
 			log.debug("No Attachment Found for Setting: ["+settingName+"]");
+			resp.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 		
@@ -151,7 +153,7 @@ public class GetReport extends HttpServlet {
 	}
 
 	private void processUserImage(HttpServletRequest req,
-			HttpServletResponse resp){		
+			HttpServletResponse resp) throws IOException{		
 		String userId = req.getParameter("userId");
 		assert userId!=null;
 		
@@ -172,13 +174,21 @@ public class GetReport extends HttpServlet {
 		
 		LocalAttachment attachment = DB.getAttachmentDao().getUserImage(userId);
 		
-		if(attachment==null)
+		if(attachment==null){
+			log.debug("No Image Found for user: ["+userId+"]");
+			//Mark as not found
+			resp.sendError(HttpServletResponse.SC_NOT_FOUND);
 			return;
+		}
 		
 		byte[] bites = attachment.getAttachment();
 		
-		if(width!=null){
+		if(width!=null && height!=null){
 			ImageUtils.resizeImage(resp, bites, width.intValue(), height.intValue());
+		}else if (height!=null){
+			ImageUtils.resizeImage(resp, bites,height.intValue(), height.intValue());
+		}else if(width!=null){
+			ImageUtils.resizeImage(resp, bites,width.intValue(), width.intValue());
 		}else{
 			ImageUtils.resizeImage(resp, bites);
 		}

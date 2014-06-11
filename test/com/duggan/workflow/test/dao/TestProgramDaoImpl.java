@@ -20,6 +20,7 @@ import com.wira.pmgt.shared.model.ParticipantType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.UserGroup;
+import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class TestProgramDaoImpl {
 
@@ -30,6 +31,18 @@ public class TestProgramDaoImpl {
 		DBTrxProvider.init();
 		DB.beginTransaction();
 		dao= DB.getProgramDaoImpl();
+	}
+	
+	
+	@Test
+	public void getCalendar(){
+		
+		List<ProgramSummary> details = dao.getProgramCalendar("Administrator");
+		//List<ProgramDetail> details = dao.getProgramCalendar("jodonya");
+		Assert.assertNotSame(0, details.size());
+		for(ProgramSummary d: details){
+			System.out.println(d.getProgramId()+" | "+d.getId()+" | "+d.getParentId()+" | "+d.getStatus()+" | "+d.getName()+" | "+d.getType()+" | "+d.getStartDate()+" | "+d.getEndDate());
+		}
 	}
 	
 	@Ignore
@@ -56,7 +69,7 @@ public class TestProgramDaoImpl {
 		ProgramDaoHelper.saveTaskInfo(info);
 	}
 	
-	@Test
+	@Ignore
 	public void loadProgramsByType(){
 		String userId = "Administrator";
 		String groupId = "ADMIN";

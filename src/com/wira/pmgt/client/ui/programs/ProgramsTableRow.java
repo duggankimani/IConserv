@@ -142,7 +142,7 @@ public class ProgramsTableRow extends RowWidget {
 			divStatus.setStyleName("hide");
 
 		} else {
-			divProgress.getElement().setInnerText("0%");
+		
 			divRating.getElement().setInnerText("N/A");
 			if(activity.getChildren().isEmpty()){
 					divRowCaret.addStyleName("hide");
@@ -235,6 +235,8 @@ public class ProgramsTableRow extends RowWidget {
 
 		}
 		spnStatus.addClassName("label-" + type);
+		divProgress.getElement().setInnerText(activity.getProgress()+"%");
+		
 	}
 
 	@Override
