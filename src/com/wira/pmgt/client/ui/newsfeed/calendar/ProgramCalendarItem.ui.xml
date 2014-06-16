@@ -1,10 +1,19 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" 
-    xmlns:g="urn:import:com.google.gwt.user.client.ui"
-    xmlns:d="urn:import:com.wira.pmgt.client.ui.component">
-	<g:HTMLPanel>
-	    <d:ActionLink ui:field="aProgram">
-	    	<span ui:field="spnDetail"></span>
-	    </d:ActionLink>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.wira.pmgt.client.ui.component">
+	<g:HTMLPanel styleName="row-fluid">
+		<div class="span2">
+			<span class="label" ui:field="spnLabel">
+			</span>
+		</div>
+		<div class="span8">
+			<d:ActionLink ui:field="aProgram">
+				<span ui:field="spnDetail"></span>
+			</d:ActionLink>
+		</div>
+		<div class="span2">
+			<span class="muted"  ui:field="spnDate">
+			</span>
+		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

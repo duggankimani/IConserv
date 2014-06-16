@@ -11,7 +11,7 @@
 	border-bottom:1px solid #CCCCCC;
 }
 
-.news-feed .name a, a:active,a:visited{
+body .news-feed a, a:active,a:visited{
   color: #428bca; 
 }
 

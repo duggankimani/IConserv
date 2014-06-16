@@ -288,7 +288,7 @@ body .dateBoxPopup {
 .navbar  .notification-dialog .notifications {
 	width: 330px;
 	margin: 0px 0px 0px 0px;
-	max-height: 34%;
+	max-height: 500px;
 	overflow-y: auto;
 	overflow-x: hidden;
 }

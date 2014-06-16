@@ -523,7 +523,7 @@ public class GenericDocumentView extends ViewImpl implements
 
 	public void show(Anchor target, boolean isvisible) {
 		if (isvisible) {
-			target.removeStyleName("hide");
+			target.removeStyleName("hidden");
 		}
 		UIObject.setVisible(target.getElement(), isvisible);
 

@@ -98,15 +98,29 @@
 			</g:HTMLPanel>
 
 			<div class="span6 activities-box hidden-phone">
-				<div class="portlet">
+				<div class="portlet full-page">
 					<div class="portlet-header">
 						<h3>
 							<i class="icon-bar-chart"></i>
 							Upcoming Activities
 						</h3>
 					</div>
-					<g:HTMLPanel styleName="portlet-content" ui:field="panelUpcomingActivities">
-						 Upcoming Activities come here..
+					<g:HTMLPanel styleName="portlet-content overflow-y" ui:field="panelUpcomingActivities">
+						<g:HTMLPanel styleName="row-fluid">
+							<span class="row-fluid bold">Overdue</span>
+							<g:HTMLPanel ui:field="divOverdue">
+							</g:HTMLPanel>
+						</g:HTMLPanel>
+						<g:HTMLPanel styleName="row-fluid">
+							<span class="row-fluid bold">Not Started</span>
+							<g:HTMLPanel ui:field="divNotStarted">
+							</g:HTMLPanel>
+						</g:HTMLPanel>
+						<g:HTMLPanel styleName="row-fluid">
+							<span class="row-fluid bold">Upcoming</span>
+							<g:HTMLPanel ui:field="divUpcoming" styleName="up-coming">
+							</g:HTMLPanel>	
+						</g:HTMLPanel>
 					</g:HTMLPanel>
 				</div>
 			</div>

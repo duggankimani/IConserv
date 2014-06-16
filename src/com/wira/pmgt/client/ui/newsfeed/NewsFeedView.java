@@ -1,5 +1,7 @@
 package com.wira.pmgt.client.ui.newsfeed;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.gwt.dom.client.DivElement;
@@ -18,7 +20,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -73,6 +74,13 @@ public class NewsFeedView extends ViewImpl implements
 	HTMLPanel divNewsFeed;
 	@UiField
 	HTMLPanel divToggleContainer;
+	@UiField
+	HTMLPanel divOverdue;
+	@UiField
+	HTMLPanel divNotStarted;
+	@UiField
+	HTMLPanel divUpcoming;
+	
 	@UiField
 	UserWidget divUserContainer;
 
@@ -261,10 +269,49 @@ public class NewsFeedView extends ViewImpl implements
 
 	@Override
 	public void setCalendar(List<ProgramSummary> summaries) {
-		panelUpcomingActivities.clear();
-		for(ProgramSummary summary: summaries){
-			panelUpcomingActivities.add(new ProgramCalendarItem(summary));
+		Collections.sort(summaries, new Comparator<ProgramSummary>(){
+			
+			@Override
+			public int compare(ProgramSummary o1, ProgramSummary o2) {
+	
+				int c = o1.getStartDate().compareTo(o2.getEndDate());
+				if(c==0){
+					c = o1.getDescription().compareTo(o2.getDescription());
+				}
+				return c;
+			}
+		});
+		
+		//clear containers
+		divUpcoming.clear();
+		divNotStarted.clear();
+		divOverdue.clear();
+		
+		for(ProgramSummary program: summaries){
+			if(program.isOverdue()){
+				addOverdueItem(program);
+			}else if(program.isNotStarted()){
+				addNotStartedItem(program);
+			}else if(program.isUpcoming()){
+				addUpcomingItem(program);
+			}
 		}
+		
+	}
+	private void addOverdueItem(ProgramSummary program) {
+		divOverdue.removeStyleName("hide");
+		divOverdue.add(new ProgramCalendarItem(program));
+	}
+	
+	private void addUpcomingItem(ProgramSummary program) {
+		divUpcoming.removeStyleName("hide");
+		divUpcoming.add(new ProgramCalendarItem(program));
+	}
+
+	private void addNotStartedItem(ProgramSummary program) {
+		System.out.println(">>>>Called Not Started");
+		divNotStarted.removeStyleName("hide");
+		divNotStarted.add(new ProgramCalendarItem(program));
 	}
 
 }

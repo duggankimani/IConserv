@@ -142,7 +142,6 @@ public class HeaderView extends ViewImpl implements HeaderPresenter.IHeaderView 
 
 	public void setValues(String user_names, String userGroups, String orgName) {
 		setValues(user_names, userGroups); //Values to user Widget
-		
 		if (user_names != null) {
 			spnUser.setInnerText(user_names);
 		} else {
