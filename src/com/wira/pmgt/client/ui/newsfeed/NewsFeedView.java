@@ -1,5 +1,7 @@
 package com.wira.pmgt.client.ui.newsfeed;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.gwt.dom.client.DivElement;
@@ -11,7 +13,6 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
@@ -19,17 +20,18 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
+import com.wira.pmgt.client.ui.component.UserWidget;
 import com.wira.pmgt.client.ui.events.CloseCarouselEvent;
 import com.wira.pmgt.client.ui.newsfeed.calendar.ProgramCalendarItem;
 import com.wira.pmgt.client.ui.newsfeed.components.CarouselPopup;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.client.util.Definitions;
+import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class NewsFeedView extends ViewImpl implements
@@ -64,12 +66,23 @@ public class NewsFeedView extends ViewImpl implements
 	@UiField
 	LIElement liReview;
 	@UiField HTMLPanel panelUpcomingActivities;
-	
-
 	@UiField
 	DivElement imgReceive;
 	@UiField
 	DivElement imgReview;
+	@UiField
+	HTMLPanel divNewsFeed;
+	@UiField
+	HTMLPanel divToggleContainer;
+	@UiField
+	HTMLPanel divOverdue;
+	@UiField
+	HTMLPanel divNotStarted;
+	@UiField
+	HTMLPanel divUpcoming;
+	
+	@UiField
+	UserWidget divUserContainer;
 
 	@UiField FocusPanel parentPanel;
 	@UiField BulletListPanel panelActivity;
@@ -122,7 +135,6 @@ public class NewsFeedView extends ViewImpl implements
 				timer = new Timer() {
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
 						position[1] = liFollowUp.getAbsoluteRight();
 						AppManager.showCarouselPanel(popUp1, position, false);
 						popUp1.showFollowUp();
@@ -232,16 +244,74 @@ public class NewsFeedView extends ViewImpl implements
 			divTutorial.addClassName("hidden");
 		}
 		
-		// TODO: Remove this afterwards
-		// divTutorial.addClassName("hidden");
+	}
+
+	@Override
+	public void showLeftPanel(boolean show) {
+		if(show){
+			divToggleContainer.removeStyleName("in");
+			divNewsFeed.addStyleName("out");
+		}else{
+			divToggleContainer.addStyleName("in");
+			divNewsFeed.removeStyleName("out");
+		}
+	}
+
+	@Override
+	public void setImage(HTUser currentUser) {
+		divUserContainer.setImage(currentUser);
+	}
+
+	@Override
+	public void setValues(String userName, String userGroups) {
+		divUserContainer.setValues(userName, userGroups);
 	}
 
 	@Override
 	public void setCalendar(List<ProgramSummary> summaries) {
-		panelUpcomingActivities.clear();
-		for(ProgramSummary summary: summaries){
-			panelUpcomingActivities.add(new ProgramCalendarItem(summary));
+		Collections.sort(summaries, new Comparator<ProgramSummary>(){
+			
+			@Override
+			public int compare(ProgramSummary o1, ProgramSummary o2) {
+	
+				int c = o1.getStartDate().compareTo(o2.getEndDate());
+				if(c==0){
+					c = o1.getDescription().compareTo(o2.getDescription());
+				}
+				return c;
+			}
+		});
+		
+		//clear containers
+		divUpcoming.clear();
+		divNotStarted.clear();
+		divOverdue.clear();
+		
+		for(ProgramSummary program: summaries){
+			if(program.isOverdue()){
+				addOverdueItem(program);
+			}else if(program.isNotStarted()){
+				addNotStartedItem(program);
+			}else if(program.isUpcoming()){
+				addUpcomingItem(program);
+			}
 		}
+		
+	}
+	private void addOverdueItem(ProgramSummary program) {
+		divOverdue.removeStyleName("hide");
+		divOverdue.add(new ProgramCalendarItem(program));
+	}
+	
+	private void addUpcomingItem(ProgramSummary program) {
+		divUpcoming.removeStyleName("hide");
+		divUpcoming.add(new ProgramCalendarItem(program));
+	}
+
+	private void addNotStartedItem(ProgramSummary program) {
+		System.out.println(">>>>Called Not Started");
+		divNotStarted.removeStyleName("hide");
+		divNotStarted.add(new ProgramCalendarItem(program));
 	}
 
 }

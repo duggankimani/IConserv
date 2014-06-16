@@ -82,11 +82,20 @@
 	padding-top: 10px;
 	height: 100%;
 }
-
-.news-feed .news-box .portlet-content{
+.news-feed .portlet-content{
 	padding-top:0px;
 	padding-left:0px;
 	height:90%;
+}
+
+.news-feed .activities-box .well{
+	width:100%;
+	padding: 5px;
+}
+
+.news-feed .activities-box .label{
+	min-width:60px;
+	text-align:center;
 }
 /*--Activities Page	: Detailed Presentation --*/
 .activities-page .activities-content{

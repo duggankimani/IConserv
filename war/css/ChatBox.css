@@ -11,8 +11,8 @@
 	border-bottom:1px solid #CCCCCC;
 }
 
-.news-feed .name a, a:active,a:visited{
-  /* color: #428bca; */ 
+body .news-feed a, a:active,a:visited{
+  color: #428bca; 
 }
 
 /* line 40, /home/andrei/core-admin-release/core-admin/source/stylesheets/base.scss */
