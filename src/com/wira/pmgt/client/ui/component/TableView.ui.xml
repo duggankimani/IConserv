@@ -8,8 +8,8 @@
 				</g:HTMLPanel>
 			</div>
 
-			<g:HTMLPanel ui:field="panelBody" styleName='tbody'>
-			</g:HTMLPanel>
+			<g:FlowPanel ui:field="panelBody" styleName='tbody'>
+			</g:FlowPanel>
 			
 			<g:HTMLPanel ui:field="panelFooter" styleName='tbody'>
 			</g:HTMLPanel>

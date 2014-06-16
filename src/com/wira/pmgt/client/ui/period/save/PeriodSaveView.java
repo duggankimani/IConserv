@@ -1,6 +1,7 @@
 package com.wira.pmgt.client.ui.period.save;
 
 import java.util.Date;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -30,6 +31,7 @@ public class PeriodSaveView extends Composite {
 	@UiField DateRangeWidget dtRange;
 	
 	private PeriodDTO periodDTO;
+	private List<PeriodDTO> periods;
 	
 	public PeriodSaveView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -45,8 +47,15 @@ public class PeriodSaveView extends Composite {
 	public PeriodSaveView(PeriodDTO period) {
 		this();
 		this.periodDTO = period;
-		txtDescription.setValue(period.getDescription());
-		dtRange.setDates(period.getStartDate(), period.getStartDate());
+		if(period!=null){
+			txtDescription.setValue(period.getDescription());
+			dtRange.setDates(period.getStartDate(), period.getEndDate());
+		}
+	}
+
+	public PeriodSaveView(PeriodDTO period, List<PeriodDTO> periods) {
+		this(period);
+		this.periods = periods;
 	}
 
 	protected void setDescription() {
@@ -91,6 +100,16 @@ public class PeriodSaveView extends Composite {
 			isValid=false;
 			issues.addError("Description is mandatory");
 		}
+		
+		if(periods!=null){
+			PeriodDTO period = getPeriod();
+			for(PeriodDTO dto: periods){
+				period.overlaps(dto);
+				isValid = false;
+				issues.addError("This period overlaps period '"+dto.getDescription()+"'");
+			}
+		}
+		
 		
 		return isValid;
 	}

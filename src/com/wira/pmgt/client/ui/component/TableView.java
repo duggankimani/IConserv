@@ -9,10 +9,12 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.programs.TableHeader;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 
 public class TableView extends Composite {
 
@@ -25,7 +27,7 @@ public class TableView extends Composite {
 	@UiField HTMLPanel overalContainer;
 	@UiField HTMLPanel tblContainer;
 	@UiField HTMLPanel panelHeader;
-	@UiField HTMLPanel panelBody;
+	@UiField FlowPanel panelBody;
 	@UiField HTMLPanel panelFooter;
 	
 	private boolean isAutoNumber=true;
@@ -184,5 +186,9 @@ public class TableView extends Composite {
 		th.setStyleName("th");
 		th.add(new InlineLabel(name));
 		panelHeader.add(th);
+	}
+
+	public void insert(RowWidget rowWidget, int beforeIndex) {
+		panelBody.insert(rowWidget, beforeIndex);
 	}
 }

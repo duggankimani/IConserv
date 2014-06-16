@@ -6,7 +6,7 @@ public enum ProgramStatus {
 	OPENED("Assigned",1),
 	COMPLETED("Awaiting Approval",2),
 	REOPENED("Re-opened",1),
-	CLOSED("Approved",3);
+	CLOSED("Completed",3);
 
 	private String display;
 	private int weight;
