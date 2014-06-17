@@ -76,12 +76,13 @@
 		</g:FocusPanel>
 
 		<g:HTMLPanel styleName="news-feed row-fluid">
-			<g:HTMLPanel styleName="toggle-box in visible-phone" ui:field="divToggleContainer">
-					<d:UserWidget ui:field="divUserContainer" mobile="true"></d:UserWidget>
-			</g:HTMLPanel>	
-			
-			
-			<g:HTMLPanel styleName="span6 news-box"  ui:field="divNewsFeed">
+			<g:HTMLPanel styleName="toggle-box in visible-phone"
+				ui:field="divToggleContainer">
+				<d:UserWidget ui:field="divUserContainer" mobile="true"></d:UserWidget>
+			</g:HTMLPanel>
+
+
+			<g:HTMLPanel styleName="span6 news-box" ui:field="divNewsFeed">
 				<div class="portlet full-page">
 					<div class="portlet-header hidden-phone">
 						<h3>
@@ -105,21 +106,24 @@
 							Upcoming Activities
 						</h3>
 					</div>
-					<g:HTMLPanel styleName="portlet-content overflow-y" ui:field="panelUpcomingActivities">
+					<g:HTMLPanel styleName="portlet-content overflow-y"
+						ui:field="panelUpcomingActivities">
 						<g:HTMLPanel styleName="row-fluid">
-							<span class="row-fluid bold">Overdue</span>
+							<div class="row-fluid">
+								<div class="group-header bold">Overdue</div>
+							</div>
 							<g:HTMLPanel ui:field="divOverdue">
 							</g:HTMLPanel>
 						</g:HTMLPanel>
 						<g:HTMLPanel styleName="row-fluid">
-							<span class="row-fluid bold">Not Started</span>
+							<div class="group-header bold">Not Started</div>
 							<g:HTMLPanel ui:field="divNotStarted">
 							</g:HTMLPanel>
 						</g:HTMLPanel>
 						<g:HTMLPanel styleName="row-fluid">
-							<span class="row-fluid bold">Upcoming</span>
+							<div class="group-header bold">Upcoming</div>
 							<g:HTMLPanel ui:field="divUpcoming" styleName="up-coming">
-							</g:HTMLPanel>	
+							</g:HTMLPanel>
 						</g:HTMLPanel>
 					</g:HTMLPanel>
 				</div>

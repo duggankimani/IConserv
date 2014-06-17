@@ -959,6 +959,9 @@ body .dateBoxPopup {
 	font-family: 'Open Sans', 'trebuchet ms', arial, sans-serif;
 	font-size: 14px;
 }
+#detailed-info .overflow-y{
+		max-height: 87%;
+}	
 
 #detailed-info .attachment-panel {
 	font-family: arial, sans-serif;
@@ -1600,29 +1603,24 @@ ul.icons-list.text-xl {
 	
 	#detailed-info {
 		width: 100%;
-	}
+	}	
 	#detailed-info .overflow-y{
 		max-height: 73%;
 	}	
-	
 	#detailed-info .content-area {
 		margin-left:0px;
 		padding-left:13px;
-	
 		padding-top: 0px;
 	}
-	
 	#detailed-info .generic-doc-title{
 		margin-left:0px;
 		padding-left: 11px;
 		padding-bottom:8px;
 		border-bottom: 1px solid #CCCCCC;
 	}
-	
 	#detailed-info .form-horizontal legend{
 		line-height:1.5;
 	}
-	
 	#detailed-info .upper-content{
 		border-bottom:none;
 		height:auto;
