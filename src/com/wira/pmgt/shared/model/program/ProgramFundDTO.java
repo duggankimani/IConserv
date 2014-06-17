@@ -65,4 +65,9 @@ public class ProgramFundDTO implements Serializable{
 		return fund.equals(other.fund);
 	}
 	
+	@Override
+	public String toString() {
+		return fund.getName()+" : "+amount+" ("+allocation+")";
+	}
+	
 }

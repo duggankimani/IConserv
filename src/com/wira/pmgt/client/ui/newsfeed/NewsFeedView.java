@@ -309,7 +309,6 @@ public class NewsFeedView extends ViewImpl implements
 	}
 
 	private void addNotStartedItem(ProgramSummary program) {
-		System.out.println(">>>>Called Not Started");
 		divNotStarted.removeStyleName("hide");
 		divNotStarted.add(new ProgramCalendarItem(program));
 	}

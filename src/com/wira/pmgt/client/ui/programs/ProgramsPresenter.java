@@ -433,26 +433,45 @@ public class ProgramsPresenter extends
 
 	private void save(final IsProgramDetail activity) {
 		// program.setParentId(programId);
-		requestHelper.execute(new CreateProgramRequest(activity),
-				new TaskServiceCallback<CreateProgramResponse>() {
+		MultiRequestAction requests = new MultiRequestAction();
+		requests.addRequest(new CreateProgramRequest(activity));
+				
+		requestHelper.execute(requests,
+				new TaskServiceCallback<MultiRequestActionResult>() {
 					@Override
-					public void processResult(CreateProgramResponse aResponse) {
+					public void processResult(MultiRequestActionResult aResponse) {
+						CreateProgramResponse createProgramsResponse = (CreateProgramResponse) aResponse.get(0);
+						
 						getView().setLastUpdatedId(
-								aResponse.getProgram().getId());
+								createProgramsResponse.getProgram().getId());
 						if(activity.getType()==ProgramDetailType.PROGRAM){
 							loadData(programId);
 						}else{
-							fireEvent(new ProgramDetailSavedEvent(aResponse.getProgram(), 
+							fireEvent(new ProgramDetailSavedEvent(createProgramsResponse.getProgram(), 
 									activity.getId()==null));
 						}
-						
 						fireEvent(new ProcessingCompletedEvent());
-						
 						fireEvent(new ActivitySavedEvent(activity.getType()
 								.name().toLowerCase()
 								+ " successfully saved"));
+						
+						
+						//reload parent
+						if(activity.getParentId()!=null){
+							requestHelper.execute(new GetProgramsRequest(activity.getParentId(), false, false), 
+									new TaskServiceCallback<GetProgramsResponse>() {
+								@Override
+								public void processResult(GetProgramsResponse aResponse) {
+									IsProgramDetail detail = aResponse.getSingleResult();
+									fireEvent(new ProgramDetailSavedEvent(detail,false));
+								}
+							});
+						}
 					}
 				});
+		
+		
+	
 	}
 
 	public void loadData(final Long activityId) {

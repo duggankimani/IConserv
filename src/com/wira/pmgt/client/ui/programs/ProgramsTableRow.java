@@ -207,7 +207,9 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 		return activity;
 	}
 
+	ValueChangeHandler<Boolean> selectionHandler;
 	public void setSelectionChangeHandler(ValueChangeHandler<Boolean> handler) {
+		this.selectionHandler = handler;
 		chkSelect.addValueChangeHandler(handler);
 	}
 
@@ -273,12 +275,7 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 		}
 	}
 
-	private void setFunding() {	
-		//allocations.clear();
-		
-//		if(activity.getType()==ProgramDetailType.OBJECTIVE){
-//			return;
-//		}
+	private void setFunding() {		
 		List<ProgramFundDTO> activityFunding = activity.getFunding();
 		List<FundDTO> activitySourceOfFunds = new ArrayList<FundDTO>();
 		for (ProgramFundDTO dto : activityFunding) {
@@ -438,22 +435,27 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 			
 			//insert this child at the end of the parent
 			FlowPanel parent = ((FlowPanel)this.getParent());
-			parent.insert(new ProgramsTableRow(event.getProgram(),funding, programId, isSummaryRow, ++level), idx);
+			ProgramsTableRow newRow = new ProgramsTableRow(event.getProgram(),funding, programId, false, level+1);
+			newRow.setSelectionChangeHandler(selectionHandler);
+			newRow.setHasChildren(false);
+			parent.insert(newRow, idx);
 			
 		}else{
 			//exists
 			if(activity.getId()==event.getProgram().getId()){
-				
+				allocations.clear();
 				this.activity = event.getProgram();
-				
 				//clear - incase of update/refresh
 				int widgetCount = row.getWidgetCount(); 
 				for(int i=1; i<=funding.size(); i++){
+		
 					if(widgetCount-i >0){
-						row.getWidget(widgetCount-i).removeFromParent();
+						//row.getWidget(widgetCount-i).removeFromParent();
+						assert row.remove(widgetCount-i);
 					}
 				}
 				init();
+				highlight();
 			}
 		}
 		
