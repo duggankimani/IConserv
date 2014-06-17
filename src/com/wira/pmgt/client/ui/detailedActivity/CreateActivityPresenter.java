@@ -48,7 +48,8 @@ public class CreateActivityPresenter extends
 	
 	private IsProgramDetail activity;
 	private Long parentId;
-	
+	private PeriodDTO period;
+		
 	@Inject
 	public CreateActivityPresenter(final EventBus eventBus, final MyView view) {
 		super(eventBus, view);
@@ -57,10 +58,11 @@ public class CreateActivityPresenter extends
 	public IsProgramDetail getActivity(){
 		IsProgramDetail viewactivity= getView().getActivity();
 		viewactivity.setParentId(parentId);
+		viewactivity.setPeriod(period);
 		if(activity!=null){
 			//update
 			viewactivity.setId(activity.getId());
-			System.err.println("Activity: "+activity.getId()+": Parent="+parentId+":: "+activity.getParentId());
+			//System.err.println("Activity: "+activity.getId()+": Parent="+parentId+":: "+activity.getParentId());
 			viewactivity.setParentId(activity.getParentId());
 			viewactivity.setPeriod(activity.getPeriod());
 		}
@@ -88,6 +90,7 @@ public class CreateActivityPresenter extends
 				
 				GetPeriodResponse getPeriod = (GetPeriodResponse)aResponse.get(i++);
 				getView().setPeriod(getPeriod.getPeriod());
+				period = getPeriod.getPeriod();
 			
 				GetProgramsResponse getPrograms = (GetProgramsResponse)aResponse.get(i++);
 				getView().setObjectives(getPrograms.getPrograms());

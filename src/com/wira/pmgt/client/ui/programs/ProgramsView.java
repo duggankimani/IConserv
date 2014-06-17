@@ -1,6 +1,8 @@
 package com.wira.pmgt.client.ui.programs;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -414,6 +416,12 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	public void setPeriods(List<PeriodDTO> periods) {
+		Collections.sort(periods, new Comparator<PeriodDTO>(){
+			@Override
+			public int compare(PeriodDTO o1, PeriodDTO o2) {
+				return -o1.getStartDate().compareTo(o2.getStartDate());
+			}
+		});
 		headerContainer.setPeriodDropdown(periods);
 
 		// if (periods != null && !periods.isEmpty()) {
@@ -479,7 +487,7 @@ public class ProgramsView extends ViewImpl implements
 					if (period.isCurrentPeriod()) {
 						headerContainer.getPeriodDropdown().setValue(period);
 						headerContainer.setDates("("
-								+ periods.get(0).getDescription() + ")");
+								+ period.getDescription() + ")");
 						break;
 					}
 				}

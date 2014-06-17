@@ -1,5 +1,7 @@
 package com.wira.pmgt.shared.model.program;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.wira.pmgt.shared.model.HTUser;
@@ -138,5 +140,20 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 
 	public void setProgress(Double progress) {
 		this.progress = progress;
+	}
+	
+	public static void sort(List<IsProgramDetail> programs) {
+		Collections.sort(programs, new Comparator<IsProgramDetail>(){
+			@Override
+			public int compare(IsProgramDetail o1, IsProgramDetail o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+	}
+
+	public void sort() {
+		if(children!=null){
+			sort(children);
+		}
 	}
 }

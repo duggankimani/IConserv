@@ -132,11 +132,6 @@ public class CreateOutcomeView extends ViewImpl implements
 	};
 
 	@Override
-	public void setPeriod(PeriodDTO period) {
-		
-	}
-	
-	@Override
 	public void setObjectives(List<IsProgramDetail> objectives) {
 		if(objectives!=null){
 			autoComplete.setValues(objectives);

@@ -26,7 +26,6 @@ public class CreateOutcomePresenter extends
 
 	public interface MyView extends View {
 		void setFunds(List<FundDTO> funds);
-		void setPeriod(PeriodDTO period);
 		void setObjectives(List<IsProgramDetail> objectives);
 		void setParentProgram(IsProgramDetail isProgramActivity);
 		boolean isValid();
@@ -39,6 +38,7 @@ public class CreateOutcomePresenter extends
 	DispatchAsync requestHelper;
 	IsProgramDetail outcome;
 	private Long parentId;
+	private PeriodDTO period;
 
 	@Inject
 	public CreateOutcomePresenter(final EventBus eventBus, final MyView view) {
@@ -53,6 +53,7 @@ public class CreateOutcomePresenter extends
 			viewoutcome.setPeriod(outcome.getPeriod());
 		}else{
 			viewoutcome.setParentId(parentId);
+			viewoutcome.setPeriod(period);
 		}
 		
 		return viewoutcome;
@@ -74,7 +75,7 @@ public class CreateOutcomePresenter extends
 				getView().setFunds(getFunds.getFunds());
 				
 				GetPeriodResponse getPeriod = (GetPeriodResponse)aResponse.get(1);
-				getView().setPeriod(getPeriod.getPeriod());
+				period = getPeriod.getPeriod();
 			
 				GetProgramsResponse getPrograms = (GetProgramsResponse)aResponse.get(2);
 				getView().setObjectives(getPrograms.getPrograms());

@@ -19,7 +19,7 @@
 					</div> <!-- /.visual -->
 
 					<div class="details">
-						<span class="content-block">Requested Process</span>
+						<span class="content-block">Assigned Tasks</span>
 						<span class="value" ui:field="spnReqCount"></span>
 					</div> <!-- /.details -->
 
@@ -36,7 +36,7 @@
 					</div> <!-- /.visual -->
 
 					<div class="details">
-						<span class="content-block">Active Processes</span>
+						<span class="content-block">Active Tasks</span>
 						<span class="value" ui:field="spnActiveCount"></span>
 					</div> <!-- /.details -->
 
@@ -53,7 +53,7 @@
 					</div> <!-- /.visual -->
 
 					<div class="details">
-						<span class="content-block">Failed Processes</span>
+						<span class="content-block">Failed Tasks</span>
 						<span class="value" ui:field="spnFailureCount"></span>
 					</div> <!-- /.details -->
 
@@ -70,7 +70,7 @@
 					<div class="portlet-header">
 						<h3>
 							<i class="icon-bar-chart"></i>
-							PROCESSES AGING ANALYSIS
+							TASK AGING ANALYSIS
 						</h3>
 					</div>
 					<g:HTMLPanel styleName="portlet-content" ui:field="panelTurnAroundTime">
@@ -83,7 +83,7 @@
 					<div class="portlet-header">
 						<h3>
 							<i class="icon-bar-chart"></i>
-							TOTAL REQUESTS MADE PER DOCUMENT
+							TOTAL TASKS
 						</h3>
 					</div>
 					<g:HTMLPanel styleName="portlet-content" ui:field="panelTotalRequestsPerDoc">
@@ -110,7 +110,7 @@
 				<div class="portlet-header">
 					<h3>
 						<i class="icon-bar-chart"></i>
-						REQUESTS VS PROCESS COMPLETION
+						TASKS ASSIGNMENT VS TASK COMPLETION COMPLETION
 					</h3>
 				</div>
 				<g:HTMLPanel styleName="portlet-content" ui:field="panelRequestsApprovalsComp">

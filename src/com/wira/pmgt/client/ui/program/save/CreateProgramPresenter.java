@@ -69,6 +69,8 @@ public class CreateProgramPresenter extends
 
 		HasClickHandlers getManageDonors();
 
+		List<PeriodDTO> getPeriods();
+
 	}
 
 	@Inject
@@ -76,6 +78,7 @@ public class CreateProgramPresenter extends
 	private Long programId;
 	private IsProgramDetail program;
 	private boolean navigateOnSave;
+	
 
 	@Inject
 	public CreateProgramPresenter(final EventBus eventBus,
@@ -97,7 +100,7 @@ public class CreateProgramPresenter extends
 
 			@Override
 			public void onClick(ClickEvent event) {
-				final PeriodSaveView periodSave = new PeriodSaveView();
+				final PeriodSaveView periodSave = new PeriodSaveView(null, getView().getPeriods());
 
 				AppManager.showPopUp("Add Period", periodSave,
 						new OptionControl() {
@@ -126,7 +129,7 @@ public class CreateProgramPresenter extends
 			@Override
 			public void onClick(ClickEvent event) {
 				final PeriodSaveView periodSave = new PeriodSaveView(getView()
-						.getPeriod());
+						.getPeriod(),getView().getPeriods());
 				AppManager.showPopUp("Add Period", periodSave,
 						new OptionControl() {
 

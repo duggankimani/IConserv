@@ -179,6 +179,12 @@ public class CreateProgramView extends PopupViewImpl implements
 
 	@Override
 	public void setPeriods(List<PeriodDTO> periods) {
+		Collections.sort(periods, new Comparator<PeriodDTO>(){
+			@Override
+			public int compare(PeriodDTO o1, PeriodDTO o2) {
+				return -o1.getStartDate().compareTo(o2.getStartDate());
+			}
+		});
 		lstPeriod.setItems(periods);
 	}
 
@@ -267,6 +273,12 @@ public class CreateProgramView extends PopupViewImpl implements
 	
 	public HasClickHandlers getManageDonors() {
 		return aManageDonors;
+	}
+
+	@Override
+	public List<PeriodDTO> getPeriods() {
+
+		return lstPeriod.values();
 	}
 
 }

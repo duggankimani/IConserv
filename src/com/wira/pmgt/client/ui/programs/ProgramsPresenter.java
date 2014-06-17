@@ -31,6 +31,7 @@ import com.wira.pmgt.client.ui.events.CreateProgramEvent;
 import com.wira.pmgt.client.ui.events.LoadAlertsEvent;
 import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent;
 import com.wira.pmgt.client.ui.events.ProcessingEvent;
+import com.wira.pmgt.client.ui.events.ProgramDetailSavedEvent;
 import com.wira.pmgt.client.ui.events.ProgramsReloadEvent;
 import com.wira.pmgt.client.ui.events.ProgramsReloadEvent.ProgramsReloadHandler;
 import com.wira.pmgt.client.ui.objective.CreateObjectivePresenter;
@@ -438,7 +439,13 @@ public class ProgramsPresenter extends
 					public void processResult(CreateProgramResponse aResponse) {
 						getView().setLastUpdatedId(
 								aResponse.getProgram().getId());
-						loadData(programId);
+						if(activity.getType()==ProgramDetailType.PROGRAM){
+							loadData(programId);
+						}else{
+							fireEvent(new ProgramDetailSavedEvent(aResponse.getProgram(), 
+									activity.getId()==null));
+						}
+						
 						fireEvent(new ProcessingCompletedEvent());
 						
 						fireEvent(new ActivitySavedEvent(activity.getType()
@@ -681,13 +688,13 @@ public class ProgramsPresenter extends
 	@Override
 	protected void onReset() {
 		super.onReset();
-		System.err.println(">>>>On reset called");
+		//System.err.println(">>>>On reset called");
 		getView().setMiddleHeight();
 	}
 	@Override
 	protected void onReveal() {
 		super.onReveal();
-		System.err.println(">>>>On reveal called");
+		//System.err.println(">>>>On reveal called");
 		//getView().setMiddleHeight();
 	}
 }

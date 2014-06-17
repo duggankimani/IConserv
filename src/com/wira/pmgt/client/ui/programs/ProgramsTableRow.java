@@ -19,19 +19,24 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.RowWidget;
+import com.wira.pmgt.client.ui.component.TableView;
 import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent;
+import com.wira.pmgt.client.ui.events.ProgramDetailSavedEvent;
+import com.wira.pmgt.client.ui.events.ProgramDetailSavedEvent.ProgramDetailSavedHandler;
 import com.wira.pmgt.client.util.AppContext;
+import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 import com.wira.pmgt.shared.model.program.ProgramStatus;
 
-public class ProgramsTableRow extends RowWidget {
+public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHandler {
 
 	private static ActivitiesTableRowUiBinder uiBinder = GWT
 			.create(ActivitiesTableRowUiBinder.class);
@@ -42,6 +47,7 @@ public class ProgramsTableRow extends RowWidget {
 
 	@UiField
 	HTMLPanel row;
+	
 	@UiField
 	SpanElement divRowStrip;
 	@UiField
@@ -98,7 +104,7 @@ public class ProgramsTableRow extends RowWidget {
 		this.programId= (programId==null? 0: programId);
 		this.level = level;
 		this.funding = sortedListOfFunding;
-		
+				
 		//Show/ hide this details based on its level on load
 		if(!isSummaryRow){
 			
@@ -116,7 +122,6 @@ public class ProgramsTableRow extends RowWidget {
 			divRowCaret.setVisible(activity.getType()==ProgramDetailType.PROGRAM && activity.getObjectives().size()>0);
 		}
 		
-		
 		//Bind Row to Table
 		setRow(row);
 		
@@ -125,7 +130,8 @@ public class ProgramsTableRow extends RowWidget {
 
 	}
 	
-	public void init(){		
+	public void init(){
+		
 		//Program/Task status - Created, Started, Done, Closed etc
 		setStatus();
 		
@@ -144,7 +150,8 @@ public class ProgramsTableRow extends RowWidget {
 		} else {
 		
 			divRating.getElement().setInnerText("N/A");
-			if(activity.getChildren().isEmpty()){
+			
+			if(activity.getChildren()!=null && activity.getChildren().isEmpty()){
 					divRowCaret.addStyleName("hide");
 			}
 		}
@@ -222,6 +229,9 @@ public class ProgramsTableRow extends RowWidget {
 			break;
 		case OPENED:
 			type="warning";
+			if(hasChildren()){
+				spnStatus.setInnerText("In Progress");
+			}
 			break;
 		case COMPLETED:
 			type="info";
@@ -235,8 +245,12 @@ public class ProgramsTableRow extends RowWidget {
 
 		}
 		spnStatus.addClassName("label-" + type);
-		divProgress.getElement().setInnerText(activity.getProgress()+"%");
+		divProgress.getElement().setInnerText(activity.getProgress().intValue()+"%");
 		
+	}
+
+	private boolean hasChildren() {
+		return !(activity.getChildren()==null || activity.getChildren().isEmpty());
 	}
 
 	@Override
@@ -259,7 +273,12 @@ public class ProgramsTableRow extends RowWidget {
 		}
 	}
 
-	private void setFunding() {
+	private void setFunding() {	
+		//allocations.clear();
+		
+//		if(activity.getType()==ProgramDetailType.OBJECTIVE){
+//			return;
+//		}
 		List<ProgramFundDTO> activityFunding = activity.getFunding();
 		List<FundDTO> activitySourceOfFunds = new ArrayList<FundDTO>();
 		for (ProgramFundDTO dto : activityFunding) {
@@ -348,7 +367,7 @@ public class ProgramsTableRow extends RowWidget {
 	private void toggle(boolean isShowChildren){
 		this.showChildren= isShowChildren;
 		
-		HTMLPanel panel = (HTMLPanel)this.getParent();
+		FlowPanel panel = (FlowPanel)this.getParent();
 		int idx = panel.getWidgetIndex(this);
 		assert idx!=-1;
 		
@@ -395,4 +414,49 @@ public class ProgramsTableRow extends RowWidget {
 		}
 	}
 	
+	@Override
+	protected void onWidgetLoad() {
+		super.onWidgetLoad();
+		addRegisteredHandler(ProgramDetailSavedEvent.TYPE, this);
+	}
+
+	@Override
+	public void onProgramDetailSaved(ProgramDetailSavedEvent event) {
+		if(event.isNew() && event.getProgram().getParentId()!=null 
+				&& event.getProgram().getParentId().equals(activity.getId())){
+			
+			//check if this is the parent
+			if(activity.getChildren()==null){
+				activity.setChildren(new ArrayList<IsProgramDetail>());
+			}
+			
+			activity.getChildren().add(event.getProgram());
+			activity.sort();
+			
+			int idx = activity.getChildren().indexOf(event.getProgram());
+			assert idx>-1;
+			
+			//insert this child at the end of the parent
+			FlowPanel parent = ((FlowPanel)this.getParent());
+			parent.insert(new ProgramsTableRow(event.getProgram(),funding, programId, isSummaryRow, ++level), idx);
+			
+		}else{
+			//exists
+			if(activity.getId()==event.getProgram().getId()){
+				
+				this.activity = event.getProgram();
+				
+				//clear - incase of update/refresh
+				int widgetCount = row.getWidgetCount(); 
+				for(int i=1; i<=funding.size(); i++){
+					if(widgetCount-i >0){
+						row.getWidget(widgetCount-i).removeFromParent();
+					}
+				}
+				init();
+			}
+		}
+		
+	}
+
 }
