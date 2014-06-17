@@ -437,7 +437,6 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 			FlowPanel parent = ((FlowPanel)this.getParent());
 			ProgramsTableRow newRow = new ProgramsTableRow(event.getProgram(),funding, programId, false, level+1);
 			newRow.setSelectionChangeHandler(selectionHandler);
-			newRow.setHasChildren(false);
 			parent.insert(newRow, idx);
 			
 		}else{
