@@ -100,4 +100,17 @@ public class ProgramSummary implements Serializable {
 	public Long getProgramId() {
 		return programId;
 	}
+	
+	public boolean isOverdue(){
+		return endDate!=null && status!=ProgramStatus.COMPLETED && endDate.before(new Date());
+	}
+	
+	public boolean isNotStarted(){
+		return startDate!=null && status==ProgramStatus.CREATED && startDate.before(new Date());
+	}
+	
+	public boolean isUpcoming(){
+		
+		return startDate!=null && new Date().before(startDate);
+	}
 }
