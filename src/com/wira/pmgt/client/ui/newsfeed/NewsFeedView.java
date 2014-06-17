@@ -274,7 +274,7 @@ public class NewsFeedView extends ViewImpl implements
 			@Override
 			public int compare(ProgramSummary o1, ProgramSummary o2) {
 	
-				int c = o1.getStartDate().compareTo(o2.getEndDate());
+				int c = o1.getStartDate().compareTo(o2.getStartDate());
 				if(c==0){
 					c = o1.getDescription().compareTo(o2.getDescription());
 				}
