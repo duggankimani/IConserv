@@ -18,6 +18,7 @@ public class ColumnConfig {
 
 	private String key;
 	private String displayName;
+	private String placeHolder;
 	private boolean isAggregationColumn;
 	private DataType type;
 	private List<Listable> dropDownItems = new ArrayList<Listable>();
@@ -26,6 +27,11 @@ public class ColumnConfig {
 		this.key = key;
 		this.displayName = displayName;
 		this.type = type;
+	}
+	
+	public ColumnConfig(String key, String displayName, DataType type, String placeHolder){
+		this(key,displayName,type);
+		this.placeHolder = placeHolder;
 	}
 
 	public String getKey() {
@@ -50,10 +56,12 @@ public class ColumnConfig {
 		HasValue widget = null;
 		if(type==DataType.INTEGER){
 			IntegerField field= new IntegerField();
+			field.setPlaceholder(placeHolder);
 			 //field.setStyleName("input-medium");
 			 widget = field;
 		}else if(type==DataType.DOUBLE){
 			 DoubleField field= new DoubleField();
+			 field.setPlaceholder(placeHolder);
 			 //field.setStyleName("input-medium");
 			 widget = field;
 		}else if(type==DataType.SELECTBASIC){
@@ -61,11 +69,14 @@ public class ColumnConfig {
 			dropDown.setItems(dropDownItems);
 			widget=dropDown;
 		}else if(type==DataType.STRINGLONG){
-			widget = new TextArea();
+			TextArea field= new TextArea();
+			field.setPlaceholder(placeHolder);
+			widget = field;
 		}
 		else{
-			widget = new TextField();
-			
+			TextField field = new TextField();
+			field.setPlaceholder(placeHolder);
+			widget = field;
 		}
 		
 		widget.setValue(value);		
@@ -95,6 +106,14 @@ public class ColumnConfig {
 
 	public void setType(DataType type) {
 		this.type = type;
+	}
+
+	public String getPlaceHolder() {
+		return placeHolder;
+	}
+
+	public void setPlaceHolder(String placeHolder) {
+		this.placeHolder = placeHolder;
 	}
 	
 }

@@ -23,6 +23,7 @@ import com.wira.pmgt.client.ui.component.grid.AggregationGrid;
 import com.wira.pmgt.client.ui.component.grid.ColumnConfig;
 import com.wira.pmgt.client.ui.component.grid.DataMapper;
 import com.wira.pmgt.client.ui.component.grid.DataModel;
+import com.wira.pmgt.client.ui.util.DateUtils;
 import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.Listable;
@@ -85,14 +86,17 @@ public class CreateActivityView extends ViewImpl implements
 //		ColumnConfig config = new ColumnConfig("condition", "Check", DataType.SELECTBASIC);
 //		configs.add(config);
 		
-		ColumnConfig config = new ColumnConfig("target", "Target", DataType.DOUBLE);
+		ColumnConfig config = new ColumnConfig("target", "Target", DataType.DOUBLE, "1000");
 		configs.add(config);
 		
-		config = new ColumnConfig("indicator", "Indicator", DataType.STRING);
+		config = new ColumnConfig("indicator", "Indicator", DataType.STRING, "Participants");
 		configs.add(config);
 		
 //		config = new ColumnConfig("actual", "Actual", DataType.INTEGER);
 //		configs.add(config);
+		
+		config = new ColumnConfig("outcome", "Outcome", DataType.DOUBLE, "1000");
+		configs.add(config);
 		
 		gridTargets.setColumnConfigs(configs);
 		gridTargets.setAutoNumber(true);
@@ -104,6 +108,10 @@ public class CreateActivityView extends ViewImpl implements
 		configs.add(donorField);
 		
 		ColumnConfig config = new ColumnConfig("amount", "Amount", DataType.DOUBLE);
+		config.setAggregationColumn(true);
+		configs.add(config);
+		
+		config = new ColumnConfig("actual", "Actual Exp", DataType.DOUBLE);
 		config.setAggregationColumn(true);
 		configs.add(config);
 		
@@ -163,7 +171,22 @@ public class CreateActivityView extends ViewImpl implements
 	@Override
 	public void setParentProgram(IsProgramDetail isProgramActivity) {
 		if(isProgramActivity.getStartDate()!=null && isProgramActivity.getEndDate()!=null){
-			dtRange.setDates(isProgramActivity.getStartDate(), isProgramActivity.getEndDate());
+						
+			if(type==ProgramDetailType.TASK){
+				
+				Date today = new Date();
+				Date tomorrow = DateUtils.addDays(today, 1);
+				
+				Date startDate = today.after(isProgramActivity.getStartDate()) && today.before(isProgramActivity.getEndDate())?
+						today: isProgramActivity.getStartDate();			
+				Date endDate = tomorrow.after(isProgramActivity.getStartDate()) && tomorrow.before(isProgramActivity.getEndDate())?
+						tomorrow: isProgramActivity.getEndDate();
+				
+				dtRange.setDates(startDate, endDate);	
+			}else{
+				dtRange.setDates(isProgramActivity.getStartDate(), isProgramActivity.getEndDate());
+			}
+			
 			dtRange.setRangeValidation(isProgramActivity.getStartDate(), isProgramActivity.getEndDate());
 		}
 		setBreadCrumbs(isProgramActivity.getProgramSummary());
@@ -240,6 +263,7 @@ public class CreateActivityView extends ViewImpl implements
 		
 		txtActivity.setValue(activity.getDescription());
 		objectivesAutoComplete.select(activity.getObjectives());
+		
 		dtRange.setDates(activity.getStartDate(), activity.getEndDate());
 		//program.setTargetsAndOutcomes(targetsAndOutcomes);
 		//

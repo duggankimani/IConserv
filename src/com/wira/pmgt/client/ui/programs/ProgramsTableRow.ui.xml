@@ -1,10 +1,11 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:d="urn:import:com.wira.pmgt.client.ui.component">
 	<g:HTMLPanel styleName="tr" ui:field="row">
 		<g:HTMLPanel styleName="td" ui:field="divCheckbox">
 			<g:HTMLPanel styleName="span4 caret-container">
-				<g:Anchor ui:field="divRowCaret" styleName="icon-caret-right helper-font-16 muted"></g:Anchor>
+				<d:ActionLink ui:field="divRowCaret" styleName="icon-caret-right helper-font-16 muted"></d:ActionLink>
 			</g:HTMLPanel>
 
 			<g:HTMLPanel styleName="span4 strip-container">
@@ -16,13 +17,16 @@
 			</g:HTMLPanel>
 
 			<g:HTMLPanel styleName="span4 name-container">
-				<g:Anchor ui:field="divName" styleName=""></g:Anchor>
+				<d:ActionLink ui:field="divName" styleName=""></d:ActionLink>
 			</g:HTMLPanel>
 		</g:HTMLPanel>
 		<g:HTMLPanel styleName="td" ui:field="divStatus">
 			<span ui:field="spnStatus" class="label"></span>
 		</g:HTMLPanel>
-		<g:HTMLPanel styleName="td" ui:field="divProgress"></g:HTMLPanel>
+		<g:HTMLPanel styleName="td" ui:field="divProgress">
+		    <d:ProgressBar ui:field="progressBar"></d:ProgressBar>
+		    <!-- span ui:field="spnProgress"></span-->
+		</g:HTMLPanel>
 		<g:HTMLPanel styleName="td" ui:field="divRating"></g:HTMLPanel>
 		<g:HTMLPanel styleName="td" ui:field="divBudget" title="Budget Amount"></g:HTMLPanel>
 	</g:HTMLPanel>

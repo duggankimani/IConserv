@@ -23,11 +23,13 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
+import com.wira.pmgt.client.ui.component.ProgressBar;
 import com.wira.pmgt.client.ui.component.RowWidget;
 import com.wira.pmgt.client.ui.component.TableView;
 import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent;
 import com.wira.pmgt.client.ui.events.ProgramDetailSavedEvent;
 import com.wira.pmgt.client.ui.events.ProgramDetailSavedEvent.ProgramDetailSavedHandler;
+import com.wira.pmgt.client.ui.util.DateUtils;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
 import com.wira.pmgt.shared.model.ProgramDetailType;
@@ -61,6 +63,9 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 	HTMLPanel divStatus;
 	@UiField
 	HTMLPanel divProgress;
+	
+	@UiField ProgressBar progressBar;
+	
 	@UiField
 	HTMLPanel divRating;
 	@UiField
@@ -72,6 +77,8 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 
 	@UiField
 	SpanElement spnStatus;
+	
+	//@UiField SpanElement spnProgress;
 
 	int level = 0;
 	long programId=0;
@@ -173,24 +180,29 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 		//Set Funding
 		setFunding();
 
-		//Highlight expired 
-
-		Date startDate = activity.getStartDate();
-		Date endDate = activity.getEndDate();
-		if(startDate!=null && activity.getStatus()==ProgramStatus.CREATED){
-			//This should have started already (Hightlight warning)
-			divRowStrip.addClassName("label-warning");
-		}
-		
-		if(endDate!=null && endDate.before(new Date()) && activity.getStatus()!=ProgramStatus.CLOSED){
-			//This should have been closed by now (Highlight red)
-			divRowStrip.addClassName("label-important");
-		}
+//		//Highlight expired 
+//
+//		Date startDate = activity.getStartDate();
+//		Date endDate = activity.getEndDate();
+//		if(startDate!=null && activity.getStatus()==ProgramStatus.CREATED){
+//			//This should have started already (Hightlight warning)
+//			divRowStrip.addClassName("label-warning");
+//		}
+//		
+//		if(endDate!=null && endDate.before(new Date()) && activity.getStatus()!=ProgramStatus.CLOSED){
+//			//This should have been closed by now (Highlight red)
+//			divRowStrip.addClassName("label-important");
+//		}
 	
 	}
 
 	private void setActivityName() {
 		divName.getElement().setInnerText(activity.getName());
+		
+		if(activity.getStartDate()!=null && activity.getEndDate()!=null)
+		divName.setTitle(DateUtils.HALFDATEFORMAT.format(activity.getStartDate())+
+				" - "+DateUtils.HALFDATEFORMAT.format(activity.getEndDate()));
+		
 		divName.setHref("#home;page=activities;activity="+programId+"d"+activity.getId());
 		divRowStrip.addClassName("label-info");
 
@@ -230,7 +242,7 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 			type="default";
 			break;
 		case OPENED:
-			type="warning";
+			type="info";
 			if(hasChildren()){
 				spnStatus.setInnerText("In Progress");
 			}
@@ -239,7 +251,7 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 			type="info";
 			break;
 		case REOPENED:
-			type="danger";
+			type="info";
 			break;
 		case CLOSED:
 			type="success";
@@ -247,7 +259,26 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 
 		}
 		spnStatus.addClassName("label-" + type);
-		divProgress.getElement().setInnerText(activity.getProgress().intValue()+"%");
+		progressBar.setValue(activity.getProgress().intValue());
+		progressBar.setText(activity.getProgress().intValue()+"%");
+		//spnProgress.setInnerText(activity.getProgress().intValue()+"%");
+		
+		if(status!=ProgramStatus.CLOSED){
+			if(activity.isOverdue()){
+				spnStatus.setClassName("label label-danger");
+				spnStatus.setTitle("This "+activity.getType().getDisplayName()+" is Overdue ("+DateUtils.MONTHDAYFORMAT.format(activity.getEndDate())+")");
+			}else if(activity.isNotStarted()){
+				spnStatus.setClassName("label label-warning");
+				spnStatus.setTitle("This "+activity.getType().getDisplayName()+" should have started by "+DateUtils.MONTHDAYFORMAT.format(activity.getStartDate()));
+			}else if(activity.isUpcoming()){
+				spnStatus.setTitle("This "+activity.getType().getDisplayName()+" is coming up soon ("+DateUtils.MONTHDAYFORMAT.format(activity.getStartDate())+")");
+			}else{
+				//its ongoing - Work in progress (CREATED, OPEN, REOPENED)
+				//spnStatus.setClassName("label label-info");
+			}
+		}else{
+			spnStatus.setClassName("label label-success");
+		}
 		
 	}
 

@@ -109,8 +109,7 @@ public class ProgramSummary implements Serializable {
 		return startDate!=null && status==ProgramStatus.CREATED && startDate.before(new Date());
 	}
 	
-	public boolean isUpcoming(){
-		
-		return startDate!=null && new Date().before(startDate);
+	public boolean isUpcoming(){		
+		return startDate!=null && new Date().before(startDate) && status==ProgramStatus.CREATED;
 	}
 }
