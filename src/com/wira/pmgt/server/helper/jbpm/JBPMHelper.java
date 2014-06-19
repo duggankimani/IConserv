@@ -150,7 +150,7 @@ public class JBPMHelper implements Closeable {
 		initialParams.put("ownerId", userId);
 		initialParams.put("priority", summary.getPriority());
 		
-		Document clone = summary.clone(); //Not sure why we clone here
+		Document clone = summary.clone(); //Not sure why we clone here; need review
 		clone.setId(summary.getId());
 		initialParams.put("document", clone);
 

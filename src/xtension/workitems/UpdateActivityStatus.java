@@ -8,7 +8,10 @@ import org.drools.runtime.process.WorkItem;
 import org.drools.runtime.process.WorkItemManager;
 
 import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
+import com.wira.pmgt.server.dao.helper.DocumentDaoHelper;
+import com.wira.pmgt.server.dao.helper.ProgramDaoHelper;
 import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.shared.model.Document;
 import com.wira.pmgt.shared.model.program.ProgramStatus;
 
 public class UpdateActivityStatus implements WorkItemHandler {
@@ -30,11 +33,27 @@ public class UpdateActivityStatus implements WorkItemHandler {
 		}
 		programId = new Long(workItem.getParameter("programId").toString());
 
+		ProgramStatus programStatus = ProgramStatus.valueOf(status);
+		
 		ProgramDetail detail = DB.getProgramDaoImpl().getProgramDetail(programId);
-		detail.setStatus(ProgramStatus.valueOf(status));
+		detail.setStatus(programStatus);
 		DB.getProgramDaoImpl().save(detail);
 		
+
+		if(programStatus==ProgramStatus.CLOSED){
+			//process is done
+			//Save this document the documents table
+			Document document = (Document)workItem.getParameter("document");
+			persist(document);
+			ProgramDaoHelper.updateTargetAndOutcome(detail,document.getValues());
+		}
+		
+		
 		manager.completeWorkItem(workItem.getId(), new HashMap<String, Object>());
+	}
+
+	private void persist(Document document) {
+		DocumentDaoHelper.save(document);
 	}
 
 	@Override

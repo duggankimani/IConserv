@@ -91,6 +91,7 @@ public class ProgramsTable extends Composite {
 		List<TableHeader> th = new ArrayList<TableHeader>();
 		if(isSummaryTable){
 			th.add(new TableHeader("TITLE",40.0));
+			th.add(new TableHeader("PROGRESS",10.0));
 			th.add(new TableHeader("BUDGET",null));
 			
 		}else{

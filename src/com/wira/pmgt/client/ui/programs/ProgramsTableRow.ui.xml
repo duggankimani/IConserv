@@ -27,7 +27,9 @@
 		    <d:ProgressBar ui:field="progressBar"></d:ProgressBar>
 		    <!-- span ui:field="spnProgress"></span-->
 		</g:HTMLPanel>
-		<g:HTMLPanel styleName="td" ui:field="divRating"></g:HTMLPanel>
+		<g:HTMLPanel styleName="td" ui:field="divRating">
+		    <d:StarRating ui:field="rating" maxValue="5"></d:StarRating>
+		</g:HTMLPanel>
 		<g:HTMLPanel styleName="td" ui:field="divBudget" title="Budget Amount"></g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 

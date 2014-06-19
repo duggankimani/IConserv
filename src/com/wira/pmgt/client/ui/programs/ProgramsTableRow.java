@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.ProgressBar;
 import com.wira.pmgt.client.ui.component.RowWidget;
+import com.wira.pmgt.client.ui.component.StarRating;
 import com.wira.pmgt.client.ui.component.TableView;
 import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent;
 import com.wira.pmgt.client.ui.events.ProgramDetailSavedEvent;
@@ -68,6 +69,9 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 	
 	@UiField
 	HTMLPanel divRating;
+	
+	@UiField StarRating rating;
+	
 	@UiField
 	HTMLPanel divBudget;
 	@UiField
@@ -138,7 +142,7 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 	}
 	
 	public void init(){
-		
+		rating.setValue(3);
 		//Program/Task status - Created, Started, Done, Closed etc
 		setStatus();
 		
@@ -150,13 +154,13 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 		
 		//Show different cols based on whether this is a program summary listing or program details
 		if (isSummaryRow) {
-			divProgress.setStyleName("hide");
+			//divProgress.setStyleName("hide");
 			divRating.setStyleName("hide");
 			divStatus.setStyleName("hide");
 
 		} else {
 		
-			divRating.getElement().setInnerText("N/A");
+			//divRating.getElement().setInnerText("N/A");
 			
 			if(activity.getChildren()!=null && activity.getChildren().isEmpty()){
 					divRowCaret.addStyleName("hide");

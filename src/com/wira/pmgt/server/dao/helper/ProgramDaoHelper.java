@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import xtension.workitems.UpdateActivityStatus;
+
 import com.wira.pmgt.client.ui.programs.ProgramsPresenter;
 import com.wira.pmgt.server.dao.ProgramDaoImpl;
 import com.wira.pmgt.server.dao.biz.model.Fund;
@@ -26,6 +28,7 @@ import com.wira.pmgt.shared.model.ParticipantType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.StringValue;
 import com.wira.pmgt.shared.model.TaskInfo;
+import com.wira.pmgt.shared.model.Value;
 import com.wira.pmgt.shared.model.form.Form;
 import com.wira.pmgt.shared.model.form.FormModel;
 import com.wira.pmgt.shared.model.form.Property;
@@ -626,6 +629,24 @@ public class ProgramDaoHelper {
 	public static List<ProgramSummary> getProgramCalendar(String userId) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		return dao.getProgramCalendar(userId);
+	}
+
+	/**
+	 * This method is called after Task Approval {@link UpdateActivityStatus#executeWorkItem}<b>
+	 * Some default values expected include:
+	 * Rating (Task Rating)
+	 * Cost (Total cost of performing the task)
+	 * <p>
+	 * The method maps inputs from the Task Form to Program Outcomes
+	 * <p> 
+	 * 
+	 * @param detail ProgramDetail to be updated
+	 * @param values Map of values from the User Task Form
+	 */
+	public static void updateTargetAndOutcome(ProgramDetail detail,
+			Map<String, Value> values) {
+		
+		
 	}
 
 //	private static ProgramSummary getSummary(ProgramDetail detail) {

@@ -56,12 +56,12 @@ public class ColumnConfig {
 		HasValue widget = null;
 		if(type==DataType.INTEGER){
 			IntegerField field= new IntegerField();
-			field.setPlaceholder(placeHolder);
+			field.setPlaceholder(placeHolder==null?"": placeHolder);
 			 //field.setStyleName("input-medium");
 			 widget = field;
 		}else if(type==DataType.DOUBLE){
 			 DoubleField field= new DoubleField();
-			 field.setPlaceholder(placeHolder);
+			 field.setPlaceholder(placeHolder==null?"": placeHolder);
 			 //field.setStyleName("input-medium");
 			 widget = field;
 		}else if(type==DataType.SELECTBASIC){
@@ -70,12 +70,12 @@ public class ColumnConfig {
 			widget=dropDown;
 		}else if(type==DataType.STRINGLONG){
 			TextArea field= new TextArea();
-			field.setPlaceholder(placeHolder);
+			field.setPlaceholder(placeHolder==null?"": placeHolder);
 			widget = field;
 		}
 		else{
 			TextField field = new TextField();
-			field.setPlaceholder(placeHolder);
+			field.setPlaceholder(placeHolder==null?"": placeHolder);
 			widget = field;
 		}
 		
