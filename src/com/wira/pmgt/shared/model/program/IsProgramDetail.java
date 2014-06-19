@@ -27,7 +27,7 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 	private List<HTUser> assignedUsers;
 	private List<UserGroup> assignedGroups;
 	private Long documentId;
-	private Double progress; 
+	private Double progress = 0.0; 
 	
 	public Long getDocumentId() {
 		return documentId;

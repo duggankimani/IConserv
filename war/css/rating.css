@@ -3,7 +3,7 @@
     display: inline-block;
     font-size: 0;
     /*position: relative;*/
-    position:absolute;
+    /* position:absolute; */
 }
 .rating-input {
     float: right;
