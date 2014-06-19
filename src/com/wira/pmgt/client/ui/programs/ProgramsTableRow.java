@@ -4,7 +4,6 @@ import static com.wira.pmgt.client.ui.util.NumberUtils.CURRENCYFORMAT;
 import static com.wira.pmgt.client.ui.util.NumberUtils.NUMBERFORMAT;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -26,13 +25,11 @@ import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.ProgressBar;
 import com.wira.pmgt.client.ui.component.RowWidget;
 import com.wira.pmgt.client.ui.component.StarRating;
-import com.wira.pmgt.client.ui.component.TableView;
 import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent;
 import com.wira.pmgt.client.ui.events.ProgramDetailSavedEvent;
 import com.wira.pmgt.client.ui.events.ProgramDetailSavedEvent.ProgramDetailSavedHandler;
 import com.wira.pmgt.client.ui.util.DateUtils;
 import com.wira.pmgt.client.util.AppContext;
-import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;

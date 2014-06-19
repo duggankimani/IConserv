@@ -1,18 +1,12 @@
 package com.wira.pmgt.client.ui.component;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.LabelElement;
-import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
 
 public class StarRating extends Composite {
@@ -24,7 +18,6 @@ public class StarRating extends Composite {
 	}
 
 	@UiField FlowPanel container;
-	private int maxValue=0;
 	String id="rating-input-";
 	private int groupId = Random.nextInt(10000);
 	
@@ -42,7 +35,6 @@ public class StarRating extends Composite {
 	}
 	
 	public void setMaxValue(int maxValue){
-		this.maxValue=maxValue;
 		createElements(maxValue);
 	}
 	
@@ -62,9 +54,10 @@ public class StarRating extends Composite {
 		
 		StringBuffer elementBuffer = new StringBuffer("");
 		
-		for(int i=1; i<=maxRatingValue; i++){
+		for(int i=maxRatingValue; i>0; i--){		
 			elementBuffer.append("<input type=\"radio\" class=\"rating-input\" "+
-                "id=\"rating-input-"+groupId+"-"+i+"\" name=\"rating-input-"+groupId+"\"/> "+
+                "id=\"rating-input-"+groupId+"-"+i+"\" name=\"rating-input-"+groupId+"\"" +
+                		" value=\""+i+"\"/> "+
                 "<label for=\"rating-input-"+groupId+"-"+i+"\" class=\"rating-star\"></label>");
 		}
 		

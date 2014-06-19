@@ -1,9 +1,9 @@
 .rating {
     overflow: hidden;
-    /*display: inline-block;*/
-    display:flex;
+    display: inline-block;
     font-size: 0;
-    position: relative;
+    /*position: relative;*/
+    position:absolute;
 }
 .rating-input {
     float: right;
