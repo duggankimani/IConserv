@@ -11,6 +11,8 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -22,6 +24,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.widget.core.client.info.Info;
 import com.wira.pmgt.client.ui.component.ProgressBar;
 import com.wira.pmgt.client.ui.component.RowWidget;
 import com.wira.pmgt.client.ui.component.StarRating;
@@ -129,6 +132,14 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 			this.showChildren=true;
 			divRowCaret.setVisible(activity.getType()==ProgramDetailType.PROGRAM && activity.getObjectives().size()>0);
 		}
+		
+//		divName.addMouseOverHandler(new MouseOverHandler() {
+//			
+//			@Override
+//			public void onMouseOver(MouseOverEvent event) {
+//				Info.display("Rating", "Value= "+rating.getValue());
+//			}
+//		});
 		
 		//Bind Row to Table
 		setRow(row);
