@@ -271,8 +271,10 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 
 		}
 		spnStatus.addClassName("label-" + type);
+		if(activity.getProgress()!=null){
 		progressBar.setValue(activity.getProgress().intValue());
 		progressBar.setText(activity.getProgress().intValue()+"%");
+		}
 		//spnProgress.setInnerText(activity.getProgress().intValue()+"%");
 		
 		if(status!=ProgramStatus.CLOSED){
