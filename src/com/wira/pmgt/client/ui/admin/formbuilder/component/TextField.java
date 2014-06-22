@@ -12,6 +12,8 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
+import com.wira.pmgt.client.ui.events.PropertyChangedEvent;
+import com.wira.pmgt.client.ui.util.StringUtils;
 import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.StringValue;
 import com.wira.pmgt.shared.model.Value;
@@ -43,9 +45,13 @@ public class TextField extends FieldWidget {
 				new KeyValuePair("left", "Left"),
 				new KeyValuePair("center", "Center"),
 				new KeyValuePair("right", "Right")));
-
+		
+		//Bind UI
 		widget = uiBinder.createAndBindUi(this);
+		
 		add(widget);
+		//testing auto complete
+		txtComponent.setAutoComplete(true);
 		UIObject.setVisible(spnMandatory, false);
 	}
 	
@@ -95,6 +101,32 @@ public class TextField extends FieldWidget {
 			}
 		});
 		
+		if(property.getName().equals(NAME)){
+			addRegisteredHandler(PropertyChangedEvent.TYPE,
+					new PropertyChangedEvent.PropertyChangedHandler(){
+				@Override
+				public void onPropertyChanged(PropertyChangedEvent event) {
+					if(event.getPropertyName().equals(CAPTION)){
+						String propertyValue = event.getPropertyValue()==null? null: event.getPropertyValue().toString();
+						
+						if(propertyValue==null || propertyValue.isEmpty()){
+							return;
+						}
+						
+						txtComponent.setValue(StringUtils.camelCase(propertyValue));
+						Value value = property.getValue();
+						if(value==null){
+							value = new StringValue(null, NAME,propertyValue);
+						}else{
+							value.setValue(propertyValue);
+						}
+						
+						property.setValue(value);
+						
+					}
+				}
+			});
+		}
 		//name.equals()
 	}
 

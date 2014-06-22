@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import xtension.workitems.UpdateActivityStatus;
 
 import com.wira.pmgt.client.ui.programs.ProgramsPresenter;
@@ -29,6 +31,7 @@ import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.StringValue;
 import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.Value;
+import com.wira.pmgt.shared.model.form.Field;
 import com.wira.pmgt.shared.model.form.Form;
 import com.wira.pmgt.shared.model.form.FormModel;
 import com.wira.pmgt.shared.model.form.Property;
@@ -42,6 +45,8 @@ import com.wira.pmgt.shared.model.program.TargetAndOutcomeDTO;
 
 public class ProgramDaoHelper {
 
+	static Logger log = Logger.getLogger(ProgramDaoHelper.class);
+	
 	public static PeriodDTO save(PeriodDTO periodDTO) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		Period period = get(periodDTO);
@@ -98,7 +103,7 @@ public class ProgramDaoHelper {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		ProgramDetail program = get(programDTO);
 		ProgramDetail parent = program.getParent();
-		
+		boolean hasFunds=false;
 		//Parent must have a preset set of funds before child source of funds are generated
 		if(parent!=null){
 			
@@ -108,8 +113,9 @@ public class ProgramDaoHelper {
 				Fund fund = programFund.getFund();
 				fundSources.add(fund);				
 			}
-			
+						
 			Set<ProgramFund> childFunds =  program.getSourceOfFunds();
+			hasFunds = childFunds!=null && !childFunds.isEmpty();
 			for(ProgramFund childFund: childFunds){
 				if(fundSources.contains(childFund.getFund())){
 					continue;
@@ -126,7 +132,10 @@ public class ProgramDaoHelper {
 		}
 		
 		dao.save(program);
-				
+		
+		//Database triggers update fund amounts & we'd like to get the committed values from the database
+		//in the get method below
+		
 		return get(program,false);
 	}
 
@@ -152,6 +161,7 @@ public class ProgramDaoHelper {
 		dto.setCode(program.getCode());
 		dto.setStatus(program.getStatus());
 		dto.setProgress(program.getProgress());
+		dto.setRating(program.getRating());
 		//dto.setTargetsAndOutcomes(List<TargetAndOutcomeDTO>);
 		dto.setType(program.getType());
 		
@@ -192,6 +202,9 @@ public class ProgramDaoHelper {
 			dto.setMeasure(target.getMeasure());
 			dto.setOutcomeRemarks(target.getOutcomeRemarks());
 			dto.setTarget(target.getTarget());
+			dto.setKey(target.getKey());
+			dto.setActualOutcome(target.getActualOutcome());
+			
 			targetsDTO.add(dto);
 		}
 		
@@ -296,7 +309,8 @@ public class ProgramDaoHelper {
 			target.setTarget(dto.getTarget());
 			target.setActualOutcome(dto.getActualOutcome());
 			target.setOutcomeRemarks(dto.getOutcomeRemarks());
-			
+			target.setKey(dto.getKey());
+			//target.setActualOutcome(dto.getActualOutcome());
 			targetsAndOutcomes.add(target);
 		}
 		return targetsAndOutcomes;
@@ -557,9 +571,51 @@ public class ProgramDaoHelper {
 			model = generateForm(taskName,taskFormCaption, detail.getDescription());
 		}
 		
+		Collection<TargetAndOutcome> targets = detail.getTargets();
+		if(targets!=null)
+			for(TargetAndOutcome target: targets){
+				addToForm(model,target.getKey(), target.getMeasure(),DataType.DOUBLE);
+			}
+		
+		//addToForm(model,"rating", "Rating", DataType.RATING);
+		//addToForm(model,"cost", "Total Expenditure", DataType.DOUBLE);
+		
 		model = FormDaoHelper.createForm(model, Boolean.FALSE);
 		
 		return model.getId();
+	}
+
+	/**
+	 * Add fields to form
+	 * 
+	 * @param model
+	 * @param key
+	 * @param measure
+	 */
+	private static void addToForm(Form model, String key, String measure, DataType type) {
+		if(key==null){
+			return;
+		}
+		List<Field> fields = model.getFields();
+		
+		for(Field fld: fields){
+			if(fld.getName().equals(key)){
+				return;
+			}
+		}
+		
+		Field field = new Field();
+		field.setProperties(Arrays.asList(
+				new Property("NAME", "Name", DataType.STRING, new StringValue(key)),
+				new Property("CAPTION", "Caption", DataType.STRING,new StringValue(measure)),
+				new Property("HELP", "Help", DataType.STRING,new StringValue(measure))));
+		
+		field.setCaption(measure);
+		field.setName(key);
+		
+		field.setType(type);		
+		fields.add(field);
+		model.setFields(fields);
 	}
 
 	private static Form generateForm(String taskName, String taskFormCaption, String description) {
@@ -632,20 +688,120 @@ public class ProgramDaoHelper {
 	}
 
 	/**
-	 * This method is called after Task Approval {@link UpdateActivityStatus#executeWorkItem}<b>
-	 * Some default values expected include:
+	 * <p>
+	 * This method maps inputs from a Task Form to Program Outcomes
+	 * <p>
+	 * 
+	 * This method is called after Task Approval {@link UpdateActivityStatus#executeWorkItem}<br>
+	 * Some common form values expected include:
 	 * Rating (Task Rating)
 	 * Cost (Total cost of performing the task)
 	 * <p>
-	 * The method maps inputs from the Task Form to Program Outcomes
-	 * <p> 
+	 * We generate keys for each Target&Outcome indicator
+	 * e.g. No of Women Participants - generates - noOfWomenParticipants
+	 * <br>
+	 * These keys are used to map Form values to Program Targets & Outcomes   
 	 * 
+	 * <p>
+	 * Since Both the form engine and the Targets & Outcomes UI use the same API for generating
+	 * keys, ensuring field captions match the indicators is key to ensuring data will be mapped correctly 
+	 * <p>
 	 * @param detail ProgramDetail to be updated
 	 * @param values Map of values from the User Task Form
 	 */
 	public static void updateTargetAndOutcome(ProgramDetail detail,
 			Map<String, Value> values) {
+		Collection<TargetAndOutcome> targetsAndOutcomes = detail.getTargets();
+//		if(targetsAndOutcomes==null || targetsAndOutcomes.isEmpty()){			
+//			//copy parent targets and outcomes
+//			log.debug("ProgramDaoHelper#updateTargetAndOutcome Copying targets and outcomes from parent of ["+detail.getName()+"]");
+//			copyParentTargetsAndOutcomes(detail, detail.getParent());
+//			targetsAndOutcomes = detail.getTargets();
+//		}
 		
+		if(targetsAndOutcomes==null || targetsAndOutcomes.isEmpty()){
+			log.debug("ProgramDaoHelper#updateTargetAndOutcome No Targets or Outcomes found for ["+detail.getName()+"]");
+			return;
+		}
+		
+		for(TargetAndOutcome tao: targetsAndOutcomes){
+			String key = tao.getKey();
+			assert key!=null;
+			
+			Value value = values.get(key);
+			if(value==null){
+				log.warn("ProgramDaoHelper#updateTargetAndOutcome No form data for target key "+key);
+				continue;
+			}
+			
+			if(values.get(key)!=null){
+				
+				Object val = value.getValue();
+				
+				if(val==null){
+					log.debug("ProgramDaoHelper#updateTargetAndOutcome Reading form values: NULL Value found target key "+key);
+					continue;
+				}
+				
+				if(!(val instanceof Number)){
+					
+					if(val instanceof String){
+						try{
+							//Quantitative figures expected onlu
+							val = Double.parseDouble(val.toString());
+						}catch(Exception e){}
+						
+					}
+					
+					if(!(val instanceof Number)){
+						log.warn("ProgramDaoHelper#updateTargetAndOutcome " +
+								"Only quantitative values expected "+"[key=" +value.getKey()+", value="+
+									value.getValue()+", type="+value.getDataType()+" ] ");
+						continue;
+					}
+				}
+				
+				Number num = (Number)val;					
+				tao.setActualOutcome(num.doubleValue());
+				
+			}
+		}
+		
+		DB.getProgramDaoImpl().save(detail);
+	}
+
+	/**
+	 * Recursively copy parent targets to child node<br/>
+	 * --How do we determine which targets are relevant to a child?<br/>
+	 * --Option 1: Use the form fields for determination (If a form field has the same key as an indicator,
+	 * add the target to the child)<br/>
+	 * --Option 2: Let the end users Key in the targets during the planning/setup stage. This increases the amount
+	 * of initial data entry the end user has to do, but also provides a better/more reliable set of indicators
+	 * <p>
+	 * @param child
+	 * @param parent
+	 */
+	private static void copyParentTargetsAndOutcomes(ProgramDetail child,
+			ProgramDetail parent) {
+		if(parent==null){
+			return;
+		}
+		
+		Collection<TargetAndOutcome> targetsAndOutcomes = parent.getTargets();
+		if(targetsAndOutcomes==null || targetsAndOutcomes.isEmpty()){			
+			//copy parent targets and outcomes
+			log.debug("ProgramDaoHelper#updateTargetAndOutcome Copying targets and outcomes from parent of ["+parent.getName()+"]");
+			copyParentTargetsAndOutcomes(parent, parent.getParent());
+			targetsAndOutcomes = parent.getTargets();
+		}
+		
+		if(targetsAndOutcomes==null || targetsAndOutcomes.isEmpty()){
+			log.debug("ProgramDaoHelper#updateTargetAndOutcome No Targets or Outcomes found for ["+parent.getName()+"]");
+			return;
+		}
+		
+		//Copy Parent targets to child
+		//if()
 		
 	}
 

@@ -11,14 +11,16 @@ public class ProgramDetailSavedEvent extends
 	public static Type<ProgramDetailSavedHandler> TYPE = new Type<ProgramDetailSavedHandler>();
 	private IsProgramDetail program;
 	private boolean isNew;
-
+	private boolean isUpdateSource;
+	
 	public interface ProgramDetailSavedHandler extends EventHandler {
 		void onProgramDetailSaved(ProgramDetailSavedEvent event);
 	}
 
-	public ProgramDetailSavedEvent(IsProgramDetail program, boolean isNew) {
+	public ProgramDetailSavedEvent(IsProgramDetail program, boolean isNew, boolean isUpdateSource) {
 		this.program = program;
 		this.isNew = isNew;
+		this.isUpdateSource = isUpdateSource;
 	}
 
 	public IsProgramDetail getProgram() {
@@ -44,7 +46,11 @@ public class ProgramDetailSavedEvent extends
 	}
 
 	public static void fire(HasHandlers source, IsProgramDetail program,
-			boolean isNew) {
-		source.fireEvent(new ProgramDetailSavedEvent(program, isNew));
+			boolean isNew,boolean isUpdateSource) {
+		source.fireEvent(new ProgramDetailSavedEvent(program, isNew,isUpdateSource));
+	}
+
+	public boolean isUpdateSource() {
+		return isUpdateSource;
 	}
 }

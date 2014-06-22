@@ -125,7 +125,16 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	private String indicator;//indicator
 	private String actual;//outputs/deliverable
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="programDetail")
+	@OneToMany(mappedBy="programDetail")
+	@Cascade(value={org.hibernate.annotations.CascadeType.DELETE_ORPHAN,
+			org.hibernate.annotations.CascadeType.SAVE_UPDATE,
+			org.hibernate.annotations.CascadeType.PERSIST,
+			org.hibernate.annotations.CascadeType.MERGE,
+			org.hibernate.annotations.CascadeType.DELETE,
+			org.hibernate.annotations.CascadeType.EVICT,
+			org.hibernate.annotations.CascadeType.REMOVE,
+			org.hibernate.annotations.CascadeType.REFRESH
+			})
 	private Set<TargetAndOutcome> targets = new HashSet<>();
 	
 	@ManyToOne
@@ -191,6 +200,8 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	private ProgramStatus status = ProgramStatus.CREATED;
 	
 	private Double progress=0.0;
+	
+	private Double rating;
 	
 	@Transient
 	private Long programId;
@@ -319,13 +330,13 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 				Double amount = fund.getAmount()==null? 0.0: fund.getAmount();				
 				
 				previous.setAmount(amount);
-				System.err.println(previous.getFund().getName()+
-						" :: Contained=true;calcuated new amounts >>>> "+previous.getAmount());
+//				System.err.println(previous.getFund().getName()+
+//						" :: Contained=true;calcuated new amounts >>>> "+previous.getAmount());
 				
 				previous.setProgramDetail(this);
 				assert this.sourceOfFunds.add(previous);
 			}else{
-				System.err.println(fund.getFund().getName()+" :: Direct set >>>> "+fund.getAmount());
+				//System.err.println(fund.getFund().getName()+" :: Direct set >>>> "+fund.getAmount());
 				//add new values
 				fund.setProgramDetail(this);
 				this.sourceOfFunds.add(fund);
@@ -456,6 +467,14 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 			//progress is either computed from status or the average completion of children items
 			progress= new Double(status.getPercCompletion());
 		}
+	}
+
+	public Double getRating() {
+		return rating;
+	}
+
+	public void setRating(Double rating) {
+		this.rating = rating;
 	}
 	
 }

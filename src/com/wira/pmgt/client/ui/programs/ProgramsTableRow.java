@@ -191,21 +191,6 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 
 		//Set Funding
 		setFunding();
-
-//		//Highlight expired 
-//
-//		Date startDate = activity.getStartDate();
-//		Date endDate = activity.getEndDate();
-//		if(startDate!=null && activity.getStatus()==ProgramStatus.CREATED){
-//			//This should have started already (Hightlight warning)
-//			divRowStrip.addClassName("label-warning");
-//		}
-//		
-//		if(endDate!=null && endDate.before(new Date()) && activity.getStatus()!=ProgramStatus.CLOSED){
-//			//This should have been closed by now (Highlight red)
-//			divRowStrip.addClassName("label-important");
-//		}
-	
 	}
 
 	private void setActivityName() {
@@ -462,46 +447,87 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 		addRegisteredHandler(ProgramDetailSavedEvent.TYPE, this);
 	}
 
+	
+	/**
+	 * This method is called on Task or Activity save/update 
+	 * to update the user interface. {@link ProgramsPresenter#save}
+	 * <p>
+	 * Notes:<br/>
+	 * This event is fired twice to update the child and parent row<br/>
+	 * i.e.<br/> 
+	 * --Activity 10<br/>
+	 * ----Task 11<br/>
+	 * <br>
+	 * If Task 10 is updated(e.g by changing budgets), Activity 10 && Task 11 will both be updated,
+	 * therefore the UI would need to reflect this new change
+	 * 
+	 * @param event ProgramDetailSavedEvent
+	 */
 	@Override
 	public void onProgramDetailSaved(ProgramDetailSavedEvent event) {
-		if(event.isNew() && event.getProgram().getParentId()!=null 
-				&& event.getProgram().getParentId().equals(activity.getId())){
+		IsProgramDetail updatedProgram = event.getProgram();
+		
+		if(event.isNew() && updatedProgram.getParentId()!=null 
+				&& updatedProgram.getParentId().equals(activity.getId())){
 			
 			//check if this is the parent
 			if(activity.getChildren()==null){
 				activity.setChildren(new ArrayList<IsProgramDetail>());
 			}
 			
-			activity.getChildren().add(event.getProgram());
+			activity.getChildren().add(updatedProgram);
 			activity.sort();
 			
-			int idx = activity.getChildren().indexOf(event.getProgram());
+			int idx = activity.getChildren().indexOf(updatedProgram);
 			assert idx>-1;
 			
 			//insert this child at the end of the parent
 			FlowPanel parent = ((FlowPanel)this.getParent());
-			ProgramsTableRow newRow = new ProgramsTableRow(event.getProgram(),funding, programId, false, level+1);
+			ProgramsTableRow newRow = new ProgramsTableRow(updatedProgram,funding, programId, false, level+1);
 			newRow.setSelectionChangeHandler(selectionHandler);
 			parent.insert(newRow, idx);
-			
-		}else{
-			//exists
-			if(activity.getId()==event.getProgram().getId()){
-				allocations.clear();
-				this.activity = event.getProgram();
-				//clear - incase of update/refresh
-				int widgetCount = row.getWidgetCount(); 
-				for(int i=1; i<=funding.size(); i++){
+			return;
+		}
 		
-					if(widgetCount-i >0){
-						//row.getWidget(widgetCount-i).removeFromParent();
-						assert row.remove(widgetCount-i);
-					}
+//		if(updatedProgram.getParentId()!=null 
+//				&& updatedProgram.getParentId().equals(activity.getId())){
+//			//replace previous model in the parent list of children with the new version
+//			IsProgramDetail updatedChild = updatedProgram;
+//			
+//			int idx=activity.getChildren().indexOf(updatedChild);
+//			activity.getChildren().remove(idx);
+//			
+//			if(idx<activity.getChildren().size()){
+//				activity.getChildren().add(idx, updatedChild);
+//			}else{
+//				activity.getChildren().add(updatedChild);
+//			}
+//			
+//		}
+		
+		//exists
+		if(activity.getId()==updatedProgram.getId()){
+			allocations.clear();
+			this.activity = updatedProgram;
+			//clear - incase of update/refresh
+			int widgetCount = row.getWidgetCount(); 
+			for(int i=1; i<=funding.size(); i++){
+	
+				if(widgetCount-i >0){
+					//row.getWidget(widgetCount-i).removeFromParent();
+					assert row.remove(widgetCount-i);
 				}
-				init();
-				highlight();
+			}
+
+			init();
+			highlight();
+			if(event.isUpdateSource()){
+				System.err.println("Updated Program Budget:: "+updatedProgram.getBudgetAmount());
+				AppContext.fireEvent(new ActivitySelectionChangedEvent(
+						updatedProgram, true));
 			}
 		}
+	
 		
 	}
 

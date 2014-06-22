@@ -61,6 +61,7 @@
 			<div class="control-group" ui:field="divTargetsAndIndicators">
 				<div class="control-label">Targets And Indicators:</div>
 				<div class="controls">
+				    <g:Anchor ui:field="aCopyTargets" title="Copy Indicators and Targets from parent activity or task">Copy Targets</g:Anchor>
 					<grid:AggregationGrid ui:field="gridTargets"></grid:AggregationGrid>
 				</div>
 			</div>

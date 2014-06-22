@@ -20,6 +20,7 @@ public class ColumnConfig {
 	private String displayName;
 	private String placeHolder;
 	private boolean isAggregationColumn;
+	private boolean isMandatory;
 	private DataType type;
 	private List<Listable> dropDownItems = new ArrayList<Listable>();
 	
@@ -114,6 +115,14 @@ public class ColumnConfig {
 
 	public void setPlaceHolder(String placeHolder) {
 		this.placeHolder = placeHolder;
+	}
+
+	public boolean isMandatory() {
+		return isMandatory;
+	}
+
+	public void setMandatory(boolean isMandatory) {
+		this.isMandatory = isMandatory;
 	}
 	
 }

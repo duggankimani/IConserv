@@ -28,6 +28,7 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 	private List<UserGroup> assignedGroups;
 	private Long documentId;
 	private Double progress = 0.0; 
+	private Double rating;
 	
 	public Long getDocumentId() {
 		return documentId;
@@ -155,5 +156,23 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 		if(children!=null){
 			sort(children);
 		}
+	}
+
+	public Double getRating() {
+		return rating;
+	}
+
+	public void setRating(Double rating) {
+		this.rating = rating;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof IsProgramDetail) || obj==null){
+			return false;
+		}
+		IsProgramDetail other = (IsProgramDetail)obj;
+		
+		return getId()==other.getId();
 	}
 }

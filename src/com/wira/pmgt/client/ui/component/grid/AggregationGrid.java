@@ -115,11 +115,21 @@ public class AggregationGrid extends Composite {
 			}
 			//System.err.println(lastRowData);
 			if(lastRowData!=null && !lastRowData.isEmpty() && columnConfigs!=null && !columnConfigs.isEmpty()){
-				ColumnConfig config = columnConfigs.get(columnConfigs.size()-1);
-				assert config!=null;
-				assert config.getKey()!=null; 
+				//ColumnConfig config = columnConfigs.get(columnConfigs.size()-1);
+				//Any column
+				boolean add = true;
+				boolean hasValue=false;
+				for(ColumnConfig config: columnConfigs){
+					if(config.isMandatory() && lastRowData.get(config.getKey())==null){
+						add=false;
+					}
+					
+					if(lastRowData.get(config.getKey())!=null){
+						hasValue=true;
+					}
+				}
 				
-				if(lastRowData.get(config.getKey())!=null){
+				if(add && hasValue){
 					addRowData(new DataModel());
 				}
 			}

@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.wira.pmgt.server.dao.model.PO;
+import com.wira.pmgt.shared.model.TargetConstraint;
 
 @Entity
 public class TargetAndOutcome extends PO{
@@ -25,10 +26,17 @@ public class TargetAndOutcome extends PO{
 	
 	@Column(nullable=false)
 	private Double target;
+	
 	private Double actualOutcome;
+	
+	private TargetConstraint targetContraint=TargetConstraint.ATLEAST;
 	
 	@Column(nullable=false)
 	private String measure;
+	
+	@Column(nullable=false)
+	private String key;
+	
 	private String outcomeRemarks;//this may be provided in place of counts
 	
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -76,6 +84,18 @@ public class TargetAndOutcome extends PO{
 	public boolean equals(Object obj) {
 		TargetAndOutcome other = (TargetAndOutcome)obj;
 		return other.measure.equals(measure);
+	}
+	public TargetConstraint getTargetContraint() {
+		return targetContraint;
+	}
+	public void setTargetContraint(TargetConstraint targetContraint) {
+		this.targetContraint = targetContraint;
+	}
+	public String getKey() {
+		return key;
+	}
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 }

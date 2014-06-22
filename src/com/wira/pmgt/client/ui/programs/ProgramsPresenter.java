@@ -446,32 +446,46 @@ public class ProgramsPresenter extends
 								createProgramsResponse.getProgram().getId());
 						if(activity.getType()==ProgramDetailType.PROGRAM){
 							loadData(programId);
-						}else{
-							fireEvent(new ProgramDetailSavedEvent(createProgramsResponse.getProgram(), 
-									activity.getId()==null));
 						}
+
+						//Reloading information in a new request 
+						//due to an issue on the server in reloading uncommitted information
+						//Budget Total Amounts && Parent program allocations updated values do not reflect
+						//unless the user actively reloads them
+						//This is a hack to prevent that issue
+						afterSave(createProgramsResponse.getProgram().getId(),activity.getParentId(),activity.getId()==null);						
 						fireEvent(new ProcessingCompletedEvent());
 						fireEvent(new ActivitySavedEvent(activity.getType()
 								.name().toLowerCase()
 								+ " successfully saved"));
 						
-						
-						//reload parent
-						if(activity.getParentId()!=null){
-							requestHelper.execute(new GetProgramsRequest(activity.getParentId(), false, false), 
-									new TaskServiceCallback<GetProgramsResponse>() {
-								@Override
-								public void processResult(GetProgramsResponse aResponse) {
-									IsProgramDetail detail = aResponse.getSingleResult();
-									fireEvent(new ProgramDetailSavedEvent(detail,false));
-								}
-							});
-						}
 					}
 				});
+				
+	}
+
+	protected void afterSave(Long saveActivityId, final Long parentId, final boolean isNew) {
+		MultiRequestAction requests = new MultiRequestAction();
+		requests.addRequest(new GetProgramsRequest(saveActivityId, false, false));
+		//reload parent
+		if(parentId!=null){							
+			requests.addRequest(new GetProgramsRequest(parentId, false, false));
+		}
 		
-		
-	
+		requestHelper.execute(requests, 
+				new TaskServiceCallback<MultiRequestActionResult>() {
+			@Override
+			public void processResult(MultiRequestActionResult aResponse) {
+				
+				IsProgramDetail activity = ((GetProgramsResponse)(aResponse.get(0))).getSingleResult();
+				fireEvent(new ProgramDetailSavedEvent(activity,isNew,true));
+				
+				if(parentId!=null){
+					IsProgramDetail parent = ((GetProgramsResponse)(aResponse.get(1))).getSingleResult();
+					fireEvent(new ProgramDetailSavedEvent(parent,false,false));
+				}
+			}
+		});
 	}
 
 	public void loadData(final Long activityId) {
@@ -680,6 +694,8 @@ public class ProgramsPresenter extends
 
 						fireEvent(new ActivitySavedEvent(
 								"You successfully assigned '"+taskInfo.getDescription()+"' "+ allocatedPeople));
+						
+						afterSave(selected.getId(), selected.getParentId(), false);
 					}
 				});
 	}

@@ -2,6 +2,8 @@ package com.wira.pmgt.shared.model.program;
 
 import java.io.Serializable;
 
+import com.wira.pmgt.shared.model.TargetConstraint;
+
 /**
  * 
  * @author duggan
@@ -18,7 +20,9 @@ public class TargetAndOutcomeDTO implements Serializable{
 	private Double actualOutcome;
 	private String measure;
 	private String outcomeRemarks;
-	private Long programActivityId;
+	private Long programDetailId;
+	private TargetConstraint targetContraint=TargetConstraint.ATLEAST;
+	private String key;
 	
 	public TargetAndOutcomeDTO() {
 	}
@@ -54,12 +58,42 @@ public class TargetAndOutcomeDTO implements Serializable{
 		this.actualOutcome = actualOutcome;
 	}
 
-	public Long getProgramActivityId() {
-		return programActivityId;
+	public Long getProgramDetailId() {
+		return programDetailId;
 	}
 
-	public void setProgramActivityId(Long programActivityId) {
-		this.programActivityId = programActivityId;
+	public void setProgramDetailId(Long programActivityId) {
+		this.programDetailId = programActivityId;
+	}
+
+	public TargetConstraint getTargetContraint() {
+		return targetContraint;
+	}
+
+	public void setTargetContraint(TargetConstraint targetContraint) {
+		this.targetContraint = targetContraint;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+	
+	public TargetAndOutcomeDTO clone(){
+		TargetAndOutcomeDTO copy = new TargetAndOutcomeDTO();
+		copy.setActualOutcome(actualOutcome);
+		copy.setId(programDetailId);
+		copy.setKey(key);
+		copy.setMeasure(measure);
+		copy.setOutcomeRemarks(outcomeRemarks);
+		copy.setProgramDetailId(programDetailId);
+		copy.setTarget(target);
+		copy.setTargetContraint(targetContraint);
+		
+		return copy;
 	}
 	
 }

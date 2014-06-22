@@ -282,7 +282,7 @@ public abstract class FieldWidget extends AbsolutePanel implements
 	 * @param type
 	 * @param handler
 	 */
-	public void addRegisteredHandler(Type<? extends EventHandler> type, FieldWidget handler){
+	public void addRegisteredHandler(Type<? extends EventHandler> type, EventHandler handler){
 		@SuppressWarnings("unchecked")
 		HandlerRegistration hr = AppContext.getEventBus().addHandler(
 				(GwtEvent.Type<EventHandler>)type, handler);

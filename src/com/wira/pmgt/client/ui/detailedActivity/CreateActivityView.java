@@ -7,8 +7,10 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
@@ -24,6 +26,7 @@ import com.wira.pmgt.client.ui.component.grid.ColumnConfig;
 import com.wira.pmgt.client.ui.component.grid.DataMapper;
 import com.wira.pmgt.client.ui.component.grid.DataModel;
 import com.wira.pmgt.client.ui.util.DateUtils;
+import com.wira.pmgt.client.ui.util.StringUtils;
 import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.Listable;
@@ -36,6 +39,7 @@ import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 import com.wira.pmgt.shared.model.program.TargetAndOutcomeDTO;
+import static com.wira.pmgt.client.ui.util.StringUtils.*;
 
 public class CreateActivityView extends ViewImpl implements
 		CreateActivityPresenter.MyView {
@@ -59,6 +63,7 @@ public class CreateActivityView extends ViewImpl implements
 	@UiField AutoCompleteField<IsProgramDetail> objectivesAutoComplete;
 	@UiField DivElement divTargetsAndIndicators;
 	@UiField DivElement divObjectives;
+	@UiField Anchor aCopyTargets;
 	
 	@UiField DateRangeWidget dtRange;
 
@@ -73,7 +78,6 @@ public class CreateActivityView extends ViewImpl implements
 		createGrid();
 		txtActivity.getElement().setAttribute("rows", "3");
 		createTargetsAndIndicatorsGrid();
-
 	}
 
 	@Override
@@ -92,10 +96,7 @@ public class CreateActivityView extends ViewImpl implements
 		config = new ColumnConfig("indicator", "Indicator", DataType.STRING, "Participants");
 		configs.add(config);
 		
-//		config = new ColumnConfig("actual", "Actual", DataType.INTEGER);
-//		configs.add(config);
-		
-		config = new ColumnConfig("outcome", "Outcome", DataType.DOUBLE, "1000");
+		config = new ColumnConfig("actual", "Outcome", DataType.DOUBLE, "1000");
 		configs.add(config);
 		
 		gridTargets.setColumnConfigs(configs);
@@ -189,11 +190,11 @@ public class CreateActivityView extends ViewImpl implements
 			
 			dtRange.setRangeValidation(isProgramActivity.getStartDate(), isProgramActivity.getEndDate());
 		}
+		
+		if(isProgramActivity.getTargetsAndOutcomes()==null || isProgramActivity.getTargetsAndOutcomes().isEmpty()){
+			aCopyTargets.addStyleName("hide");
+		}
 		setBreadCrumbs(isProgramActivity.getProgramSummary());
-	}
-	
-	boolean isNullOrEmpty(String value) {
-		return value == null || value.trim().length() == 0;
 	}
 
 	@Override
@@ -267,13 +268,6 @@ public class CreateActivityView extends ViewImpl implements
 		dtRange.setDates(activity.getStartDate(), activity.getEndDate());
 		//program.setTargetsAndOutcomes(targetsAndOutcomes);
 		//
-		List<Object> targets = new ArrayList<Object>();
-		if(activity.getTargetsAndOutcomes()!=null)
-		for(TargetAndOutcomeDTO dto: activity.getTargetsAndOutcomes()){
-			targets.add(dto);
-		}	
-		List<DataModel> models = targetAndOutcomeMapper.getDataModels(targets); 
-		gridTargets.setData(models);
 		
 		Collections.sort(activity.getFunding(), new Comparator<ProgramFundDTO>() {
 			@Override
@@ -282,14 +276,33 @@ public class CreateActivityView extends ViewImpl implements
 				return o1.getFund().getName().compareTo(o2.getFund().getName());
 			}
 		});
+		
+		setTargetsAndOutComes(activity.getTargetsAndOutcomes());
+		
 		//Program Funds
 		List<Object> lst = new ArrayList<Object>();
 		for(ProgramFundDTO dto: activity.getFunding()){
 			lst.add(dto);
 		}	
-		models = programFundMapper.getDataModels(lst); 
+		List<DataModel> models = programFundMapper.getDataModels(lst); 
 		gridView.setData(models);
+	}
+	
+	@Override
+	public void setTargetsAndOutComes(
+			List<TargetAndOutcomeDTO> targetsAndOutComes) {
+		List<Object> targets = new ArrayList<Object>();
 		
+		if(targetsAndOutComes==null || targetsAndOutComes.isEmpty()){
+			return;
+		}			
+			
+		for(TargetAndOutcomeDTO dto: targetsAndOutComes){
+			targets.add(dto);
+		}	
+		List<DataModel> models = targetAndOutcomeMapper.getDataModels(targets); 
+		gridTargets.setData(models);
+				
 	}
 
 	@Override
@@ -358,6 +371,7 @@ public class CreateActivityView extends ViewImpl implements
 				model.setId(target.getId());
 				model.set("target", target.getTarget());
 				model.set("indicator", target.getMeasure());
+				model.set("actual", target.getActualOutcome());
 				models.add(model);
 			}
 			
@@ -373,13 +387,16 @@ public class CreateActivityView extends ViewImpl implements
 			
 			TargetAndOutcomeDTO dto = new TargetAndOutcomeDTO();
 			dto.setId(model.getId());
-			dto.setMeasure(model.get("indicator")==null? null:
-				model.get("indicator").toString().isEmpty()? null: 
+			dto.setMeasure(isNullOrEmpty(model.get("indicator"))? null: 
 					model.get("indicator").toString());
 			
 			dto.setTarget(model.get("target")==null ? null: 
 				(Double)model.get("target"));
 			
+			dto.setActualOutcome(model.get("actual")==null ? null: 
+				(Double)model.get("actual"));
+			
+			dto.setKey(StringUtils.camelCase(dto.getMeasure()));
 			return dto;
 		}
 	};
@@ -389,9 +406,16 @@ public class CreateActivityView extends ViewImpl implements
 		this.type=type;
 		if(type==ProgramDetailType.TASK){
 			divActivityName.setInnerText("Task Name");
-			divTargetsAndIndicators.setClassName("hide");
+			//divTargetsAndIndicators.setClassName("hide");
 			divObjectives.setClassName("hide");
+			aCopyTargets.removeStyleName("hide");
+		}else{
+			aCopyTargets.addStyleName("hide");
 		}
+	}
+	
+	public HasClickHandlers getCopyTargetsLink(){
+		return aCopyTargets;
 	}
 
 }

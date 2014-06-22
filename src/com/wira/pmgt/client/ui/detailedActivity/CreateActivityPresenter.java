@@ -1,12 +1,16 @@
 package com.wira.pmgt.client.ui.detailedActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.EventBus;
+import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
-import com.google.inject.Inject;
-import com.google.gwt.event.shared.EventBus;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.ProgramDetailType;
@@ -14,17 +18,14 @@ import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
+import com.wira.pmgt.shared.model.program.TargetAndOutcomeDTO;
 import com.wira.pmgt.shared.requests.GetFundsRequest;
-import com.wira.pmgt.shared.requests.GetGroupsRequest;
 import com.wira.pmgt.shared.requests.GetPeriodRequest;
 import com.wira.pmgt.shared.requests.GetProgramsRequest;
-import com.wira.pmgt.shared.requests.GetUsersRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
 import com.wira.pmgt.shared.responses.GetFundsResponse;
-import com.wira.pmgt.shared.responses.GetGroupsResponse;
 import com.wira.pmgt.shared.responses.GetPeriodResponse;
 import com.wira.pmgt.shared.responses.GetProgramsResponse;
-import com.wira.pmgt.shared.responses.GetUsersResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
 public class CreateActivityPresenter extends
@@ -42,17 +43,44 @@ public class CreateActivityPresenter extends
 		void setGroups(List<UserGroup> groups);
 		void setUsers(List<HTUser> users);
 		void setType(ProgramDetailType type);
+		HasClickHandlers getCopyTargetsLink();
+		void setTargetsAndOutComes(List<TargetAndOutcomeDTO> targetsAndOutComes);
 	}
 
 	@Inject DispatchAsync requestHelper;
 	
 	private IsProgramDetail activity;
 	private Long parentId;
+	private List<TargetAndOutcomeDTO> parentTargetsAndOutcomes=null;
 	private PeriodDTO period;
 		
 	@Inject
 	public CreateActivityPresenter(final EventBus eventBus, final MyView view) {
 		super(eventBus, view);
+	}
+	
+	@Override
+	protected void onBind() {
+		super.onBind();
+		getView().getCopyTargetsLink().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				assert parentId!=null;
+				List<TargetAndOutcomeDTO> clones = new ArrayList<TargetAndOutcomeDTO>();
+				
+				if(clones!=null)
+				for(TargetAndOutcomeDTO dto: parentTargetsAndOutcomes){
+					TargetAndOutcomeDTO clone = dto.clone();
+					clone.setActualOutcome(0.0);
+					clone.setProgramDetailId(null);
+					clone.setId(null);
+					clones.add(clone);
+				}
+				getView().setTargetsAndOutComes(clones);					
+				
+			}
+		});
 	}
 
 	public IsProgramDetail getActivity(){
@@ -78,32 +106,31 @@ public class CreateActivityPresenter extends
 		action.addRequest(new GetPeriodRequest());
 		action.addRequest(new GetProgramsRequest(ProgramDetailType.OBJECTIVE, false));
 		action.addRequest(new GetProgramsRequest(outcomeId, false));
-		action.addRequest(new GetGroupsRequest());
-		action.addRequest(new GetUsersRequest());
 				
 		requestHelper.execute(action, new TaskServiceCallback<MultiRequestActionResult>() {
 			@Override
 			public void processResult(MultiRequestActionResult aResponse) {
 				int i=0;
+				//List of funds to choose from
 				GetFundsResponse getFunds = (GetFundsResponse)aResponse.get(i++);
 				getView().setFunds(getFunds.getFunds());
 				
+				//List of periods to choose from
 				GetPeriodResponse getPeriod = (GetPeriodResponse)aResponse.get(i++);
 				getView().setPeriod(getPeriod.getPeriod());
 				period = getPeriod.getPeriod();
 			
+				//List of Objectives for this activity
 				GetProgramsResponse getPrograms = (GetProgramsResponse)aResponse.get(i++);
 				getView().setObjectives(getPrograms.getPrograms());
 				
+				//Parent Program (for pop up additional information)
 				GetProgramsResponse getProgram = (GetProgramsResponse)aResponse.get(i++);
 				getView().setParentProgram(getProgram.getSingleResult());
+				parentTargetsAndOutcomes = getProgram.getSingleResult().getTargetsAndOutcomes();
+				
+				/**Activity selected from the grid see see {#setActivity}*/  
 				getView().setActivity(activity);
-				
-				GetGroupsResponse getGroups = (GetGroupsResponse)aResponse.get(i++);
-				getView().setGroups(getGroups.getGroups());
-				
-				GetUsersResponse getUsers = (GetUsersResponse)aResponse.get(i++);
-				getView().setUsers(getUsers.getUsers());
 				
 			}
 		});

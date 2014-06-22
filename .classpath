@@ -157,6 +157,10 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gxt-3.0.1.jar" sourcepath="/home/duggan/.m2/repository/com/sencha/gxt/gxt/3.0.1/gxt-3.0.1-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/sqljdbc4.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/sqljdbc.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-17.0-sources.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-17.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-gwt-17.0-sources.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-gwt-17.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gflot-3.2.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-servlet.jar"/>
