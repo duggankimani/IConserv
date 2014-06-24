@@ -113,14 +113,14 @@
 				<g:HTMLPanel ui:field="divMiddleContent"
 					styleName="tabbable tabs-below hidden full-page no-overflow-x">
 
-					<d:HTMLPanel cssId="usercontent" styleName="tab-content"
+					<d:MyHTMLPanel cssId="usercontent" styleName="tab-content"
 						ui:field="divProgramsTable">
 						<g:HTMLPanel>
 							<div ui:field="divTab1Content" class="tab-pane fade in active">
 								<programs:ProgramsTable ui:field="tblView"></programs:ProgramsTable>
 							</div>
 						</g:HTMLPanel>
-					</d:HTMLPanel>
+					</d:MyHTMLPanel>
 
 					<g:HTMLPanel styleName="row-fluid tab-body" ui:field="divContentBottom">
 						<div class="span2 controllers hide">

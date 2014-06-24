@@ -71,8 +71,8 @@
 				</div>
 
 				<!--Detailed Info(Generic document View) -->
-				<d:HTMLPanel ui:field="docContainer" styleName="full-page span10" cssId="detailed-info">
-				</d:HTMLPanel>
+				<d:MyHTMLPanel ui:field="docContainer" styleName="full-page span10" cssId="detailed-info">
+				</d:MyHTMLPanel>
 			</g:HTMLPanel>
 
 		</g:HTMLPanel>

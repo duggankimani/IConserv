@@ -27,13 +27,13 @@ public class DashboardPresenter extends
 
 		void setValues(Integer requestCount, Integer activeCount,
 				Integer failureCount);
-		
+
 	}
 
 	private IndirectProvider<PieChartPresenter> pieChartFactory;
 	private IndirectProvider<LineGraphPresenter> lineGraphFactory;
 	private IndirectProvider<TableDataPresenter> tableFactory;
-	
+
 	@ContentSlot
 	public static final Type<RevealContentHandler<?>> OVERALLTURNAROUND_SLOT = new Type<RevealContentHandler<?>>();
 	@ContentSlot
@@ -42,18 +42,23 @@ public class DashboardPresenter extends
 	public static final Type<RevealContentHandler<?>> LINEGRAPH_SLOT = new Type<RevealContentHandler<?>>();
 	@ContentSlot
 	public static final Type<RevealContentHandler<?>> LONGLASTINGTASKS_SLOT = new Type<RevealContentHandler<?>>();
-	
-	@Inject DispatchAsync requestHelper;
-	
+
 	@Inject
-	public DashboardPresenter(final EventBus eventBus, final IDashboardView view,
-			Provider<PieChartPresenter>pieChartProvider,
-			Provider<LineGraphPresenter>lineGraphProvider,
-			Provider<TableDataPresenter>tableDataProvider) {
+	DispatchAsync requestHelper;
+
+	@Inject
+	public DashboardPresenter(final EventBus eventBus,
+			final IDashboardView view,
+			Provider<PieChartPresenter> pieChartProvider,
+			Provider<LineGraphPresenter> lineGraphProvider,
+			Provider<TableDataPresenter> tableDataProvider) {
 		super(eventBus, view);
-		pieChartFactory = new StandardProvider<PieChartPresenter>(pieChartProvider);
-		lineGraphFactory = new StandardProvider<LineGraphPresenter>(lineGraphProvider);
-		tableFactory = new StandardProvider<TableDataPresenter>(tableDataProvider);
+		pieChartFactory = new StandardProvider<PieChartPresenter>(
+				pieChartProvider);
+		lineGraphFactory = new StandardProvider<LineGraphPresenter>(
+				lineGraphProvider);
+		tableFactory = new StandardProvider<TableDataPresenter>(
+				tableDataProvider);
 	}
 
 	@Override
@@ -61,57 +66,58 @@ public class DashboardPresenter extends
 		super.onReset();
 		loadCharts();
 	}
-	
-	boolean loaded=false;
+
+	boolean loaded = false;
 	int i;
+
 	private void loadCharts() {
-		if(loaded){
-			//System.err.println("Reset Called Again..........."+(++i));
+		if (loaded) {
+			// System.err.println("Reset Called Again..........."+(++i));
 			return;
 		}
-		
-		loaded=true;
-		
+
+		loaded = true;
+
 		setInSlot(OVERALLTURNAROUND_SLOT, null);
 		setInSlot(REQUESTSPERDOC_SLOT, null);
 		setInSlot(LINEGRAPH_SLOT, null);
 		requestHelper.execute(new GetDashBoardDataRequest(),
 				new TaskServiceCallback<GetDashBoardDataResponse>() {
-			@Override
-			public void processResult(GetDashBoardDataResponse aResponse) {
-				getView().setValues(aResponse.getRequestCount(), aResponse.getActiveCount(), aResponse.getFailureCount());
-				loadCharts(aResponse);
-			}
-		});
-		
+					@Override
+					public void processResult(GetDashBoardDataResponse aResponse) {
+						getView().setValues(aResponse.getRequestCount(),
+								aResponse.getActiveCount(),
+								aResponse.getFailureCount());
+						loadCharts(aResponse);
+					}
+				});
+
 	}
 
-	protected void loadCharts(final GetDashBoardDataResponse dataResponse) {			
+	protected void loadCharts(final GetDashBoardDataResponse dataResponse) {
 		pieChartFactory.get(new ServiceCallback<PieChartPresenter>() {
 			@Override
 			public void processResult(PieChartPresenter aResponse) {
-				aResponse.setChart(ChartType.AGINGANALYSIS);
 				aResponse.setValues(dataResponse.getRequestAging());
 				setInSlot(OVERALLTURNAROUND_SLOT, aResponse);
 			}
 		});
-		
+
 		pieChartFactory.get(new ServiceCallback<PieChartPresenter>() {
 			@Override
 			public void processResult(PieChartPresenter aResponse) {
-				aResponse.setChart(ChartType.AVGTURNAROUNDPERDOC);
 				aResponse.setValues(dataResponse.getDocumentCounts());
 				setInSlot(REQUESTSPERDOC_SLOT, aResponse);
 			}
 		});
-		
+
 		lineGraphFactory.get(new ServiceCallback<LineGraphPresenter>() {
 			@Override
 			public void processResult(LineGraphPresenter aResponse) {
 				setInSlot(LINEGRAPH_SLOT, aResponse);
 			}
 		});
-		
+
 		tableFactory.get(new ServiceCallback<TableDataPresenter>() {
 			@Override
 			public void processResult(TableDataPresenter aResponse) {

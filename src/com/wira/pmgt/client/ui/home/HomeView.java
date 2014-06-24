@@ -30,7 +30,7 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 	@UiField
 	HTMLPanel activityContainer;
 	@UiField
-	com.wira.pmgt.client.ui.component.HTMLPanel docContainer;
+	com.wira.pmgt.client.ui.component.MyHTMLPanel docContainer;
 	@UiField
 	HTMLPanel mainContainer;
 

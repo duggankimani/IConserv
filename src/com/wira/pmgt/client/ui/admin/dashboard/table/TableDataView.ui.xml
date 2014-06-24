@@ -2,7 +2,8 @@
 	<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
      xmlns:g="urn:import:com.google.gwt.user.client.ui"
      xmlns:c="urn:import:com.sencha.gxt.chart.client.chart"
-     xmlns:d="urn:import:com.wira.pmgt.client.ui.component">
+     xmlns:d="urn:import:com.wira.pmgt.client.ui.component"
+     >
 	
 	<d:TableView ui:field="tableView"></d:TableView>
 </ui:UiBinder>

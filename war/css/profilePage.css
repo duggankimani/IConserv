@@ -113,8 +113,6 @@
 	margin-top: 11px;
 }
 
-
-
 /*--Activities Page	: Activities Presentation --*/
 .activities-page{
 	padding: 0px 0px;
@@ -319,8 +317,6 @@
    background-color: #DFDFDF;
 }
 
-
-
 .activities-page .nav-tabs > li{
 	white-space: nowrap;
 	display: inline-block;
@@ -395,4 +391,47 @@ body .GWTUpld .gwt-FileUpload{
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
   background-color: #3078eb;
   background-color: #3078eb \9;
+}
+
+
+/* Home Reports Styles */
+.home-reports{
+	height:inherit;
+	padding:0px 20px;
+}
+.home-reports .top-section{
+	padding-top:20px;
+}
+
+.home-reports .dashboard-stat.tertiary{
+	background: #468847;	
+}
+.home-reports .dashboard-stat.tertiary i{
+	color: #658865;
+}
+.home-reports .dashboard-stat.primary{
+   background: #3a87ad;
+}
+.home-reports .dashboard-stat.primary i{
+	color: #4095BE;
+}
+.color-chart{
+	/* width:200px; */
+	margin-top: 30px;
+}
+.color-chart div.span2{
+	margin-left:6px;
+	width:60px;
+	text-align: center;
+	font-size: 11px;
+	cursor: pointer;
+}
+.color-chart span.label{
+	min-width:50px;
+	border-radius:0px;
+	/* border: 1px solid #eee; */
+	height: 6px;
+	display: block;
+	text-align: right;
+	font-size: inherit;
 }

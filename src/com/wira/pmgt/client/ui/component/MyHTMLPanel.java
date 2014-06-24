@@ -4,10 +4,15 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class HTMLPanel extends ComplexPanel {
+public class MyHTMLPanel extends ComplexPanel {
 
-	public HTMLPanel() {
+	public MyHTMLPanel() {
 		setElement(Document.get().createDivElement());
+	}
+	
+	public MyHTMLPanel(String style) {
+		this();
+		setStyleName(style);
 	}
 
 	public void setCssId(String id) {

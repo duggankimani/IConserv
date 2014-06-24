@@ -304,7 +304,6 @@ public class HomePresenter extends
 			});
 			
 		}else if(name!=null){
-
 			TaskType type = TaskType.getTaskType(name);
 			this.currentTaskType=type;
 			

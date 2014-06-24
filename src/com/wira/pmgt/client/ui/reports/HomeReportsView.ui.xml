@@ -1,0 +1,162 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
+	xmlns:d="urn:import:com.wira.pmgt.client.ui.component"
+	xmlns:c="urn:import:com.wira.pmgt.client.ui.charts"
+	ui:generateLocales='default'>
+
+	<g:HTMLPanel styleName="home-reports content-body overflow-y">
+		<div class="row-fluid top-section section">
+			<div class="span4">
+				<a class="dashboard-stat tertiary">
+					<div class="visual">
+						<!-- <i class="icon-money"></i> -->
+					</div> <!-- /.visual -->
+
+					<div class="details">
+						<span class="content-block">Total Funding</span>
+						<span class="value" ui:field="spnReqCount">
+							$ 10,0000</span>
+					</div> <!-- /.details -->
+
+					<!-- <i class="icon-play-circle more"></i> -->
+
+				</a> <!-- /.dashboard-stat -->
+
+			</div> <!-- /.col-md-3 -->
+
+			<div class="span4">
+				<a class="dashboard-stat primary">
+					<div class="visual">
+						<!-- <i class="icon-folder-open"></i> -->
+					</div> <!-- /.visual -->
+
+					<div class="details">
+						<span class="content-block">Programs</span>
+						<span class="value" ui:field="spnActiveCount">
+							10
+						</span>
+					</div> <!-- /.details -->
+
+					<!-- <i class="icon-play-circle more"></i> -->
+
+				</a> <!-- /.dashboard-stat -->
+
+			</div> <!-- /.col-md-3 -->
+
+			<div class="span4">
+				<a class="dashboard-stat secondary">
+					<div class="visual">
+						<!-- <i class="icon-certificate"></i> -->
+					</div> <!-- /.visual -->
+
+					<div class="details">
+						<span class="content-block">Activities &amp; Tasks</span>
+						<span class="value" ui:field="spnFailureCount">
+							120</span>
+					</div> <!-- /.details -->
+
+					<!-- <i class="icon-play-circle more"></i> -->
+
+				</a> <!-- /.dashboard-stat -->
+
+			</div> <!-- /.col-md-3 -->
+		</div>
+
+		<div class="row-fluid middle-section section">
+			<div class="span6">
+				<div class="portlet">
+					<div class="portlet-header">
+						<h3>
+							<i class="icon-bar-chart"></i>
+							BUDGET PERFORMANCE
+						</h3>
+					</div>
+					<g:HTMLPanel styleName="portlet-content" ui:field="panelTurnAroundTime">
+						<span class="muted">Percentage expenditure within budget by percentage outside budget</span>
+						<c:PieChart ui:field="pieChartBudget"></c:PieChart>
+					</g:HTMLPanel>
+				</div>
+			</div>
+
+			<div class="span6">
+				<div class="portlet">
+					<div class="portlet-header">
+						<h3>
+							<i class="icon-bar-chart"></i>
+							EXPENDITURE TO DATE
+						</h3>
+					</div>
+					<g:HTMLPanel styleName="portlet-content" ui:field="panelTotalRequestsPerDoc">
+					<c:PieChart ui:field="pieChartConsumption"></c:PieChart>
+					</g:HTMLPanel>
+				</div>
+			</div>
+		</div>
+
+		<div class="row-fluid middle-section section">
+			<div class="span6">
+				<div class="portlet">
+					<div class="portlet-header">
+						<h3>
+							<i class="icon-bar-chart"></i>
+							MEETING TIMELINES
+						</h3>
+					</div>
+					<g:HTMLPanel styleName="portlet-content" ui:field="panelTurnAroundTime2">
+					<c:PieChart ui:field="pieChartTimelines"></c:PieChart>
+					</g:HTMLPanel>
+				</div>
+			</div>
+
+			<div class="span6">
+				<div class="portlet">
+					<div class="portlet-header">
+						<h3>
+							<i class="icon-bar-chart"></i>
+							MEETING TARGETS
+						</h3>
+					</div>
+					<g:HTMLPanel styleName="portlet-content" ui:field="panelTotalRequestsPerDoc2">
+						<c:PieChart ui:field="pieChartTargets"></c:PieChart>
+					</g:HTMLPanel>
+				</div>
+			</div>
+		</div>
+
+		<div class="row-fluid middle-section section">
+			<div class="portlet">
+				<div class="portlet-header">
+					<h3>
+						<i class="icon-bar-chart"></i>
+						PROGRAM ANALYSIS
+					</h3>
+				</div>
+				<g:HTMLPanel styleName="portlet-content" ui:field="panelProgramAnalysis">
+					<d:TableView ui:field="tableAnalysis"></d:TableView>
+					<g:HTMLPanel styleName="row-fluid color-chart">
+						<div class="span2">
+							<span class="label label-success"></span>
+							<p class="">Well</p>
+						</div>
+						<div class="span2">
+							<span class="label label-info"></span>
+							<p class="">Average</p>
+						</div>
+						<div class="span2">
+							<span class="label label-danger"></span>
+							<p class="">Poor</p>
+						</div>
+						<div class="span2">
+							<span class="label label-default"></span>
+							<p class="">No Data</p>
+						</div>
+					</g:HTMLPanel>
+				</g:HTMLPanel>
+			</div>
+		</div>
+	</g:HTMLPanel>
+
+</ui:UiBinder>

@@ -106,8 +106,7 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 	@ColumnResult(name="name"),
 	@ColumnResult(name="description")
 	}
-)
-	
+)	
 public class ProgramDetail 	extends ProgramBasicDetail{
 	
 	/**
