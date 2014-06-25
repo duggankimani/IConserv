@@ -15,18 +15,25 @@ public class IntValue implements Value{
 	
 	public IntValue(Integer value){
 		this();
-		this.value = value;
+		setValue(value);
 	}
 	
 	public IntValue(Long id, String key, Integer value){
 		this.id=id;
 		this.key=key;
-		this.value=value;
+		setValue(value);
 	}
 	
 	@Override
 	public void setValue(Object value) {
-		this.value = (Integer)value;
+		
+		if(this.value!=null){
+			this.value = ((Number)value).intValue();
+		}else{
+			this.value=null;
+		}
+		
+		
 	}
 
 	@Override

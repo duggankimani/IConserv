@@ -13,20 +13,29 @@ public class LongValue implements Value{
 	public LongValue() {
 	}
 	
-	public LongValue(Long value){
+	public LongValue(Number value){
 		this();
-		this.value = value;
+		if(value!=null){
+			this.value = value.longValue();
+		}else{
+			this.value=null;
+		}
 	}
 	
-	public LongValue(Long id, String key, Long value){
+	public LongValue(Long id, String key, Number val){
 		this.id=id;
 		this.key=key;
-		this.value=value;
+		setValue(val);
 	}
 	
 	@Override
-	public void setValue(Object value) {
-		this.value = (Long)value;
+	public void setValue(Object val) {
+		if(val!=null){
+			this.value=((Number)val).longValue();
+		}else{
+			this.value=null;
+		}
+		
 	}
 
 	@Override

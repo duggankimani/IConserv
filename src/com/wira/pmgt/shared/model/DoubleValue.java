@@ -14,21 +14,26 @@ public class DoubleValue implements Value {
 	public DoubleValue(){
 	}
 
-	public DoubleValue(Double val){
-		value=val;
+	public DoubleValue(Number val){
+		setValue(val);
 	}
 	
-	public DoubleValue(Long id, String key, Double value){
+	public DoubleValue(Long id, String key, Number value){
 		this.id=id;
 		this.key=key;
-		this.value=value;
+		setValue(value);
 	}
+	
 	
 	public Double getValue() {
 		return value;
 	}
 	public void setValue(Object value) {
-		this.value = (Double)value;
+		if(value!=null){
+			this.value = ((Number)value).doubleValue();
+		}else{
+			this.value=null;
+		}
 	}
 	public String getKey() {
 		return key;

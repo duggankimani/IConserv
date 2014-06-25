@@ -692,10 +692,11 @@ public class ProgramsPresenter extends
 							allocatedPeople = allocatedPeople+entity.getDisplayName() + ",";
 						}
 
+
+						afterSave(selected.getId(), selected.getParentId(), false);
 						fireEvent(new ActivitySavedEvent(
 								"You successfully assigned '"+taskInfo.getDescription()+"' "+ allocatedPeople));
 						
-						afterSave(selected.getId(), selected.getParentId(), false);
 					}
 				});
 	}

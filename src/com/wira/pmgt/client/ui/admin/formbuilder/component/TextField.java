@@ -101,6 +101,8 @@ public class TextField extends FieldWidget {
 			}
 		});
 		
+		//For Form Fields only - shouldnt fire for form caption
+		if(property.getFieldId()!=null)
 		if(property.getName().equals(NAME)){
 			addRegisteredHandler(PropertyChangedEvent.TYPE,
 					new PropertyChangedEvent.PropertyChangedHandler(){

@@ -20,6 +20,8 @@ public interface HasProperties {
 	public static final String SQLDS="SQLDS";
 	public static final String SQLSELECT="SQLSELECT";
 	public static final String FORMULA="FORMULA";
+	public static final String MAXVALUE="MAXVALUE";
+	
 	void addProperty(Property property);
 	
 	String getPropertyValue(String propertyName);

@@ -62,6 +62,7 @@ public class StarRating extends Composite {
 		
 		for(int i=max; i>0; i--){
 			String strId = id+i;
+			System.err.println(strId);
 			Element el = DOM.getElementById(strId);//elements.getItem(i);
 			
 			String val = el.getAttribute("checked");

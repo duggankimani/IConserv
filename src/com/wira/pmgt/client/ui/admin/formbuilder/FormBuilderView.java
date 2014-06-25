@@ -98,6 +98,7 @@ public class FormBuilderView extends ViewImpl implements
 	@UiField PalettePanel vMultipleButtonPanel;
 	@UiField PalettePanel vLabelPanel;
 	@UiField PalettePanel vGridPanel;
+	@UiField PalettePanel vStarRatingPanel;
 	
 	@UiField PalettePanel vHRPanel;
 //	@UiField PalettePanel vGridPanel;
@@ -282,6 +283,8 @@ public class FormBuilderView extends ViewImpl implements
 		vTextAreaPanel.registerDragController(widgetDragController);
 		vInlineCheckBoxPanel.registerDragController(widgetDragController);
 		vSelectBasicPanel.registerDragController(widgetDragController);
+		//Star Rating
+		vStarRatingPanel.registerDragController(widgetDragController);
 		vLabelPanel.registerDragController(widgetDragController);
 		
 		//select
@@ -296,6 +299,7 @@ public class FormBuilderView extends ViewImpl implements
 		//layout
 		vHRPanel.registerDragController(widgetDragController);
 		vGridPanel.registerDragController(widgetDragController);
+	
 	}
 	
 	/**
