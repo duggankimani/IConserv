@@ -280,11 +280,12 @@ public class FormDaoHelper {
 		case DATE:
 			value = new DateValue(id, key, advalue.getDateValue());
 			break;
-			
+		
+		case RATING:
 		case DOUBLE:
 			value =new DoubleValue(id, key, advalue.getDoubleValue());
 			break;
-			
+		
 		case INTEGER:
 			value = new LongValue(id, key, advalue.getLongValue());
 			break;
@@ -558,7 +559,8 @@ public class FormDaoHelper {
 		case DATE:
 			advalue.setDateValue((Date)value.getValue());
 			break;
-			
+		
+		case RATING:	
 		case DOUBLE:
 			advalue.setDoubleValue((Double)value.getValue());
 			break;

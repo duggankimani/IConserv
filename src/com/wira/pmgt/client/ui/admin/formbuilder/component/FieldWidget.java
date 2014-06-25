@@ -624,7 +624,9 @@ public abstract class FieldWidget extends AbsolutePanel implements
 			widget = new GridLayout();
 			/*widget = new GridField();*/
 			break;
-
+		case RATING:
+			widget = new RatingField();
+			break;
 		}
 
 		widget.designMode = activatePopup;
@@ -695,11 +697,11 @@ public abstract class FieldWidget extends AbsolutePanel implements
 			break;
 
 		case DOUBLE:
-			widget = new TextField(property);
+			widget = new NumberField(property);
 			break;
 
 		case INTEGER:
-			widget = new TextField(property);
+			widget = new NumberField(property);
 			break;
 
 		case STRING:

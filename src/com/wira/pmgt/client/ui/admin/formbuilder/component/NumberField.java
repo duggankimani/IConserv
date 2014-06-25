@@ -82,7 +82,7 @@ public class NumberField extends FieldWidget{
 				if(previousValue==null){
 					previousValue = new StringValue();
 				}else{
-					if(event.getValue().equals(previousValue.getValue())){
+					if(event.getValue()==null || event.getValue().equals(previousValue.getValue())){
 						return;
 					}
 				}
