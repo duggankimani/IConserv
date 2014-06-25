@@ -115,11 +115,11 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 		this.programId= (programId==null? 0: programId);
 		this.level = level;
 		this.funding = sortedListOfFunding;
-				
+			
+
+		this.showChildren=(level==0);
 		//Show/ hide this details based on its level on load
 		if(!isSummaryRow){
-			
-			this.showChildren=(level==0);
 			
 			if(level>1){
 				//Only show level 0 and level 1 items - Hide all the rest
@@ -129,7 +129,14 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 				setHasChildren(this.showChildren);
 			}
 		}else{
-			this.showChildren=true;
+			this.showChildren=false;//Programs shouldnt initially show objectives
+			if(level>0){
+				//Only show level 0 and level 1 items - Hide all the rest
+				show(false);
+				setHasChildren(false);	
+			}else if(activity.getObjectives()!=null && !activity.getObjectives().isEmpty()){
+				setHasChildren(this.showChildren);
+			}
 			divRowCaret.setVisible(activity.getType()==ProgramDetailType.PROGRAM && activity.getObjectives().size()>0);
 		}
 		
@@ -170,7 +177,7 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 		
 			//divRating.getElement().setInnerText("N/A");
 			
-			if(activity.getChildren()!=null && activity.getChildren().isEmpty()){
+			if(activity.getChildren()==null || activity.getChildren().isEmpty()){
 					divRowCaret.addStyleName("hide");
 			}
 		}
@@ -178,7 +185,7 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 		//Budgeting & Allocations information
 		String budgetAmount = activity.getBudgetAmount() == null ? ""
 				: CURRENCYFORMAT.format(activity.getBudgetAmount());
-		divBudget.getElement().setInnerText(budgetAmount);
+		divBudget.getElement().setInnerText(activity.getType()==ProgramDetailType.OBJECTIVE? "": budgetAmount);
 
 		chkSelect.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
@@ -200,7 +207,13 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 		divName.setTitle(DateUtils.HALFDATEFORMAT.format(activity.getStartDate())+
 				" - "+DateUtils.HALFDATEFORMAT.format(activity.getEndDate()));
 		
-		divName.setHref("#home;page=activities;activity="+programId+"d"+activity.getId());
+		if(isSummaryRow && activity.getType()==ProgramDetailType.PROGRAM){
+			//Summary table
+			divName.setHref("#home;page=activities;activity="+activity.getId());
+		}else{
+			divName.setHref("#home;page=activities;activity="+programId+"d"+activity.getId());
+		}
+		
 		divRowStrip.addClassName("label-info");
 
 		if (activity.getType() == ProgramDetailType.OBJECTIVE)
@@ -325,23 +338,25 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 				amounts.add(new InlineLabel(amount));
 
 				Double allocation = activityFund.getAllocation();
+				
 				if (allocation != null && allocation != 0.0) {
-					HTMLPanel allocationPanel = new HTMLPanel("("
-							+ NUMBERFORMAT.format(allocation) + ")");
-					allocationPanel.setTitle("Allocated amount");
+					Double diff = activityFund.getAmount() - allocation;
+					HTMLPanel allocationPanel = new HTMLPanel(NUMBERFORMAT.format(diff));
+					allocationPanel.setTitle("Remaining amount");
 					allocationPanel.getElement().getStyle()
 							.setFontSize(0.8, Unit.EM);
-					allocationPanel.addStyleName("underline");
+					
+					//allocationPanel.addStyleName("underline");
 					if (allocation > activityFund.getAmount()) {
-						allocationPanel.addStyleName("text-warning");
+						allocationPanel.addStyleName("text-error bold");
 					} else {
-						allocationPanel.addStyleName("text-success");
+						allocationPanel.addStyleName("text-success bold");
 					}
 					allocationPanel.getElement().getStyle()
 							.setFontSize(0.8, Unit.EM);
 					amounts.add(allocationPanel);
 					allocations.add(allocationPanel);
-					allocationPanel.setVisible(showChildren);
+					allocationPanel.setVisible(showChildren || isSummaryRow);
 				}
 				createTd(amounts);
 			}
@@ -466,7 +481,7 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 	@Override
 	public void onProgramDetailSaved(ProgramDetailSavedEvent event) {
 		IsProgramDetail updatedProgram = event.getProgram();
-		
+
 		if(event.isNew() && updatedProgram.getParentId()!=null 
 				&& updatedProgram.getParentId().equals(activity.getId())){
 			
@@ -478,37 +493,28 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 			activity.getChildren().add(updatedProgram);
 			activity.sort();
 			
-			int idx = activity.getChildren().indexOf(updatedProgram);
+			int idx = activity.getChildren().indexOf(updatedProgram); 
 			assert idx>-1;
 			
 			//insert this child at the end of the parent
 			FlowPanel parent = ((FlowPanel)this.getParent());
 			ProgramsTableRow newRow = new ProgramsTableRow(updatedProgram,funding, programId, false, level+1);
 			newRow.setSelectionChangeHandler(selectionHandler);
-			parent.insert(newRow, idx);
+			
+			//Position the row below the parent
+			parent.insert(newRow, parent.getWidgetIndex(this)+idx+1); //Indexes start from zero, but we want children to be listed from parents position+1 
+			
+			newRow.show(true);
 			return;
 		}
-		
-//		if(updatedProgram.getParentId()!=null 
-//				&& updatedProgram.getParentId().equals(activity.getId())){
-//			//replace previous model in the parent list of children with the new version
-//			IsProgramDetail updatedChild = updatedProgram;
-//			
-//			int idx=activity.getChildren().indexOf(updatedChild);
-//			activity.getChildren().remove(idx);
-//			
-//			if(idx<activity.getChildren().size()){
-//				activity.getChildren().add(idx, updatedChild);
-//			}else{
-//				activity.getChildren().add(updatedChild);
-//			}
-//			
-//		}
 		
 		//exists
 		if(activity.getId()==updatedProgram.getId()){
 			allocations.clear();
+			List<IsProgramDetail> children  = this.activity.getChildren();
 			this.activity = updatedProgram;
+			this.activity.setChildren(children);
+			
 			//clear - incase of update/refresh
 			int widgetCount = row.getWidgetCount(); 
 			for(int i=1; i<=funding.size(); i++){
@@ -522,7 +528,6 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 			init();
 			highlight();
 			if(event.isUpdateSource()){
-				System.err.println("Updated Program Budget:: "+updatedProgram.getBudgetAmount());
 				AppContext.fireEvent(new ActivitySelectionChangedEvent(
 						updatedProgram, true));
 			}

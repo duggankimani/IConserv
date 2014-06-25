@@ -1,5 +1,6 @@
 package com.wira.pmgt.client.ui.programs;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -78,7 +79,7 @@ public class ProgramHeader extends Composite {
 		if (text != null) {
 			spnTitle.setInnerText(text);
 		} else {
-			spnTitle.setInnerText("Programs & Activities");
+			spnTitle.setInnerText("Programs Summary");
 		}
 	}
 	
@@ -153,6 +154,9 @@ public class ProgramHeader extends Composite {
 
 	public void setProgramId(Long programId) {
 		this.programId = programId;
+		if(programId==null || programId==0){
+			setText(null);
+		}
 	}
 	
 	public void setLeftMargin(Boolean status) {

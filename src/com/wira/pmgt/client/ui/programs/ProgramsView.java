@@ -32,6 +32,7 @@ import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
+import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class ProgramsView extends ViewImpl implements
 		ProgramsPresenter.IActivitiesView {
@@ -241,9 +242,17 @@ public class ProgramsView extends ViewImpl implements
 
 	/**
 	 * Bind Table data
+	 * Programs Summary binding [Only list of programs bound here]
+	 *  
 	 */
 	@Override
 	public void setData(List<IsProgramDetail> activities) {
+//		panelCrumbs.clear();
+//		BulletListPanel breadCrumbs = headerContainer
+//				.setBreadCrumbs(Arrays.asList(new ProgramSummary("Summary",
+//						"Summary", 0L, 0L, null, null, null, null, null)));		
+//		panelCrumbs.add(breadCrumbs);
+		
 		tblView.setLastUpdatedId(lastUpdatedId);
 		tblView.setData(activities);
 		lastUpdatedId = null;
@@ -286,6 +295,7 @@ public class ProgramsView extends ViewImpl implements
 			panelCrumbs.add(breadCrumbs);
 			showBackButton(true);
 		}
+		
 		if (singleResult.getType() == ProgramDetailType.PROGRAM) {
 
 			if (singleResult.getBudgetAmount() == null
