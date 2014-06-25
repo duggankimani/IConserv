@@ -13,6 +13,7 @@ public class NameTokens {
 	public static final String adminhome = "adminhome";
 	public static final String profile = "profile";
 	public static final String settings = "settings";
+	public static final String reports = "reports";
 
 	public static String getHome() {
 		return home;
@@ -52,6 +53,10 @@ public class NameTokens {
 
 	public static String getSettings() {
 		return settings;
+	}
+
+	public static String getReports() {
+		return reports;
 	}
 	
 }

@@ -15,6 +15,7 @@ import com.wira.pmgt.client.ui.home.HomePresenter;
 import com.wira.pmgt.client.ui.login.LoginGateKeeper;
 import com.wira.pmgt.client.ui.login.LoginPresenter;
 import com.wira.pmgt.client.ui.programs.ProgramsPresenter;
+import com.wira.pmgt.client.ui.reports.HomeReportsPresenter;
 
 @GinModules({ DispatchAsyncModule.class, ClientModule.class })
 public interface ClientGinjector extends Ginjector {
@@ -40,5 +41,7 @@ public interface ClientGinjector extends Ginjector {
 	AsyncProvider<AdminHomePresenter> getAdminHomePresenter();
 
 	AsyncProvider<SettingsPresenter> getSettingsPresenter();
+
+	AsyncProvider<HomeReportsPresenter> getReportsPresenter();
 
 }

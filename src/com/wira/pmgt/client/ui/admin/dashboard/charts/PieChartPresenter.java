@@ -7,7 +7,6 @@ import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
-import com.wira.pmgt.shared.model.dashboard.ChartType;
 import com.wira.pmgt.shared.model.dashboard.Data;
 
 public class PieChartPresenter extends
@@ -19,7 +18,6 @@ public class PieChartPresenter extends
 	}
 	
 	@Inject DispatchAsync requestHelper;
-	ChartType type;
 	
 	@Inject
 	public PieChartPresenter(final EventBus eventBus, final IPieChartView view) {
@@ -31,10 +29,6 @@ public class PieChartPresenter extends
 		super.onBind();
 	}
 	
-	public void setChart(ChartType type) {
-		this.type =type; 		
-	}
-
 	public void setValues(List<Data> data) {
 		getView().setData(data);
 	}

@@ -115,6 +115,8 @@ import com.wira.pmgt.client.ui.assign.AssignActivityPresenter;
 import com.wira.pmgt.client.ui.assign.AssignActivityView;
 import com.wira.pmgt.client.ui.document.activityview.ActivityDetailPresenter;
 import com.wira.pmgt.client.ui.document.activityview.ActivityDetailView;
+import com.wira.pmgt.client.ui.reports.HomeReportsPresenter;
+import com.wira.pmgt.client.ui.reports.HomeReportsView;
 
 public class ClientModule extends AbstractPresenterModule {
 
@@ -296,5 +298,8 @@ public class ClientModule extends AbstractPresenterModule {
 
 		bindPresenterWidget(ActivityDetailPresenter.class,
 				ActivityDetailPresenter.MyView.class, ActivityDetailView.class);
+
+		bindPresenter(HomeReportsPresenter.class, HomeReportsPresenter.MyView.class,
+				HomeReportsView.class,HomeReportsPresenter.MyProxy.class);
 	}
 }

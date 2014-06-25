@@ -59,7 +59,7 @@ public class ProgramsView extends ViewImpl implements
 	ProgramsTable tblView;
 
 	@UiField
-	com.wira.pmgt.client.ui.component.HTMLPanel divProgramsTable;
+	com.wira.pmgt.client.ui.component.MyHTMLPanel divProgramsTable;
 
 	@UiField
 	ActionLink aNewOutcome;
@@ -307,7 +307,6 @@ public class ProgramsView extends ViewImpl implements
 			}else{
 				setData(Arrays.asList(singleResult));
 			}
-			
 			
 		} else {
 			setData(Arrays.asList(singleResult));
