@@ -299,6 +299,11 @@ body .breadcrumb a,a:hover{
 .color-sky {
 	color: #0A5BC4;
 }
+
+.background-purple {
+	background-color: rgb(231, 203, 231) !important;
+}
+
 /** end text color helper**/
 /** border corner helper**/
 .corner-all {

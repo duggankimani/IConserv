@@ -83,11 +83,19 @@ public class TableView extends Composite {
 		}
 	}
 	
-	public void addRow(Widget ...widgets ){
+	public void addRow(Widget ...widgets){
 		addRow(Arrays.asList(widgets));
+	}
+	
+	public void addRow(List<String> tdStyles, Widget ...widgets){
+		addRow(tdStyles,Arrays.asList(widgets));
 	}
 
 	public void addRow(List<Widget> widgets){
+		addRow(new ArrayList<String>(), widgets);		
+	}
+	
+	public void addRow(List<String> tdStyles,List<Widget> widgets){
 		HTMLPanel row = new HTMLPanel("");
 		row.addStyleName("tr");
 			
@@ -95,8 +103,15 @@ public class TableView extends Composite {
 			row.add(getTd(new InlineLabel((++count)+"")));
 		}
 		
+		int i=0;
 		for(Widget widget: widgets){
-			row.add(getTd(widget));
+			Widget td = getTd(widget);
+			if(tdStyles.size()>i){
+				if(!tdStyles.get(i).isEmpty())
+				td.addStyleName(tdStyles.get(i));
+			}
+			row.add(td);
+			++i;
 		}
 		panelBody.add(row);
 	}

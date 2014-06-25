@@ -402,19 +402,47 @@ body .GWTUpld .gwt-FileUpload{
 .home-reports .top-section{
 	padding-top:20px;
 }
-
+.home-reports a.dashboard-stat{
+	text-shadow:none !important;
+	text-align:center;
+	border-right: 1px solid #cccccc;
+	border: 1px solid #cccccc;
+}
+.home-reports a.dashboard-stat:hover{
+	background: transparent;
+	color:#000;
+}
 .home-reports .dashboard-stat.tertiary{
-	background: #468847;	
+	background: transparent;
+	color:#000;
 }
 .home-reports .dashboard-stat.tertiary i{
 	color: #658865;
 }
 .home-reports .dashboard-stat.primary{
-   background: #3a87ad;
+ 	background: transparent;
+	color:#000;
 }
 .home-reports .dashboard-stat.primary i{
 	color: #4095BE;
 }
+.home-reports .dashboard-stat.secondary{
+	background:transparent;
+	color:#000;
+}
+
+.home-reports .dashboard-stat .value{
+	font-size:30px;
+}
+.home-reports .dashboard-stat.secondary .value{
+	color:#468847;	
+}
+
+.home-reports .dashboard-stat .content-block{
+	text-align:center;
+	color: #999999;
+}
+
 .color-chart{
 	width: 190px;
 	margin-top: 30px;
