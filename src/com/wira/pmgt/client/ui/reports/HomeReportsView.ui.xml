@@ -135,6 +135,37 @@
 					</h3>
 				</div>
 				<g:HTMLPanel styleName="portlet-content" ui:field="panelProgramAnalysis">
+					
+					<span class="success">Comparative dashboard of performance of Programs based on the following metrics</span>
+					<ul>
+						<li>
+							<strong>Budgets</strong>
+							<ul>
+								<li>Ability to work within budgetary limits</li> 
+								<li>Availability of budget utilization data</li>
+							</ul>
+						</li>
+						<li>
+							<strong>Meeting Targets</strong>
+							<ul>
+								<li>Quantitative measure of targets met</li> 
+								<li>Availability of outcome data</li>
+							</ul>
+						</li>
+						<li>
+							<strong>Meeting Timelines</strong>
+							<ul>
+								<li>Ability to work within planned timelines</li> 
+							</ul>
+						</li>
+						<li>
+							<strong>Throughput</strong>
+							<ul>
+								<li>Availability of documentation for the program</li> 
+							</ul>
+						</li>
+					</ul>
+					
 					<d:TableView ui:field="tableAnalysis"></d:TableView>
 					<g:HTMLPanel styleName="row-fluid color-chart">
 						<div class="span2">
