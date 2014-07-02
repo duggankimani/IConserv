@@ -1,6 +1,5 @@
 package com.wira.pmgt.server.dao.biz.model;
 
-import java.io.Serializable;
 import java.lang.Long;
 import java.lang.Double;
 

@@ -74,33 +74,33 @@ public class HomeReportsView extends ViewImpl implements
 		tblBudgetAnalysis.addRow(
 				Arrays.asList("", "background-purple", "", ""),
 				new InlineLabel("Wildlife Program"), new InlineLabel(
-						"KES 16,000,000"), new InlineLabel("KES 16,000,000"),
+						"KES 16,000,000"), new InlineLabel("KES 12,000,000"),
 				getInlineLabel("KES 4,000,000", "text-success"));
 		tblBudgetAnalysis.addRow(
 				Arrays.asList("", "background-purple", "", ""),
-				new InlineLabel("Wildlife Program"), new InlineLabel(
-						"KES 16,000,000"), new InlineLabel("KES 16,000,000"),
-				getInlineLabel("KES 10,000,000", "text-success"));
+				new InlineLabel("Education & Ecoliteracy Program"), new InlineLabel(
+						"KES 33,000,000"), new InlineLabel("KES 16,000,000"),
+				getInlineLabel("KES 7,000,000", "text-success"));
 		tblBudgetAnalysis.addRow(
 				Arrays.asList("", "background-purple", "", ""),
-				new InlineLabel("Wildlife Program"), new InlineLabel(
-						"KES 16,000,000"), new InlineLabel("KES 16,000,000"),
-				getInlineLabel("KES 4,000,000", "text-success"));
+				new InlineLabel("Forests Program"), new InlineLabel(
+						"KES 10,000,000"), new InlineLabel("KES 16,000,000"),
+				getInlineLabel("-KES 6,000,000", "text-success"));
 		tblBudgetAnalysis.addRow(
 				Arrays.asList("", "background-purple", "", ""),
-				new InlineLabel("Wildlife Program"), new InlineLabel(
-						"KES 16,000,000"), new InlineLabel("KES 16,000,000"),
-				getInlineLabel("-KES 4,000,000", "text-error"));
+				new InlineLabel("Fundraising, Monitoring and Evaluation Program"), new InlineLabel(
+						"KES 23,000,000"), new InlineLabel("KES 26,000,000"),
+				getInlineLabel("-KES 3,000,000", "text-error"));
 		tblBudgetAnalysis.addRow(
 				Arrays.asList("", "background-purple", "", ""),
-				new InlineLabel("Wildlife Program"), new InlineLabel(
-						"KES 16,000,000"), new InlineLabel("KES 16,000,000"),
-				getInlineLabel("-KES 4,000,000", "text-error"));
+				new InlineLabel("HR, Finance and Administration (Core Costs)"), new InlineLabel(
+						"KES 19,000,000"), new InlineLabel("KES 21,000,000"),
+				getInlineLabel("-KES 3,000,000", "text-error"));
 		tblBudgetAnalysis.addRow(
 				Arrays.asList("", "background-purple", "", ""),
-				new InlineLabel("Wildlife Program"), new InlineLabel(
-						"KES 16,000,000"), new InlineLabel("KES 16,000,000"),
-				getInlineLabel("-KES 4,000,000", "text-error"));
+				new InlineLabel("Rangelands Management Program"), new InlineLabel(
+						"KES 6,000,000"), new InlineLabel("KES 7,200,000"),
+				getInlineLabel("-KES 1,200,000", "text-error"));
 
 		tblBudgetAnalysis.addRow(
 				Arrays.asList("", "background-purple", "", ""),
@@ -163,10 +163,10 @@ public class HomeReportsView extends ViewImpl implements
 				));
 
 		pieChartTimelines.setData(Arrays.asList(new Data("Within deadlines",
-				75, "60%"), new Data("Outside Deadlines", 25, "30%")));
+				75, "60%"), new Data("Failed Deadlines", 25, "30%")));
 
 		pieChartTargets.setData(Arrays.asList(new Data("Within Targets", 60,
-				"60%"), new Data("Outside Targets", 30, "30%"), new Data(
+				"60%"), new Data("Failed Targets", 30, "30%"), new Data(
 				"No Data", 10, "10%")));
 
 	}

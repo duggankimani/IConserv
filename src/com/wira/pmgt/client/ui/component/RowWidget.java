@@ -69,6 +69,18 @@ public abstract class RowWidget extends Composite {
 	}
 	
 	/**
+	 * Remove widget in index i
+	 * @param index Index of widget to be removed
+	 * @return
+	 */
+	public boolean remove(Widget w){
+		if(w.getParent()!=row){
+			System.err.println("This is not a child of row!!!!");
+		}
+		return row.remove(w);
+	}
+	
+	/**
 	 * 
 	 * @param type
 	 * @param handler
@@ -94,15 +106,5 @@ public abstract class RowWidget extends Composite {
 	protected void onUnload() {
 		super.onUnload();
 		cleanUpEvents();
-	}
-	
-	@Override
-	protected void onLoad() {
-		super.onLoad();
-		onWidgetLoad();
-	}
-
-	protected void onWidgetLoad() {
-		
 	}
 }

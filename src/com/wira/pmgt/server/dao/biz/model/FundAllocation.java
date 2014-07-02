@@ -25,6 +25,8 @@ public class FundAllocation implements Serializable{
 	
 	private Double allocation;
 	
+	private Double actual;//Actual consumption from the fund
+	
 	public Long getId() {
 		return id;
 	}
@@ -35,6 +37,14 @@ public class FundAllocation implements Serializable{
 
 	public Double getAllocation() {
 		return allocation;
+	}
+
+	public Double getActual() {
+		return actual;
+	}
+
+	public void setActual(Double actual) {
+		this.actual = actual;
 	}
 	
 }

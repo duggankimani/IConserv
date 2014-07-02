@@ -11,8 +11,6 @@ import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -24,7 +22,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.widget.core.client.info.Info;
 import com.wira.pmgt.client.ui.component.ProgressBar;
 import com.wira.pmgt.client.ui.component.RowWidget;
 import com.wira.pmgt.client.ui.component.StarRating;
@@ -329,7 +326,9 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 			int idx = activitySourceOfFunds.indexOf(programFund);
 
 			if (idx == -1) {
+				//Add empty to table td
 				createTd(new InlineLabel(""));
+				
 			} else {
 				ProgramFundDTO activityFund = activityFunding.get(idx);
 				HTMLPanel amounts = new HTMLPanel("");
@@ -358,6 +357,7 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 					allocations.add(allocationPanel);
 					allocationPanel.setVisible(showChildren || isSummaryRow);
 				}
+				//Add to table td
 				createTd(amounts);
 			}
 
@@ -381,6 +381,7 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 	@Override
 	protected void onLoad() {
 		super.onLoad();
+		addRegisteredHandler(ProgramDetailSavedEvent.TYPE, this);
 		divRowCaret.addClickHandler(new ClickHandler() {
 			
 			@Override
@@ -390,7 +391,7 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 			}
 		});	
 	}
-
+	
 	private void setHasChildren(boolean hasChildren) {
 		//divRowCaret.setHref("#home;page=activities;activity="+programId+"d"+activity.getId());
 		if (hasChildren) {
@@ -456,12 +457,6 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 		}
 	}
 	
-	@Override
-	protected void onWidgetLoad() {
-		super.onWidgetLoad();
-		addRegisteredHandler(ProgramDetailSavedEvent.TYPE, this);
-	}
-
 	
 	/**
 	 * This method is called on Task or Activity save/update 
@@ -484,7 +479,6 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 
 		if(event.isNew() && updatedProgram.getParentId()!=null 
 				&& updatedProgram.getParentId().equals(activity.getId())){
-			
 			//check if this is the parent
 			if(activity.getChildren()==null){
 				activity.setChildren(new ArrayList<IsProgramDetail>());
@@ -509,22 +503,17 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 		}
 		
 		//exists
-		if(activity.getId()==updatedProgram.getId()){
+		if(activity.getId().equals(updatedProgram.getId())){
+			int count=row.getWidgetCount();
+			for (FundDTO programFund : funding) {
+				assert remove(row.getWidget(--count));
+			}
+			
 			allocations.clear();
+			
 			List<IsProgramDetail> children  = this.activity.getChildren();
 			this.activity = updatedProgram;
 			this.activity.setChildren(children);
-			
-			//clear - incase of update/refresh
-			int widgetCount = row.getWidgetCount(); 
-			for(int i=1; i<=funding.size(); i++){
-	
-				if(widgetCount-i >0){
-					//row.getWidget(widgetCount-i).removeFromParent();
-					assert row.remove(widgetCount-i);
-				}
-			}
-
 			init();
 			highlight();
 			if(event.isUpdateSource()){
@@ -532,7 +521,6 @@ public class ProgramsTableRow extends RowWidget implements ProgramDetailSavedHan
 						updatedProgram, true));
 			}
 		}
-	
 		
 	}
 

@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import xtension.workitems.UpdateActivityStatus;
 
 import com.wira.pmgt.client.ui.programs.ProgramsPresenter;
+import com.wira.pmgt.client.ui.util.StringUtils;
 import com.wira.pmgt.server.dao.ProgramDaoImpl;
 import com.wira.pmgt.server.dao.biz.model.Fund;
 import com.wira.pmgt.server.dao.biz.model.FundAllocation;
@@ -539,11 +540,12 @@ public class ProgramDaoHelper {
 		String taskName = "Program-"+ detail.getId();		
 		String taskFormCaption ="Task Form - "+detail.getName();
 
-		FormModel form = FormDaoHelper.getFormByName(taskName);
-		if(form!=null){
-			return form.getId();
+		Long formId = DB.getFormDao().getFormByName(taskName);
+		
+		if(formId!=null){
+			return formId;
 		}
-				
+		
 		//Approval Form
 //		String approvalTaskName = taskName+"-Approval";
 //		String approvalTaskForm = "Task Approval Form - "+detail.getName(); 
@@ -576,6 +578,16 @@ public class ProgramDaoHelper {
 			for(TargetAndOutcome target: targets){
 				addToForm(model,target.getKey(), target.getMeasure(),DataType.DOUBLE);
 			}
+		
+		Collection<ProgramFund> funds = detail.getSourceOfFunds();
+		if(funds!=null){
+			for(ProgramFund programFund: funds){
+				Fund fund = programFund.getFund();
+				String key = "cost_"+fund.getName();
+				key = StringUtils.camelCase(key);
+				addToForm(model, key, "Cost "+fund.getName(), DataType.DOUBLE);
+			}
+		}
 		
 		//addToForm(model,"rating", "Rating", DataType.RATING);
 		//addToForm(model,"cost", "Total Expenditure", DataType.DOUBLE);
@@ -692,7 +704,7 @@ public class ProgramDaoHelper {
 	 * This method maps inputs from a Task Form to Program Outcomes
 	 * <p>
 	 * 
-	 * This method is called after Task Approval {@link UpdateActivityStatus#executeWorkItem}<br>
+	 * This method is called after Task Approval in the WorkItem Handler {@link UpdateActivityStatus#executeWorkItem}<br>
 	 * Some common form values expected include:
 	 * Rating (Task Rating)
 	 * Cost (Total cost of performing the task)
@@ -735,7 +747,6 @@ public class ProgramDaoHelper {
 			}
 			
 			if(values.get(key)!=null){
-				
 				Object val = value.getValue();
 				
 				if(val==null){
@@ -744,13 +755,11 @@ public class ProgramDaoHelper {
 				}
 				
 				if(!(val instanceof Number)){
-					
 					if(val instanceof String){
 						try{
-							//Quantitative figures expected onlu
+							//Quantitative data expected only
 							val = Double.parseDouble(val.toString());
 						}catch(Exception e){}
-						
 					}
 					
 					if(!(val instanceof Number)){
@@ -763,7 +772,43 @@ public class ProgramDaoHelper {
 				
 				Number num = (Number)val;					
 				tao.setActualOutcome(num.doubleValue());
+			}
+		}
+		
+		Collection<ProgramFund> funds = detail.getSourceOfFunds();
+		if(funds!=null){
+			for(ProgramFund programFund: funds){
+				Fund fund = programFund.getFund();
+				String key = "cost_"+fund.getName();
+				key = StringUtils.camelCase(key);
 				
+				Value value = values.get(key);
+				if(value==null){
+					log.warn("ProgramDaoHelper#updateTargetAndOutcome No form data for target key "+key);
+					continue;
+				}
+				
+				Object val= value.getValue();
+				if(!(val instanceof Number)){
+					
+					if(val instanceof String){
+						try{
+							//Quantitative data expected only
+							val = Double.parseDouble(val.toString());
+						}catch(Exception e){}
+					}
+					
+					if(!(val instanceof Number)){
+						log.warn("ProgramDaoHelper#updateTargetAndOutcome " +
+								"Only quantitative values expected "+"[key=" +value.getKey()+", value="+
+									value.getValue()+", type="+value.getDataType()+" ] ");
+						continue;
+					}
+				}
+				
+				Number num = (Number)val;//Actual thus far				
+				if(programFund.getAllocation()!=null)
+					programFund.getAllocation().setActual(num.doubleValue());
 			}
 		}
 		
