@@ -368,6 +368,7 @@
 	margin-left: 1%;
 	height: 463px;
 	width: 59%;
+	overflow-y:auto;
 }
 
 #main-content .maincontent-panel .dragdrop-dropTarget {
@@ -663,7 +664,7 @@
 
 .table-bordered>.thead>.tr>.th,.table-bordered>.tbody>.tr>.th,.table-bordered>.tfoot>.tr>.th,.table-bordered>.thead>.tr>.td,.table-bordered>.tbody>.tr>.td,.table-bordered>.tfoot>.tr>.td
 	{
-	border: 1px solid #dddddd;
+	/* border: 1px solid #dddddd; */
 }
 
 .table-bordered>.thead>.tr>.th,.table-bordered>.thead>.tr>.td {

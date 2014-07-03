@@ -12,7 +12,6 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
-
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.History;
@@ -32,7 +31,6 @@ import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
-import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class ProgramsView extends ViewImpl implements
 		ProgramsPresenter.IActivitiesView {
@@ -210,7 +208,6 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	private void showContent(boolean status) {
-
 		if (status) {
 			divMiddleContent.removeStyleName("hidden");
 			divNoContent.addStyleName("hidden");

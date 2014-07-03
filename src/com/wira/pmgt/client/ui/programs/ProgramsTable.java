@@ -90,15 +90,16 @@ public class ProgramsTable extends Composite {
 	private void createGrid() {
 		List<TableHeader> th = new ArrayList<TableHeader>();
 		if(isSummaryTable){
-			th.add(new TableHeader("TITLE",40.0));
+			th.add(new TableHeader("TITLE",37.0));
+			th.add(new TableHeader("TIMELINES",10.0));
 			th.add(new TableHeader("PROGRESS",10.0));
 			th.add(new TableHeader("BUDGET",null));
 			
 		}else{
-			th.add(new TableHeader("TITLE",40.0));
+			th.add(new TableHeader("TITLE",37.0));
+			th.add(new TableHeader("TIMELINES",10.0));
 			th.add(new TableHeader("STATUS",10.0));
 			th.add(new TableHeader("PROGRESS",10.0));
-			th.add(new TableHeader("RATING",15.0));
 			th.add(new TableHeader("BUDGET",10.0));
 		}
 		tblView.setTableHeaders(th);
