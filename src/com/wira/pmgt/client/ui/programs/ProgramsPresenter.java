@@ -8,12 +8,15 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
+import com.gwtplatform.mvp.client.annotations.ContentSlot;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.PlaceRequest;
+import com.gwtplatform.mvp.client.proxy.RevealContentHandler;
 import com.wira.pmgt.client.place.NameTokens;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.AppManager;
@@ -34,6 +37,7 @@ import com.wira.pmgt.client.ui.events.ProcessingEvent;
 import com.wira.pmgt.client.ui.events.ProgramDetailSavedEvent;
 import com.wira.pmgt.client.ui.events.ProgramsReloadEvent;
 import com.wira.pmgt.client.ui.events.ProgramsReloadEvent.ProgramsReloadHandler;
+import com.wira.pmgt.client.ui.filter.FilterPresenter;
 import com.wira.pmgt.client.ui.objective.CreateObjectivePresenter;
 import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
 import com.wira.pmgt.client.util.AppContext;
@@ -61,7 +65,10 @@ public class ProgramsPresenter extends
 		PresenterWidget<ProgramsPresenter.IActivitiesView> implements
 		ActivitySelectionChangedHandler, ProgramsReloadHandler, ResizeHandler {
 	
-	public static final Object DETAIL_SLOT = new Object();
+	@ContentSlot
+	public static final Type<RevealContentHandler<?>> FILTER_SLOT = new Type<RevealContentHandler<?>>();
+	
+	@Inject FilterPresenter filterPresenter;
 	
 	public interface IActivitiesView extends View {
 		
@@ -725,6 +732,7 @@ public class ProgramsPresenter extends
 	protected void onReset() {
 		super.onReset();
 		//System.err.println(">>>>On reset called");
+		setInSlot(FILTER_SLOT, filterPresenter);
 		getView().setMiddleHeight();
 	}
 	@Override

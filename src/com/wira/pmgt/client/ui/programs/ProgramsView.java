@@ -1,5 +1,7 @@
 package com.wira.pmgt.client.ui.programs;
 
+import static com.wira.pmgt.client.ui.home.HomePresenter.FILTER_SLOT;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -58,6 +60,12 @@ public class ProgramsView extends ViewImpl implements
 	ProgramsTable tblView;
 
 	@UiField
+	HTMLPanel divFilterBox;
+	
+	@UiField
+	Anchor iFilterdropdown;
+
+	@UiField
 	com.wira.pmgt.client.ui.component.MyHTMLPanel divProgramsTable;
 
 	@UiField
@@ -106,6 +114,8 @@ public class ProgramsView extends ViewImpl implements
 
 	int scrollDistancePX = 6; // 6px at a time
 	private Long programId;
+
+	protected boolean isNotDisplayed;
 
 	@Inject
 	public ProgramsView(final Binder binder) {
@@ -171,6 +181,20 @@ public class ProgramsView extends ViewImpl implements
 				History.back();
 			}
 		});
+		
+		
+		iFilterdropdown.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				if(isNotDisplayed){
+				divFilterBox.removeStyleName("hide");
+				isNotDisplayed=false;
+				}else{
+				divFilterBox.addStyleName("hide");
+				isNotDisplayed=true;
+				}
+			}
+		});
 
 	}
 
@@ -179,10 +203,10 @@ public class ProgramsView extends ViewImpl implements
 		int topHeight = divContentTop.getElement().getOffsetHeight();
 		int middleHeight = totalHeight - topHeight - 43;
 
-//		System.err.println("Total Height>>>" + totalHeight);
-//		System.err.println("Top Height>>>" + topHeight);
+		// System.err.println("Total Height>>>" + totalHeight);
+		// System.err.println("Top Height>>>" + topHeight);
 
-		if(middleHeight>0){
+		if (middleHeight > 0) {
 			divProgramsTable.setHeight(middleHeight + "px");
 		}
 	}
@@ -238,18 +262,18 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	/**
-	 * Bind Table data
-	 * Programs Summary binding [Only list of programs bound here]
-	 *  
+	 * Bind Table data Programs Summary binding [Only list of programs bound
+	 * here]
+	 * 
 	 */
 	@Override
 	public void setData(List<IsProgramDetail> activities) {
-//		panelCrumbs.clear();
-//		BulletListPanel breadCrumbs = headerContainer
-//				.setBreadCrumbs(Arrays.asList(new ProgramSummary("Summary",
-//						"Summary", 0L, 0L, null, null, null, null, null)));		
-//		panelCrumbs.add(breadCrumbs);
-		
+		// panelCrumbs.clear();
+		// BulletListPanel breadCrumbs = headerContainer
+		// .setBreadCrumbs(Arrays.asList(new ProgramSummary("Summary",
+		// "Summary", 0L, 0L, null, null, null, null, null)));
+		// panelCrumbs.add(breadCrumbs);
+
 		tblView.setLastUpdatedId(lastUpdatedId);
 		tblView.setData(activities);
 		lastUpdatedId = null;
@@ -292,7 +316,7 @@ public class ProgramsView extends ViewImpl implements
 			panelCrumbs.add(breadCrumbs);
 			showBackButton(true);
 		}
-		
+
 		if (singleResult.getType() == ProgramDetailType.PROGRAM) {
 
 			if (singleResult.getBudgetAmount() == null
@@ -311,10 +335,10 @@ public class ProgramsView extends ViewImpl implements
 				selectTab(singleResult.getId());
 				headerContainer.setText(singleResult.getName());
 				setData(singleResult.getChildren());
-			}else{
+			} else {
 				setData(Arrays.asList(singleResult));
 			}
-			
+
 		} else {
 			setData(Arrays.asList(singleResult));
 		}
@@ -422,7 +446,7 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	public void setPeriods(List<PeriodDTO> periods) {
-		Collections.sort(periods, new Comparator<PeriodDTO>(){
+		Collections.sort(periods, new Comparator<PeriodDTO>() {
 			@Override
 			public int compare(PeriodDTO o1, PeriodDTO o2) {
 				return -o1.getStartDate().compareTo(o2.getStartDate());
@@ -492,8 +516,8 @@ public class ProgramsView extends ViewImpl implements
 				for (PeriodDTO period : periods) {
 					if (period.isCurrentPeriod()) {
 						headerContainer.getPeriodDropdown().setValue(period);
-						headerContainer.setDates("("
-								+ period.getDescription() + ")");
+						headerContainer.setDates("(" + period.getDescription()
+								+ ")");
 						break;
 					}
 				}
@@ -503,4 +527,17 @@ public class ProgramsView extends ViewImpl implements
 		}
 	}
 
+	@Override
+	public void setInSlot(Object slot, Widget content) {
+		if (slot == FILTER_SLOT) {
+			System.err.println(">>>Filter Presenter");
+			divFilterBox.clear();
+			if (content != null) {
+				divFilterBox.add(content);
+			}
+		} else {
+			super.setInSlot(slot, content);
+		}
+
+	}
 }
