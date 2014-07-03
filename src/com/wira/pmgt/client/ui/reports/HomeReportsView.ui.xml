@@ -88,13 +88,12 @@
 					<div class="portlet-header">
 						<h3>
 							<i class="icon-bar-chart"></i>
-							BUDGET PERFORMANCE
+							BUDGET DISTRIBUTION
 						</h3>
 					</div>
 
 					<g:HTMLPanel styleName="portlet-content" ui:field="panelTurnAroundTime">
-						<span class="muted">Percentage expenditure within budget by
-							percentage outside budget</span>
+						<span class="muted">Distribution of budgets amongst LWF Programs</span>
 						<c:PieChart ui:field="pieChartBudget"></c:PieChart>
 					</g:HTMLPanel>
 				</div>

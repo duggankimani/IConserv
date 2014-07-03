@@ -40,7 +40,7 @@ public class TargetAndOutcome extends PO{
 	private String outcomeRemarks;//this may be provided in place of counts
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="programdetailid",nullable=false,referencedColumnName="id")
+	@JoinColumn(name="programid",nullable=false,referencedColumnName="id")
 	private ProgramDetail programDetail;
 	
 	public Long getId() {
