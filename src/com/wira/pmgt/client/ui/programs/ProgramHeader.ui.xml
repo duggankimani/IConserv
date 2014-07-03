@@ -25,7 +25,10 @@
 				</g:FocusPanel>
 			</div>
 			<div class="span2">
-				<span class="muted pull-right budget" ui:field="spnBudget"></span>
+				<span class="muted pull-right budget">
+				    <span ui:field="spnBudget"></span>
+				    <span ui:field="spnAllocation" title="Remaining Amount"></span>
+				</span>
 			</div>
 		</div>
 	</g:HTMLPanel>

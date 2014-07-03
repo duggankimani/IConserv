@@ -291,6 +291,14 @@ public class CreateActivityView extends ViewImpl implements
 	@Override
 	public void setTargetsAndOutComes(
 			List<TargetAndOutcomeDTO> targetsAndOutComes) {
+		Collections.sort(targetsAndOutComes, new Comparator<TargetAndOutcomeDTO>(){
+			@Override
+			public int compare(TargetAndOutcomeDTO o1, TargetAndOutcomeDTO o2) {
+				
+				return o1.getMeasure().compareTo(o2.getMeasure());
+			}
+		});
+		
 		List<Object> targets = new ArrayList<Object>();
 		
 		if(targetsAndOutComes==null || targetsAndOutComes.isEmpty()){
