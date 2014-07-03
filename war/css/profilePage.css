@@ -121,7 +121,7 @@
 	right: 0px;
 }
 .activities-page #usercontent.tab-content{
-    padding: 0px 0px 0px 5px;
+    padding: 0px 0px 0px 0px;
     height: auto;
     overflow-x: hidden;
 }
@@ -188,6 +188,18 @@
 	border-bottom: 1px solid #E6E6E6;
 	padding-left: 20px;
 }
+.action-buttons .input-append{
+	position:relative;
+}
+.action-buttons .input-append .icon-caret-down{
+	font-size: 14px;
+	position: absolute;
+	right: 45px;
+	z-index:5;
+	top: 8px;
+	cursor:pointer;
+}
+
 .activities-page .user-content{
 	margin: 20px;
 }

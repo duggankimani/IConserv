@@ -13,80 +13,100 @@
 			<g:HTMLPanel styleName="content-top" ui:field="divContentTop">
 				<!--Action Buttons -->
 				<div class="action-buttons row-fluid">
-					<!--Button Add Document -->
+					<div class="span9">
+						<div class="span3">
+							<d:ActionLink ui:field="aProgram" styleName="btn btn-danger"
+								dataToggle="tooltip">Create Program</d:ActionLink>
+						</div>
+
+						<div class="span3 hide">
+							<d:ActionLink ui:field="aBack" styleName="btn btn-default"
+								dataToggle="tooltip" dataPlacement="bottom" title="Back">
+								<i class="icon-google-back icon-button"></i>
+							</d:ActionLink>
+						</div>
+
+						<div class="span3 hide">
+							<d:ActionLink ui:field="aNewOutcome" styleName="btn btn-primary"
+								dataToggle="tooltip" dataPlacement="bottom" title="Create outcome">
+								<i class="icon-plus"></i>
+								Create Outcome
+							</d:ActionLink>
+						</div>
+
+						<div class="span3 hide">
+							<d:ActionLink ui:field="aNewObjective" styleName="btn btn-primary"
+								dataToggle="tooltip" dataPlacement="bottom" title="Create objective">
+								<i class="icon-plus-sign"></i>
+								Create Objective
+							</d:ActionLink>
+						</div>
+
+						<div class="span3 hide">
+							<d:ActionLink ui:field="aNewActivity" styleName="btn btn-primary"
+								dataToggle="tooltip" dataPlacement="bottom" title="Create activity">
+								<i class="icon-plus"></i>
+								Create Activity
+							</d:ActionLink>
+						</div>
+
+						<div class="span3 hide">
+							<d:ActionLink ui:field="aNewTask" styleName="btn btn-primary"
+								dataToggle="tooltip" dataPlacement="bottom" title="Create Task">
+								<i class="icon-plus"></i>
+								Create Task
+							</d:ActionLink>
+						</div>
+
+						<div class="span3 hide">
+							<d:ActionLink ui:field="aEdit" styleName="btn btn-default"
+								dataToggle="tooltip" dataPlacement="bottom" title="Edit">
+								<i class="icon-pencil icon-button"></i>
+							</d:ActionLink>
+						</div>
+
+						<div class="span3 hide">
+							<d:ActionLink ui:field="aDetail" styleName="btn btn-default"
+								dataToggle="tooltip" dataPlacement="bottom" title="Detailed view">
+								<i class="icon-tasks icon-button"></i>
+							</d:ActionLink>
+						</div>
+
+						<div class="span3 hide">
+							<d:ActionLink ui:field="aDelete" styleName="btn btn-danger"
+								dataToggle="tooltip" dataPlacement="bottom" title="Delete">
+								<i class="icon-trash icon-button"></i>
+							</d:ActionLink>
+						</div>
+
+						<div class="span3 hide">
+							<d:ActionLink ui:field="aAssign" styleName="btn btn-default"
+								dataToggle="tooltip" dataPlacement="bottom" title="Assign to Individual/Group">
+								<i class="icon-google-share icon-button"></i>
+							</d:ActionLink>
+						</div>
+					</div>
 					<div class="span3">
-						<d:ActionLink ui:field="aProgram" styleName="btn btn-danger"
-							dataToggle="tooltip">Create Program</d:ActionLink>
-					</div>
-
-					<div class="span3 hide">
-						<d:ActionLink ui:field="aBack" styleName="btn btn-default"
-							dataToggle="tooltip" dataPlacement="bottom" title="Back">
-							<i class="icon-google-back icon-button"></i>
-						</d:ActionLink>
-					</div>
-
-					<div class="span3 hide">
-						<d:ActionLink ui:field="aNewOutcome" styleName="btn btn-primary"
-							dataToggle="tooltip" dataPlacement="bottom" title="Create outcome">
-							<i class="icon-plus"></i>
-							Create Outcome
-						</d:ActionLink>
-					</div>
-
-					<div class="span3 hide">
-						<d:ActionLink ui:field="aNewObjective" styleName="btn btn-primary"
-							dataToggle="tooltip" dataPlacement="bottom" title="Create objective">
-							<i class="icon-plus-sign"></i>
-							Create Objective
-						</d:ActionLink>
-					</div>
-
-					<div class="span3 hide">
-						<d:ActionLink ui:field="aNewActivity" styleName="btn btn-primary"
-							dataToggle="tooltip" dataPlacement="bottom" title="Create activity">
-							<i class="icon-plus"></i>
-							Create Activity
-						</d:ActionLink>
-					</div>
-
-					<div class="span3 hide">
-						<d:ActionLink ui:field="aNewTask" styleName="btn btn-primary"
-							dataToggle="tooltip" dataPlacement="bottom" title="Create Task">
-							<i class="icon-plus"></i>
-							Create Task
-						</d:ActionLink>
-					</div>
-
-					<div class="span3 hide">
-						<d:ActionLink ui:field="aEdit" styleName="btn btn-default"
-							dataToggle="tooltip" dataPlacement="bottom" title="Edit">
-							<i class="icon-pencil icon-button"></i>
-						</d:ActionLink>
-					</div>
-
-					<div class="span3 hide">
-						<d:ActionLink ui:field="aDetail" styleName="btn btn-default"
-							dataToggle="tooltip" dataPlacement="bottom" title="Detailed view">
-							<i class="icon-tasks icon-button"></i>
-						</d:ActionLink>
-					</div>
-
-					<div class="span3 hide">
-						<d:ActionLink ui:field="aDelete" styleName="btn btn-danger"
-							dataToggle="tooltip" dataPlacement="bottom" title="Delete">
-							<i class="icon-trash icon-button"></i>
-						</d:ActionLink>
-					</div>
-
-					<div class="span3 hide">
-						<d:ActionLink ui:field="aAssign" styleName="btn btn-default"
-							dataToggle="tooltip" dataPlacement="bottom" title="Assign to Individual/Group">
-							<i class="icon-google-share icon-button"></i>
-						</d:ActionLink>
+						<div class="program-search pull-right">
+							<div class="input-append">
+								<input type="text" styleName="search-query"
+									placeholder="Search here">
+								</input>
+								<g:Anchor styleName="icon-caret-down muted" ui:field="iFilterdropdown"></g:Anchor>
+								<button type="submit" class="btn">
+									<i class="icon-search"></i>
+								</button>
+							</div>
+							
+							<g:HTMLPanel ui:field="divFilterBox" styleName="hide">
+								
+							</g:HTMLPanel>
+						</div>
 					</div>
 
 				</div>
+
+
 				<div class="row-fluid">
 					<programs:ProgramHeader ui:field="headerContainer"
 						leftMargin="true"></programs:ProgramHeader>
@@ -96,10 +116,10 @@
 				<g:HTMLPanel styleName="row-fluid" ui:field="panelCrumbs">
 				</g:HTMLPanel>
 			</g:HTMLPanel>
-			
+
 
 			<div class="row-fluid full-page content-body">
-				
+
 				<g:HTMLPanel ui:field="divNoContent" styleName="hidden">
 					<i class="icon-warning-sign helper-font-16"></i>
 					<span class="helper-font-16">

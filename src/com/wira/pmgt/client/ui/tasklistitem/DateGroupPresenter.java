@@ -14,7 +14,6 @@ import com.gwtplatform.mvp.client.View;
 import com.wira.pmgt.client.service.ServiceCallback;
 import com.wira.pmgt.client.ui.events.PresentTaskEvent;
 import com.wira.pmgt.client.ui.events.PresentTaskEvent.PresentTaskHandler;
-import com.wira.pmgt.client.ui.util.DateUtils;
 
 public class DateGroupPresenter extends
 		PresenterWidget<DateGroupPresenter.MyView> implements PresentTaskHandler{
