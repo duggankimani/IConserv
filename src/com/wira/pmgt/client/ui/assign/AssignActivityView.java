@@ -1,6 +1,7 @@
 package com.wira.pmgt.client.ui.assign;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -8,15 +9,14 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
-import com.wira.pmgt.client.ui.component.autocomplete.AutoCompleteField;
+import com.wira.pmgt.client.ui.component.tabs.TabContent;
+import com.wira.pmgt.client.ui.component.tabs.TabHeader;
+import com.wira.pmgt.client.ui.component.tabs.TabPanel;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.OrgEntity;
 import com.wira.pmgt.shared.model.ParticipantType;
@@ -30,42 +30,24 @@ public class AssignActivityView extends ViewImpl implements
 	private final Widget widget;
 
 	@UiField
-	Anchor aAdd;
-	@UiField
-	Anchor aCreateForm;
-
-	@UiField
-	AutoCompleteField<OrgEntity> allocatedToUsers;
-
-	@UiField
 	BulletListPanel crumbContainer;
+	@UiField
+	TabPanel divTabs;
 
-	@UiField
-	HTMLPanel divAllocations;
-
-	@UiField
-	Anchor aMessage;
-	@UiField
-	HTMLPanel divMessage;
-	@UiField
-	TextArea txtMessage;
-
-	Boolean isShowMessage = false;
+	private UserAssign assignWidget;
+	private FormAssign formWidget;
 
 	public interface Binder extends UiBinder<Widget, AssignActivityView> {
 	}
-
-	List<OrgEntity> selectedSet = new ArrayList<OrgEntity>();
-
-	private ProgramDetailType detailType;
 
 	@Inject
 	public AssignActivityView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
 
-		selectedSet.add(AppContext.getContextUser());
+		assignWidget = new UserAssign();
+		formWidget = new FormAssign();
 
-		aAdd.addClickHandler(new ClickHandler() {
+		assignWidget.getaddButton().addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -73,89 +55,20 @@ public class AssignActivityView extends ViewImpl implements
 			}
 		});
 
-		aMessage.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				if (isShowMessage) {
-					// current state = show message
-					// therefore negate
-					divMessage.addStyleName("hidden");
-					aMessage.setText("Add Message");
-					isShowMessage = false;
-				} else {
-					// current state = hide message
-					divMessage.removeStyleName("hidden");
-					aMessage.setText("Discard Message");
-					isShowMessage = true;
-				}
+		assignWidget.getSelectedSet().add(AppContext.getContextUser());
 
-			}
-		});
+		setTabPanel();
 	}
 
-	public void addAllItems() {
-		List<OrgEntity> selected = allocatedToUsers.getSelectedItems();
-		if (selected != null && !selected.isEmpty()) {
-			addAllocations(selected);
-		}
-		allocatedToUsers.clearSelection();
-	}
+	public void setTabPanel() {
+		divTabs.setHeaders(Arrays.asList(new TabHeader(
+				"Allocated User(s)", true, "users"), new TabHeader(
+				"Allocated Form(s)", false, "forms")));
 
-	protected void addAllocations(List<OrgEntity> entities) {
-		
-		//Nothing previously selected
-		if (selectedSet.isEmpty()) {
-			entities.add(AppContext.getContextUser());
-		}
+		divTabs.setContent(Arrays.asList(
+							new TabContent(assignWidget,"users",true),
+							new TabContent(formWidget,"forms",false)));
 
-		for (OrgEntity entity : entities) {
-			if (!selectedSet.contains(entity)) {
-				selectedSet.add(entity);
-				ParticipantType type = detailType==ProgramDetailType.PROGRAM?
-					ParticipantType.STAKEHOLDER : ParticipantType.ASSIGNEE;
-				
-				if (entity.equals(AppContext.getContextUser())) {
-					type = ParticipantType.INITIATOR;
-				}
-				createTaskAllocation(entity,type);
-			}
-		}
-
-		// loop and create widgets
-//		for (OrgEntity entity : selectedSet) {
-//			ParticipantType type = ParticipantType.ASSIGNEE;
-//			if (entity.equals(AppContext.getContextUser())) {
-//				type = ParticipantType.INITIATOR;
-//			}
-//			
-//			createTaskAllocation(entity,type);
-//		}
-	}
-
-	private void createTaskAllocation(OrgEntity entity, ParticipantType type) {
-
-		final TaskAllocation allocation = new TaskAllocation(detailType,entity, type);
-		divAllocations.add(allocation);
-
-		allocation.getRemoveLink().addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				// event.getSource();
-				OrgEntity entity = allocation.getOrgEntity();
-				selectedSet.remove(entity);
-				divAllocations.remove(allocation);
-			}
-		});
-	}
-
-	/**
-	 * Drop Down of Users & Groups for selection
-	 */
-	public void setSelection(List<OrgEntity> entities) {
-		allocatedToUsers.addItems(entities);
-
-		addAllocations(new ArrayList<OrgEntity>());
 	}
 
 	@Override
@@ -165,34 +78,31 @@ public class AssignActivityView extends ViewImpl implements
 
 	@Override
 	public void clear() {
-		selectedSet.clear();
-		allocatedToUsers.clearSelection();
-		divAllocations.clear();
+		assignWidget.clear();
 	}
 
 	@Override
 	public TaskInfo getTaskInfo() {
 		TaskInfo taskInfo = new TaskInfo();
-		int count = divAllocations.getWidgetCount();
+		int count = assignWidget.getDivAllocations().getWidgetCount();
 		for (int i = 0; i < count; i++) {
-			TaskAllocation allocation = (TaskAllocation) divAllocations
-					.getWidget(i);
+			TaskAllocation allocation = (TaskAllocation) assignWidget
+					.getDivAllocations().getWidget(i);
 			taskInfo.addParticipant(allocation.getOrgEntity(),
 					allocation.getParticipantType());
 		}
 
 		taskInfo.setMessage("Kindly take care of this task, Thank you.");
 
-		if (!txtMessage.getValue().isEmpty())
-			taskInfo.setMessage(txtMessage.getValue());
+		if (!assignWidget.getMessage().isEmpty())
+			taskInfo.setMessage(assignWidget.getMessage());
 
 		return taskInfo;
 	}
 
 	@Override
 	public void setActivityId(Long activityId, ProgramDetailType type) {
-		this.detailType = type;
-		aCreateForm.setHref("#adminhome;page=formbuilder;create=" + activityId);
+		assignWidget.setActivityId(activityId, type);
 	}
 
 	public void createCrumb(String text, String title, Long id, Boolean isActive) {
@@ -219,19 +129,39 @@ public class AssignActivityView extends ViewImpl implements
 
 	@Override
 	public void setTaskInfo(TaskInfo taskInfo) {
-		Map<ParticipantType, List<OrgEntity>> participants = taskInfo.getParticipants();
-		if(!participants.isEmpty()){
-			for(ParticipantType type: participants.keySet()){
+		Map<ParticipantType, List<OrgEntity>> participants = taskInfo
+				.getParticipants();
+		if (!participants.isEmpty()) {
+			for (ParticipantType type : participants.keySet()) {
 				List<OrgEntity> entities = participants.get(type);
-				for(OrgEntity entity: entities){
-					if (!selectedSet.contains(entity)){
-						selectedSet.add(entity);
-						createTaskAllocation(entity, type);
+				for (OrgEntity entity : entities) {
+					if (!assignWidget.getSelectedSet().contains(entity)) {
+						assignWidget.getSelectedSet().add(entity);
+						assignWidget.createTaskAllocation(entity, type);
 					}
-					
+
 				}
 			}
 		}
+	}
+
+	/**
+	 * Drop Down of Users & Groups for selection
+	 */
+	@Override
+	public void setSelection(List<OrgEntity> entities) {
+		assignWidget.getAllocatedToUsers().addItems(entities);
+		assignWidget.addAllocations(new ArrayList<OrgEntity>());
+	}
+
+	@Override
+	public void addAllItems() {
+		List<OrgEntity> selected = assignWidget.getAllocatedToUsers()
+				.getSelectedItems();
+		if (selected != null && !selected.isEmpty()) {
+			assignWidget.addAllocations(selected);
+		}
+		assignWidget.getAllocatedToUsers().clearSelection();
 	}
 
 }

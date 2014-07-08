@@ -20,7 +20,7 @@
 						<p class="title span10">
 							Filter Options:
 						</p>
-						<g:Anchor styleName="span2" ui:field="aClose">
+						<g:Anchor styleName="span2 hide" ui:field="aClose">
 							<i class="icon-remove pull-right" />
 						</g:Anchor>
 					</div>

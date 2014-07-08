@@ -16,12 +16,12 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.PopupViewImpl;
 import com.wira.pmgt.client.model.UploadContext;
 import com.wira.pmgt.client.model.UploadContext.UPLOADACTION;
-import com.wira.pmgt.client.ui.admin.component.ListField;
 import com.wira.pmgt.client.ui.admin.users.save.UserSavePresenter.TYPE;
 import com.wira.pmgt.client.ui.component.IssuesPanel;
 import com.wira.pmgt.client.ui.component.PasswordField;
@@ -40,6 +40,8 @@ public class UserSaveView extends PopupViewImpl implements
 	@UiField HTMLPanel divGroupDetails;
 	@UiField IssuesPanel issues;
 	@UiField Anchor aClose;
+	
+	TabPanel t;
 
 	@UiField TextField txtUserName;
 	@UiField TextField txtFirstname;

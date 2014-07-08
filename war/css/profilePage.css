@@ -3,12 +3,12 @@
 /*User Assignment Page*/
 .modal .users-container{
 	/* padding:10px; */
-	margin-bottom:20px;
+	margin-bottom: 10px;
 	min-height: 150px;
 }
 .modal .container-box{
 	border-top:1px solid #eeeeee;
-	max-height: 200px;
+	min-height: 150px;
 }
 
 .modal .users-container .heading{
@@ -124,6 +124,7 @@
     padding: 0px 0px 0px 0px;
     height: auto;
     overflow-x: hidden;
+    overflow-y: auto;
 }
 .activities-page .content-top{
 	padding: 10px 0px 0px 0px;
