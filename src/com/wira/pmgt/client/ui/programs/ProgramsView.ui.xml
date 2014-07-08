@@ -86,8 +86,8 @@
 							</d:ActionLink>
 						</div>
 					</div>
-					<div class="span3">
-						<div class="program-search pull-right">
+					<div class="span3 right-side">
+						<div class="program-search">
 							<div class="input-append">
 								<input type="text" styleName="search-query"
 									placeholder="Search here">
@@ -98,12 +98,10 @@
 								</button>
 							</div>
 							
-							<g:HTMLPanel ui:field="divFilterBox" styleName="hide">
-								
+							<g:HTMLPanel ui:field="divFilterBox" styleName="hide search-box">
 							</g:HTMLPanel>
 						</div>
 					</div>
-
 				</div>
 
 

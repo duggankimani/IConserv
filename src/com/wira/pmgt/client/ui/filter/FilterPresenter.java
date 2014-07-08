@@ -65,12 +65,6 @@ public class FilterPresenter extends PresenterWidget<FilterPresenter.MyView> {
 			}
 		});
 		
-		getView().getCloseButton().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				//homeview.hideFilterDialog();
-			}
-		});
 		
 		getView().getFilterDialog().addBlurHandler(new BlurHandler() {
 			@Override

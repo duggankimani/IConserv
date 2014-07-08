@@ -732,6 +732,8 @@ public class ProgramsPresenter extends
 	protected void onReset() {
 		super.onReset();
 		//System.err.println(">>>>On reset called");
+		
+		assert(filterPresenter!=null);
 		setInSlot(FILTER_SLOT, filterPresenter);
 		getView().setMiddleHeight();
 	}

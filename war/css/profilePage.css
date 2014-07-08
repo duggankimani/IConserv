@@ -199,6 +199,25 @@
 	top: 8px;
 	cursor:pointer;
 }
+.action-buttons .right-side{
+	margin-right:0px !important;
+}
+.action-buttons .search-box{
+	position:relative;
+}
+.action-buttons .search-box .dialog-filter{
+    position: absolute;
+	
+}
+
+/*Dialog Box*/
+.dialog-filter .form .compositeinput{
+    width: 100%;
+}
+.dialog-filter .form select{
+    width: 100%;
+}
+
 
 .activities-page .user-content{
 	margin: 20px;
