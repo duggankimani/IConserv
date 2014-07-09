@@ -1152,10 +1152,10 @@ body .dateBoxPopup {
 }
 
 .panel-activity .feed-item.well {
-	margin-left: 50px;
+	margin-left: 62px;
 	margin-top: 2px;
-	padding-top: 0px;
-	padding-left: 53px;
+	padding-top: 5px;
+	padding-left: 57px;
 	background: none;
 	border: none;
 	min-height: 49px;
@@ -1178,7 +1178,7 @@ body .dateBoxPopup {
 	padding-top: 5px;
 	font-size: 13px;
 	padding-bottom: 0px;
-	padding-left: 54px;
+	padding-left: 61px;
 	/* border-left: 2px solid #DDD;*/
 	/* border-bottom: 1px dotted #CCCCCC; */
 	font-family: 'Open Sans', 'trebuchet ms', arial, sans-serif;

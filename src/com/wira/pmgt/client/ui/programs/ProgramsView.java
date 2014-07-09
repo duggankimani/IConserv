@@ -1,6 +1,6 @@
 package com.wira.pmgt.client.ui.programs;
 
-import static com.wira.pmgt.client.ui.home.HomePresenter.FILTER_SLOT;
+import static com.wira.pmgt.client.ui.programs.ProgramsPresenter.FILTER_SLOT;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -523,7 +523,7 @@ public class ProgramsView extends ViewImpl implements
 	@Override
 	public void setInSlot(Object slot, Widget content) {
 		if (slot == FILTER_SLOT) {
-			System.err.println(">>>Filter Presenter");
+			//System.err.println(">>>Filter Presenter");
 			divFilterBox.clear();
 			if (content != null) {
 				divFilterBox.add(content);
