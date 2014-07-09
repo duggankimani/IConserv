@@ -14,7 +14,6 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.programs.TableHeader;
-import com.wira.pmgt.shared.model.program.IsProgramDetail;
 
 public class TableView extends Composite {
 
@@ -51,13 +50,18 @@ public class TableView extends Composite {
 	public void setTableHeaders(List<TableHeader> headers){
 		panelHeader.clear();
 		for(TableHeader header: headers){
-			InlineLabel label = new InlineLabel(header.getTitleName());
+			//th
 			HTMLPanel th = new HTMLPanel("");
 			th.addStyleName("th");
+			
+			//Label
+			InlineLabel label = new InlineLabel(header.getTitleName());
 			th.add(label);
+			
+			//add to row
 			panelHeader.add(th);
 			if(header.getWidth()!=null){
-			th.getElement().getStyle().setWidth(header.getWidth(), Unit.PCT);
+				th.getElement().getStyle().setWidth(header.getWidth(), Unit.PCT);
 			}
 		}
 	}

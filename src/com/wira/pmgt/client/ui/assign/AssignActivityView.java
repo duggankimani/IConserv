@@ -103,6 +103,7 @@ public class AssignActivityView extends ViewImpl implements
 	@Override
 	public void setActivityId(Long activityId, ProgramDetailType type) {
 		assignWidget.setActivityId(activityId, type);
+		formWidget.setActivityId(activityId, type);
 	}
 
 	public void createCrumb(String text, String title, Long id, Boolean isActive) {
