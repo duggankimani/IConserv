@@ -5,15 +5,15 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 
-public class ReportsView extends ViewImpl implements ReportsPresenter.MyView {
+public class AdminReportsView extends ViewImpl implements AdminReportsPresenter.MyView {
 
 	private final Widget widget;
 
-	public interface Binder extends UiBinder<Widget, ReportsView> {
+	public interface Binder extends UiBinder<Widget, AdminReportsView> {
 	}
 
 	@Inject
-	public ReportsView(final Binder binder) {
+	public AdminReportsView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
 	}
 

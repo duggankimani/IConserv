@@ -39,7 +39,7 @@
 						</g:Anchor>
 					</li>
 					<li ui:field="liReports">
-						<a href='#reports'>
+						<a href='#home;page=reports'>
 							<i class="icon-bar-chart"></i>
 							Reports
 						</a>

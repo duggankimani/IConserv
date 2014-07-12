@@ -174,7 +174,7 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 			setActive(liDashboard, true);
 		} else if (page.equals("Activities")) {
 			setActive(liActivities, true);
-		} else if (page.equals("Report")) {
+		} else if (page.equals("Reports")) {
 			setActive(liReports, true);
 		} else if (page.equals("Profile")) {
 			setActive(liDashboard, false);
