@@ -42,6 +42,7 @@ import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
+import com.wira.pmgt.shared.model.program.ProgramTaskForm;
 import com.wira.pmgt.shared.model.program.TargetAndOutcomeDTO;
 
 public class ProgramDaoHelper {
@@ -244,10 +245,7 @@ public class ProgramDaoHelper {
 		programFundDTO.setFund(get(programFund.getFund()));
 		programFundDTO.setId(programFund.getId());
 		programFundDTO.setProgramId(programFund.getProgramDetail().getId());
-		FundAllocation allocation = programFund.getAllocation();
-		if(allocation!=null){
-			programFundDTO.setAllocation(allocation.getAllocation());
-		}
+		programFundDTO.setAllocation(programFund.getAllocatedAmount());
 		
 		return programFundDTO;
 	}
@@ -848,6 +846,13 @@ public class ProgramDaoHelper {
 		//Copy Parent targets to child
 		//if()
 		
+	}
+
+	public static List<ProgramTaskForm> getTaskForms(Long programId) {
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		List<ProgramTaskForm> taskForms = dao.getTaskFormsForProgram(programId);
+		
+		return taskForms;
 	}
 
 //	private static ProgramSummary getSummary(ProgramDetail detail) {

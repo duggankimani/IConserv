@@ -216,13 +216,6 @@ public class ProgramsView extends ViewImpl implements
 		return widget;
 	}
 
-	public void setBudget(Double number) {
-		if (number != null) {
-			headerContainer
-					.setBudget(NumberUtils.CURRENCYFORMAT.format(number));
-		}
-	}
-
 	public HasClickHandlers getNewOutcome() {
 		return aNewOutcome;
 	}
@@ -328,7 +321,7 @@ public class ProgramsView extends ViewImpl implements
 						+ singleResult.getName() + "'");
 			}
 
-			setBudget(singleResult.getBudgetAmount());
+			headerContainer.setFunding(singleResult.getBudgetAmount(),singleResult.getFunding());
 
 			if (!tblView.isSummaryTable) {
 				// select tab

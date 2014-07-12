@@ -155,15 +155,7 @@ public class ProgramsTableRow extends RowWidget implements
 					.setVisible(activity.getType() == ProgramDetailType.PROGRAM
 							&& activity.getObjectives().size() > 0);
 		}
-
-		// divName.addMouseOverHandler(new MouseOverHandler() {
-		//
-		// @Override
-		// public void onMouseOver(MouseOverEvent event) {
-		// Info.display("Rating", "Value= "+rating.getValue());
-		// }
-		// });
-
+		
 		// Bind Row to Table
 		setRow(row);
 
@@ -322,6 +314,7 @@ public class ProgramsTableRow extends RowWidget implements
 		if (status != ProgramStatus.CLOSED) {
 			if (activity.isOverdue()) {
 				spnStatus.setClassName("label label-danger");
+				//divDates.addStyleName("text-danger");
 				spnStatus
 						.setTitle("This "
 								+ activity.getType().getDisplayName()
@@ -335,6 +328,7 @@ public class ProgramsTableRow extends RowWidget implements
 						+ " should have started by "
 						+ DateUtils.MONTHDAYFORMAT.format(activity
 								.getStartDate()));
+				//divDates.addStyleName("text-warning");
 			} else if (activity.isUpcoming()) {
 				spnStatus.setTitle("This "
 						+ activity.getType().getDisplayName()
@@ -344,9 +338,11 @@ public class ProgramsTableRow extends RowWidget implements
 			} else {
 				// its ongoing - Work in progress (CREATED, OPEN, REOPENED)
 				// spnStatus.setClassName("label label-info");
+				//divDates.addStyleName("text-success");
 			}
 		} else {
 			spnStatus.setClassName("label label-success");
+			
 		}
 
 	}

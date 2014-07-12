@@ -111,7 +111,7 @@ public class SingleButton extends FieldWidget {
 							}
 						}
 
-					}, "Yes", "No","Cancel");
+					}, "Yes","Cancel");
 				}
 			});
 		}else{

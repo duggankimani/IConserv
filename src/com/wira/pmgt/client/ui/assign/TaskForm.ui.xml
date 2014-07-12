@@ -1,0 +1,16 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+    xmlns:d='urn:import:com.wira.pmgt.client.ui.component'  xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	
+	<g:HTMLPanel styleName="row-fluid name-box">
+		
+		<div class="span10 names">
+			<g:Anchor ui:field="aFormLink" target="_blank">
+			    <span ui:field="spnName"></span>
+			</g:Anchor>
+		</div>
+		<div class="span2">
+			<g:Anchor ui:field="aRemove" styleName="icon-remove muted pull-right hide"></g:Anchor>
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder>

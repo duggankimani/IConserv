@@ -54,15 +54,21 @@ public class TableView extends Composite {
 
 	public void setTableHeaders(List<TableHeader> headers) {
 		panelHeader.clear();
-		for (TableHeader header : headers) {
-			InlineLabel label = new InlineLabel(header.getTitleName());
+//		for (TableHeader header : headers) {
+//			InlineLabel label = new InlineLabel(header.getTitleName());
+		for(TableHeader header: headers){
+			//th
 			HTMLPanel th = new HTMLPanel("");
 			th.addStyleName("th");
+			
+			//Label
+			InlineLabel label = new InlineLabel(header.getTitleName());
 			th.add(label);
+			
+			//add to row
 			panelHeader.add(th);
-			if (header.getWidth() != null) {
-				th.getElement().getStyle()
-						.setWidth(header.getWidth(), Unit.PCT);
+			if(header.getWidth()!=null){
+				th.getElement().getStyle().setWidth(header.getWidth(), Unit.PCT);
 			}
 		}
 	}

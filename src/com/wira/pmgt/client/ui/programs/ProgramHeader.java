@@ -20,7 +20,9 @@ import com.wira.pmgt.client.ui.component.ActionLink;
 import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.Dropdown;
+import com.wira.pmgt.client.ui.util.NumberUtils;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
+import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class ProgramHeader extends Composite {
@@ -33,6 +35,8 @@ public class ProgramHeader extends Composite {
 
 	@UiField
 	SpanElement spnBudget;
+	@UiField
+	SpanElement spnAllocation;
 	@UiField
 	InlineLabel spnDates;
 	@UiField
@@ -166,6 +170,32 @@ public class ProgramHeader extends Composite {
 			divHeader.addClassName("no-margin-left");
 		}
 	}
-	
+
+	public void setFunding(Double budget,List<ProgramFundDTO> funding) {
+		if (budget == null) {
+			budget=0.0;
+		}
+		
+		setBudget(NumberUtils.CURRENCYFORMAT.format(budget));
+		Double totalAllocated = 0.0;
+		if(funding!=null){
+			for(ProgramFundDTO dto: funding){
+				Double allocation = dto.getAllocation();
+				if(allocation==null){
+					allocation=0.0;
+				}
+				totalAllocated=allocation+totalAllocated;
+			}
+		}
+		
+		if (totalAllocated > budget) {
+			spnAllocation.addClassName("text-error bold");
+		} else {
+			spnAllocation.addClassName("text-success bold");
+		}
+		
+		spnAllocation.setInnerText(NumberUtils.NUMBERFORMAT.format(budget-totalAllocated));
+		
+	}
 
 }

@@ -21,6 +21,7 @@ import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
+import com.wira.pmgt.shared.model.program.ProgramTaskForm;
 
 public class TestProgramDaoImpl {
 
@@ -33,8 +34,14 @@ public class TestProgramDaoImpl {
 		dao= DB.getProgramDaoImpl();
 	}
 	
-	
 	@Test
+	public void getTaskForms(){
+		List<ProgramTaskForm> forms = dao.getTaskFormsForProgram(53L);
+		Assert.assertNotSame(0, forms.size());
+		
+	}
+	
+	@Ignore
 	public void getCalendar(){
 		
 		List<ProgramSummary> details = dao.getProgramCalendar("Administrator");

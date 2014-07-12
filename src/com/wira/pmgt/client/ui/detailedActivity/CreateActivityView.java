@@ -123,6 +123,13 @@ public class CreateActivityView extends ViewImpl implements
 	@Override
 	public void setFunds(List<FundDTO> funds) {
 		donors.clear();
+		Collections.sort(funds, new Comparator<FundDTO>() {
+			@Override
+			public int compare(FundDTO o1, FundDTO o2) {
+				
+				return o1.getDisplayName().compareTo(o2.getDisplayName());
+			}
+		});
 		if(funds!=null){
 			for(FundDTO dto: funds){
 				donors.add(dto);
@@ -291,6 +298,14 @@ public class CreateActivityView extends ViewImpl implements
 	@Override
 	public void setTargetsAndOutComes(
 			List<TargetAndOutcomeDTO> targetsAndOutComes) {
+		Collections.sort(targetsAndOutComes, new Comparator<TargetAndOutcomeDTO>(){
+			@Override
+			public int compare(TargetAndOutcomeDTO o1, TargetAndOutcomeDTO o2) {
+				
+				return o1.getMeasure().compareTo(o2.getMeasure());
+			}
+		});
+		
 		List<Object> targets = new ArrayList<Object>();
 		
 		if(targetsAndOutComes==null || targetsAndOutComes.isEmpty()){
