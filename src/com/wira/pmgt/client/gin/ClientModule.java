@@ -39,8 +39,8 @@ import com.wira.pmgt.client.ui.admin.processes.save.ProcessSavePresenter;
 import com.wira.pmgt.client.ui.admin.processes.save.ProcessSaveView;
 import com.wira.pmgt.client.ui.admin.processitem.ProcessItemPresenter;
 import com.wira.pmgt.client.ui.admin.processitem.ProcessItemView;
-import com.wira.pmgt.client.ui.admin.reports.ReportsPresenter;
-import com.wira.pmgt.client.ui.admin.reports.ReportsView;
+import com.wira.pmgt.client.ui.admin.reports.AdminReportsPresenter;
+import com.wira.pmgt.client.ui.admin.reports.AdminReportsView;
 import com.wira.pmgt.client.ui.admin.settings.SettingsPresenter;
 import com.wira.pmgt.client.ui.admin.settings.SettingsView;
 import com.wira.pmgt.client.ui.admin.users.UserPresenter;
@@ -216,8 +216,8 @@ public class ClientModule extends AbstractPresenterModule {
 		bindPresenterWidget(DashboardPresenter.class,
 				DashboardPresenter.IDashboardView.class, DashboardView.class);
 
-		bindPresenterWidget(ReportsPresenter.class,
-				ReportsPresenter.MyView.class, ReportsView.class);
+		bindPresenterWidget(AdminReportsPresenter.class,
+				AdminReportsPresenter.MyView.class, AdminReportsView.class);
 		
 		bindPresenterWidget(UserSavePresenter.class,
 				UserSavePresenter.IUserSaveView.class, UserSaveView.class);
@@ -299,7 +299,7 @@ public class ClientModule extends AbstractPresenterModule {
 		bindPresenterWidget(ActivityDetailPresenter.class,
 				ActivityDetailPresenter.MyView.class, ActivityDetailView.class);
 
-		bindPresenter(HomeReportsPresenter.class, HomeReportsPresenter.MyView.class,
-				HomeReportsView.class,HomeReportsPresenter.MyProxy.class);
+		bindPresenterWidget(HomeReportsPresenter.class, HomeReportsPresenter.MyView.class,
+				HomeReportsView.class);
 	}
 }

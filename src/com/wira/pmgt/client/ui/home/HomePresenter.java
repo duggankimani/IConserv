@@ -62,6 +62,7 @@ import com.wira.pmgt.client.ui.newsfeed.NewsFeedPresenter;
 import com.wira.pmgt.client.ui.profile.ProfilePresenter;
 import com.wira.pmgt.client.ui.program.save.CreateProgramPresenter;
 import com.wira.pmgt.client.ui.programs.ProgramsPresenter;
+import com.wira.pmgt.client.ui.reports.HomeReportsPresenter;
 import com.wira.pmgt.client.ui.save.form.GenericFormPresenter;
 import com.wira.pmgt.client.ui.tasklistitem.DateGroupPresenter;
 import com.wira.pmgt.client.ui.util.DateUtils;
@@ -77,9 +78,11 @@ import com.wira.pmgt.shared.requests.GetTaskList;
 import com.wira.pmgt.shared.responses.GetTaskListResult;
 
 public class HomePresenter extends
-		Presenter<HomePresenter.MyView, HomePresenter.MyProxy> implements AfterSaveHandler,
-		DocumentSelectionHandler, ReloadHandler, AlertLoadHandler, ActivitiesSelectedHandler,
-		ProcessingHandler, ProcessingCompletedHandler, SearchHandler,CreateProgramHandler, ContextLoadedHandler{
+		Presenter<HomePresenter.MyView, HomePresenter.MyProxy> implements
+		AfterSaveHandler, DocumentSelectionHandler, ReloadHandler,
+		AlertLoadHandler, ActivitiesSelectedHandler, ProcessingHandler,
+		ProcessingCompletedHandler, SearchHandler, CreateProgramHandler,
+		ContextLoadedHandler {
 
 	public interface MyView extends View {
 		void showmask(boolean mask);
@@ -91,7 +94,7 @@ public class HomePresenter extends
 		void bindAlerts(HashMap<TaskType, Integer> alerts);
 
 		void setSelectedTab(String page);
-		
+
 		void showUserImg(HTUser currentUser);
 
 		void showActivitiesPanel(boolean show);
@@ -114,104 +117,115 @@ public class HomePresenter extends
 	public static final Type<RevealContentHandler<?>> ACTIVITIES_SLOT = new Type<RevealContentHandler<?>>();
 	@ContentSlot
 	public static final Type<RevealContentHandler<?>> ADMIN_SLOT = new Type<RevealContentHandler<?>>();
-	
-	@Inject DispatchAsync dispatcher;
-	@Inject PlaceManager placeManager;
-	@Inject DocumentPopupPresenter docPopup;
-		
+
+	@Inject
+	DispatchAsync dispatcher;
+	@Inject
+	PlaceManager placeManager;
+	@Inject
+	DocumentPopupPresenter docPopup;
+
 	private IndirectProvider<CreateProgramPresenter> createDocProvider;
 	private IndirectProvider<GenericDocumentPresenter> docViewFactory;
+	private IndirectProvider<HomeReportsPresenter> reportFactory;
 	private IndirectProvider<DateGroupPresenter> dateGroupFactory;
 	private IndirectProvider<NewsFeedPresenter> newsFeedFactory;
 	private IndirectProvider<ProgramsPresenter> activitiesFactory;
 	private IndirectProvider<ProfilePresenter> profileFactory;
-	
+
 	private TaskType currentTaskType;
-	
-	
+
 	/**
 	 * Url processInstanceId (pid) - required incase the use hits refresh
 	 */
-	private Long processInstanceId=null;
-	
+	private Long processInstanceId = null;
+
 	/**
 	 * Url documentId (did) - required incase the use hits refresh
 	 */
-	private Long documentId=null;
-	
-	
-	@Inject FilterPresenter filterPresenter;
+	private Long documentId = null;
+
+	@Inject
+	FilterPresenter filterPresenter;
 	Timer timer = new Timer() {
-		
+
 		@Override
 		public void run() {
 			search();
 		}
 	};
-	
+
 	@Inject
 	public HomePresenter(final EventBus eventBus, final MyView view,
-			final MyProxy proxy,
-			Provider<CreateProgramPresenter> docProvider,
+			final MyProxy proxy, Provider<CreateProgramPresenter> docProvider,
 			Provider<GenericFormPresenter> formProvider,
 			Provider<GenericDocumentPresenter> docViewProvider,
+			Provider<HomeReportsPresenter> reportsProvider,
 			Provider<DateGroupPresenter> dateGroupProvider,
 			Provider<NewsFeedPresenter> newsfeedProvider,
 			Provider<ProfilePresenter> profileProvider,
-			Provider<ProgramsPresenter> activitiesProvider)	{
+			Provider<ProgramsPresenter> activitiesProvider) {
 		super(eventBus, view, proxy);
-		
-		createDocProvider = new StandardProvider<CreateProgramPresenter>(docProvider);
-		docViewFactory  = new StandardProvider<GenericDocumentPresenter>(docViewProvider);
-		dateGroupFactory = new StandardProvider<DateGroupPresenter>(dateGroupProvider);
-		newsFeedFactory = new StandardProvider<NewsFeedPresenter>(newsfeedProvider);
+
+		createDocProvider = new StandardProvider<CreateProgramPresenter>(
+				docProvider);
+		docViewFactory = new StandardProvider<GenericDocumentPresenter>(
+				docViewProvider);
+		reportFactory = new StandardProvider<HomeReportsPresenter>(reportsProvider);
+		dateGroupFactory = new StandardProvider<DateGroupPresenter>(
+				dateGroupProvider);
+		newsFeedFactory = new StandardProvider<NewsFeedPresenter>(
+				newsfeedProvider);
 		profileFactory = new StandardProvider<ProfilePresenter>(profileProvider);
-		activitiesFactory = new StandardProvider<ProgramsPresenter>(activitiesProvider);
+		activitiesFactory = new StandardProvider<ProgramsPresenter>(
+				activitiesProvider);
 	}
 
 	protected void search() {
 		timer.cancel();
-		if(searchTerm.isEmpty()){
+		if (searchTerm.isEmpty()) {
 			loadTasks();
 			return;
 		}
-		
-		//fireEvent(new ProcessingEvent());
+
+		// fireEvent(new ProcessingEvent());
 		SearchFilter filter = new SearchFilter();
 		filter.setSubject(searchTerm);
-		//filter.setPhrase(searchTerm);
+		// filter.setPhrase(searchTerm);
 		search(filter);
 	}
-	
-	public void search(final SearchFilter filter){
-			
+
+	public void search(final SearchFilter filter) {
+
 		GetTaskList request = new GetTaskList(AppContext.getUserId(), filter);
 		fireEvent(new ProcessingEvent());
-		dispatcher.execute(request, new TaskServiceCallback<GetTaskListResult>(){
-			@Override
-			public void processResult(GetTaskListResult result) {		
-				
-				GetTaskListResult rst = (GetTaskListResult)result;
-				List<Doc> tasks = rst.getTasks();
-				loadLines(tasks);
-				if(tasks.isEmpty())
-					getView().setHasItems(false);
-				else
-					getView().setHasItems(true);
-				
-				fireEvent(new AfterSearchEvent(filter.getSubject(), filter.getPhrase()));
-				fireEvent(new ProcessingCompletedEvent());
-			}
-		});		
+		dispatcher.execute(request,
+				new TaskServiceCallback<GetTaskListResult>() {
+					@Override
+					public void processResult(GetTaskListResult result) {
+
+						GetTaskListResult rst = (GetTaskListResult) result;
+						List<Doc> tasks = rst.getTasks();
+						loadLines(tasks);
+						if (tasks.isEmpty())
+							getView().setHasItems(false);
+						else
+							getView().setHasItems(true);
+
+						fireEvent(new AfterSearchEvent(filter.getSubject(),
+								filter.getPhrase()));
+						fireEvent(new ProcessingCompletedEvent());
+					}
+				});
 	}
 
 	@Override
 	protected void revealInParent() {
 		RevealContentEvent.fire(this, MainPagePresenter.CONTENT_SLOT, this);
 	}
-	
-	String searchTerm="";
-	
+
+	String searchTerm = "";
+
 	@Override
 	protected void onBind() {
 		super.onBind();
@@ -225,7 +239,7 @@ public class HomePresenter extends
 		addRegisteredHandler(SearchEvent.TYPE, this);
 		addRegisteredHandler(CreateProgramEvent.TYPE, this);
 		addRegisteredHandler(ContextLoadedEvent.TYPE, this);
-		
+
 	}
 
 	/**
@@ -234,26 +248,25 @@ public class HomePresenter extends
 	@Override
 	public void prepareFromRequest(PlaceRequest request) {
 		super.prepareFromRequest(request);
-		
+
 		fireEvent(new LoadAlertsEvent());
-		clear();		
-		processInstanceId=null;
-		documentId=null;
-		
+		clear();
+		processInstanceId = null;
+		documentId = null;
+
 		final String name = request.getParameter("type", null);
 		String processInstID = request.getParameter("pid", null);
 		String documentSearchID = request.getParameter("did", null);
-		if(processInstID!=null){
+		if (processInstID != null) {
 			processInstanceId = Long.parseLong(processInstID);
 		}
-		if(documentSearchID!=null){
+		if (documentSearchID != null) {
 			documentId = Long.parseLong(documentSearchID);
 		}
-		
-		String page=request.getParameter("page", null);
-		
 
-		if(page!=null && page.equals("profile")){
+		String page = request.getParameter("page", null);
+
+		if (page != null && page.equals("profile")) {
 			Window.setTitle("Profile");
 			profileFactory.get(new ServiceCallback<ProfilePresenter>() {
 				@Override
@@ -262,17 +275,16 @@ public class HomePresenter extends
 					getView().setSelectedTab("Profile");
 				}
 			});
-			
-			
-		}else if(page!=null && page.equals("activities")){
-			String project = request.getParameter("activity","0");
+
+		} else if (page != null && page.equals("activities")) {
+			String project = request.getParameter("activity", "0");
 			String detail = "0";
-			if(project.contains("d")){
-				String [] ids=project.split("d");
-				project=ids[0];
+			if (project.contains("d")) {
+				String[] ids = project.split("d");
+				project = ids[0];
 				detail = ids[1];
 			}
-			
+
 			final Long activityId = new Long(project);
 			final Long detailId = new Long(detail);
 			Window.setTitle("Activities");
@@ -284,32 +296,41 @@ public class HomePresenter extends
 					getView().setSelectedTab("Activities");
 				}
 			});
-		}else if(page!=null && page.equals("detailed")){
-//			String project = request.getParameter("activity","0");
-//			String detail = "0";
+
+		} else if (page != null && page.equals("detailed")) {
 			final String activityId = request.getParameter("activityid", null);
-			if(activityId==null){
+			if (activityId == null) {
 				History.back();
 			}
-			
+
 			Window.setTitle("Detailed Activity View");
 			docViewFactory.get(new ServiceCallback<GenericDocumentPresenter>() {
 				@Override
 				public void processResult(GenericDocumentPresenter docResponse) {
-					//docResponse.loadData();
+					// docResponse.loadData();
 					docResponse.showDetailedView(new Long(activityId));
 					setInSlot(ACTIVITIES_SLOT, docResponse);
 					getView().setSelectedTab("Activities");
 				}
 			});
-			
-		}else if(name!=null){
+
+		} else if (page != null && page.equals("reports")) {
+			Window.setTitle("Reports Dashboard");
+			reportFactory.get(new ServiceCallback<HomeReportsPresenter>() {
+				@Override
+				public void processResult(HomeReportsPresenter reportResponse) {
+					setInSlot(ACTIVITIES_SLOT, reportResponse);
+					getView().setSelectedTab("Reports");
+				}
+			});
+
+		} else if (name != null) {
 			TaskType type = TaskType.getTaskType(name);
-			this.currentTaskType=type;
-			
-			//getView().setTaskType(currentTaskType);
+			this.currentTaskType = type;
+
+			// getView().setTaskType(currentTaskType);
 			loadTasks(type);
-		}else{
+		} else {
 			Window.setTitle("Home");
 			newsFeedFactory.get(new ServiceCallback<NewsFeedPresenter>() {
 				@Override
@@ -320,131 +341,136 @@ public class HomePresenter extends
 				}
 			});
 		}
-		
-	}	
-	
-	
 
-	private void clear() {		
-		//clear document slot
+	}
+
+	private void clear() {
+		// clear document slot
 		setInSlot(DATEGROUP_SLOT, null);
 		setInSlot(DOCUMENT_SLOT, null);
 	}
-	
+
 	private void loadTasks() {
 		loadTasks(currentTaskType);
 	}
 
 	/**
 	 * Load JBPM records
+	 * 
 	 * @param type
 	 */
 	private void loadTasks(final TaskType type) {
 		clear();
-//		if(type==null){
-//			getView().setHeading("Home");
-//			History.newItem("home;type=drafts");
-//			return;
-//		}
-//		
-//		getView().setHeading(type.getTitle());
-//		
+		// if(type==null){
+		// getView().setHeading("Home");
+		// History.newItem("home;type=drafts");
+		// return;
+		// }
+		//
+		// getView().setHeading(type.getTitle());
+		//
 		String userId = AppContext.getUserId();
-		
-		GetTaskList request = new GetTaskList(userId,currentTaskType);
+
+		GetTaskList request = new GetTaskList(userId, currentTaskType);
 		request.setProcessInstanceId(processInstanceId);
 		request.setDocumentId(documentId);
-		
-		//System.err.println("###### Search:: did="+documentId+"; PID="+processInstanceId+"; TaskType="+type);
-		
+
+		// System.err.println("###### Search:: did="+documentId+"; PID="+processInstanceId+"; TaskType="+type);
+
 		fireEvent(new ProcessingEvent());
-		dispatcher.execute(request, new TaskServiceCallback<GetTaskListResult>(){
-			@Override
-			public void processResult(GetTaskListResult result) {		
-				
-				GetTaskListResult rst = (GetTaskListResult)result;
-				List<Doc> tasks = rst.getTasks();
-				loadLines(tasks);
-				System.err.println("Tasks Loaded >> "+tasks.size());
-				
-				if(tasks.size()>0){
-					getView().setHasItems(true);
-					
-					Doc doc = tasks.get(0);
-					Long docId=null;
-					DocMode docMode = DocMode.READ;
-					
-					if(doc instanceof Document){
-						docId = (Long)doc.getId();
-						if(((Document)doc).getStatus()==DocStatus.DRAFTED){
-							docMode = DocMode.READWRITE;
+		dispatcher.execute(request,
+				new TaskServiceCallback<GetTaskListResult>() {
+					@Override
+					public void processResult(GetTaskListResult result) {
+
+						GetTaskListResult rst = (GetTaskListResult) result;
+						List<Doc> tasks = rst.getTasks();
+						loadLines(tasks);
+						System.err.println("Tasks Loaded >> " + tasks.size());
+
+						if (tasks.size() > 0) {
+							getView().setHasItems(true);
+
+							Doc doc = tasks.get(0);
+							Long docId = null;
+							DocMode docMode = DocMode.READ;
+
+							if (doc instanceof Document) {
+								docId = (Long) doc.getId();
+								if (((Document) doc).getStatus() == DocStatus.DRAFTED) {
+									docMode = DocMode.READWRITE;
+								}
+								// Load document
+								fireEvent(new DocumentSelectionEvent(docId,
+										null, docMode));
+							} else {
+								docId = ((HTSummary) doc).getDocumentRef();
+								long taskId = ((HTSummary) doc).getId();
+								// Load Task
+								fireEvent(new DocumentSelectionEvent(docId,
+										taskId, docMode));
+							}
+
+						} else {
+							getView().setHasItems(false);
 						}
-						//Load document
-						fireEvent(new DocumentSelectionEvent(docId,null,docMode));
-					}else{
-						docId = ((HTSummary)doc).getDocumentRef();
-						long taskId = ((HTSummary)doc).getId(); 
-						//Load Task
-						fireEvent(new DocumentSelectionEvent(docId,taskId,docMode));
+
+						fireEvent(new ProcessingCompletedEvent());
 					}
-					
-				}else{
-					getView().setHasItems(false);
-				}
-				
-				fireEvent(new ProcessingCompletedEvent());
-			}
-			
-		});
+
+				});
 	}
-	
+
 	/**
 	 * 
 	 * @param tasks
 	 */
 	protected void loadLines(final List<Doc> tasks) {
 		setInSlot(DATEGROUP_SLOT, null);
-		final List<Date> dates=new ArrayList<Date>();
-		
-		for(int i=0; i< tasks.size(); i++){
-			//final String dt = DateUtils.FULLDATEFORMAT.format(tasks.get(i).getCreated());
+		final List<Date> dates = new ArrayList<Date>();
+
+		for (int i = 0; i < tasks.size(); i++) {
+			// final String dt =
+			// DateUtils.FULLDATEFORMAT.format(tasks.get(i).getCreated());
 			final Doc doc = tasks.get(i);
 			final String dt = DateUtils.DATEFORMAT.format(doc.getCreated());
 			final Date date = DateUtils.DATEFORMAT.parse(dt);
-			
-			if(dates.contains(date)){
+
+			if (dates.contains(date)) {
 				fireEvent(new PresentTaskEvent(doc));
-			}else{
+			} else {
 				dateGroupFactory.get(new ServiceCallback<DateGroupPresenter>() {
 					@Override
 					public void processResult(DateGroupPresenter result) {
 						result.setDate(doc.getCreated());
-						HomePresenter.this.addToSlot(DATEGROUP_SLOT, result);						
-						fireEvent(new PresentTaskEvent(doc));						
+						HomePresenter.this.addToSlot(DATEGROUP_SLOT, result);
+						fireEvent(new PresentTaskEvent(doc));
 						dates.add(date);
 					}
 				});
-				
+
 			}
 		}
-	
+
 	}
-	
-	protected void showEditForm(final Long programId){
+
+	protected void showEditForm(final Long programId) {
 		showEditForm(programId, true);
 	}
-	
+
 	/**
 	 * Navigate to the program Url on Save
+	 * 
 	 * @param programId
 	 * @param navigateOnSave
 	 */
-	protected void showEditForm(final Long programId, final boolean navigateOnSave){
+	protected void showEditForm(final Long programId,
+			final boolean navigateOnSave) {
 		createDocProvider.get(new ServiceCallback<CreateProgramPresenter>() {
 			@Override
 			public void processResult(CreateProgramPresenter result) {
 				result.setNavigateOnSave(navigateOnSave);
-				result.setProgramId(programId);					
+				result.setProgramId(programId);
 				addToPopupSlot(result, false);
 			}
 		});
@@ -453,7 +479,7 @@ public class HomePresenter extends
 	@Override
 	protected void onReset() {
 		super.onReset();
-		//System.err.println("HomePresenter - OnReset :: "+this);
+		// System.err.println("HomePresenter - OnReset :: "+this);
 		setInSlot(FILTER_SLOT, filterPresenter);
 		setInSlot(DOCPOPUP_SLOT, docPopup);
 	}
@@ -465,16 +491,16 @@ public class HomePresenter extends
 
 	@Override
 	public void onDocumentSelection(DocumentSelectionEvent event) {
-		
+
 		displayDocument(event.getDocumentId(), event.getTaskId());
 	}
-	
+
 	private void displayDocument(final Long documentId, final Long taskId) {
-		if(documentId==null && taskId==null){
+		if (documentId == null && taskId == null) {
 			setInSlot(DOCUMENT_SLOT, null);
 			return;
 		}
-		
+
 		docViewFactory.get(new ServiceCallback<GenericDocumentPresenter>() {
 			@Override
 			public void processResult(GenericDocumentPresenter result) {
@@ -483,7 +509,7 @@ public class HomePresenter extends
 			}
 		});
 	}
-	
+
 	@Override
 	public void onReload(ReloadEvent event) {
 		loadTasks();
@@ -491,40 +517,42 @@ public class HomePresenter extends
 
 	@Override
 	public void onAlertLoad(AlertLoadEvent event) {
-		//event.getAlerts();
+		// event.getAlerts();
 		getView().bindAlerts(event.getAlerts());
 		Integer count = event.getAlerts().get(currentTaskType);
-		if(count==null) count=0;
-		if(currentTaskType!=null)
-		Window.setTitle(currentTaskType.getTitle()+ (count==0? "" : " ("+count+")"));
+		if (count == null)
+			count = 0;
+		if (currentTaskType != null)
+			Window.setTitle(currentTaskType.getTitle()
+					+ (count == 0 ? "" : " (" + count + ")"));
 	}
 
 	@Override
 	public void onActivitiesSelected(ActivitiesSelectedEvent event) {
-		
+
 	}
 
 	@Override
 	public void onProcessingCompleted(ProcessingCompletedEvent event) {
 		getView().showmask(false);
-		
+
 	}
 
 	@Override
-	public void onProcessing(ProcessingEvent event) {		
+	public void onProcessing(ProcessingEvent event) {
 		getView().showmask(true);
 	}
 
 	@Override
 	public void onSearch(SearchEvent event) {
-		SearchFilter filter= event.getFilter();
+		SearchFilter filter = event.getFilter();
 		search(filter);
 	}
 
 	@Override
 	public void onCreateProgram(CreateProgramEvent event) {
-		Long programId = event.getProgramId();	
-		showEditForm(programId,event.isNavigateOnSave());
+		Long programId = event.getProgramId();
+		showEditForm(programId, event.isNavigateOnSave());
 	}
 
 	@Override

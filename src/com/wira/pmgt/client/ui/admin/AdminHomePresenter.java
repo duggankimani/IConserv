@@ -23,7 +23,7 @@ import com.wira.pmgt.client.ui.admin.dashboard.DashboardPresenter;
 import com.wira.pmgt.client.ui.admin.ds.DataSourcePresenter;
 import com.wira.pmgt.client.ui.admin.formbuilder.FormBuilderPresenter;
 import com.wira.pmgt.client.ui.admin.processes.ProcessPresenter;
-import com.wira.pmgt.client.ui.admin.reports.ReportsPresenter;
+import com.wira.pmgt.client.ui.admin.reports.AdminReportsPresenter;
 import com.wira.pmgt.client.ui.admin.settings.SettingsPresenter;
 import com.wira.pmgt.client.ui.admin.users.UserPresenter;
 import com.wira.pmgt.client.ui.admin.users.save.UserSavePresenter.TYPE;
@@ -74,7 +74,7 @@ public class AdminHomePresenter extends
 	@Inject	ProcessPresenter process;
 	@Inject	UserPresenter users;
 	@Inject	DashboardPresenter dashboard;
-	@Inject	ReportsPresenter reports;
+	@Inject	AdminReportsPresenter reports;
 	@Inject	FormBuilderPresenter formbuilder;
 	@Inject DataSourcePresenter datasources;
 	@Inject SettingsPresenter settings;
