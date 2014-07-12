@@ -62,7 +62,7 @@ public class ProgramsTableRow extends RowWidget implements
 	HTMLPanel divStatus;
 	@UiField
 	HTMLPanel divProgress;
-	
+
 	@UiField
 	HTMLPanel divDates;
 
@@ -72,12 +72,11 @@ public class ProgramsTableRow extends RowWidget implements
 	@UiField
 	HTMLPanel divTimelines;
 
-	
 	@UiField
 	DivElement spanStartMonth;
 	@UiField
 	DivElement spanStartDay;
-	
+
 	@UiField
 	DivElement spanEndMonth;
 	@UiField
@@ -184,11 +183,15 @@ public class ProgramsTableRow extends RowWidget implements
 		// Padding based on the child level
 		setPadding();
 
+		// set widths for the tables
+		// setRowWidths();
+
 		// Show different cols based on whether this is a program summary
 		// listing or program details
 		if (isSummaryRow) {
 			// divProgress.setStyleName("hide");
 			divStatus.setStyleName("hide");
+			divStatus.setWidth("0%");
 
 		} else {
 
@@ -224,15 +227,15 @@ public class ProgramsTableRow extends RowWidget implements
 	private void setTimeline() {
 		if (activity.getStartDate() != null) {
 			divDates.removeStyleName("hide");
-			spanStartDay.setInnerText(DateUtils.DAYSHORTFORMAT
-					.format(activity.getStartDate()));
+			spanStartDay.setInnerText(DateUtils.DAYSHORTFORMAT.format(activity
+					.getStartDate()));
 			spanStartMonth.setInnerText(DateUtils.MONTHSHORTFORMAT
 					.format(activity.getStartDate()));
-			
-			spanEndDay.setInnerText(DateUtils.DAYSHORTFORMAT
-					.format(activity.getEndDate()));
-			spanEndMonth.setInnerText(DateUtils.MONTHSHORTFORMAT.format(activity
+
+			spanEndDay.setInnerText(DateUtils.DAYSHORTFORMAT.format(activity
 					.getEndDate()));
+			spanEndMonth.setInnerText(DateUtils.MONTHSHORTFORMAT
+					.format(activity.getEndDate()));
 		}
 	}
 
@@ -363,7 +366,6 @@ public class ProgramsTableRow extends RowWidget implements
 
 			if (level == 2) {
 				divRowStrip.addClassName("label-info");
-				divRowStrip.addClassName("label-warning");
 			}
 
 			divCheckbox.getElement().getStyle()
@@ -384,9 +386,9 @@ public class ProgramsTableRow extends RowWidget implements
 			int idx = activitySourceOfFunds.indexOf(programFund);
 
 			if (idx == -1) {
-				//Add empty to table td
-				createTd(new InlineLabel(""));
-				
+				// Add empty to table td
+				createTd(new InlineLabel(""),"10%");
+
 			} else {
 				ProgramFundDTO activityFund = activityFunding.get(idx);
 				HTMLPanel amounts = new HTMLPanel("");
@@ -416,8 +418,8 @@ public class ProgramsTableRow extends RowWidget implements
 					allocations.add(allocationPanel);
 					allocationPanel.setVisible(showChildren || isSummaryRow);
 				}
-				//Add to table td
-				createTd(amounts);
+				// Add to table td
+				createTd(amounts,"10%");
 			}
 
 		}
@@ -450,7 +452,7 @@ public class ProgramsTableRow extends RowWidget implements
 			}
 		});
 	}
-	
+
 	private void setHasChildren(boolean hasChildren) {
 		// divRowCaret.setHref("#home;page=activities;activity="+programId+"d"+activity.getId());
 		if (hasChildren) {
@@ -518,7 +520,6 @@ public class ProgramsTableRow extends RowWidget implements
 		}
 	}
 
-
 	/**
 	 * This method is called on Task or Activity save/update to update the user
 	 * interface. {@link ProgramsPresenter#save}
@@ -540,10 +541,10 @@ public class ProgramsTableRow extends RowWidget implements
 	public void onProgramDetailSaved(ProgramDetailSavedEvent event) {
 		IsProgramDetail updatedProgram = event.getProgram();
 
-		if(event.isNew() && updatedProgram.getParentId()!=null 
-				&& updatedProgram.getParentId().equals(activity.getId())){
-			//check if this is the parent
-			if(activity.getChildren()==null){
+		if (event.isNew() && updatedProgram.getParentId() != null
+				&& updatedProgram.getParentId().equals(activity.getId())) {
+			// check if this is the parent
+			if (activity.getChildren() == null) {
 				activity.setChildren(new ArrayList<IsProgramDetail>());
 			}
 
@@ -578,17 +579,17 @@ public class ProgramsTableRow extends RowWidget implements
 			newRow.show(true);
 			return;
 		}
-		
-		//exists
-		if(activity.getId().equals(updatedProgram.getId())){
-			int count=row.getWidgetCount();
+
+		// exists
+		if (activity.getId().equals(updatedProgram.getId())) {
+			int count = row.getWidgetCount();
 			for (FundDTO programFund : funding) {
 				assert remove(row.getWidget(--count));
 			}
-			
+
 			allocations.clear();
-			
-			List<IsProgramDetail> children  = this.activity.getChildren();
+
+			List<IsProgramDetail> children = this.activity.getChildren();
 			this.activity = updatedProgram;
 			this.activity.setChildren(children);
 			init();

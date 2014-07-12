@@ -14,7 +14,6 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.programs.TableHeader;
-import com.wira.pmgt.shared.model.program.IsProgramDetail;
 
 public class TableView extends Composite {
 
@@ -23,45 +22,51 @@ public class TableView extends Composite {
 
 	interface TableViewUiBinder extends UiBinder<Widget, TableView> {
 	}
-	
-	@UiField HTMLPanel overalContainer;
-	@UiField HTMLPanel tblContainer;
-	@UiField HTMLPanel panelHeader;
-	@UiField FlowPanel panelBody;
-	@UiField HTMLPanel panelFooter;
-	
-	private boolean isAutoNumber=true;
-	private int count=0;
-	
+
+	@UiField
+	HTMLPanel overalContainer;
+	@UiField
+	HTMLPanel tblContainer;
+	@UiField
+	HTMLPanel panelHeader;
+	@UiField
+	FlowPanel panelBody;
+	@UiField
+	HTMLPanel panelFooter;
+
+	private boolean isAutoNumber = true;
+	private int count = 0;
+
 	public TableView() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
-	
-	public void setHeaders(List<String> names){
-		List<Widget>widgets = new ArrayList<Widget>();
 
-		for(String name: names){
+	public void setHeaders(List<String> names) {
+		List<Widget> widgets = new ArrayList<Widget>();
+
+		for (String name : names) {
 			InlineLabel label = new InlineLabel(name);
 			widgets.add(label);
 		}
 
 		setHeaderWidgets(widgets);
 	}
-	
-	public void setTableHeaders(List<TableHeader> headers){
+
+	public void setTableHeaders(List<TableHeader> headers) {
 		panelHeader.clear();
-		for(TableHeader header: headers){
+		for (TableHeader header : headers) {
 			InlineLabel label = new InlineLabel(header.getTitleName());
 			HTMLPanel th = new HTMLPanel("");
 			th.addStyleName("th");
 			th.add(label);
 			panelHeader.add(th);
-			if(header.getWidth()!=null){
-			th.getElement().getStyle().setWidth(header.getWidth(), Unit.PCT);
+			if (header.getWidth() != null) {
+				th.getElement().getStyle()
+						.setWidth(header.getWidth(), Unit.PCT);
 			}
 		}
 	}
-	
+
 	@Override
 	public Widget asWidget() {
 		return super.asWidget();
@@ -70,96 +75,96 @@ public class TableView extends Composite {
 	public void setHeaderWidgets(List<Widget> widgets) {
 
 		panelHeader.clear();
-		if(isAutoNumber){
+		if (isAutoNumber) {
 			InlineLabel label = new InlineLabel("#");
 			widgets.add(0, label);
 		}
-		
-		for(Widget widget: widgets){
+
+		for (Widget widget : widgets) {
 			HTMLPanel th = new HTMLPanel("");
 			th.addStyleName("th");
 			th.add(widget);
 			panelHeader.add(th);
 		}
 	}
-	
-	public void addRow(Widget ...widgets){
+
+	public void addRow(Widget... widgets) {
 		addRow(Arrays.asList(widgets));
 	}
-	
-	public void addRow(List<String> tdStyles, Widget ...widgets){
-		addRow(tdStyles,Arrays.asList(widgets));
+
+	public void addRow(List<String> tdStyles, Widget... widgets) {
+		addRow(tdStyles, Arrays.asList(widgets));
 	}
 
-	public void addRow(List<Widget> widgets){
-		addRow(new ArrayList<String>(), widgets);		
+	public void addRow(List<Widget> widgets) {
+		addRow(new ArrayList<String>(), widgets);
 	}
-	
-	public void addRow(List<String> tdStyles,List<Widget> widgets){
+
+	public void addRow(List<String> tdStyles, List<Widget> widgets) {
 		HTMLPanel row = new HTMLPanel("");
 		row.addStyleName("tr");
-			
-		if(isAutoNumber){
-			row.add(getTd(new InlineLabel((++count)+"")));
+
+		if (isAutoNumber) {
+			row.add(getTd(new InlineLabel((++count) + "")));
 		}
-		
-		int i=0;
-		for(Widget widget: widgets){
+
+		int i = 0;
+		for (Widget widget : widgets) {
 			Widget td = getTd(widget);
-			if(tdStyles.size()>i){
-				if(!tdStyles.get(i).isEmpty())
-				td.addStyleName(tdStyles.get(i));
+			if (tdStyles.size() > i) {
+				if (!tdStyles.get(i).isEmpty())
+					td.addStyleName(tdStyles.get(i));
 			}
 			row.add(td);
 			++i;
 		}
 		panelBody.add(row);
 	}
-	
-	public void addRow(RowWidget rowWidget){
+
+	public void addRow(RowWidget rowWidget) {
 		rowWidget.setAutoNumber(isAutoNumber());
 		rowWidget.setRowNumber(++count);
-		panelBody.add(rowWidget);		
+		panelBody.add(rowWidget);
 	}
-	
-	public int getRowCount(){
+
+	public int getRowCount() {
 		return panelBody.getWidgetCount();
 	}
-	
-	public Widget getRow(int row){
-		if(panelBody.getWidgetCount()>row)
+
+	public Widget getRow(int row) {
+		if (panelBody.getWidgetCount() > row)
 			return panelBody.getWidget(row);
-		
+
 		return null;
 	}
 
 	private Widget getTd(Widget widget) {
 		HTMLPanel td = new HTMLPanel("");
 		td.addStyleName("td");
-		td.add(widget);				
+		td.add(widget);
 		return td;
 	}
-	
+
 	public void setStriped(Boolean status) {
-		if(status){
+		if (status) {
 			tblContainer.addStyleName("table-striped");
-		}else{
+		} else {
 			tblContainer.removeStyleName("table-striped");
 		}
 	}
-	
+
 	public void setBordered(Boolean status) {
-		if(status){
+		if (status) {
 			tblContainer.addStyleName("table-bordered");
-		}else{
+		} else {
 			tblContainer.removeStyleName("table-bordered");
 		}
 	}
-	
-	public void setIsGrid(Boolean status){
-		if(status){
+
+	public void setIsGrid(Boolean status) {
+		if (status) {
 			overalContainer.getElement().setAttribute("id", "grid");
-		}else{
+		} else {
 			overalContainer.getElement().removeAttribute("id");
 		}
 	}
@@ -176,31 +181,38 @@ public class TableView extends Composite {
 	public void setAutoNumber(boolean isAutoNumber) {
 		this.isAutoNumber = isAutoNumber;
 	}
-	
-	public void setFooter(List<Widget> widgets){
+
+	public void setFooter(List<Widget> widgets) {
 		panelFooter.clear();
 		HTMLPanel row = new HTMLPanel("");
 		row.addStyleName("tr");
-			
-		if(isAutoNumber){
+
+		if (isAutoNumber) {
 			row.add(getTd(new InlineLabel()));
 		}
-		
-		for(Widget widget: widgets){
+
+		for (Widget widget : widgets) {
 			row.add(getTd(widget));
 		}
 		panelFooter.add(row);
 	}
-	
-	public void resetCount(){
-		count=0;
+
+	public void resetCount() {
+		count = 0;
+	}
+
+	public void createHeader(String name, String width) {
+		HTMLPanel th = new HTMLPanel("");
+		th.setStyleName("th");
+		if (width != null) {
+			th.setWidth(width);
+		}
+		th.add(new InlineLabel(name));
+		panelHeader.add(th);
 	}
 
 	public void createHeader(String name) {
-		HTMLPanel th = new HTMLPanel("");
-		th.setStyleName("th");
-		th.add(new InlineLabel(name));
-		panelHeader.add(th);
+		createHeader(name, null);
 	}
 
 	public void insert(RowWidget rowWidget, int beforeIndex) {

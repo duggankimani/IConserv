@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.wira.pmgt.client.ui.component">
 	<g:HTMLPanel styleName="tr" ui:field="row">
-		<g:HTMLPanel styleName="td" ui:field="divCheckbox">
+		<g:HTMLPanel styleName="td" ui:field="divCheckbox" width="40%">
 			<g:HTMLPanel styleName="span4 caret-container">
 				<d:ActionLink ui:field="divRowCaret"
 					styleName="icon-caret-right helper-font-16 muted"></d:ActionLink>
@@ -21,7 +21,7 @@
 			</g:HTMLPanel>
 		</g:HTMLPanel>
 
-		<g:HTMLPanel styleName="td" ui:field="divTimelines">
+		<g:HTMLPanel styleName="td" ui:field="divTimelines" width="10%">
 			<g:HTMLPanel styleName="hide" ui:field="divDates">
 				<div class="span5">
 					<div class="helper-font-14 bold" ui:field="spanStartDay"></div>
@@ -37,14 +37,14 @@
 			</g:HTMLPanel>
 		</g:HTMLPanel>
 
-		<g:HTMLPanel styleName="td" ui:field="divStatus">
+		<g:HTMLPanel styleName="td" ui:field="divStatus"  width="10%">
 			<span ui:field="spnStatus" class="label"></span>
 		</g:HTMLPanel>
-		<g:HTMLPanel styleName="td" ui:field="divProgress">
+		<g:HTMLPanel styleName="td" ui:field="divProgress" width="10%">
 			<d:ProgressBar ui:field="progressBar"></d:ProgressBar>
 			<!-- span ui:field="spnProgress"></span -->
 		</g:HTMLPanel>
 
-		<g:HTMLPanel styleName="td" ui:field="divBudget" title="Budget Amount"></g:HTMLPanel>
+		<g:HTMLPanel styleName="td" ui:field="divBudget" title="Budget Amount" width="10%"></g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 
