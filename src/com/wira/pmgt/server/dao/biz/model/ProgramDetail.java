@@ -26,6 +26,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SqlResultSetMapping;
+import javax.persistence.SqlResultSetMappings;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
@@ -87,24 +88,34 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 			"((status is null or status=:statusCreated) and startDate<(:currentDate)) " +
 			"or ((status is null or status!=:statusClosed) and endDate<:currentDate)" +
 			") " +
-			"order by path_info ")
-	
+			"order by path_info "),
+	@NamedNativeQuery(name="ProgramDetail.getTaskForms",
+		resultSetMapping="ProgramDetail.taskFormsMapping",
+		query=("select id,caption from adform where name in(:formNames)"))			
 })
 
-@SqlResultSetMapping(name="ProgramDetail.calendarMappings",
-	columns={
-	//@ColumnResult(name="path"),
-	@ColumnResult(name="programId"),
-	@ColumnResult(name="id"),
-	@ColumnResult(name="parentid"),
-	@ColumnResult(name="type"),
-	@ColumnResult(name="startdate"),
-	@ColumnResult(name="enddate"),
-	@ColumnResult(name="status"),
-	@ColumnResult(name="name"),
-	@ColumnResult(name="description")
-	}
-)	
+@SqlResultSetMappings({
+	@SqlResultSetMapping(name="ProgramDetail.calendarMappings",
+		columns={
+		//@ColumnResult(name="path"),
+		@ColumnResult(name="programId"),
+		@ColumnResult(name="id"),
+		@ColumnResult(name="parentid"),
+		@ColumnResult(name="type"),
+		@ColumnResult(name="startdate"),
+		@ColumnResult(name="enddate"),
+		@ColumnResult(name="status"),
+		@ColumnResult(name="name"),
+		@ColumnResult(name="description")
+		}
+	),
+	@SqlResultSetMapping(name="ProgramDetail.taskFormsMapping",
+		columns={
+		@ColumnResult(name="id"),
+		@ColumnResult(name="caption")
+		}
+	)
+})	
 public class ProgramDetail 	extends ProgramBasicDetail{
 	
 	/**
@@ -148,6 +159,8 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 
 	private Double budgetAmount=0.0; //Total budget amount (accumulation of source of funds)
 	private Double actualAmount=0.0; //Actual amount spent
+	private Double commitedAmount=0.0;
+	private Double totalAllocation=0.0;
 	
 	private Date startDate; //For Activities & tasks - Start Date (Programs run for a whole year)
 	private Date endDate; //For Activities & tasks - End Date
@@ -436,6 +449,13 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 			//progress is either computed from status or the average completion of children items
 			progress= new Double(status.getPercCompletion());
 		}
+		
+		if(status==ProgramStatus.OPENED || status==ProgramStatus.REOPENED){
+			if(sourceOfFunds!=null)
+			for(ProgramFund fund: sourceOfFunds){
+				fund.commitFunds();
+			}
+		}
 	}
 
 	public Double getRating() {
@@ -445,5 +465,13 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	public void setRating(Double rating) {
 		this.rating = rating;
 	}
-	
+
+	public Double getTotalAllocation() {
+		return totalAllocation;
+	}
+
+	public Double getCommitedAmount() {
+		return commitedAmount;
+	}
+
 }

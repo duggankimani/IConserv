@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -33,10 +32,11 @@ public class ProgramFund extends PO {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	//Total amount assigned to a program/activity/task from a fund (e.g. 30M from USAID for Wildlife Program)
 	private Double amount;
-	
-	@OneToOne(mappedBy="fund")
-	private FundAllocation allocation;
+	private Double allocatedAmount;//allocated during budgeting
+	private Double commitedAmount;//Committed at program start
+	private Double actualAmount;//Report actual utilization
 	
 	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinColumn(name="fundid", referencedColumnName="id", nullable=false)
@@ -82,7 +82,7 @@ public class ProgramFund extends PO {
 	}
 
 	public FundAllocation getAllocation() {
-		return allocation;
+		return null;
 	}
 
 	@Override
@@ -96,5 +96,25 @@ public class ProgramFund extends PO {
 			return false;
 		
 		return fund.equals(other.fund) && programDetail.equals(other.programDetail);
+	}
+
+	public Double getCommitedAmount() {
+		return commitedAmount;
+	}
+
+	public Double getActualAmount() {
+		return actualAmount;
+	}
+
+	public void setActualAmount(Double actualAmount) {
+		this.actualAmount = actualAmount;
+	}
+
+	public Double getAllocatedAmount() {
+		return allocatedAmount;
+	}
+
+	public void commitFunds() {
+		commitedAmount=allocatedAmount;
 	}
 }

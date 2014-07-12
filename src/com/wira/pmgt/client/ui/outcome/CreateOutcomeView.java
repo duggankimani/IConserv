@@ -77,6 +77,13 @@ public class CreateOutcomeView extends ViewImpl implements
 	@Override
 	public void setFunds(List<FundDTO> funds) {
 		donors.clear();
+		Collections.sort(funds, new Comparator<FundDTO>() {
+			@Override
+			public int compare(FundDTO o1, FundDTO o2) {
+				
+				return o1.getDisplayName().compareTo(o2.getDisplayName());
+			}
+		});
 		if(funds!=null){
 			for(FundDTO dto: funds){
 				donors.add(dto);

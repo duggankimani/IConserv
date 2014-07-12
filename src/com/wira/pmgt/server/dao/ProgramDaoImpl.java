@@ -20,6 +20,7 @@ import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.program.ProgramStatus;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
+import com.wira.pmgt.shared.model.program.ProgramTaskForm;
 
 /**
  * Dao Implementation Class for managing
@@ -232,5 +233,26 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		.setParameter("period", getActivePeriod());
 				
 		return getResultList(query);
+	}
+
+	public List<ProgramTaskForm> getTaskFormsForProgram(Long programId) {
+		List<String> formsNames = Arrays.asList("Program-"+programId,"Program-"+programId+"-Approval" );
+		Query query = em.createNamedQuery("ProgramDetail.getTaskForms")
+				.setParameter("formNames", formsNames);	
+		List<Object[]> rows = getResultList(query); 
+		
+		List<ProgramTaskForm> forms = new ArrayList<>();
+		for(Object[] row: rows){
+			int i=0;
+			Object value=null;
+			Long formId= (value=row[i++])==null? null: new Long(value.toString());
+			String caption = (value=row[i++])==null? null: value.toString();
+			
+			ProgramTaskForm form = new ProgramTaskForm(formId,caption);
+			
+			forms.add(form);
+		}
+		
+		return forms;
 	}
 }

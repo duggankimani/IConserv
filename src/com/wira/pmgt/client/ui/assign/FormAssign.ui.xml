@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<g:HTMLPanel>
 		<div class="row-fluid">
-			<g:Anchor href="#adminhome;page=formbuilder;formid=1"
+			<g:Anchor href="#"
 				target="_blank" styleName="btn btn-success" ui:field="aCreateForm">Create Task
 				form
 			</g:Anchor>

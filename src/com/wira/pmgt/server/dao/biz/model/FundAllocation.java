@@ -23,7 +23,9 @@ public class FundAllocation implements Serializable{
 	@JoinColumn(name="programfundid")
 	private ProgramFund fund;
 	
-	private Double allocation;
+	private Double allocation;//Allocated amount
+	
+	private Double commited;//Committed amount (Commitment occurs at task start)
 	
 	private Double actual;//Actual consumption from the fund
 	
@@ -45,6 +47,10 @@ public class FundAllocation implements Serializable{
 
 	public void setActual(Double actual) {
 		this.actual = actual;
+	}
+
+	public Double getCommited() {
+		return commited;
 	}
 	
 }
