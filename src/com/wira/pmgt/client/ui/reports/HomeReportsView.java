@@ -14,6 +14,7 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.admin.formbuilder.component.ColorWidget;
 import com.wira.pmgt.client.ui.charts.PieChart;
+import com.wira.pmgt.client.ui.component.ActionLink;
 import com.wira.pmgt.client.ui.component.TableView;
 import com.wira.pmgt.client.ui.reports.Performance.PerformanceType;
 import com.wira.pmgt.client.ui.util.NumberUtils;
@@ -144,9 +145,17 @@ public class HomeReportsView extends ViewImpl implements
 		double totalLeft = 0.0;
 		
 		for(ProgramAnalysis analysis: list){
+			String href = "#home;page=activities;activity="+analysis.getId();
+			
+			ActionLink link = new ActionLink(analysis.getName());
+			link.addStyleName("reports-program-link");
+			link.setHref(href);
+			link.setTitle(analysis.getDescription());
+			
 			tblBudgetAnalysis.addRow(
 					Arrays.asList("", "background-purple text-right", "text-right", "text-right"),
-					new InlineLabel(analysis.getName()), new InlineLabel(formatShort(analysis.getBudgetAmount())),
+					link, 
+					new InlineLabel(formatShort(analysis.getBudgetAmount())),
 					new InlineLabel(formatShort(analysis.getActual())),
 					getInlineLabel(formatShort(analysis.getDiff()), analysis.isWithinBudget()? "text-success":"text-error"));
 			
