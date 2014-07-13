@@ -136,6 +136,8 @@ import com.wira.pmgt.shared.requests.GetProgramCalendarRequest;
 import com.wira.pmgt.server.actionhandlers.GetProgramCalendarRequestHandler;
 import com.wira.pmgt.shared.requests.GetProgramTaskForm;
 import com.wira.pmgt.server.actionhandlers.GetProgramTaskFormRequestHandler;
+import com.wira.pmgt.shared.requests.GetAnalysisDataRequest;
+import com.wira.pmgt.server.actionhandlers.GetAnalysisDataRequestHandler;
 
 
 
@@ -357,5 +359,9 @@ public class ServerModule extends HandlerModule {
 
 		bindHandler(GetProgramTaskForm.class,
 				GetProgramTaskFormRequestHandler.class, SessionValidator.class);
+
+		bindHandler(GetAnalysisDataRequest.class,
+				GetAnalysisDataRequestHandler.class,
+				SessionValidator.class);
 	}
 }

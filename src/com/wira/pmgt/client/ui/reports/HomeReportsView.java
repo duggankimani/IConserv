@@ -1,7 +1,10 @@
 package com.wira.pmgt.client.ui.reports;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.HTML;
@@ -13,7 +16,9 @@ import com.wira.pmgt.client.ui.admin.formbuilder.component.ColorWidget;
 import com.wira.pmgt.client.ui.charts.PieChart;
 import com.wira.pmgt.client.ui.component.TableView;
 import com.wira.pmgt.client.ui.reports.Performance.PerformanceType;
+import com.wira.pmgt.client.ui.util.NumberUtils;
 import com.wira.pmgt.shared.model.dashboard.Data;
+import com.wira.pmgt.shared.model.program.ProgramAnalysis;
 
 public class HomeReportsView extends ViewImpl implements
 		HomeReportsPresenter.MyView {
@@ -23,6 +28,10 @@ public class HomeReportsView extends ViewImpl implements
 
 	private final Widget widget;
 
+	@UiField SpanElement spnTotalFunding;
+	@UiField SpanElement spnActual;
+	@UiField SpanElement spnRemaining;
+	
 	@UiField
 	TableView tableAnalysis;
 
@@ -42,8 +51,8 @@ public class HomeReportsView extends ViewImpl implements
 	public HomeReportsView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
 
-		tblBudgetAnalysis.setHeaders(Arrays.asList("Program Names", "Plan",
-				"Actual", "Plan Vs Actual"));
+		tblBudgetAnalysis.setHeaders(Arrays.asList("Program Names", "Plan(Ksh)",
+				"Actual(Ksh)", "Available(Ksh)"));
 
 		tableAnalysis.setHeaders(Arrays.asList("PROGRAM NAME", "BUDGET",
 				"MEETING TARGETS", "MEETING TIMELINES", "THROUGH PUT"));
@@ -51,7 +60,7 @@ public class HomeReportsView extends ViewImpl implements
 	}
 
 	InlineLabel getInlineLabel(String amount, String color) {
-		InlineLabel deficit = new InlineLabel("KES 4,000,000");
+		InlineLabel deficit = new InlineLabel(amount);
 		if (!color.isEmpty())
 			deficit.addStyleName(color);
 		deficit.addStyleName("bold");
@@ -70,49 +79,7 @@ public class HomeReportsView extends ViewImpl implements
 		String targetNoData = "Percentage of Activities without actual outcome information";
 		String timelinesMeasure = "Measure of ability to meet planned timelines.";
 		String throughPut = "Average amount of documentation available compared to other programs";
-
-		tblBudgetAnalysis.addRow(
-				Arrays.asList("", "background-purple", "", ""),
-				new InlineLabel("Wildlife Program"), new InlineLabel(
-						"KES 16,000,000"), new InlineLabel("KES 12,000,000"),
-				getInlineLabel("KES 4,000,000", "text-success"));
-		tblBudgetAnalysis.addRow(
-				Arrays.asList("", "background-purple", "", ""),
-				new InlineLabel("Education & Ecoliteracy Program"), new InlineLabel(
-						"KES 33,000,000"), new InlineLabel("KES 16,000,000"),
-				getInlineLabel("KES 7,000,000", "text-success"));
-		tblBudgetAnalysis.addRow(
-				Arrays.asList("", "background-purple", "", ""),
-				new InlineLabel("Forests Program"), new InlineLabel(
-						"KES 10,000,000"), new InlineLabel("KES 16,000,000"),
-				getInlineLabel("-KES 6,000,000", "text-success"));
-		tblBudgetAnalysis.addRow(
-				Arrays.asList("", "background-purple", "", ""),
-				new InlineLabel("Fundraising, Monitoring and Evaluation Program"), new InlineLabel(
-						"KES 23,000,000"), new InlineLabel("KES 26,000,000"),
-				getInlineLabel("-KES 3,000,000", "text-error"));
-		tblBudgetAnalysis.addRow(
-				Arrays.asList("", "background-purple", "", ""),
-				new InlineLabel("HR, Finance and Administration (Core Costs)"), new InlineLabel(
-						"KES 19,000,000"), new InlineLabel("KES 21,000,000"),
-				getInlineLabel("-KES 3,000,000", "text-error"));
-		tblBudgetAnalysis.addRow(
-				Arrays.asList("", "background-purple", "", ""),
-				new InlineLabel("Rangelands Management Program"), new InlineLabel(
-						"KES 6,000,000"), new InlineLabel("KES 7,200,000"),
-				getInlineLabel("-KES 1,200,000", "text-error"));
-
-		tblBudgetAnalysis.addRow(
-				Arrays.asList("", "background-purple", "", ""),
-				new InlineLabel("Wildlife Program"), new InlineLabel(
-						"KES 16,000,000"), new InlineLabel("KES 16,000,000"),
-				getInlineLabel("-KES 4,000,000", "text-error"));
-		tblBudgetAnalysis.addRow(
-				Arrays.asList("", "background-purple", "", ""),
-				new InlineLabel("Wildlife Program"), new InlineLabel(
-						"KES 16,000,000"), new InlineLabel("KES 16,000,000"),
-				getInlineLabel("-KES 4,000,000", "text-error"));
-
+		
 		/* Other Analysis */
 		tableAnalysis.addRow(
 				new InlineLabel("Wildlife Program"),
@@ -153,14 +120,6 @@ public class HomeReportsView extends ViewImpl implements
 				new ColorWidget(Arrays.asList(new Performance(throughPut, 100,
 						PerformanceType.AVERAGE))));
 
-		/* Pie chart */
-		pieChartBudget.setData(Arrays.asList(
-				new Data("Wildlife Program", 60,"Ksh 6,000,000"), 
-				new Data("Forest Program", 30,"Ksh 3,000,000"), 
-				new Data("Education & Eco-Literacy Program", 10, "Ksh 1,000,000"),
-				new Data("HR, Finance and Administration (Core Costs)", 10, "Ksh 1,000,000"),
-				new Data("Rangelands Management Program", 10, "Ksh 1,000,000")
-				));
 
 		pieChartTimelines.setData(Arrays.asList(new Data("Within deadlines",
 				75, "60%"), new Data("Failed Deadlines", 25, "30%")));
@@ -174,5 +133,53 @@ public class HomeReportsView extends ViewImpl implements
 	@Override
 	public Widget asWidget() {
 		return widget;
+	}
+
+	@Override
+	public void generate(List<ProgramAnalysis> list) {
+		
+		List<Data> pieChartData = new ArrayList<Data>();
+		double totalFunding = 0.0;
+		double totalActual = 0.0;
+		double totalLeft = 0.0;
+		
+		for(ProgramAnalysis analysis: list){
+			tblBudgetAnalysis.addRow(
+					Arrays.asList("", "background-purple text-right", "text-right", "text-right"),
+					new InlineLabel(analysis.getName()), new InlineLabel(formatShort(analysis.getBudgetAmount())),
+					new InlineLabel(formatShort(analysis.getActual())),
+					getInlineLabel(formatShort(analysis.getDiff()), analysis.isWithinBudget()? "text-success":"text-error"));
+			
+			totalFunding = totalFunding+analysis.getBudgetAmount();
+			totalActual = totalActual+analysis.getActual();
+			totalLeft = totalLeft+analysis.getDiff();
+		}
+		spnTotalFunding.setInnerText(format(totalFunding));
+		spnActual.setInnerText(format(totalActual));
+		spnRemaining.setInnerText(format(totalLeft));
+		
+		
+		for(ProgramAnalysis analysis: list){
+			if(analysis.getBudgetAmount()!=0){
+				pieChartData.add(new Data(analysis.getName(), analysis.getBudgetAmount()/totalFunding,
+						formatPerc(analysis.getBudgetAmount()*100/totalFunding)));
+			}
+		}
+		pieChartBudget.setData(pieChartData);
+	}
+
+	private String formatPerc(Double d) {
+		
+		return d.intValue()+"%";
+	}
+
+	private String format(Double budgetAmount) {
+		
+		return NumberUtils.CURRENCYFORMAT.format(budgetAmount);
+	}
+	
+	private String formatShort(Double budgetAmount) {
+		
+		return NumberUtils.NUMBERFORMAT.format(budgetAmount);
 	}
 }

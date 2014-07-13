@@ -89,9 +89,16 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 			"or ((status is null or status!=:statusClosed) and endDate<:currentDate)" +
 			") " +
 			"order by path_info "),
+			
 	@NamedNativeQuery(name="ProgramDetail.getTaskForms",
 		resultSetMapping="ProgramDetail.taskFormsMapping",
-		query=("select id,caption from adform where name in(:formNames)"))			
+		query=("select id,caption from adform where name in(:formNames)")),
+
+	@NamedNativeQuery(name="ProgramDetail.getAnalysisData",
+		resultSetMapping="ProgramDetail.analysisDataMapping",
+		query=("select id,name,description,budgetamount,actualamount,totalallocation,commitedamount" +
+				" from programdetail where type='PROGRAM' and periodid=:periodid order by name")),
+			
 })
 
 @SqlResultSetMappings({
@@ -114,7 +121,18 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 		@ColumnResult(name="id"),
 		@ColumnResult(name="caption")
 		}
-	)
+	),
+	@SqlResultSetMapping(name="ProgramDetail.analysisDataMapping",
+	columns={
+	@ColumnResult(name="id"),
+	@ColumnResult(name="name"),
+	@ColumnResult(name="description"),
+	@ColumnResult(name="budgetAmount"),
+	@ColumnResult(name="actualAmount"),
+	@ColumnResult(name="commitedAmount"),
+	@ColumnResult(name="totalAllocation")
+	}
+)
 })	
 public class ProgramDetail 	extends ProgramBasicDetail{
 	
@@ -282,17 +300,8 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	}
 
 	public void setSourceOfFunds(Set<ProgramFund> sourceOfFundz) {
-		Set<ProgramFund> canBeRmoved = new HashSet<>();
-		for(ProgramFund fund: sourceOfFunds){
-			//delete causes referencial integrity errors - Foreign key issues
-			//So we set their budgets to zero instead; but remove those we can
-			if(fund.getAllocation()==null){
-				canBeRmoved.add(fund);
-			}else if(!sourceOfFundz.contains(fund)){
-				fund.setAmount(0.0);
-			}
-		}		
-		this.sourceOfFunds.removeAll(canBeRmoved);
+		
+		this.sourceOfFunds.clear();
 		
 		//Put everything in a list to allow retrieval
 		List<ProgramFund> previousValues = new ArrayList<>();
@@ -448,13 +457,6 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 				&& this.getChildren().isEmpty()){
 			//progress is either computed from status or the average completion of children items
 			progress= new Double(status.getPercCompletion());
-		}
-		
-		if(status==ProgramStatus.OPENED || status==ProgramStatus.REOPENED){
-			if(sourceOfFunds!=null)
-			for(ProgramFund fund: sourceOfFunds){
-				fund.commitFunds();
-			}
 		}
 	}
 

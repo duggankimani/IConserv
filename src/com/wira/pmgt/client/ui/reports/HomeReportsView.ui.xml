@@ -16,8 +16,8 @@
 
 					<div class="details">
 						<span class="content-block">Total Funding</span>
-						<span class="value" ui:field="spnReqCount">
-							KES 200,000,000
+						<span class="value" ui:field="spnTotalFunding">
+							
 						</span>
 					</div> <!-- /.details -->
 
@@ -34,9 +34,9 @@
 					</div> <!-- /.visual -->
 
 					<div class="details">
-						<span class="content-block">Actual</span>
-						<span class="value" ui:field="spnActiveCount">
-							KES 180,000,000
+						<span class="content-block">Expenditure</span>
+						<span class="value" ui:field="spnActual">
+							
 						</span>
 					</div> <!-- /.details -->
 
@@ -54,8 +54,8 @@
 
 					<div class="details">
 						<span class="content-block">Left to Spend</span>
-						<span class="value" ui:field="spnFailureCount">
-							KES 20,000,000
+						<span class="value" ui:field="spnRemaining">
+							
 						</span>
 					</div> <!-- /.details -->
 
