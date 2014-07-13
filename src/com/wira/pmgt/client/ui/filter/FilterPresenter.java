@@ -27,16 +27,20 @@ public class FilterPresenter extends PresenterWidget<FilterPresenter.MyView> {
 
 	public interface MyView extends View {
 		HasClickHandlers getCloseButton();
+
 		HasClickHandlers getSearchButton();
+
 		HasBlurHandlers getFilterDialog();
+
 		SearchFilter getSearchFilter();
-		void setDocTypes(List<DocumentType> documentTypes);
 	}
-	
-	@Inject HomeView homeview;
+
+	@Inject
+	HomeView homeview;
 	private String subject;
-	
-	@Inject DispatchAsync requestHelper;
+
+	@Inject
+	DispatchAsync requestHelper;
 
 	@Inject
 	public FilterPresenter(final EventBus eventBus, final MyView view) {
@@ -46,53 +50,53 @@ public class FilterPresenter extends PresenterWidget<FilterPresenter.MyView> {
 	@Override
 	protected void onBind() {
 		super.onBind();
-		
+
 		getView().getSearchButton().addClickHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent event) {
 
 				SearchFilter filter = getView().getSearchFilter();
-				
-				if(!filter.isEmpty())
-				fireEvent(new SearchEvent(filter));
-				subject=filter.getSubject();
-				if(subject!=""){
-					//homeview.setSearchBox(subject);
+
+				if (!filter.isEmpty())
+					fireEvent(new SearchEvent(filter));
+				subject = filter.getSubject();
+				if (subject != "") {
+					// homeview.setSearchBox(subject);
 				}
-				
-				//homeview.hideFilterDialog();
+
+				// homeview.hideFilterDialog();
 			}
 		});
-		
-		
+
 		getView().getFilterDialog().addBlurHandler(new BlurHandler() {
 			@Override
 			public void onBlur(BlurEvent event) {
-				//homeview.hideFilterDialog();
+				// homeview.hideFilterDialog();
 			}
 		});
 	}
-	
+
 	@Override
 	protected void onReveal() {
 		super.onReveal();
-		
+
 		loadDocTypes();
 	}
 
 	private void loadDocTypes() {
 		MultiRequestAction requests = new MultiRequestAction();
 		requests.addRequest(new GetDocumentTypesRequest());
-		
-		requestHelper.execute(requests, 
-					new TaskServiceCallback<MultiRequestActionResult>() {
-				
-				public void processResult(MultiRequestActionResult responses) {
-				
-					GetDocumentTypesResponse response = (GetDocumentTypesResponse)responses.get(0);
-					getView().setDocTypes(response.getDocumentTypes());
-				}
-		});
+
+		requestHelper.execute(requests,
+				new TaskServiceCallback<MultiRequestActionResult>() {
+
+					public void processResult(MultiRequestActionResult responses) {
+
+						GetDocumentTypesResponse response = (GetDocumentTypesResponse) responses
+								.get(0);
+						// getView().setDocTypes(response.getDocumentTypes());
+					}
+				});
 	}
 }

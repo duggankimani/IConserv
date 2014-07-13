@@ -1,6 +1,6 @@
 package com.wira.pmgt.client.ui.filter;
 
-import java.util.List;
+import java.util.Arrays;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.component.DropDownList;
-import com.wira.pmgt.shared.model.DocumentType;
+import com.wira.pmgt.shared.model.Listable;
 import com.wira.pmgt.shared.model.SearchFilter;
 
 public class FilterView extends ViewImpl implements FilterPresenter.MyView {
@@ -32,7 +32,98 @@ public class FilterView extends ViewImpl implements FilterPresenter.MyView {
 	@UiField
 	Anchor aClose;
 	@UiField
-	DropDownList<DocumentType> lstDocType;
+	DropDownList<ProgressFilter> lstProgressType;
+	@UiField
+	DropDownList<TargetsFilter> lstTargetsType;
+	@UiField
+	DropDownList<TimelinesFilter> lstTimelinesType;
+	@UiField
+	DropDownList<BudgetFilter> lstBudgetType;
+	
+	public enum ProgressFilter implements Listable{
+		COMPLETED("Completed"),
+		ONGOING("On Going"),
+		NOTSTARTED("Not Started");
+		
+		String name;
+		private ProgressFilter(String text) {
+			this.name = text;
+		}
+		@Override
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public String getDisplayName() {
+			return name;
+		}
+		
+	}
+	
+	public enum BudgetFilter implements Listable{
+		WITHIN("Within Budget"),
+		OUTSIDE("Outside Budget"),
+		NODATA("Not Data");
+		
+		String name;
+		private BudgetFilter(String text) {
+			this.name = text;
+		}
+		@Override
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public String getDisplayName() {
+			return name;
+		}
+		
+	}
+
+	public enum TimelinesFilter implements Listable{
+		WITHIN("Within Timelines"),
+		OUTSIDE("Outside Timelines"),
+		NODATA("No Data");
+		
+		String name;
+		private TimelinesFilter(String text) {
+			this.name = text;
+		}
+		@Override
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public String getDisplayName() {
+			return name;
+		}
+	}
+	
+	public enum TargetsFilter implements Listable{
+		MET("Within Targets"),
+		NOTMET("Outside Targets"),
+		NODATA("No Data");
+		
+		String name;
+		private TargetsFilter(String text) {
+			this.name = text;
+		}
+		@Override
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public String getDisplayName() {
+			return name;
+		}
+		
+	}
+	
+	
 
 	public interface Binder extends UiBinder<Widget, FilterView> {
 	}
@@ -44,9 +135,13 @@ public class FilterView extends ViewImpl implements FilterPresenter.MyView {
 		aClose.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				//divFilter.removeStyleName("is-visible");
 			}
 		});
+		
+		lstProgressType.setItems(Arrays.asList(ProgressFilter.values()));
+		lstTimelinesType.setItems(Arrays.asList(TimelinesFilter.values()));
+		lstBudgetType.setItems(Arrays.asList(BudgetFilter.values()));
+		lstTargetsType.setItems(Arrays.asList(TargetsFilter.values()));
 	}
 
 	@Override
@@ -62,11 +157,6 @@ public class FilterView extends ViewImpl implements FilterPresenter.MyView {
 	@Override
 	public SearchFilter getSearchFilter() {
 		SearchFilter filter = new SearchFilter();
-		// filter.setSubject(txtSubject.getValue());
-		// filter.setPhrase(txtPhrase.getValue());
-		// filter.setStartDate(dateInput1.getValue());
-		// filter.setEndDate(dateInput2.getValue());
-		filter.setDocType(lstDocType.getValue());
 		return filter;
 	}
 
@@ -78,11 +168,6 @@ public class FilterView extends ViewImpl implements FilterPresenter.MyView {
 	@Override
 	public HasBlurHandlers getFilterDialog() {
 		return filterDialog;
-	}
-
-	@Override
-	public void setDocTypes(List<DocumentType> documentTypes) {
-		lstDocType.setItems(documentTypes);
 	}
 
 }

@@ -63,10 +63,23 @@ public abstract class RowWidget extends Composite {
 	}
 	
 	public void createTd(Widget widget, TextAlign align) {
+		createTd(widget, align,null);
+	}
+	
+	public void createTd(Widget widget, String width) {
+		createTd(widget, TextAlign.CENTER,width);
+	}
+	
+	public void createTd(Widget widget,TextAlign align,String width){
 		HTMLPanel td = (HTMLPanel)getTd(widget);
 		td.getElement().getStyle().setTextAlign(align);
+		
+		if(width!=null){
+			td.setWidth(width);
+		}
 		row.add(td);
 	}
+	
 	
 	/**
 	 * Remove widget in index i

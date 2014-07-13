@@ -18,7 +18,7 @@
 					<div class="row-fluid">
 
 						<p class="title span10">
-							Filter Options:
+							<strong>Filter Options:</strong>
 						</p>
 						<g:Anchor styleName="span2 hide" ui:field="aClose">
 							<i class="icon-remove pull-right" />
@@ -29,21 +29,21 @@
 							<span>By Progress:</span>
 						</div>
 						<div class="row-fluid">
-							<d:DropDownList ui:field="lstDocType">
+							<d:DropDownList ui:field="lstProgressType">
 							</d:DropDownList>
 						</div>
 						<div class="row-fluid">
 							<span>By Budget:</span>
 						</div>
 						<div class="row-fluid">
-							<d:DropDownList ui:field="lstDocType2">
+							<d:DropDownList ui:field="lstBudgetType">
 							</d:DropDownList>
 						</div>
 						<div class="row-fluid">
 							<span>By Timelines:</span>
 						</div>
 						<div class="row-fluid">
-							<d:DropDownList ui:field="lstDocType3">
+							<d:DropDownList ui:field="lstTimelinesType">
 							</d:DropDownList>
 						</div>
 
@@ -52,7 +52,7 @@
 						</div>
 						
 						<div class="row-fluid">
-							<d:DropDownList ui:field="lstDocType4">
+							<d:DropDownList ui:field="lstTargetsType">
 							</d:DropDownList>
 						</div>
 

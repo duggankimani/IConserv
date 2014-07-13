@@ -224,66 +224,85 @@
 	margin: 20px;
 }
 
-.activities-page .table-programs .thead .th{
+.table-programs .thead{
+	width:100%;
+	
+}
+.table-programs .thead .tr:first-child{
+	width: 100%;
+	position:absolute;
+	color: rgb(112, 112, 112);
+	font-weight: normal;
+	background: linear-gradient(rgb(248, 248, 248) 0px, rgb(236, 236, 236)
+		100%) repeat-x rgb(242, 242, 242);
+	margin-top: -1px;
+}
+
+.table-programs .tbody .tr:first-child .td{
+	padding-top: 31px;
+	border-top: 0px;
+}
+
+.table-programs .thead .th{
 	border-bottom: 1px solid #F7F7F7;
 	border-top: 1px solid #E6E6E6 !important;
 	text-align:center;
 	white-space: nowrap;
 }
 
-.activities-page .table-programs .tbody .td{
+.table-programs .tbody .td{
 	padding-right: 10px;
 	padding-bottom: 0px;
 	text-align: center;
 }
-.activities-page .table-programs .tbody .hovered{
+.table-programs .tbody .hovered{
 	background-color: #fcf8e3;
 	transition: background .25s ease-in-out;
    -moz-transition: background .25s ease-in-out;
    -webkit-transition: background .25s ease-in-out;
 }
-.activities-page .table-programs .tbody .left{
+ .table-programs .tbody .left{
 	text-align: left;
 }
 
-.activities-page .table-programs .tbody .caret-container{
+.table-programs .tbody .caret-container{
 	width:5%;
 	line-height: 4;
 }
 
-.activities-page .table-programs .tbody .strip-container{
+.table-programs .tbody .strip-container{
 	width:5%;
 }
 
-.activities-page .table-programs .tbody .select-container{
+.table-programs .tbody .select-container{
 	width:5%;
 	line-height: 3;
 }
 
-.activities-page .table-programs .tbody .name-container{
+.table-programs .tbody .name-container{
 	width: 77%;
 	text-align: left;
 }
 
-.activities-page .table-programs .tbody .name-container a{
+.table-programs .tbody .name-container a{
 	color:#000000;
 }
 
-.activities-page .table-programs .tbody .name-container a:hover{
+.table-programs .tbody .name-container a:hover{
 	text-decoration:underline;
 	cursor:pointer;
 	color: #428bca !important;
 }
 
-.activities-page .color-strip {
+.table-programs .label-default {
+	background-color:#999999;
+}
+
+.color-strip {
 	width: 3px;
 	min-height: 50px;
 	display: inline-block;
 	height: auto;
-}
-
-.activities-page .table-programs .label-default {
-	background-color:#999999;
 }
 
 /* Tabs Below */
