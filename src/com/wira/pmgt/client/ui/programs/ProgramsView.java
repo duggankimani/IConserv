@@ -323,8 +323,10 @@ public class ProgramsView extends ViewImpl implements
 				// select tab
 				selectTab(singleResult.getId());
 				headerContainer.setText(singleResult.getName());
+				headerContainer.showBudgets(true);
 				setData(singleResult.getChildren());
 			} else {
+				headerContainer.showBudgets(false);
 				setData(Arrays.asList(singleResult));
 			}
 
@@ -519,7 +521,6 @@ public class ProgramsView extends ViewImpl implements
 	@Override
 	public void setInSlot(Object slot, Widget content) {
 		if (slot == FILTER_SLOT) {
-			//System.err.println(">>>Filter Presenter");
 			divFilterBox.clear();
 			if (content != null) {
 				divFilterBox.add(content);

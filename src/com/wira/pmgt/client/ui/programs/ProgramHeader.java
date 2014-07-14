@@ -45,6 +45,10 @@ public class ProgramHeader extends Composite {
 	FocusPanel panelTitle;
 	@UiField
 	HTMLPanel divPopup;
+	
+	@UiField
+	HTMLPanel divBudget;
+	
 	@UiField
 	HeadingElement spnTitle;
 	@UiField
@@ -193,9 +197,15 @@ public class ProgramHeader extends Composite {
 		} else {
 			spnAllocation.addClassName("text-success bold");
 		}
-		
 		spnAllocation.setInnerText(NumberUtils.NUMBERFORMAT.format(budget-totalAllocated));
-		
+	}
+	
+	public void showBudgets(boolean show){
+		if(show){
+			divBudget.removeStyleName("hide");
+		}else{
+			divBudget.addStyleName("hide");
+		}
 	}
 
 }
