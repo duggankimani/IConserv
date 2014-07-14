@@ -20,6 +20,7 @@ public class ProgramBasicDetail extends PO {
 	@Column(unique=true, nullable=false)
 	private String name;
 	
+	@Column(length=5000)
 	private String description;
 
 	public Long getId() {

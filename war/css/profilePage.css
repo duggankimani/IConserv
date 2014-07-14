@@ -1,4 +1,4 @@
-/*Activity Page Styles*/
+/*Activity Page Styles--*/
 
 /*User Assignment Page*/
 .modal .users-container{
@@ -227,9 +227,10 @@
 .table-programs .thead{
 	width:100%;
 	
+	height: 31px !important;
 }
 .table-programs .thead .tr:first-child{
-	width: 100%;
+	width: 98.5%;
 	position:absolute;
 	color: rgb(112, 112, 112);
 	font-weight: normal;
@@ -243,17 +244,24 @@
 	border-top: 0px;
 }
 
-.table-programs .thead .th{
-	border-bottom: 1px solid #F7F7F7;
+.table-programs .table>.thead>.tr>.th{
+	border: 1px solid #E6E6E6;
 	border-top: 1px solid #E6E6E6 !important;
 	text-align:center;
 	white-space: nowrap;
+	padding-right: 0px;
+	padding-left: 0px;
+	margin: 0px;
+	padding: 0px;
 }
 
 .table-programs .tbody .td{
-	padding-right: 10px;
+	border: 1px solid #E6E6E6;
+	padding-right: 0px;
 	padding-bottom: 0px;
 	text-align: center;
+	padding: 0px;
+	margin: 0px;
 }
 .table-programs .tbody .hovered{
 	background-color: #fcf8e3;

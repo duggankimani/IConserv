@@ -27,7 +27,6 @@ import com.wira.pmgt.client.ui.component.ActionLink;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
 import com.wira.pmgt.client.ui.component.Dropdown;
-import com.wira.pmgt.client.ui.util.NumberUtils;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
@@ -167,9 +166,6 @@ public class ProgramsView extends ViewImpl implements
 		aRight.addClickHandler(clickHandler);
 		aLeft.addClickHandler(clickHandler);
 
-		// BreadCrumbItem item = headerContainer.createCrumb("Home", "Home", 0L,
-		// false);
-		// crumbContainer.add(item);
 
 		show(aBack, false);
 		show(aDetail, false);
