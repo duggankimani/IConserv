@@ -81,10 +81,6 @@ public class ProgramFund extends PO {
 		this.programDetail = programDetail;
 	}
 
-	public FundAllocation getAllocation() {
-		return null;
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if(obj==null || !(obj instanceof ProgramFund)){
@@ -108,6 +104,8 @@ public class ProgramFund extends PO {
 
 	public void setActualAmount(Double actualAmount) {
 		this.actualAmount = actualAmount;
+		//reset committed figures
+		
 	}
 
 	public Double getAllocatedAmount() {
@@ -115,6 +113,10 @@ public class ProgramFund extends PO {
 	}
 
 	public void commitFunds() {
-		commitedAmount=allocatedAmount;
+		commitedAmount=amount;
+	}
+
+	public void resetCommited() {
+		this.commitedAmount=0.0;
 	}
 }

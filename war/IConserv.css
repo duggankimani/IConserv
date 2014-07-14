@@ -308,3 +308,7 @@ span.tasktimelines{
 span.underline{
 	text-decoration:underline;
 }
+
+div.text-right{
+	text-align:right;
+}

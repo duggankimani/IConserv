@@ -2,6 +2,7 @@ package com.wira.pmgt.server.dao;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -13,11 +14,14 @@ import org.apache.log4j.Logger;
 import com.wira.pmgt.server.dao.biz.model.Fund;
 import com.wira.pmgt.server.dao.biz.model.Period;
 import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
+import com.wira.pmgt.server.dao.biz.model.ProgramFund;
+import com.wira.pmgt.server.dao.model.PO;
 import com.wira.pmgt.server.helper.auth.LoginHelper;
 import com.wira.pmgt.server.helper.session.SessionHelper;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
+import com.wira.pmgt.shared.model.program.ProgramAnalysis;
 import com.wira.pmgt.shared.model.program.ProgramStatus;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 import com.wira.pmgt.shared.model.program.ProgramTaskForm;
@@ -36,6 +40,32 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 	public ProgramDaoImpl(EntityManager em) {
 		super(em);
 	}
+	
+	/**
+	 * ProgramDetail status change from CREATED to Assigned should 
+	 * commit the budget amount; ideally indicating the amount budgeted
+	 * as already used(before the end user comes in to indicate what the actual expenditure is)
+	 * <p>
+	 * 
+	 * For this reason, we override save to update all program funds
+	 */
+	public void save(PO po) {
+		if(po instanceof ProgramDetail && po.getId()!=null){
+			//This only happens in an update
+			ProgramDetail detail = (ProgramDetail)po;
+			if(detail.getStatus()!=ProgramStatus.CREATED && detail.getStatus()!=ProgramStatus.COMPLETED){
+				Collection<ProgramFund> funds = detail.getSourceOfFunds();
+				for(ProgramFund fund: funds){
+					if(fund.getCommitedAmount()!=fund.getAmount()){//Amount budget vs amount
+						fund.commitFunds();
+						save(fund);
+					}
+				}
+			}
+			
+		}
+		super.save(po);
+	};
 	
 	public Period getActivePeriod(){
 		Query query = em.createNamedQuery("Period.findActive")
@@ -254,5 +284,31 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		}
 		
 		return forms;
+	}
+
+	public List<ProgramAnalysis> getAnalysisData(Long periodId) {
+		if(periodId==null){
+			return new ArrayList<>();
+		}
+		Query query = em.createNamedQuery("ProgramDetail.getAnalysisData")
+				.setParameter("periodid", periodId);	
+		List<Object[]> rows = getResultList(query); 
+		
+		List<ProgramAnalysis> list = new ArrayList<>();
+		for(Object[] row: rows){
+			int i=0;
+			Object value=null;
+			Long id= (value=row[i++])==null? null: new Long(value.toString());
+			String name = (value=row[i++])==null? null: value.toString();
+			String description=(value=row[i++])==null? null: value.toString();
+			Double budgetAmount=(value=row[i++])==null? null: new Double(value.toString()); //Total budget amount (accumulation of source of funds)
+			Double actualAmount=(value=row[i++])==null? null: new Double(value.toString()); //Actual amount spent
+			Double commitedAmount=(value=row[i++])==null? null: new Double(value.toString());
+			Double totalAllocation=(value=row[i++])==null? null: new Double(value.toString());
+			
+			ProgramAnalysis analysis = new ProgramAnalysis(id, name, description, budgetAmount, actualAmount, commitedAmount, totalAllocation);
+			list.add(analysis);
+		}
+		return list;
 	}
 }

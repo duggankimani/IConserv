@@ -152,6 +152,7 @@ public class PieChart extends Composite{
 
 	public void setData(List<Data> data){
 		store.addAll(data);
+		chart.redrawChart();
 	}
 	
 	public void setData(List<Data> data, List<String> colors){

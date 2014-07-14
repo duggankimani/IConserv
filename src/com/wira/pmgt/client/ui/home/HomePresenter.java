@@ -321,6 +321,7 @@ public class HomePresenter extends
 				public void processResult(HomeReportsPresenter reportResponse) {
 					setInSlot(ACTIVITIES_SLOT, reportResponse);
 					getView().setSelectedTab("Reports");
+					reportResponse.loadData();
 				}
 			});
 

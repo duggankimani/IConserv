@@ -16,7 +16,6 @@ import com.wira.pmgt.client.ui.programs.ProgramsPresenter;
 import com.wira.pmgt.client.ui.util.StringUtils;
 import com.wira.pmgt.server.dao.ProgramDaoImpl;
 import com.wira.pmgt.server.dao.biz.model.Fund;
-import com.wira.pmgt.server.dao.biz.model.FundAllocation;
 import com.wira.pmgt.server.dao.biz.model.Period;
 import com.wira.pmgt.server.dao.biz.model.ProgramAccess;
 import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
@@ -34,13 +33,14 @@ import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.Value;
 import com.wira.pmgt.shared.model.form.Field;
 import com.wira.pmgt.shared.model.form.Form;
-import com.wira.pmgt.shared.model.form.FormModel;
 import com.wira.pmgt.shared.model.form.Property;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
+import com.wira.pmgt.shared.model.program.ProgramAnalysis;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
+import com.wira.pmgt.shared.model.program.ProgramStatus;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 import com.wira.pmgt.shared.model.program.ProgramTaskForm;
 import com.wira.pmgt.shared.model.program.TargetAndOutcomeDTO;
@@ -118,7 +118,7 @@ public class ProgramDaoHelper {
 						
 			Set<ProgramFund> childFunds =  program.getSourceOfFunds();
 			hasFunds = childFunds!=null && !childFunds.isEmpty();
-			for(ProgramFund childFund: childFunds){
+			for(ProgramFund childFund: childFunds){					
 				if(fundSources.contains(childFund.getFund())){
 					continue;
 				}else{
@@ -128,7 +128,7 @@ public class ProgramDaoHelper {
 					programFund.setFund(childFund.getFund());
 					programFund.setProgramDetail(parent);
 					dao.save(programFund);
-				}				
+				}	
 			}
 			
 		}
@@ -804,9 +804,9 @@ public class ProgramDaoHelper {
 					}
 				}
 				
-				Number num = (Number)val;//Actual thus far				
-				if(programFund.getAllocation()!=null)
-					programFund.getAllocation().setActual(num.doubleValue());
+				Number num = (Number)val;//Actual thus far
+				programFund.setActualAmount(num.doubleValue());
+				programFund.resetCommited();
 			}
 		}
 		
@@ -853,6 +853,15 @@ public class ProgramDaoHelper {
 		List<ProgramTaskForm> taskForms = dao.getTaskFormsForProgram(programId);
 		
 		return taskForms;
+	}
+
+	public static List<ProgramAnalysis> getAnalysisData(Long periodId) {
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		if(periodId==null){
+			periodId = dao.getActivePeriod()==null? null: dao.getActivePeriod().getId();
+		}
+		
+		return dao.getAnalysisData(periodId);
 	}
 
 //	private static ProgramSummary getSummary(ProgramDetail detail) {

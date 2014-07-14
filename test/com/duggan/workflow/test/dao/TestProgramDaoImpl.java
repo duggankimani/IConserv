@@ -20,6 +20,7 @@ import com.wira.pmgt.shared.model.ParticipantType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.UserGroup;
+import com.wira.pmgt.shared.model.program.ProgramAnalysis;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 import com.wira.pmgt.shared.model.program.ProgramTaskForm;
 
@@ -35,6 +36,12 @@ public class TestProgramDaoImpl {
 	}
 	
 	@Test
+	public void getGetAnalysisData(){
+		List<ProgramAnalysis> data = ProgramDaoHelper.getAnalysisData(null);
+		Assert.assertNotSame(0, data.size());
+	}
+	
+	@Ignore
 	public void getTaskForms(){
 		List<ProgramTaskForm> forms = dao.getTaskFormsForProgram(53L);
 		Assert.assertNotSame(0, forms.size());

@@ -20,7 +20,7 @@ public class ProgramSummary implements Serializable {
 	private Long parentId; 
 	private Date startDate;
 	private Date endDate; 
-	private Long programId; //Parent Program ID
+	private Long programId; //Main Parent Program ID
 	
 	public ProgramSummary(){}
 	

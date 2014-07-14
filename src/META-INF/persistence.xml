@@ -52,7 +52,6 @@ http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistenc
 		<class>com.wira.pmgt.server.dao.model.LocalAttachment</class>
 		<class>com.wira.pmgt.server.dao.model.ProcessDefModel</class>
 		<class>com.wira.pmgt.server.dao.model.ADKeyValuePair</class>
-		<class>com.wira.pmgt.server.dao.biz.model.FundAllocation</class>
 
 		<!-- Async Executor Classes -->
 		<class>com.wira.pmgt.server.executor.entities.RequestInfo</class>
