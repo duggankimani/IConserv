@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -41,7 +42,10 @@ public class ProgramsView extends ViewImpl implements
 
 	@UiField
 	ActionLink aProgram;
-
+	
+	@UiField
+	ActionLink aDeleteProgram;
+	
 	@UiField
 	HTMLPanel divMainContainer;
 
@@ -174,6 +178,7 @@ public class ProgramsView extends ViewImpl implements
 		show(aBack, false);
 		show(aDetail, false);
 		show(aAssign, false);
+		show(aDeleteProgram, false);
 
 		aBack.addClickHandler(new ClickHandler() {
 			@Override
@@ -363,6 +368,22 @@ public class ProgramsView extends ViewImpl implements
 			}
 		}
 	}
+	
+	@Override
+	public void removeTab(Long id) {
+		int size = listPanel.getWidgetCount();
+		for (int i = 0; i < size; i++) {
+			BulletPanel li = (BulletPanel) listPanel.getWidget(i);
+
+			Anchor a = (Anchor) li.getWidget(0);
+			String href = "#home;page=activities;activity=" + id;
+			
+			if(a.getHref().endsWith(href)){
+				//hide this
+				li.getElement().getStyle().setDisplay(Display.NONE);
+			}
+		}
+	}
 
 	@Override
 	public HasClickHandlers getNewObjectiveLink() {
@@ -406,8 +427,10 @@ public class ProgramsView extends ViewImpl implements
 		show(aNewActivity, false);
 		show(aNewTask, false);
 		show(aEdit, true);
+		show(aDeleteProgram, isRowData);
 		show(aAssign, isRowData);
 		show(aDetail, isRowData);
+		
 
 		if (type == ProgramDetailType.PROGRAM) {
 			show(aNewOutcome, !isRowData);
@@ -415,6 +438,7 @@ public class ProgramsView extends ViewImpl implements
 			// Program can be selected from the SummaryTab == isRowData
 			// or When A Program Tab e.g Wildlife Program is selected
 			show(aEdit, AppContext.isCurrentUserAdmin());
+			show(aDeleteProgram, AppContext.isCurrentUserAdmin());
 		} else if (type == ProgramDetailType.OBJECTIVE) {
 			show(aAssign, false);
 		} else if (type == ProgramDetailType.OUTCOME) {
@@ -430,6 +454,7 @@ public class ProgramsView extends ViewImpl implements
 			show(aAssign, false);
 			show(aProgram, AppContext.isCurrentUserAdmin());
 			show(aEdit, false);
+			show(aDeleteProgram, false);
 		}
 	}
 
@@ -454,6 +479,10 @@ public class ProgramsView extends ViewImpl implements
 
 	public HasClickHandlers getDetailButton() {
 		return aDetail;
+	}
+	
+	public HasClickHandlers getDeleteButton(){
+		return aDeleteProgram;
 	}
 
 	@Override
@@ -533,4 +562,5 @@ public class ProgramsView extends ViewImpl implements
 		}
 
 	}
+
 }

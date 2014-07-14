@@ -20,6 +20,7 @@ import com.gwtplatform.mvp.client.proxy.RevealContentHandler;
 import com.wira.pmgt.client.place.NameTokens;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.AppManager;
+import com.wira.pmgt.client.ui.OnOptionSelected;
 import com.wira.pmgt.client.ui.OptionControl;
 import com.wira.pmgt.client.ui.assign.AssignActivityPresenter;
 import com.wira.pmgt.client.ui.component.Dropdown;
@@ -34,6 +35,7 @@ import com.wira.pmgt.client.ui.events.CreateProgramEvent;
 import com.wira.pmgt.client.ui.events.LoadAlertsEvent;
 import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent;
 import com.wira.pmgt.client.ui.events.ProcessingEvent;
+import com.wira.pmgt.client.ui.events.ProgramDeletedEvent;
 import com.wira.pmgt.client.ui.events.ProgramDetailSavedEvent;
 import com.wira.pmgt.client.ui.events.ProgramsReloadEvent;
 import com.wira.pmgt.client.ui.events.ProgramsReloadEvent.ProgramsReloadHandler;
@@ -50,12 +52,14 @@ import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.requests.AssignTaskRequest;
 import com.wira.pmgt.shared.requests.CreateProgramRequest;
+import com.wira.pmgt.shared.requests.DeleteProgramRequest;
 import com.wira.pmgt.shared.requests.GetFundsRequest;
 import com.wira.pmgt.shared.requests.GetPeriodsRequest;
 import com.wira.pmgt.shared.requests.GetProgramsRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
 import com.wira.pmgt.shared.responses.AssignTaskResponse;
 import com.wira.pmgt.shared.responses.CreateProgramResponse;
+import com.wira.pmgt.shared.responses.DeleteProgramResponse;
 import com.wira.pmgt.shared.responses.GetFundsResponse;
 import com.wira.pmgt.shared.responses.GetPeriodsResponse;
 import com.wira.pmgt.shared.responses.GetProgramsResponse;
@@ -81,6 +85,8 @@ public class ProgramsPresenter extends
 		HasClickHandlers getNewTaskLink();
 
 		HasClickHandlers getEditLink();
+		
+		HasClickHandlers getDeleteButton();
 
 		void setData(List<IsProgramDetail> programs);
 
@@ -116,6 +122,8 @@ public class ProgramsPresenter extends
 		void selectTab(Long l);
 
 		void setMiddleHeight();
+
+		void removeTab(Long id);
 	}
 
 	@Inject
@@ -236,6 +244,25 @@ public class ProgramsPresenter extends
 				fireEvent(new CreateProgramEvent(null));
 			}
 
+		});
+		
+		getView().getDeleteButton().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				final IsProgramDetail program = (selected != null)? selected : detail;
+				AppManager.showPopUp("Delete "+program.getType().getDisplayName(), 
+						"Do you want to delete "+program.getType().getDisplayName()+" '"+program.getName()+"'",
+						new OnOptionSelected() {
+							
+							@Override
+							public void onSelect(String name) {
+								if(name.equals("Yes")){
+									delete(program.getId());
+								}
+							}
+						}, "Cancel","Yes");
+			}
 		});
 
 		getView().getNewOutcome().addClickHandler(new ClickHandler() {
@@ -470,6 +497,51 @@ public class ProgramsPresenter extends
 				});
 				
 	}
+	
+	public void delete(Long programId){
+		requestHelper.execute(new DeleteProgramRequest(programId), new TaskServiceCallback<DeleteProgramResponse>() {
+			@Override
+			public void processResult(DeleteProgramResponse aResponse) {
+				//refresh
+				IsProgramDetail program = (selected != null)? selected : detail;
+				afterDelete(program.getId(), program.getParentId());
+				
+				if(program.getType()==ProgramDetailType.PROGRAM){
+					//remove Program Tab
+					getView().removeTab(program.getId());
+				}
+				
+				if(selected!=null){
+					ProgramsPresenter.this.selected = null;
+					getView().setSelection(detail==null ? null : detail.getType());
+				}else if(detail!=null){
+					ProgramsPresenter.this.detail=null;
+					getView().setSelection(null);
+				}
+				
+			}
+		});
+	}
+
+	protected void afterDelete(Long id, final Long parentId) {
+		
+		//reload parent
+		if(parentId!=null){
+			MultiRequestAction requests = new MultiRequestAction();
+			requests.addRequest(new GetProgramsRequest(parentId, false, false));		
+			requestHelper.execute(requests, 
+					new TaskServiceCallback<MultiRequestActionResult>() {
+				@Override
+				public void processResult(MultiRequestActionResult aResponse) {
+					IsProgramDetail parent = ((GetProgramsResponse)(aResponse.get(0))).getSingleResult();
+					fireEvent(new ProgramDetailSavedEvent(parent,false,false));
+				}
+			});
+		}
+		
+		fireEvent(new ProgramDeletedEvent(id));
+		
+	}
 
 	protected void afterSave(Long saveActivityId, final Long parentId, final boolean isNew) {
 		MultiRequestAction requests = new MultiRequestAction();
@@ -494,6 +566,8 @@ public class ProgramsPresenter extends
 			}
 		});
 	}
+	
+	
 
 	public void loadData(final Long activityId) {
 		loadData(activityId, programDetailId);
@@ -737,10 +811,5 @@ public class ProgramsPresenter extends
 		setInSlot(FILTER_SLOT, filterPresenter);
 		getView().setMiddleHeight();
 	}
-	@Override
-	protected void onReveal() {
-		super.onReveal();
-		//System.err.println(">>>>On reveal called");
-		//getView().setMiddleHeight();
-	}
+	
 }

@@ -20,7 +20,9 @@ import com.wira.pmgt.shared.model.ParticipantType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.UserGroup;
+import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.ProgramAnalysis;
+import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 import com.wira.pmgt.shared.model.program.ProgramTaskForm;
 
@@ -35,7 +37,25 @@ public class TestProgramDaoImpl {
 		dao= DB.getProgramDaoImpl();
 	}
 	
+	@Ignore
+	public void save(){
+		IsProgramDetail detail = new ProgramDTO();
+		detail.setName("Test");
+		detail.setDescription("Test");
+		detail.setType(ProgramDetailType.PROGRAM);
+		detail.setPeriod(ProgramDaoHelper.getActivePeriod());
+		ProgramDaoHelper.save(detail);
+		
+	}
+	
 	@Test
+	public void delete(){
+		Long programId=48L;
+		
+		ProgramDaoHelper.delete(programId);
+	}
+	
+	@Ignore
 	public void getGetAnalysisData(){
 		List<ProgramAnalysis> data = ProgramDaoHelper.getAnalysisData(null);
 		Assert.assertNotSame(0, data.size());
