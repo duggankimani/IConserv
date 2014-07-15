@@ -53,7 +53,7 @@ public class CreateProgramView extends PopupViewImpl implements
 	@UiField HasClickHandlers btnSave;
 	@UiField HasClickHandlers btnCancel;
 	@UiField DropDownList<PeriodDTO> lstPeriod;
-	@UiField AutoCompleteField<UserGroup> autoComplete;
+	@UiField AutoCompleteField<IsProgramDetail> autoComplete;
 	@UiField AggregationGrid gridView;
 	@UiField ActionLink imgAdd;
 	@UiField ActionLink btnEditPeriod;
@@ -119,6 +119,7 @@ public class CreateProgramView extends PopupViewImpl implements
 		program.setParentId(null);
 		PeriodDTO period = lstPeriod.getValue();
 		program.setPeriod(lstPeriod.getValue());
+		program.setProgramOutcomes(autoComplete.getSelectedItems());
 		if(period!=null){
 			program.setEndDate(period.getEndDate());
 			program.setStartDate(period.getStartDate());
@@ -187,11 +188,6 @@ public class CreateProgramView extends PopupViewImpl implements
 			}
 		});
 		lstPeriod.setItems(periods);
-	}
-
-	@Override
-	public void setGroups(List<UserGroup> groups) {
-		autoComplete.setValues(groups);
 	}
 	
 	DataMapper programFundMapper = new DataMapper() {
@@ -287,6 +283,13 @@ public class CreateProgramView extends PopupViewImpl implements
 	public List<PeriodDTO> getPeriods() {
 
 		return lstPeriod.values();
+	}
+	
+	@Override
+	public void setObjectives(List<IsProgramDetail> objectives) {
+		if(objectives!=null){
+			autoComplete.setValues(objectives);
+		}
 	}
 
 }

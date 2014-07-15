@@ -154,10 +154,13 @@ public class ProgramsTableRow extends RowWidget implements
 					&& !activity.getProgramOutcomes().isEmpty()) {
 				setHasChildren(this.showChildren);
 			}
-			divRowCaret
-					.setVisible(activity.getType() == ProgramDetailType.PROGRAM &&
-							(activity.getProgramOutcomes()!=null) 
-							&& (activity.getProgramOutcomes().size() > 0));
+			
+			if(activity.getType() == ProgramDetailType.PROGRAM){
+				divRowCaret
+				.setVisible((activity.getProgramOutcomes()!=null) 
+						&& (activity.getProgramOutcomes().size() > 0));
+			}
+			
 		}
 		
 		// Bind Row to Table
