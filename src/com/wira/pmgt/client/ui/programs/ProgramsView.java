@@ -241,7 +241,7 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	public void createDefaultTabs() {
-		createTab("Objectives", -1, true);
+		createTab("Goals", -1, true);
 		createTab("Summary", 0, true);
 	}
 

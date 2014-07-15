@@ -709,7 +709,7 @@ public class ProgramsPresenter extends
 								getView().setData(response.getPrograms());
 							}
 							getView().setSelection(null);
-							getView().selectTab(0L);
+							getView().selectTab(typeToLoad==ProgramDetailType.OBJECTIVE? -1:0L);
 						}
 
 						if (programDetailId != null) {
