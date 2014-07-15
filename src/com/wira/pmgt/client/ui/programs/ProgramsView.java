@@ -28,7 +28,6 @@ import com.wira.pmgt.client.ui.component.ActionLink;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
 import com.wira.pmgt.client.ui.component.Dropdown;
-import com.wira.pmgt.client.ui.util.NumberUtils;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
@@ -171,9 +170,6 @@ public class ProgramsView extends ViewImpl implements
 		aRight.addClickHandler(clickHandler);
 		aLeft.addClickHandler(clickHandler);
 
-		// BreadCrumbItem item = headerContainer.createCrumb("Home", "Home", 0L,
-		// false);
-		// crumbContainer.add(item);
 
 		show(aBack, false);
 		show(aDetail, false);
@@ -333,8 +329,10 @@ public class ProgramsView extends ViewImpl implements
 				// select tab
 				selectTab(singleResult.getId());
 				headerContainer.setText(singleResult.getName());
+				headerContainer.showBudgets(true);
 				setData(singleResult.getChildren());
 			} else {
+				headerContainer.showBudgets(false);
 				setData(Arrays.asList(singleResult));
 			}
 
@@ -553,7 +551,6 @@ public class ProgramsView extends ViewImpl implements
 	@Override
 	public void setInSlot(Object slot, Widget content) {
 		if (slot == FILTER_SLOT) {
-			//System.err.println(">>>Filter Presenter");
 			divFilterBox.clear();
 			if (content != null) {
 				divFilterBox.add(content);

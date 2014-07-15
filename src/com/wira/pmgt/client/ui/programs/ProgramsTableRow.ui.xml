@@ -2,7 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.wira.pmgt.client.ui.component">
 	<g:HTMLPanel styleName="tr" ui:field="row">
-		<g:HTMLPanel styleName="td" ui:field="divCheckbox" width="40%">
+		<g:HTMLPanel styleName="td" ui:field="divCheckbox" width="30%">
 			<g:HTMLPanel styleName="span4 caret-container">
 				<d:ActionLink ui:field="divRowCaret"
 					styleName="icon-caret-right helper-font-16 muted"></d:ActionLink>

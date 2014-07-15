@@ -239,10 +239,12 @@ public class ProgramsTableRow extends RowWidget implements
 		divName.getElement().setInnerText(activity.getName());
 
 		if (activity.getStartDate() != null && activity.getEndDate() != null)
-			divName.setTitle(DateUtils.HALFDATEFORMAT.format(activity
-					.getStartDate())
-					+ " - "
-					+ DateUtils.HALFDATEFORMAT.format(activity.getEndDate()));
+//			divName.setTitle(DateUtils.HALFDATEFORMAT.format(activity
+//					.getStartDate())
+//					+ " - "
+//					+ DateUtils.HALFDATEFORMAT.format(activity.getEndDate()));
+			
+			divName.setTitle(activity.getDescription());
 
 		if (isSummaryRow && activity.getType() == ProgramDetailType.PROGRAM) {
 			// Summary table

@@ -67,6 +67,7 @@ public class CreateProgramView extends PopupViewImpl implements
 		widget = binder.createAndBindUi(this);
 		
 		btnEditPeriod.setVisible(false);
+		txtDescription.getElement().setAttribute("rows", "5");
 		//imgAdd.setResource(ImageResources.IMAGES.add());
 		
 		int[] position=AppManager.calculatePosition(5, 50);

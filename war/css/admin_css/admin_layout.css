@@ -315,7 +315,7 @@
 /*--content-body||Users and Groups--*/
 .content-body .tab-content {
 	overflow-x: hidden;
-	overflow-y: hidden;
+	overflow-y: auto;
 	height: 392px;
 }
 
