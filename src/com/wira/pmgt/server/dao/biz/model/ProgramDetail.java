@@ -46,8 +46,13 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 	@NamedQuery(name="ProgramDetail.findByType", 
 			query="SELECT distinct(p) FROM ProgramDetail p left join p.programAccess access " +
 					"where (true=:isCurrentUserAdmin or (access.userId=:userId or access.groupId in (:groupIds))) " +
-					"and p.isActive=:isActive and p.type=:type and p.period=:period order by p.name"), 
+					"and p.isActive=:isActive and p.type=:type order by p.name"), 
 	
+	@NamedQuery(name="ProgramDetail.findByTypeAndPeriod", 
+	query="SELECT distinct(p) FROM ProgramDetail p left join p.programAccess access " +
+			"where (true=:isCurrentUserAdmin or (access.userId=:userId or access.groupId in (:groupIds))) " +
+			"and p.isActive=:isActive and p.type=:type and p.period=:period order by p.name"), 
+
 	@NamedQuery(name="ProgramDetail.findAll", query="SELECT distinct(p) FROM ProgramDetail p left join p.programAccess access " +
 			"where (true=:isCurrentUserAdmin or (access.userId=:userId or access.groupId in (:groupIds))) " +
 			"and p.isActive=:isActive and p.period=:period " +
@@ -191,21 +196,43 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	@OneToMany(mappedBy="parent", cascade=CascadeType.ALL)
 	private Set<ProgramDetail> children = new HashSet<>();
 	
+	
+	
 	/**
-	 * Objectives and Outcomes/Activities have a many to Many Relationship
+	 * A Collection of outcomes for each program
 	 * 
-	 * Also Objectives belong to a single Program
 	 */
 	@ManyToMany
-	@JoinTable(name="programobjective",
-			joinColumns=@JoinColumn(name="programdetailid"),
-			inverseJoinColumns=@JoinColumn(name="objectiveId")
+	@JoinTable(name="programoutcome",
+			joinColumns=@JoinColumn(name="programid"),
+			inverseJoinColumns=@JoinColumn(name="outcomeId")
 			)
-	private Set<ProgramDetail> objectives = new HashSet<>();
+	private Set<ProgramDetail> programOutcomes = new HashSet<>();
 	
-	@ManyToMany(mappedBy="objectives")
-	private Set<ProgramDetail> outcomes = new HashSet<>();
+	/**
+	 * A collection of programs under a given outcome (Reverse reference of programOutcomes)
+	 * Given an outcome, this is the set of programs that have this outcome.
+	 */
+	@ManyToMany(mappedBy="programOutcomes")
+	private Set<ProgramDetail> outcomePrograms = new HashSet<>();
 	
+	
+	
+	/**
+	 * An activity in a program is linked to one programOutcome, One outcome to many activities
+	 */
+	@OneToMany
+	private Set<ProgramDetail> outcomeActivities = new HashSet<>();	
+	
+	/**
+	 * Many activities to one outcome (Reverse Reference)
+	 */
+	@ManyToOne
+	@JoinColumn(name="outcomeid", referencedColumnName="id", nullable=true)
+	private ProgramDetail activityOutcome;
+	
+	
+
 	private Long processInstanceId;
 	
 	@OneToMany(mappedBy="programDetail",fetch=FetchType.LAZY)
@@ -358,20 +385,24 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 		}
 	}
 
-	public Set<ProgramDetail> getObjectives() {
-		return objectives;
+	public Set<ProgramDetail> getProgramOutcomes() {
+		return programOutcomes;
 	}
 
-	public void setObjectives(Set<ProgramDetail> objs) {
-		objectives.clear();
-		outcomes.remove(this);
+	public void setProgramOutcomes(Collection<ProgramDetail> outcomesForProgram) {
+		programOutcomes.clear();
+		outcomePrograms.remove(this);
 		
-		if(objs!=null){
-			for(ProgramDetail detail: objs){
-				objectives.add(detail);
-				outcomes.add(this);
+		if(outcomesForProgram!=null){
+			for(ProgramDetail detail: outcomesForProgram){
+				programOutcomes.add(detail);
+				outcomePrograms.add(this);
 			}
 		}
+	}
+
+	public void setActivityOutcome(ProgramDetail outcome){
+		this.activityOutcome = outcome;
 	}
 
 	@Override
@@ -474,6 +505,10 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 
 	public Double getCommitedAmount() {
 		return commitedAmount;
+	}
+
+	public ProgramDetail getActivityOutcome() {
+		return activityOutcome;
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.wira.pmgt.shared.model.program;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -22,13 +23,14 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 	private List<TargetAndOutcomeDTO> targetsAndOutcomes;
 	private PeriodDTO period;
 	private List<IsProgramDetail> children;
-	private List<IsProgramDetail> objectives; //Objectives of an outcome
 	private List<ProgramSummary> programSummary; //Used to build breadcrumb 
+	private List<IsProgramDetail> programOutcomes;
 	private List<HTUser> assignedUsers;
 	private List<UserGroup> assignedGroups;
 	private Long documentId;
 	private Double progress = 0.0; 
 	private Double rating;
+	private Long activityOutcomeId;
 	
 	public Long getDocumentId() {
 		return documentId;
@@ -95,14 +97,6 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 
 	public void setProgramSummary(List<ProgramSummary> programSummary) {
 		this.programSummary = programSummary;
-	}
-
-	public List<IsProgramDetail> getObjectives() {
-		return objectives;
-	}
-
-	public void setObjectives(List<IsProgramDetail> objectives) {
-		this.objectives = objectives;
 	}
 	
 	@Override
@@ -174,5 +168,30 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 		IsProgramDetail other = (IsProgramDetail)obj;
 		
 		return getId()==other.getId();
+	}
+
+	public Long getActivityOutcomeId() {
+		return activityOutcomeId;
+	}
+
+	public void setActivityOutcomeId(Long activityOutcomeId) {
+		this.activityOutcomeId = activityOutcomeId;
+	}
+
+	public List<IsProgramDetail> getProgramOutcomes() {
+		return programOutcomes;
+	}
+
+	public void setProgramOutcomes(List<IsProgramDetail> programOutcomes) {
+		this.programOutcomes = programOutcomes;
+	}
+	
+
+	public void addProgramOutcomes(IsProgramDetail programDTO) {
+		if(programOutcomes==null){
+			programOutcomes = new ArrayList<IsProgramDetail>();
+		}
+		
+		programOutcomes.add(programDTO);
 	}
 }

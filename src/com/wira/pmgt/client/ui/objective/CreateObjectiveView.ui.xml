@@ -37,6 +37,13 @@
 					<span class="mandatory" title="Required Field">*</span>
 				</div>
 			</div>
+			
+			<div class="control-group" ui:field="divTargetsAndIndicators">
+				<div class="control-label">Targets And Indicators:</div>
+				<div class="controls">
+					<grid:AggregationGrid ui:field="gridTargets"></grid:AggregationGrid>
+				</div>
+			</div>
 
 		</fieldset>
 	</g:HTMLPanel>

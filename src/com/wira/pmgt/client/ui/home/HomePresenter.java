@@ -264,7 +264,7 @@ public class HomePresenter extends
 			documentId = Long.parseLong(documentSearchID);
 		}
 
-		String page = request.getParameter("page", null);
+		final String page = request.getParameter("page", null);
 
 		if (page != null && page.equals("profile")) {
 			Window.setTitle("Profile");
@@ -276,7 +276,7 @@ public class HomePresenter extends
 				}
 			});
 
-		} else if (page != null && page.equals("activities")) {
+		} else if (page != null && (page.equals("activities") || page.equals("objectives"))) {
 			String project = request.getParameter("activity", "0");
 			String detail = "0";
 			if (project.contains("d")) {
@@ -287,11 +287,16 @@ public class HomePresenter extends
 
 			final Long activityId = new Long(project);
 			final Long detailId = new Long(detail);
-			Window.setTitle("Activities");
+			Window.setTitle(page.equals("activities")?"Activities":"Objectives");
 			activitiesFactory.get(new ServiceCallback<ProgramsPresenter>() {
 				@Override
 				public void processResult(ProgramsPresenter aResponse) {
-					aResponse.loadData(activityId, detailId);
+					if(page.equals("activities")){
+						aResponse.loadData(activityId, detailId);
+					}else{
+						aResponse.loadObjectives();
+					}
+					
 					setInSlot(ACTIVITIES_SLOT, aResponse);
 					getView().setSelectedTab("Activities");
 				}

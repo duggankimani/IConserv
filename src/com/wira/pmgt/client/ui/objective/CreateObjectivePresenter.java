@@ -30,7 +30,6 @@ public class CreateObjectivePresenter extends
 	
 	@Inject DispatchAsync requestHelper;
 	IsProgramDetail objective;
-	Long parentId = null;
 	
 	@Inject
 	public CreateObjectivePresenter(final EventBus eventBus, final ICreateObjectiveView view) {
@@ -44,33 +43,15 @@ public class CreateObjectivePresenter extends
 			objective.setName(viewObjective.getName());
 			return objective;
 		}else{
-			viewObjective.setParentId(parentId);
 			return viewObjective;
 		}
-	}
-
-	public void load(Long parentId) {
-		this.parentId = parentId;
-		assert parentId!=null;
-		
-		MultiRequestAction action = new MultiRequestAction();
-		action.addRequest(new GetProgramsRequest(parentId, false));
-		requestHelper.execute(action, new TaskServiceCallback<MultiRequestActionResult>() {
-			@Override
-			public void processResult(MultiRequestActionResult aResponse) {				
-				
-				GetProgramsResponse response = (GetProgramsResponse)aResponse.get(0);
-				IsProgramDetail parent = response.getSingleResult();
-				getView().setPeriod(parent.getPeriod());
-				getView().setBreadCrumbs(parent.getProgramSummary());
-				getView().setObjective(objective);
-			}
-		});
 	}
 
 	public void setObjective(IsProgramDetail selected) {
 		this.objective = selected;
 		getView().clear();
+		getView().setObjective(objective);
+		
 	}
 
 }

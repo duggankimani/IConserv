@@ -40,7 +40,7 @@
 			<div class="control-group" ui:field="divObjectives">
 				<div class="control-label">Objectives:</div>
 				<div class="controls">
-					<a:AutoCompleteField ui:field="objectivesAutoComplete" />
+					<a:AutoCompleteField ui:field="outcomesAutoComplete" />
 				</div>
 			</div>
 						

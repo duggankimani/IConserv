@@ -150,13 +150,14 @@ public class ProgramsTableRow extends RowWidget implements
 				// Only show level 0 and level 1 items - Hide all the rest
 				show(false);
 				setHasChildren(false);
-			} else if (activity.getObjectives() != null
-					&& !activity.getObjectives().isEmpty()) {
+			} else if (activity.getProgramOutcomes() != null
+					&& !activity.getProgramOutcomes().isEmpty()) {
 				setHasChildren(this.showChildren);
 			}
 			divRowCaret
-					.setVisible(activity.getType() == ProgramDetailType.PROGRAM
-							&& activity.getObjectives().size() > 0);
+					.setVisible(activity.getType() == ProgramDetailType.PROGRAM &&
+							(activity.getProgramOutcomes()!=null) 
+							&& (activity.getProgramOutcomes().size() > 0));
 		}
 		
 		// Bind Row to Table
@@ -481,8 +482,8 @@ public class ProgramsTableRow extends RowWidget implements
 				.getChildren().size();
 		if (programId == 0) {
 			// summary table
-			childCount = activity.getObjectives() == null ? 0 : activity
-					.getObjectives().size();
+			childCount = activity.getProgramOutcomes() == null ? 0 : activity
+					.getProgramOutcomes().size();
 		}
 
 		setHasChildren(isShowChildren);
