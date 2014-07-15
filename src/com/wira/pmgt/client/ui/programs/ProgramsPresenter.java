@@ -340,12 +340,12 @@ public class ProgramsPresenter extends
 			if (edit) {
 				// we are editing the selected item
 				createTask.setActivity(activity);
-				createTask.load(activity.getParentId());
+				createTask.load(activity.getParentId(),null);
 			} else {
 				// selected item is the parent - We are creating a new activity
 				// based on selected item
 				createTask.setActivity(null);
-				createTask.load(activity.getId());
+				createTask.load(activity.getId(),null);
 			}
 
 			AppManager.showPopUp(edit ? "Edit Task" : "Create Task",
@@ -372,13 +372,16 @@ public class ProgramsPresenter extends
 			if (edit) {
 				// we are editing the selected item
 				createActivity.setActivity(activity);
-				createActivity.load(activity.getParentId());
+				createActivity.load(activity.getParentId(),activity.getActivityOutcomeId());
 			} else {
 				// selected item is the parent - We are creating a new activity
 				// based on selected item
 				// User selected an outcome & is now creating a new Activity
 				createActivity.setActivity(null);
-				createActivity.load(activity.getId());
+				if(detail!=null){
+					createActivity.load(detail.getId(),selected.getId());// Program is the parent, not the selected Outcome
+				}
+				
 			}
 
 			AppManager.showPopUp(edit ? "Edit Activity" : "Create Activity",
@@ -602,7 +605,7 @@ public class ProgramsPresenter extends
 		MultiRequestAction action = new MultiRequestAction();
 		
 		if(typeToLoad.equals(ProgramDetailType.OBJECTIVE)){
-			GetProgramsRequest request = new GetProgramsRequest(ProgramDetailType.OBJECTIVE,false);
+			GetProgramsRequest request = new GetProgramsRequest(ProgramDetailType.OBJECTIVE,true);
 			action.addRequest(request);
 		}
 		
@@ -705,9 +708,10 @@ public class ProgramsPresenter extends
 								//This is a summary table with no program selecte
 								getView().setData(response.getPrograms());
 							}
-							getView().setSelection(typeToLoad==ProgramDetailType.OBJECTIVE? ProgramDetailType.OBJECTIVE: null,false);
+							
 							getView().selectTab(typeToLoad==ProgramDetailType.OBJECTIVE? "#home;page=objectives":
 								"#home;page=activities;activity="+0);
+							getView().setSelection(typeToLoad==ProgramDetailType.OBJECTIVE? ProgramDetailType.OBJECTIVE: null,false);
 						}
 
 						if (programDetailId != null) {

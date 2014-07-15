@@ -50,6 +50,7 @@ public class ProgramsTable extends Composite {
 		level++;
 		sort(programActivities);
 		for (IsProgramDetail activity : programActivities) {
+			System.err.println("Painting :: "+activity.getName());
 			ProgramsTableRow row = new ProgramsTableRow(activity,funds,programId,isSummaryTable, level);
 			if(activity.getId()==lastUpdatedId){
 				row.highlight();
@@ -61,12 +62,11 @@ public class ProgramsTable extends Composite {
 			if(activity.getType()==ProgramDetailType.PROGRAM){
 				//this is data for the summary tab
 				if(activity.getProgramOutcomes()!=null){
+					System.err.println("Count >> "+activity.getProgramOutcomes().size());
 					sort(activity.getProgramOutcomes());
 					setActivities(activity.getProgramOutcomes(),level);
 				}
-			}
-			
-			if(activity.getChildren()!=null && !activity.getChildren().isEmpty()){
+			}else if(activity.getChildren()!=null && !activity.getChildren().isEmpty()){
 				setActivities(activity.getChildren(),level);
 			}
 		}

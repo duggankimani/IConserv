@@ -5,7 +5,9 @@ import static com.wira.pmgt.client.ui.programs.ProgramsPresenter.FILTER_SLOT;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -119,6 +121,8 @@ public class ProgramsView extends ViewImpl implements
 	private Long programId;
 
 	protected boolean isNotDisplayed;
+
+	private boolean isCurrentPlaceObjectivesPage=false;
 
 	@Inject
 	public ProgramsView(final Binder binder) {
@@ -334,11 +338,35 @@ public class ProgramsView extends ViewImpl implements
 				selectTab(singleResult.getId());
 				headerContainer.setText(singleResult.getName());
 				headerContainer.showBudgets(true);
-				setData(singleResult.getChildren());
+				
+				if(singleResult.getType()==ProgramDetailType.PROGRAM){
+					Map<Long, IsProgramDetail> outcomeActivityMap = new HashMap<Long, IsProgramDetail>();
+					if(singleResult.getProgramOutcomes()!=null){
+						for(IsProgramDetail outcome: singleResult.getProgramOutcomes()){
+							outcomeActivityMap.put(outcome.getId(), outcome);
+						}	
+						
+						List<IsProgramDetail> activities = singleResult.getChildren();
+						if(activities!=null){
+							for(IsProgramDetail activity: activities){
+								if(outcomeActivityMap.get(activity.getActivityOutcomeId())!=null){
+									outcomeActivityMap.get(activity.getActivityOutcomeId()).addChild(activity);
+								}
+							}
+						}
+					}
+					setData(singleResult.getProgramOutcomes());
+				}else{
+					setData(singleResult.getChildren());
+				}
+				
+				
 			} else {
 				headerContainer.showBudgets(false);
 				setData(Arrays.asList(singleResult));
 			}
+			
+			
 
 		} else {
 			setData(Arrays.asList(singleResult));
@@ -359,6 +387,8 @@ public class ProgramsView extends ViewImpl implements
 	}
 	
 	public void selectTab(String href) {
+		isCurrentPlaceObjectivesPage=href.equals("#home;page=objectives");
+		
 		int size = listPanel.getWidgetCount();
 		for (int i = 0; i < size; i++) {
 			BulletPanel li = (BulletPanel) listPanel.getWidget(i);
@@ -429,22 +459,21 @@ public class ProgramsView extends ViewImpl implements
 	public void setSelection(ProgramDetailType type, boolean isRowData) {
 		show(aProgram, false);
 		show(aNewOutcome, false);
-		show(aNewObjective, AppContext.isCurrentUserAdmin());
+		show(aNewObjective, isCurrentPlaceObjectivesPage && AppContext.isCurrentUserAdmin() && !isRowData);
 		show(aNewActivity, false);
 		show(aNewTask, false);
 		show(aEdit, true);
 		show(aDeleteProgram, isRowData);
-		show(aAssign, isRowData);
+		show(aAssign, false);
 		show(aDetail, isRowData);
 		
 
 		if (type == ProgramDetailType.PROGRAM) {
-			show(aNewOutcome, !isRowData);
-			show(aNewObjective, isRowData);
 			// Program can be selected from the SummaryTab == isRowData
 			// or When A Program Tab e.g Wildlife Program is selected
 			show(aEdit, AppContext.isCurrentUserAdmin());
 			show(aDeleteProgram, AppContext.isCurrentUserAdmin());
+			show(aAssign, isRowData);
 		} else if (type == ProgramDetailType.OBJECTIVE) {
 			show(aAssign, false);
 			show(aNewOutcome, isRowData);

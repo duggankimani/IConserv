@@ -247,6 +247,10 @@ public class CreateProgramView extends PopupViewImpl implements
 		lstPeriod.setValue(program.getPeriod());
 		btnEditPeriod.setVisible(program.getPeriod()!=null);
 		
+		if(program.getProgramOutcomes()!=null){
+			autoComplete.select(program.getProgramOutcomes());
+		}
+		
 		List<Object> lst = new ArrayList<Object>();
 		
 		Collections.sort(program.getFunding(), new Comparator<ProgramFundDTO>() {
