@@ -135,13 +135,25 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 			return getProgramDetails(period);
 		}
 		
-		Query query = em.createNamedQuery("ProgramDetail.findByType")
-				.setParameter("isCurrentUserAdmin", groups.contains("ADMIN"))
-				.setParameter("userId", user)
-				.setParameter("groupIds", groups)
-				.setParameter("type", type)
-				.setParameter("period", period)
-				.setParameter("isActive", 1);
+		Query query = null;
+		
+		if(type.equals(ProgramDetailType.OBJECTIVE)){
+			query = em.createNamedQuery("ProgramDetail.findByType")
+			.setParameter("isCurrentUserAdmin", groups.contains("ADMIN"))
+			.setParameter("userId", user)
+			.setParameter("groupIds", groups)
+			.setParameter("type", type)
+			.setParameter("isActive", 1);
+		}else{
+			query=em.createNamedQuery("ProgramDetail.findByTypeAndPeriod")
+					.setParameter("isCurrentUserAdmin", groups.contains("ADMIN"))
+					.setParameter("userId", user)
+					.setParameter("groupIds", groups)
+					.setParameter("type", type)
+					.setParameter("period", period)
+					.setParameter("isActive", 1);
+		}
+		
 		
 		return getResultList(query);
 	}

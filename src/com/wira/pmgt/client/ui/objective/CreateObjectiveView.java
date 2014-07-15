@@ -1,6 +1,10 @@
 package com.wira.pmgt.client.ui.objective;
 
+import static com.wira.pmgt.client.ui.util.StringUtils.isNullOrEmpty;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.gwt.uibinder.client.UiBinder;
@@ -14,8 +18,12 @@ import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.IssuesPanel;
+import com.wira.pmgt.client.ui.component.grid.AggregationGrid;
+import com.wira.pmgt.client.ui.component.grid.ColumnConfig;
 import com.wira.pmgt.client.ui.component.grid.DataMapper;
 import com.wira.pmgt.client.ui.component.grid.DataModel;
+import com.wira.pmgt.client.ui.util.StringUtils;
+import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
@@ -23,6 +31,9 @@ import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
+import com.wira.pmgt.shared.model.program.TargetAndOutcomeDTO;
+
+import static com.wira.pmgt.client.ui.util.StringUtils.*;
 
 public class CreateObjectiveView extends ViewImpl implements
 		CreateObjectivePresenter.ICreateObjectiveView {
@@ -37,6 +48,7 @@ public class CreateObjectiveView extends ViewImpl implements
 	@UiField TextArea txtObjective;
 	@UiField BulletListPanel crumbContainer;
 	@UiField InlineLabel spnPeriod;
+	@UiField AggregationGrid gridTargets;
 	PeriodDTO period;
 	
 	@Inject
@@ -45,11 +57,30 @@ public class CreateObjectiveView extends ViewImpl implements
 		
 		txtObjective.getElement().setAttribute("rows", "5");
 		
+		createTargetsAndIndicatorsGrid();
 	}
 
 	@Override
 	public Widget asWidget() {
 		return widget;
+	}
+	
+	private void createTargetsAndIndicatorsGrid() {
+		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
+//		ColumnConfig config = new ColumnConfig("condition", "Check", DataType.SELECTBASIC);
+//		configs.add(config);
+		
+		ColumnConfig config = new ColumnConfig("target", "Target", DataType.DOUBLE, "1000");
+		configs.add(config);
+		
+		config = new ColumnConfig("indicator", "Indicator", DataType.STRING, "Participants");
+		configs.add(config);
+		
+		config = new ColumnConfig("actual", "Outcome", DataType.DOUBLE, "1000");
+		configs.add(config);
+		
+		gridTargets.setColumnConfigs(configs);
+		gridTargets.setAutoNumber(true);
 	}
 	
 	@Override
@@ -60,18 +91,20 @@ public class CreateObjectiveView extends ViewImpl implements
 		
 		txtObjective.setValue(objective.getDescription());
 		txtObjectiveRef.setValue(objective.getName());
+		setTargetsAndOutComes(objective.getTargetsAndOutcomes());
 		setPeriod(period);
 		
 	}
 	
 	public ProgramDTO getObjective(){
-		assert period!=null;
 		ProgramDTO program = new ProgramDTO();
 		program.setDescription(txtObjective.getValue());
 		program.setName(txtObjectiveRef.getValue());
 		program.setType(ProgramDetailType.OBJECTIVE);
-		program.setPeriod(period);
-		//program.setTargetsAndOutcomes(targetsAndOutcomes);
+		//Targets and Outcomes
+		List<TargetAndOutcomeDTO> targets = gridTargets.getData(targetAndOutcomeMapper); 
+		program.setTargetsAndOutcomes(targets);
+				
 //		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
 //		program.setFunding(funding);
 //		Double totalAmount=0.0;
@@ -86,9 +119,80 @@ public class CreateObjectiveView extends ViewImpl implements
 		
 	}
 	
+	public void setTargetsAndOutComes(
+			List<TargetAndOutcomeDTO> targetsAndOutComes) {
+		Collections.sort(targetsAndOutComes, new Comparator<TargetAndOutcomeDTO>(){
+			@Override
+			public int compare(TargetAndOutcomeDTO o1, TargetAndOutcomeDTO o2) {
+				
+				return o1.getMeasure().compareTo(o2.getMeasure());
+			}
+		});
+		
+		List<Object> targets = new ArrayList<Object>();
+		
+		if(targetsAndOutComes==null || targetsAndOutComes.isEmpty()){
+			return;
+		}			
+			
+		for(TargetAndOutcomeDTO dto: targetsAndOutComes){
+			targets.add(dto);
+		}	
+		List<DataModel> models = targetAndOutcomeMapper.getDataModels(targets); 
+		gridTargets.setData(models);
+				
+	}
+	
+	DataMapper targetAndOutcomeMapper = new DataMapper() {
+		
+		@Override
+		public List<DataModel> getDataModels(List<Object> funding) {
+
+			List<DataModel> models = new ArrayList<DataModel>();
+			for(Object obj: funding){
+				TargetAndOutcomeDTO target = (TargetAndOutcomeDTO)obj;
+				DataModel model = new DataModel();
+				model.setId(target.getId());
+				model.set("target", target.getTarget());
+				model.set("indicator", target.getMeasure());
+				model.set("actual", target.getActualOutcome());
+				models.add(model);
+			}
+			
+			return models;
+		}
+		
+		@Override
+		public TargetAndOutcomeDTO getData(DataModel model) {
+
+			if(model.isEmpty()){
+				return null;
+			}
+			
+			TargetAndOutcomeDTO dto = new TargetAndOutcomeDTO();
+			dto.setId(model.getId());
+			dto.setMeasure(isNullOrEmpty(model.get("indicator"))? null: 
+					model.get("indicator").toString());
+			
+			dto.setTarget(model.get("target")==null ? null: 
+				(Double)model.get("target"));
+			
+			dto.setActualOutcome(model.get("actual")==null ? null: 
+				(Double)model.get("actual"));
+			
+			dto.setKey(StringUtils.camelCase(dto.getMeasure()));
+			return dto;
+		}
+	};
+
+	
 	@Override
 	public void setPeriod(PeriodDTO period) {
+		
 		this.period = period;
+		if(period==null){
+			return;
+		}
 		spnPeriod.setText(period.getDescription());
 	} 
 	
@@ -157,10 +261,6 @@ public class CreateObjectiveView extends ViewImpl implements
 		}
 				
 		return isValid;
-	}
-
-	boolean isNullOrEmpty(String value) {
-		return value == null || value.trim().length() == 0;
 	}
 
 	@Override

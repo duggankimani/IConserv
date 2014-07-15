@@ -120,6 +120,8 @@ public class ProgramsPresenter extends
 		void setActivePeriod(PeriodDTO period);
 
 		void selectTab(Long l);
+		
+		void selectTab(String url);
 
 		void setMiddleHeight();
 
@@ -402,14 +404,7 @@ public class ProgramsPresenter extends
 
 		case OBJECTIVE:
 			objectivePresenter
-					.setObjective((edit && activity.getType() == ProgramDetailType.OBJECTIVE) ? activity
-							: null);
-			
-			//if creating new, activity is the parent
-			final Long parentId = edit ? activity.getParentId() : activity.getId();
-			
-			objectivePresenter.load(parentId);// Parent Id Passed here
-
+					.setObjective((edit) ? activity : null);
 			AppManager.showPopUp(edit ? "Edit Objective" : "Add Objective",
 					objectivePresenter.getWidget(), new OptionControl() {
 
@@ -480,6 +475,8 @@ public class ProgramsPresenter extends
 								createProgramsResponse.getProgram().getId());
 						if(activity.getType()==ProgramDetailType.PROGRAM){
 							loadData(programId);
+						}else if(activity.getType()==ProgramDetailType.OBJECTIVE ){
+							loadData(null,null,null,ProgramDetailType.OBJECTIVE);
 						}
 
 						//Reloading information in a new request 
@@ -708,8 +705,9 @@ public class ProgramsPresenter extends
 								//This is a summary table with no program selecte
 								getView().setData(response.getPrograms());
 							}
-							getView().setSelection(null);
-							getView().selectTab(typeToLoad==ProgramDetailType.OBJECTIVE? -1:0L);
+							getView().setSelection(typeToLoad==ProgramDetailType.OBJECTIVE? ProgramDetailType.OBJECTIVE: null,false);
+							getView().selectTab(typeToLoad==ProgramDetailType.OBJECTIVE? "#home;page=objectives":
+								"#home;page=activities;activity="+0);
 						}
 
 						if (programDetailId != null) {

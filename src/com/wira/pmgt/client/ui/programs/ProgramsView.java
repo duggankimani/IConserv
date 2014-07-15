@@ -237,15 +237,19 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	public void createDefaultTabs() {
-		createTab("Goals", -1, true);
+		createTab("Goals", "#home;page=objectives", true);
 		createTab("Summary", 0, true);
 	}
 
 	public void createTab(String text, long id, boolean active) {
+		createTab(text, "#home;page=activities;activity=" + id, active);
+	}
+	
+	public void createTab(String text, String url, boolean active) {
 		BulletPanel li = new BulletPanel();
 		ActionLink a = new ActionLink(text);
 
-		a.setHref("#home;page=activities;activity=" + id);
+		a.setHref(url);
 		li.add(a);
 
 		if (active) {
@@ -351,12 +355,15 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	public void selectTab(Long id) {
+		selectTab("#home;page=activities;activity=" + id);
+	}
+	
+	public void selectTab(String href) {
 		int size = listPanel.getWidgetCount();
 		for (int i = 0; i < size; i++) {
 			BulletPanel li = (BulletPanel) listPanel.getWidget(i);
 
 			Anchor a = (Anchor) li.getWidget(0);
-			String href = "#home;page=activities;activity=" + id;
 			boolean active = a.getHref().endsWith(href);
 
 			if (active) {
@@ -422,7 +429,7 @@ public class ProgramsView extends ViewImpl implements
 	public void setSelection(ProgramDetailType type, boolean isRowData) {
 		show(aProgram, false);
 		show(aNewOutcome, false);
-		show(aNewObjective, false);
+		show(aNewObjective, AppContext.isCurrentUserAdmin());
 		show(aNewActivity, false);
 		show(aNewTask, false);
 		show(aEdit, true);
@@ -440,6 +447,7 @@ public class ProgramsView extends ViewImpl implements
 			show(aDeleteProgram, AppContext.isCurrentUserAdmin());
 		} else if (type == ProgramDetailType.OBJECTIVE) {
 			show(aAssign, false);
+			show(aNewOutcome, isRowData);
 		} else if (type == ProgramDetailType.OUTCOME) {
 			show(aNewActivity, true);
 			show(aAssign, false);
