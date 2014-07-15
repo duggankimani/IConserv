@@ -37,7 +37,7 @@
 			</g:HTMLPanel>
 		</g:HTMLPanel>
 
-		<g:HTMLPanel styleName="td" ui:field="divStatus"  width="10%">
+		<g:HTMLPanel styleName="td" ui:field="divStatus" width="10%">
 			<span ui:field="spnStatus" class="label"></span>
 		</g:HTMLPanel>
 		<g:HTMLPanel styleName="td" ui:field="divProgress" width="10%">

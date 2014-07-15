@@ -126,6 +126,8 @@ public class ProgramsPresenter extends
 		void setMiddleHeight();
 
 		void removeTab(Long id);
+
+		void setProgramId(Long programId, boolean isGoalsTable);
 	}
 
 	@Inject
@@ -597,13 +599,15 @@ public class ProgramsPresenter extends
 		programDetailId = detailId == null ? null : detailId == 0 ? null
 				: detailId;
 
-		getView().setProgramId(this.programId);
 
 		MultiRequestAction action = new MultiRequestAction();
 		
 		if(typeToLoad.equals(ProgramDetailType.OBJECTIVE)){
+			getView().setProgramId(this.programId,true);
 			GetProgramsRequest request = new GetProgramsRequest(ProgramDetailType.OBJECTIVE,false);
 			action.addRequest(request);
+		}else{
+			getView().setProgramId(this.programId);
 		}
 		
 		// List of Programs for tabs

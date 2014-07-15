@@ -569,4 +569,11 @@ public class ProgramsView extends ViewImpl implements
 
 	}
 
+	@Override
+	public void setProgramId(Long programId, boolean isGoalsTable) {
+		tblView.setGoalsTable(isGoalsTable);
+		headerContainer.setProgramId(programId);
+	}
+
+
 }
