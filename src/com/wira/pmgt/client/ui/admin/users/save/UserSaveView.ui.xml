@@ -43,7 +43,7 @@
 								<b>Username:</b>
 							</label>
 							<d:TextField ui:field="txtUserName" type="text"
-								class="input-large" placeholder="" />
+								class="input-large" placeholder="" disabled="false"/>
 						</div>
 					</div>
 					<div class="control-group">

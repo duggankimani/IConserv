@@ -1,6 +1,5 @@
 package com.wira.pmgt.client.ui.programs;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -90,11 +89,9 @@ public class ProgramHeader extends Composite {
 			spnTitle.setInnerText("Programs Summary");
 		}
 	}
-	
-	
-	
-	public void setBudget(String text){
-		spnBudget.setInnerHTML(text);
+
+	public void setBudget(String budget){
+		spnBudget.setInnerHTML(budget);
 	}
 	
 	public void setPeriodDropdown(List<PeriodDTO> periods){
@@ -197,7 +194,7 @@ public class ProgramHeader extends Composite {
 		} else {
 			spnAllocation.addClassName("text-success bold");
 		}
-		spnAllocation.setInnerText(NumberUtils.NUMBERFORMAT.format(budget-totalAllocated));
+		spnAllocation.setInnerText(NumberUtils.CURRENCYFORMAT.format(budget-totalAllocated));
 	}
 	
 	public void showBudgets(boolean show){

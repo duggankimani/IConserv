@@ -1,3 +1,4 @@
+
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
@@ -9,8 +10,9 @@
 	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
 	ui:generateLocales='default'>
 
-	<g:DialogBox text="Create Program" styleName="modal modal-document"
-		modal="true" glassEnabled="true" ui:field="popupView">
+	<g:DialogBox text="Create Program"
+		styleName="modal modal-document modal-createProgram" modal="true"
+		glassEnabled="true" ui:field="popupView">
 		<g:HTMLPanel>
 			<g:HTMLPanel ui:field="panelBody" styleName="modal-body">
 				<d:IssuesPanel ui:field="issues">
@@ -21,30 +23,34 @@
 						<div class="control-group">
 							<div class="control-label" ui:field="tdDocType">Program Name:</div>
 							<div class="controls">
-								<g:TextBox ui:field="txtName" styleName="input-large" />
+								<g:TextBox ui:field="txtName" styleName="input-xlarge" />
 							</div>
 						</div>
 
 						<div class="control-group">
 							<div class="control-label">Description:</div>
 							<div class="controls">
-								<g:TextArea ui:field="txtDescription"  width="90%"/>
+								<g:TextArea ui:field="txtDescription" width="90%" />
 							</div>
 						</div>
 
 						<div class="control-group">
 							<div class="control-label">Period:</div>
 							<div class="controls">
-								<d:DropDownList ui:field="lstPeriod" styleName="input-large">
-								</d:DropDownList>
-								<span>
-									<d:ActionLink ui:field="imgAdd" styleName="icon-plus"
-										title="Add Period" dataToggle="tooltip"></d:ActionLink>
-								</span>
-								<span>
-									<d:ActionLink ui:field="btnEditPeriod" styleName="icon-pencil"
-										title="Edit Period" dataToggle="tooltip"></d:ActionLink>
-								</span>
+								<div class="row-fluid">
+									<d:DropDownList ui:field="lstPeriod" styleName="span6 no-margin-left">
+									</d:DropDownList>
+									<div class="span6 period">
+										<span>
+											<d:ActionLink ui:field="imgAdd" styleName="icon-plus"
+												title="Add Period" dataToggle="tooltip"></d:ActionLink>
+										</span>
+										<span>
+											<d:ActionLink ui:field="btnEditPeriod"
+												styleName="icon-pencil" title="Edit Period" dataToggle="tooltip"></d:ActionLink>
+										</span>
+									</div>
+								</div>
 							</div>
 						</div>
 

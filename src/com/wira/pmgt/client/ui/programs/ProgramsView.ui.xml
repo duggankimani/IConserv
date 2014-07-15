@@ -20,11 +20,6 @@
 						</div>
 
 						<div class="span3 hide">
-							<d:ActionLink ui:field="aDeleteProgram" styleName="btn btn-danger"
-								dataToggle="tooltip">Delete</d:ActionLink>
-						</div>
-						
-						<div class="span3 hide">
 							<d:ActionLink ui:field="aBack" styleName="btn btn-default"
 								dataToggle="tooltip" dataPlacement="bottom" title="Back">
 								<i class="icon-google-back icon-button"></i>
@@ -78,12 +73,12 @@
 						</div>
 
 						<div class="span3 hide">
-							<d:ActionLink ui:field="aDelete" styleName="btn btn-danger"
+							<d:ActionLink ui:field="aDeleteProgram" styleName="btn btn-default"
 								dataToggle="tooltip" dataPlacement="bottom" title="Delete">
 								<i class="icon-trash icon-button"></i>
 							</d:ActionLink>
 						</div>
-
+						
 						<div class="span3 hide">
 							<d:ActionLink ui:field="aAssign" styleName="btn btn-default"
 								dataToggle="tooltip" dataPlacement="bottom" title="Assign to Individual/Group">

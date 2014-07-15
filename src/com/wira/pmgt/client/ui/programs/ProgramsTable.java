@@ -140,7 +140,7 @@ public class ProgramsTable extends Composite {
 		
 		createGrid();
 		for(FundDTO fund: funds){
-			tblView.createHeader(fund.getName(),"10%");
+			tblView.createHeader(fund.getName()+"(Ksh)","10%");
 		}
 	}
 	

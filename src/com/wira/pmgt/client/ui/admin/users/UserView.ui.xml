@@ -31,20 +31,20 @@
 						<g:Anchor href="#groups" ui:field="aGroupstab">Groups</g:Anchor>
 					</li>
 				</ul>
-				
+
 				<div id="usercontent" class="tab-content">
 					<!-- User's Information Tab -->
 					<div ui:field="divUserContent" class="tab-pane fade in active">
 						<div class="table table-hover table-striped table-bordered">
 							<div class="thead">
 								<div class="tr">
-									<div class="th">
-										<label>
-											<input type="checkbox" class="ace" />
-										</label>
-									</div>
-									<div class="th">Last Name</div>
+									<!-- <div class="th"> -->
+									<!-- <label> -->
+									<!-- <input type="checkbox" class="ace" /> -->
+									<!-- </label> -->
+									<!-- </div> -->
 									<div class="th">First Name</div>
+									<div class="th">Last Name</div>
 									<div class="th">Username</div>
 									<div class="th">Email</div>
 									<div class="th">Group</div>

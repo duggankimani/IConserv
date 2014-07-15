@@ -18,7 +18,6 @@ public class TaskForm extends Composite {
 	}
 
 	@UiField Anchor aFormLink;
-	@UiField Anchor aRemove;
 	@UiField SpanElement spnName;
 	ProgramTaskForm taskForm;
 	

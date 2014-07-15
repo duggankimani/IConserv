@@ -1,14 +1,13 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:d='urn:import:com.wira.pmgt.client.ui.component' xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<g:HTMLPanel>
-		<div class="row-fluid">
-			<g:Anchor href="#"
-				target="_blank" styleName="btn btn-success" ui:field="aCreateForm">Create Task
-				form
-			</g:Anchor>
+		<div class="row-fluid action-buttons">
+			<d:ActionLink href="#" target="_blank" styleName="btn btn-success"
+				ui:field="aCreateForm">Create form
+			</d:ActionLink>
 		</div>
-		
+
 		<div class="row-fluid">
 			<div class="row-fluid users-container">
 				<g:HTMLPanel ui:field="divAllocations" styleName="overflow-y container-box">
