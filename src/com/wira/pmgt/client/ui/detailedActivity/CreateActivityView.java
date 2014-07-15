@@ -60,7 +60,7 @@ public class CreateActivityView extends ViewImpl implements
 	@UiField AggregationGrid gridTargets;
 	@UiField AutoCompleteField<HTUser> allocatedToUsers;
 	@UiField AutoCompleteField<UserGroup> allocatedToGroups;
-	@UiField AutoCompleteField<IsProgramDetail> objectivesAutoComplete;
+	@UiField AutoCompleteField<IsProgramDetail> outcomesAutoComplete;
 	@UiField DivElement divTargetsAndIndicators;
 	@UiField DivElement divObjectives;
 	@UiField Anchor aCopyTargets;
@@ -151,7 +151,7 @@ public class CreateActivityView extends ViewImpl implements
 	@Override
 	public void setObjectives(List<IsProgramDetail> objectives) {
 		if(objectives!=null){
-			objectivesAutoComplete.setValues(objectives);
+			outcomesAutoComplete.setValues(objectives);
 		}
 	}
 
@@ -241,7 +241,7 @@ public class CreateActivityView extends ViewImpl implements
 		program.setType(type);
 		program.setStartDate(dtRange.getStartDate());
 		program.setEndDate(dtRange.getEndDate());
-		program.setObjectives(objectivesAutoComplete.getSelectedItems());
+		program.setProgramOutcomes(outcomesAutoComplete.getSelectedItems());
 		
 		//Targets and Outcomes
 		List<TargetAndOutcomeDTO> targets = gridTargets.getData(targetAndOutcomeMapper); 
@@ -270,7 +270,7 @@ public class CreateActivityView extends ViewImpl implements
 		}
 		
 		txtActivity.setValue(activity.getDescription());
-		objectivesAutoComplete.select(activity.getObjectives());
+		outcomesAutoComplete.select(activity.getProgramOutcomes());
 		
 		dtRange.setDates(activity.getStartDate(), activity.getEndDate());
 		//program.setTargetsAndOutcomes(targetsAndOutcomes);
@@ -326,7 +326,7 @@ public class CreateActivityView extends ViewImpl implements
 		txtActivity.setValue(null);
 		crumbContainer.clear();
 		spnPeriod.setText(null);
-		objectivesAutoComplete.clearSelection();
+		outcomesAutoComplete.clearSelection();
 		issues.clear();
 	}
 

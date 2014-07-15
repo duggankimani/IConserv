@@ -197,7 +197,7 @@ public class CreateOutcomeView extends ViewImpl implements
 		program.setDescription(txtOutcome.getValue());
 		program.setName(txtOutcome.getValue());
 		program.setType(ProgramDetailType.OUTCOME);
-		program.setObjectives(autoComplete.getSelectedItems());
+		program.setProgramOutcomes(autoComplete.getSelectedItems());
 		//program.setTargetsAndOutcomes(targetsAndOutcomes);
 		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
 		program.setFunding(funding);
@@ -220,7 +220,7 @@ public class CreateOutcomeView extends ViewImpl implements
 		}
 		
 		txtOutcome.setValue(outcome.getDescription());
-		autoComplete.select(outcome.getObjectives());
+		autoComplete.select(outcome.getProgramOutcomes());
 		Collections.sort(outcome.getFunding(), new Comparator<ProgramFundDTO>() {
 			@Override
 			public int compare(ProgramFundDTO o1, ProgramFundDTO o2) {

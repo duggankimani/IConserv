@@ -40,7 +40,6 @@ import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramAnalysis;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
-import com.wira.pmgt.shared.model.program.ProgramStatus;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 import com.wira.pmgt.shared.model.program.ProgramTaskForm;
 import com.wira.pmgt.shared.model.program.TargetAndOutcomeDTO;
@@ -166,27 +165,39 @@ public class ProgramDaoHelper {
 		dto.setRating(program.getRating());
 		//dto.setTargetsAndOutcomes(List<TargetAndOutcomeDTO>);
 		dto.setType(program.getType());
+				
+		if(program.getActivityOutcome()!=null){
+			dto.setActivityOutcomeId(program.getActivityOutcome().getId());
+		}
+		
+		//Program Outcomes
+		if(program.getProgramOutcomes()!=null){
+			for(ProgramDetail outcome: program.getProgramOutcomes()){
+				dto.addProgramOutcomes(get(outcome,false,false));
+			}
+		}
 		
 		if(loadChildren){
 			dto.setChildren(getActivity(program.getChildren(),loadChildren,loadObjectives));
 		}
+				
 		
-		if(program.getType()==ProgramDetailType.PROGRAM){
-			//Objectives are saved a children of program
-			//Load program objectives here
-			List<IsProgramDetail> objectives = new ArrayList<>();
-			for(ProgramDetail obj: program.getChildren()){					
-				if(obj.getType()==ProgramDetailType.OBJECTIVE){
-					objectives.add(get(obj, false));
-				}					
-			}
-			dto.setObjectives(objectives);
-		}else{
-			//Objectives for Outcomes/Activities (many to many relationship)
-			//if(loadObjectives){
-			dto.setObjectives(getActivity(program.getObjectives(), false,true));
-			//}
-		}
+//		if(program.getType()==ProgramDetailType.PROGRAM){
+//			//Objectives are saved a children of program
+//			//Load program objectives here
+//			List<IsProgramDetail> objectives = new ArrayList<>();
+//			for(ProgramDetail obj: program.getChildren()){					
+//				if(obj.getType()==ProgramDetailType.OBJECTIVE){
+//					objectives.add(get(obj, false));
+//				}					
+//			}
+//			dto.setObjectives(objectives);
+//		}else{
+//			//Objectives for Outcomes/Activities (many to many relationship)
+//			//if(loadObjectives){
+//			//dto.setObjectives(getActivity(program.getObjectives(), false,true));
+//			//}
+//		}
 		
 		if(program.getTargets()!=null)
 			dto.setTargetsAndOutcomes(getTargets(program.getTargets()));
@@ -221,9 +232,6 @@ public class ProgramDaoHelper {
 		List<IsProgramDetail> activity = new ArrayList<>();
 		if(children!=null)
 			for(ProgramDetail detail: children){
-				if(!loadObjectives && detail.getType()==ProgramDetailType.OBJECTIVE){
-					continue;
-				}
 				activity.add(get(detail,loadChildren));
 			}
 		return activity;
@@ -282,15 +290,23 @@ public class ProgramDaoHelper {
 		detail.setSourceOfFunds(get(programDTO.getFunding()));
 		detail.setStartDate(programDTO.getStartDate());
 		
-		if(programDTO.getObjectives()!=null)
-			detail.setObjectives(getProgramChildren(programDTO.getObjectives()));
-		
 		//detail.setTarget(String);
 		//detail.setTargets(Set<TargetAndOutcome>);
 		detail.setType(programDTO.getType());
 		List<TargetAndOutcomeDTO> targets = programDTO.getTargetsAndOutcomes();
 		detail.setTargets(getTargets(targets));
 		
+		if(programDTO.getActivityOutcomeId()!=null){
+			detail.setActivityOutcome(dao.getProgramDetail(programDTO.getActivityOutcomeId()));
+		}
+		
+		if(programDTO.getProgramOutcomes()!=null){
+			List<ProgramDetail> programOutcomes = new ArrayList<ProgramDetail>();
+			for(IsProgramDetail outcome: programDTO.getProgramOutcomes()){
+				programOutcomes.add(dao.getProgramDetail(outcome.getId()));
+			}
+			detail.setProgramOutcomes(programOutcomes);
+		}
 		return detail;
 	}
 

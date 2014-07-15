@@ -37,6 +37,55 @@ public class TestProgramDaoImpl {
 		dao= DB.getProgramDaoImpl();
 	}
 	
+	@Test
+	public void create(){
+		ProgramDetail objective = new ProgramDetail();
+		objective.setName("Obj 1");
+		objective.setDescription("Objective 1");
+		objective.setType(ProgramDetailType.OBJECTIVE);
+		dao.save(objective);
+		
+		ProgramDetail outcome = new ProgramDetail();
+		outcome.setName("Outcome 1.1");
+		outcome.setDescription("Outcome 1.1");
+		outcome.setParent(objective);
+		outcome.setType(ProgramDetailType.OUTCOME);
+		dao.save(outcome);
+		
+		ProgramDetail outcome2 = new ProgramDetail();
+		outcome2.setName("Outcome 1.2");
+		outcome2.setDescription("Outcome 1.2");
+		outcome2.setParent(objective);
+		outcome2.setType(ProgramDetailType.OUTCOME);
+		dao.save(outcome2);
+		
+		ProgramDetail program = new ProgramDetail();
+		program.setName("Wildlife Program");
+		program.setDescription("Wildlife Program");
+		program.setPeriod(dao.getActivePeriod());
+		program.setType(ProgramDetailType.PROGRAM);
+		dao.save(program);
+		
+		ProgramDetail activity = new ProgramDetail();
+		activity.setName("Community Meeting");
+		activity.setDescription("Community Meeting");
+		activity.setParent(program);
+		activity.setActivityOutcome(outcome2);
+		activity.setPeriod(dao.getActivePeriod());
+		activity.setType(ProgramDetailType.ACTIVITY);
+		dao.save(activity);
+		
+		ProgramDetail activity2 = new ProgramDetail();
+		activity2.setName("Community Meeting");
+		activity2.setDescription("Community Meeting");
+		activity2.setParent(program);
+		activity2.setActivityOutcome(outcome2);
+		activity2.setPeriod(dao.getActivePeriod());
+		activity2.setType(ProgramDetailType.ACTIVITY);
+		dao.save(activity2);
+		
+	}
+	
 	@Ignore
 	public void save(){
 		IsProgramDetail detail = new ProgramDTO();
@@ -48,7 +97,7 @@ public class TestProgramDaoImpl {
 		
 	}
 	
-	@Test
+	@Ignore
 	public void delete(){
 		Long programId=48L;
 		

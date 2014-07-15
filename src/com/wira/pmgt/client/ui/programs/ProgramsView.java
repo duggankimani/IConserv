@@ -240,7 +240,8 @@ public class ProgramsView extends ViewImpl implements
 		}
 	}
 
-	public void createDefaultTab() {
+	public void createDefaultTabs() {
+		createTab("Objectives", -1, true);
 		createTab("Summary", 0, true);
 	}
 
@@ -287,7 +288,7 @@ public class ProgramsView extends ViewImpl implements
 			return;
 		}
 
-		createDefaultTab();
+		createDefaultTabs();
 		// System.err.println("Size = " + programs.size());
 		for (IsProgramDetail activity : programs) {
 			// boolean first = programs.indexOf(activity) == 0;

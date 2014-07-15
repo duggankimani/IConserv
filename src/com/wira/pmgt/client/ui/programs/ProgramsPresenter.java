@@ -577,6 +577,14 @@ public class ProgramsPresenter extends
 		loadData(programId, detailId, null);
 	}
 	
+	public void loadObjectives(){
+		loadData(null, null, null, ProgramDetailType.OBJECTIVE);
+	}
+	
+	public void loadData(Long programId, Long detailId, Long periodId){
+		loadData(programId, detailId, periodId, ProgramDetailType.PROGRAM);
+	}
+	
 	/**
 	 * If PeriodId is null; current period is selected
 	 * 
@@ -584,9 +592,8 @@ public class ProgramsPresenter extends
 	 * @param detailId
 	 * @param periodId
 	 */
-	public void loadData(Long programId, Long detailId, Long periodId) {
+	public void loadData(Long programId, Long detailId, Long periodId, final ProgramDetailType typeToLoad) {
 		fireEvent(new ProcessingEvent());
-		System.err.println("programId, detailId, periodId ["+programId+", "+detailId+", "+periodId+"]");
 		
 		this.programId = (programId == null || programId == 0L) ? null
 				: programId;
@@ -596,19 +603,29 @@ public class ProgramsPresenter extends
 		getView().setProgramId(this.programId);
 
 		MultiRequestAction action = new MultiRequestAction();
-		// List of Programs for tabs
-		if(periodId!=null){
-			GetProgramsRequest request = new GetProgramsRequest(ProgramDetailType.PROGRAM,false);
-			request.setPeriodId(periodId);
+		
+		if(typeToLoad.equals(ProgramDetailType.OBJECTIVE)){
+			GetProgramsRequest request = new GetProgramsRequest(ProgramDetailType.OBJECTIVE,false);
 			action.addRequest(request);
-		}else{
-			action.addRequest(new GetProgramsRequest(ProgramDetailType.PROGRAM,
-					false));
 		}
 		
+		// List of Programs for tabs
+		{
+			//Withing a given period
+			GetProgramsRequest request = new GetProgramsRequest(ProgramDetailType.PROGRAM,false);
+			if(periodId!=null){
+				request.setPeriodId(periodId);
+			}
+			action.addRequest(request);
+		}
+		
+		//Get Periods
 		action.addRequest(new GetPeriodsRequest());
+		
+		//Get Funding Sources
 		action.addRequest(new GetFundsRequest());
 
+		
 		if (this.programId != null) {
 			// Details of selected program
 			this.programId = programId;
@@ -652,6 +669,12 @@ public class ProgramsPresenter extends
 					@Override
 					public void processResult(MultiRequestActionResult aResponse) {
 						int i = 0;
+						if(typeToLoad.equals(ProgramDetailType.OBJECTIVE)){
+							GetProgramsResponse response = (GetProgramsResponse) aResponse
+									.get(i++);
+							getView().setData(response.getPrograms());
+						}
+						
 						// Programs (Presented as tabs below)
 						GetProgramsResponse response = (GetProgramsResponse) aResponse
 								.get(i++);
@@ -681,7 +704,7 @@ public class ProgramsPresenter extends
 							
 						} else{
 					
-							if(programDetailId == null){
+							if(programDetailId == null && typeToLoad==ProgramDetailType.PROGRAM){
 								//This is a summary table with no program selecte
 								getView().setData(response.getPrograms());
 							}

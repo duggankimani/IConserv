@@ -60,9 +60,9 @@ public class ProgramsTable extends Composite {
 			
 			if(activity.getType()==ProgramDetailType.PROGRAM){
 				//this is data for the summary tab
-				if(activity.getObjectives()!=null){
-					sort(activity.getObjectives());
-					setActivities(activity.getObjectives(),level);
+				if(activity.getProgramOutcomes()!=null){
+					sort(activity.getProgramOutcomes());
+					setActivities(activity.getProgramOutcomes(),level);
 				}
 			}
 			

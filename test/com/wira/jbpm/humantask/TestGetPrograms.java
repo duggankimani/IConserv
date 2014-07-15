@@ -28,7 +28,7 @@ public class TestGetPrograms {
 		List<IsProgramDetail> activities = ProgramDaoHelper.getProgramsByType(ProgramDetailType.PROGRAM,false,true);
 		
 		for(IsProgramDetail a: activities){
-			System.err.println(a.getName()+" >> "+a.getObjectives());
+			System.err.println(a.getName()+" >> "+a.getProgramOutcomes());
 		}
 	}
 	
