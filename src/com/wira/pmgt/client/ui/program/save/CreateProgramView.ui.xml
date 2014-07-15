@@ -12,36 +12,34 @@
 	<g:DialogBox text="Create Program" styleName="modal modal-document"
 		modal="true" glassEnabled="true" ui:field="popupView">
 		<g:HTMLPanel>
-			<d:IssuesPanel ui:field="issues">
-			</d:IssuesPanel>
-
 			<g:HTMLPanel ui:field="panelBody" styleName="modal-body">
+				<d:IssuesPanel ui:field="issues">
+				</d:IssuesPanel>
 				<fieldset>
-					<g:HTMLPanel ui:field="panelFields" styleName="form-horizontal">
+					<g:HTMLPanel ui:field="panelFields">
 
 						<div class="control-group">
 							<div class="control-label" ui:field="tdDocType">Program Name:</div>
 							<div class="controls">
-								<g:TextBox ui:field="txtName" />
+								<g:TextBox ui:field="txtName" styleName="input-large" />
 							</div>
 						</div>
 
 						<div class="control-group">
 							<div class="control-label">Description:</div>
 							<div class="controls">
-								<g:TextArea ui:field="txtDescription" />
+								<g:TextArea ui:field="txtDescription"  width="90%"/>
 							</div>
 						</div>
 
 						<div class="control-group">
 							<div class="control-label">Period:</div>
 							<div class="controls">
-								<d:DropDownList ui:field="lstPeriod">
+								<d:DropDownList ui:field="lstPeriod" styleName="input-large">
 								</d:DropDownList>
 								<span>
 									<d:ActionLink ui:field="imgAdd" styleName="icon-plus"
-									title="Add Period" dataToggle="tooltip"
-									></d:ActionLink>
+										title="Add Period" dataToggle="tooltip"></d:ActionLink>
 								</span>
 								<span>
 									<d:ActionLink ui:field="btnEditPeriod" styleName="icon-pencil"

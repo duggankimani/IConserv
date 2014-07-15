@@ -43,7 +43,7 @@
 /*Uploader Modal */
 .modal {
 	max-width: 70%;
-	min-width: 40%;
+	min-width: 45%;
 }
 
 .modal .popupContent {
@@ -132,7 +132,7 @@ body .dateBoxPopup {
 
 .modal-document {
 	width: 40%;
-	display: inline-table;
+	/* display: inline-table; */
 	margin-left: -25%;
 }
 
