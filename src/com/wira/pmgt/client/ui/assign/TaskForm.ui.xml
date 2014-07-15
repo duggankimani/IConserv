@@ -9,8 +9,5 @@
 			    <span ui:field="spnName"></span>
 			</g:Anchor>
 		</div>
-		<div class="span2">
-			<g:Anchor ui:field="aRemove" styleName="icon-remove muted pull-right hide"></g:Anchor>
-		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

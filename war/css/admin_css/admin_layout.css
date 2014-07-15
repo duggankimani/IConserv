@@ -312,6 +312,10 @@
 	max-width:160px;
 }
 
+#myTabContent{
+	overflow-y:hidden;
+}
+
 /*--content-body||Users and Groups--*/
 .content-body .tab-content {
 	overflow-x: hidden;
@@ -664,7 +668,7 @@
 
 .table-bordered>.thead>.tr>.th,.table-bordered>.tbody>.tr>.th,.table-bordered>.tfoot>.tr>.th,.table-bordered>.thead>.tr>.td,.table-bordered>.tbody>.tr>.td,.table-bordered>.tfoot>.tr>.td
 	{
-	/* border: 1px solid #dddddd; */
+	border: 1px solid #dddddd;
 }
 
 .table-bordered>.thead>.tr>.th,.table-bordered>.thead>.tr>.td {

@@ -151,7 +151,6 @@ public class UserSaveView extends PopupViewImpl implements
 		user.setSurname(txtLastname.getValue());
 		user.setUserId(txtUserName.getValue());
 		user.setGroups(lstGroups.getSelectedItems());
-		
 		return user;
 	}
 	
@@ -163,6 +162,7 @@ public class UserSaveView extends PopupViewImpl implements
 		txtConfirmPassword.setValue(user.getPassword());
 		txtLastname.setValue(user.getSurname());
 		txtUserName.setValue(user.getUserId());
+		txtUserName.setDisabled(true);
 		lstGroups.select(user.getGroups());
 		setContext(user.getUserId());
 
