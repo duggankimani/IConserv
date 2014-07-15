@@ -20,6 +20,11 @@
 						</div>
 
 						<div class="span3 hide">
+							<d:ActionLink ui:field="aDeleteProgram" styleName="btn btn-danger"
+								dataToggle="tooltip">Delete</d:ActionLink>
+						</div>
+						
+						<div class="span3 hide">
 							<d:ActionLink ui:field="aBack" styleName="btn btn-default"
 								dataToggle="tooltip" dataPlacement="bottom" title="Back">
 								<i class="icon-google-back icon-button"></i>

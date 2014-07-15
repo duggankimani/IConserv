@@ -138,6 +138,8 @@ import com.wira.pmgt.shared.requests.GetProgramTaskForm;
 import com.wira.pmgt.server.actionhandlers.GetProgramTaskFormRequestHandler;
 import com.wira.pmgt.shared.requests.GetAnalysisDataRequest;
 import com.wira.pmgt.server.actionhandlers.GetAnalysisDataRequestHandler;
+import com.wira.pmgt.shared.requests.DeleteProgramRequest;
+import com.wira.pmgt.server.actionhandlers.DeleteProgramRequestActionHandler;
 
 
 
@@ -363,5 +365,8 @@ public class ServerModule extends HandlerModule {
 		bindHandler(GetAnalysisDataRequest.class,
 				GetAnalysisDataRequestHandler.class,
 				SessionValidator.class);
+
+		bindHandler(DeleteProgramRequest.class,
+				DeleteProgramRequestActionHandler.class, SessionValidator.class);
 	}
 }

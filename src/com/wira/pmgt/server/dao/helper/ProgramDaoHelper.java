@@ -864,6 +864,12 @@ public class ProgramDaoHelper {
 		return dao.getAnalysisData(periodId);
 	}
 
+	public static void delete(Long programId) {
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		ProgramDetail detail = dao.getProgramDetail(programId);
+		dao.delete(detail);
+	}
+
 //	private static ProgramSummary getSummary(ProgramDetail detail) {
 //		ProgramSummary summary = new ProgramSummary();
 //		summary.setId(detail.getId());

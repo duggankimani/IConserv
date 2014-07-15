@@ -25,7 +25,10 @@ import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.ProgressBar;
 import com.wira.pmgt.client.ui.component.RowWidget;
+import com.wira.pmgt.client.ui.component.TableView;
 import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent;
+import com.wira.pmgt.client.ui.events.ProgramDeletedEvent;
+import com.wira.pmgt.client.ui.events.ProgramDeletedEvent.ProgramDeletedHandler;
 import com.wira.pmgt.client.ui.events.ProgramDetailSavedEvent;
 import com.wira.pmgt.client.ui.events.ProgramDetailSavedEvent.ProgramDetailSavedHandler;
 import com.wira.pmgt.client.ui.util.DateUtils;
@@ -37,7 +40,7 @@ import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 import com.wira.pmgt.shared.model.program.ProgramStatus;
 
 public class ProgramsTableRow extends RowWidget implements
-		ProgramDetailSavedHandler {
+		ProgramDetailSavedHandler,  ProgramDeletedHandler {
 
 	private static ActivitiesTableRowUiBinder uiBinder = GWT
 			.create(ActivitiesTableRowUiBinder.class);
@@ -441,6 +444,7 @@ public class ProgramsTableRow extends RowWidget implements
 	protected void onLoad() {
 		super.onLoad();
 		addRegisteredHandler(ProgramDetailSavedEvent.TYPE, this);
+		addRegisteredHandler(ProgramDeletedEvent.TYPE, this);
 		divRowCaret.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -596,6 +600,21 @@ public class ProgramsTableRow extends RowWidget implements
 				AppContext.fireEvent(new ActivitySelectionChangedEvent(
 						updatedProgram, true));
 			}
+		}
+	}
+
+	@Override
+	public void onProgramDeleted(ProgramDeletedEvent event) {
+		if(activity.getId().equals(event.getProgramId())){
+			if(activity.getChildren()!=null && !activity.getChildren().isEmpty()){
+				//remove children
+				toggle(false);
+			}
+			
+			//Widget parent = getParent();
+			//System.err.println("Parent >> "+parent.getClass());
+			removeFromParent();
+			
 		}
 	}
 
