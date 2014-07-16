@@ -494,6 +494,7 @@ public class ProgramsView extends ViewImpl implements
 			show(aAssign, false);
 		} else if (type == ProgramDetailType.TASK) {
 			show(aNewTask, true);
+			show(aAssign, isRowData);
 		} else {
 			show(aDetail, false);
 			show(aAssign, false);

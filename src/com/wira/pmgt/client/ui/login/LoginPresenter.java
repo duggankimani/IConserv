@@ -159,24 +159,22 @@ public class LoginPresenter extends
 									
 								
 									if(redirect!=null){
-										boolean isAdmin = result.getUser().isAdmin();
-//										System.err.println("Redirect= "+redirect+
-//												" :: IsUserAdmin = "+isAdmin+
-//												" :: "+result.getUser().getGroupsAsString());
-										
-										if(isAdmin && redirect.equals("home")){
-											History.newItem(NameTokens.adminhome);
-										}else{
-											History.newItem(redirect);
-										}
+										History.newItem(redirect);
+//										boolean isAdmin = result.getUser().isAdmin();
+//										if(isAdmin && redirect.equals("home")){
+//											History.newItem(NameTokens.adminhome);
+//										}else{
+//											History.newItem(redirect);
+//										}
 										
 									}else{
+										placeManager.revealDefaultPlace();
 										//System.err.println("No Redirect");
-										if(result.getUser().isAdmin()){
-											placeManager.revealPlace(new PlaceRequest(NameTokens.adminhome));
-										}else{
-											placeManager.revealDefaultPlace();
-										}
+//										if(result.getUser().isAdmin()){
+//											placeManager.revealPlace(new PlaceRequest(NameTokens.adminhome));
+//										}else{
+//											placeManager.revealDefaultPlace();
+//										}
 										
 									}
 									AppContext.reloadContext();

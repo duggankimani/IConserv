@@ -20,7 +20,7 @@ public class ProgramSummary implements Serializable {
 	private Long parentId; 
 	private Date startDate;
 	private Date endDate; 
-	private Long programId; //Main Parent Program ID
+	protected Long programId; //Main Parent Program ID
 	
 	public ProgramSummary(){}
 	
@@ -112,4 +112,9 @@ public class ProgramSummary implements Serializable {
 	public boolean isUpcoming(){		
 		return startDate!=null && new Date().before(startDate) && status==ProgramStatus.CREATED;
 	}
+	
+	public void setProgramId(Long programId) {
+		this.programId = programId;
+	}
+
 }
