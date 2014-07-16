@@ -34,14 +34,11 @@ public class CreateActivityPresenter extends
 	public interface MyView extends View {
 		void setFunds(List<FundDTO> funds);
 		void setPeriod(PeriodDTO period);
-		void setObjectives(List<IsProgramDetail> objectives);
 		void setParentProgram(IsProgramDetail outcome);
 		boolean isValid();
 		void setActivity(IsProgramDetail activity);
 		void clear();
 		IsProgramDetail getActivity();
-		void setGroups(List<UserGroup> groups);
-		void setUsers(List<HTUser> users);
 		void setType(ProgramDetailType type);
 		HasClickHandlers getCopyTargetsLink();
 		void setTargetsAndOutComes(List<TargetAndOutcomeDTO> targetsAndOutComes);
@@ -109,7 +106,6 @@ public class CreateActivityPresenter extends
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetFundsRequest());
 		action.addRequest(new GetPeriodRequest());
-		action.addRequest(new GetProgramsRequest(ProgramDetailType.OBJECTIVE, false));
 		action.addRequest(new GetProgramsRequest(programId, false));
 				
 		requestHelper.execute(action, new TaskServiceCallback<MultiRequestActionResult>() {
@@ -125,10 +121,6 @@ public class CreateActivityPresenter extends
 				getView().setPeriod(getPeriod.getPeriod());
 				period = getPeriod.getPeriod();
 			
-				//List of Objectives for this activity
-				GetProgramsResponse getPrograms = (GetProgramsResponse)aResponse.get(i++);
-				getView().setObjectives(getPrograms.getPrograms());
-				
 				//Parent Program (for pop up additional information)
 				GetProgramsResponse getProgram = (GetProgramsResponse)aResponse.get(i++);
 				getView().setParentProgram(getProgram.getSingleResult());

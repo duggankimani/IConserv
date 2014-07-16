@@ -32,8 +32,8 @@
 						</g:Anchor>
 					</li>
 
-					<li ui:field="liActivities">
-						<g:Anchor href='#home;page=activities' ui:field='aActivities'>
+					<li ui:field="liActivities" title="Programs Management">
+						<g:Anchor href='#home;page=objectives' ui:field='aActivities'>
 							<i class="icon-tasks"></i>
 							Programs Man.
 						</g:Anchor>

@@ -58,11 +58,7 @@ public class CreateActivityView extends ViewImpl implements
 	@UiField BulletListPanel crumbContainer;
 	@UiField InlineLabel spnPeriod;
 	@UiField AggregationGrid gridTargets;
-	@UiField AutoCompleteField<HTUser> allocatedToUsers;
-	@UiField AutoCompleteField<UserGroup> allocatedToGroups;
-	@UiField AutoCompleteField<IsProgramDetail> outcomesAutoComplete;
 	@UiField DivElement divTargetsAndIndicators;
-	@UiField DivElement divObjectives;
 	@UiField Anchor aCopyTargets;
 	
 	@UiField DateRangeWidget dtRange;
@@ -145,13 +141,6 @@ public class CreateActivityView extends ViewImpl implements
 			spnPeriod.setText(period.getDescription());
 			dtRange.setRangeValidation(period.getStartDate(), period.getEndDate());
 			dtRange.setDates(period.getStartDate(), period.getEndDate());
-		}
-	}
-	
-	@Override
-	public void setObjectives(List<IsProgramDetail> objectives) {
-		if(objectives!=null){
-			outcomesAutoComplete.setValues(objectives);
 		}
 	}
 
@@ -241,7 +230,6 @@ public class CreateActivityView extends ViewImpl implements
 		program.setType(type);
 		program.setStartDate(dtRange.getStartDate());
 		program.setEndDate(dtRange.getEndDate());
-		program.setProgramOutcomes(outcomesAutoComplete.getSelectedItems());
 		
 		//Targets and Outcomes
 		List<TargetAndOutcomeDTO> targets = gridTargets.getData(targetAndOutcomeMapper); 
@@ -270,7 +258,6 @@ public class CreateActivityView extends ViewImpl implements
 		}
 		
 		txtActivity.setValue(activity.getDescription());
-		outcomesAutoComplete.select(activity.getProgramOutcomes());
 		
 		dtRange.setDates(activity.getStartDate(), activity.getEndDate());
 		//program.setTargetsAndOutcomes(targetsAndOutcomes);
@@ -326,20 +313,8 @@ public class CreateActivityView extends ViewImpl implements
 		txtActivity.setValue(null);
 		crumbContainer.clear();
 		spnPeriod.setText(null);
-		outcomesAutoComplete.clearSelection();
 		issues.clear();
-	}
-
-	@Override
-	public void setGroups(List<UserGroup> groups) {
-		allocatedToGroups.setValues(groups);
-	}
-
-	@Override
-	public void setUsers(List<HTUser> users) {
-		allocatedToUsers.setValues(users);
-	}
-	
+	}	
 
 	/**
 	 * Program Fund Mapper
@@ -422,7 +397,6 @@ public class CreateActivityView extends ViewImpl implements
 		if(type==ProgramDetailType.TASK){
 			divActivityName.setInnerText("Task Name");
 			//divTargetsAndIndicators.setClassName("hide");
-			divObjectives.setClassName("hide");
 			aCopyTargets.removeStyleName("hide");
 		}else{
 			aCopyTargets.addStyleName("hide");

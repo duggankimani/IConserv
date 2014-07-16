@@ -126,6 +126,8 @@ public class ProgramsPresenter extends
 		void setMiddleHeight();
 
 		void removeTab(Long id);
+
+		void createDefaultTabs();
 	}
 
 	@Inject
@@ -487,7 +489,12 @@ public class ProgramsPresenter extends
 						//Budget Total Amounts && Parent program allocations updated values do not reflect
 						//unless the user actively reloads them
 						//This is a hack to prevent that issue
-						afterSave(createProgramsResponse.getProgram().getId(),activity.getParentId(),activity.getId()==null);						
+						if(activity.getType()==ProgramDetailType.ACTIVITY){
+							assert activity.getActivityOutcomeId()!=null;
+							afterSave(createProgramsResponse.getProgram().getId(),activity.getActivityOutcomeId(),activity.getId()==null);
+						}else{
+							afterSave(createProgramsResponse.getProgram().getId(),activity.getParentId(),activity.getId()==null);
+						}
 						fireEvent(new ProcessingCompletedEvent());
 						fireEvent(new ActivitySavedEvent(activity.getType()
 								.name().toLowerCase()
@@ -528,7 +535,7 @@ public class ProgramsPresenter extends
 		//reload parent
 		if(parentId!=null){
 			MultiRequestAction requests = new MultiRequestAction();
-			requests.addRequest(new GetProgramsRequest(parentId, false, false));		
+			requests.addRequest(new GetProgramsRequest(parentId, false));		
 			requestHelper.execute(requests, 
 					new TaskServiceCallback<MultiRequestActionResult>() {
 				@Override
@@ -545,10 +552,10 @@ public class ProgramsPresenter extends
 
 	protected void afterSave(Long saveActivityId, final Long parentId, final boolean isNew) {
 		MultiRequestAction requests = new MultiRequestAction();
-		requests.addRequest(new GetProgramsRequest(saveActivityId, false, false));
+		requests.addRequest(new GetProgramsRequest(saveActivityId, false));
 		//reload parent
 		if(parentId!=null){							
-			requests.addRequest(new GetProgramsRequest(parentId, false, false));
+			requests.addRequest(new GetProgramsRequest(parentId, false));
 		}
 		
 		requestHelper.execute(requests, 
@@ -646,18 +653,18 @@ public class ProgramsPresenter extends
 				//Summary Table Drill down - Load program and objectives only
 				if(periodId!=null){
 					assert programDetailCode!=null;
-					action.addRequest(new GetProgramsRequest(programDetailCode,periodId,false,true));
+					action.addRequest(new GetProgramsRequest(programDetailCode,periodId,false));
 				}else{
-					action.addRequest(new GetProgramsRequest(programDetailId,false,true));
+					action.addRequest(new GetProgramsRequest(programDetailId,false));
 				}
 				
 			}else{
 				//We are loading details of an item under a program
 				//Program Table Drill Down - Load program detail/ activity without the objectives
 				if(periodId!=null){
-					action.addRequest(new GetProgramsRequest(programDetailCode,periodId,true,false));
+					action.addRequest(new GetProgramsRequest(programDetailCode,periodId,true));
 				}else{
-					action.addRequest(new GetProgramsRequest(programDetailId,true,false));
+					action.addRequest(new GetProgramsRequest(programDetailId,true));
 				}
 				
 			}

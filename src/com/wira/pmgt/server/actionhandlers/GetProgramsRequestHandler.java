@@ -47,17 +47,17 @@ public class GetProgramsRequestHandler extends
 			List<IsProgramDetail> activities) {
 		if(action.getCode()!=null){
 			IsProgramDetail activity = ProgramDaoHelper.getProgramByCode(action.getCode(), action.getPeriodId(),
-					action.isLoadChildren(),action.isLoadObjectives());
+					action.isLoadChildren());
 			
 			if(activity!=null){
 				activities.add(activity);
 			}
 		}else if(action.getType()!=null){
 			activities.addAll(ProgramDaoHelper.getProgramByTypeAndPeriod(action.getType(), action.getPeriodId(),
-					action.isLoadChildren(),action.isLoadObjectives()));
+					action.isLoadChildren()));
 		}else{
 			activities.addAll(ProgramDaoHelper.getProgramsByPeriod(action.getPeriodId(),
-					action.isLoadChildren(),action.isLoadObjectives()));
+					action.isLoadChildren()));
 		}
 	}
 
@@ -65,14 +65,14 @@ public class GetProgramsRequestHandler extends
 			List<IsProgramDetail> activities) {
 
 		if(action.getId()!=null){
-			IsProgramDetail activity = ProgramDaoHelper.getProgramById(action.getId(), action.isLoadChildren(),action.isLoadObjectives());
+			IsProgramDetail activity = ProgramDaoHelper.getProgramById(action.getId(), action.isLoadChildren());
 			if(activity!=null){
 				activities.add(activity);
 			}
 		}else if(action.getType()!=null){
-			activities.addAll(ProgramDaoHelper.getProgramsByType(action.getType(), action.isLoadChildren(),action.isLoadObjectives()));
+			activities.addAll(ProgramDaoHelper.getProgramsByType(action.getType(), action.isLoadChildren()));
 		}else{
-			activities.addAll(ProgramDaoHelper.getPrograms(action.isLoadChildren(),action.isLoadObjectives()));
+			activities.addAll(ProgramDaoHelper.getPrograms(action.isLoadChildren()));
 		}
 	}
 
