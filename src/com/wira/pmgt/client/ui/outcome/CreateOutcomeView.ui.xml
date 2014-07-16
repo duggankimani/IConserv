@@ -23,21 +23,37 @@
 			</div>
 
 			<div class="control-group">
-				<div class="control-label">Outcome Name:</div>
+				<div class="control-label">Outcome Ref:</div>
+				<div class="controls">
+					<g:TextBox ui:field="txtOutcomeRef"/>
+					<span class="mandatory" title="Required Field">*</span>
+				</div>
+			</div>
+			
+			<div class="control-group">
+				<div class="control-label">Outcome Description:</div>
 				<div class="controls">
 					<g:TextArea ui:field="txtOutcome" width="90%" />
 					<span class="mandatory" title="Required Field">*</span>
 				</div>
 			</div>
 
-			<div class="control-group">
+			<div class="control-group hidden">
 				<div class="control-label">Objectives:</div>
 				<div class="controls">
 					<a:AutoCompleteField ui:field="autoComplete" />
 				</div>
 			</div>
 
-			<div class="control-group">
+			<div class="control-group" ui:field="divTargetsAndIndicators">
+				<div class="control-label">Targets And Indicators:</div>
+				<div class="controls">
+					<g:Anchor ui:field="aCopyTargets" title="Copy Indicators and Targets from Objective">Copy Targets</g:Anchor>
+					<grid:AggregationGrid ui:field="gridTargets"></grid:AggregationGrid>
+				</div>
+			</div>
+			
+			<div class="control-group hidden">
 				<div class="control-label">Budget:</div>
 				<div class="controls">
 					<grid:AggregationGrid ui:field="gridView"></grid:AggregationGrid>

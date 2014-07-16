@@ -18,7 +18,6 @@ public class GetProgramsRequest extends BaseRequest<GetProgramsResponse> {
 	
 	private ProgramDetailType type;
 	private boolean loadChildren;
-	private boolean loadObjectives;
 	
 	public GetProgramsRequest() {
 	}
@@ -28,31 +27,17 @@ public class GetProgramsRequest extends BaseRequest<GetProgramsResponse> {
 		this.loadChildren = loadChildren;
 	}
 	
-	public GetProgramsRequest(Long id, boolean loadChildren, boolean loadObjectives){
-		this(id,loadChildren);
-		this.loadObjectives=loadObjectives;
-	}
-	
 	public GetProgramsRequest(String code,Long periodId, boolean loadChildren) {
 		this.code = code;
 		this.periodId = periodId;
 		this.loadChildren = loadChildren;
 	}
 	
-	public GetProgramsRequest(String code,Long periodId, boolean loadChildren, boolean loadObjectives){
-		this(code,periodId,loadChildren);
-		this.loadObjectives=loadObjectives;
-	}
-	
 	public GetProgramsRequest(ProgramDetailType type, boolean loadChildren){
 		this.type = type;
 		this.loadChildren= loadChildren;
 	}
-	public GetProgramsRequest(ProgramDetailType type, boolean loadChildren, boolean loadObjectives){
-		this(type,loadChildren);
-		this.loadObjectives = loadObjectives;
-	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -68,14 +53,6 @@ public class GetProgramsRequest extends BaseRequest<GetProgramsResponse> {
 	
 	public ProgramDetailType getType(){
 		return type;
-	}
-
-	public boolean isLoadObjectives() {
-		return loadObjectives;
-	}
-
-	public void setLoadObjectives(boolean loadObjectives) {
-		this.loadObjectives = loadObjectives;
 	}
 
 	public Long getPeriodId() {

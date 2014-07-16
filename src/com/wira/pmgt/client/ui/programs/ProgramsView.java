@@ -241,6 +241,7 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	public void createDefaultTabs() {
+		listPanel.clear();
 		createTab("Goals", "#home;page=objectives", true);
 		createTab("Summary", 0, true);
 	}
@@ -284,16 +285,18 @@ public class ProgramsView extends ViewImpl implements
 
 	@Override
 	public void createProgramTabs(List<IsProgramDetail> programs) {
-		showContent(!(programs == null || programs.isEmpty()));
-
+		//showContent(!(programs == null || programs.isEmpty()));
+		showContent(true);
 		this.programs = programs;
-		listPanel.clear();
+		/*listPanel.clear();
 		if (programs == null) {
 			return;
-		}
+		}*/
 
 		createDefaultTabs();
+		
 		// System.err.println("Size = " + programs.size());
+		if(programs!=null)
 		for (IsProgramDetail activity : programs) {
 			// boolean first = programs.indexOf(activity) == 0;
 			createTab(activity.getName(), activity.getId(), false);
@@ -309,8 +312,9 @@ public class ProgramsView extends ViewImpl implements
 		}
 		setSelection(singleResult.getType(), false);
 
-		assert singleResult.getPeriod() != null;
-		headerContainer.getPeriodDropdown().setValue(singleResult.getPeriod());
+		if(singleResult.getPeriod()!=null){
+			headerContainer.getPeriodDropdown().setValue(singleResult.getPeriod());
+		}
 
 		if (singleResult.getProgramSummary() != null) {
 			BulletListPanel breadCrumbs = headerContainer
@@ -463,9 +467,9 @@ public class ProgramsView extends ViewImpl implements
 		show(aNewActivity, false);
 		show(aNewTask, false);
 		show(aEdit, true);
-		show(aDeleteProgram, isRowData);
-		show(aAssign, isRowData);
-		show(aDetail, isRowData);
+		show(aDeleteProgram, isRowData && AppContext.isCurrentUserAdmin());
+		show(aAssign, false);
+		show(aDetail, !isCurrentPlaceObjectivesPage && isRowData);
 		
 
 		if (type == ProgramDetailType.PROGRAM) {
@@ -476,10 +480,15 @@ public class ProgramsView extends ViewImpl implements
 			show(aAssign, isRowData);
 		} else if (type == ProgramDetailType.OBJECTIVE) {
 			show(aAssign, false);
-			show(aNewOutcome, isRowData);
+			show(aNewOutcome, AppContext.isCurrentUserAdmin() && isRowData);
+			show(aEdit, isCurrentPlaceObjectivesPage && isRowData);
 		} else if (type == ProgramDetailType.OUTCOME) {
-			show(aNewActivity, true);
+			show(aNewActivity,  AppContext.isCurrentUserAdmin() && isRowData && !isCurrentPlaceObjectivesPage 
+					&& !(programId==null || programId==0));
 			show(aAssign, false);
+			show(aDetail, false);
+			show(aEdit, isCurrentPlaceObjectivesPage && isRowData);
+			show(aDeleteProgram, isRowData && AppContext.isCurrentUserAdmin() && isCurrentPlaceObjectivesPage);
 		} else if (type == ProgramDetailType.ACTIVITY) {
 			show(aNewTask, true);
 			show(aAssign, false);
@@ -488,7 +497,7 @@ public class ProgramsView extends ViewImpl implements
 		} else {
 			show(aDetail, false);
 			show(aAssign, false);
-			show(aProgram, AppContext.isCurrentUserAdmin());
+			show(aProgram, !isCurrentPlaceObjectivesPage && AppContext.isCurrentUserAdmin());
 			show(aEdit, false);
 			show(aDeleteProgram, false);
 		}

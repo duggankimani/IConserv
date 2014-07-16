@@ -25,7 +25,7 @@ public class TestSaveFunds {
 	
 	@Test
 	public void updateFund(){
-		IsProgramDetail fund= ProgramDaoHelper.getProgramById(11L, false,false);
+		IsProgramDetail fund= ProgramDaoHelper.getProgramById(11L, false);
 		List<ProgramFundDTO> programFunds = fund.getFunding();
 		
 		ProgramFundDTO programFundDto = programFunds.get(0);

@@ -104,7 +104,7 @@ public class ProgramsTableRow extends RowWidget implements
 	List<FundDTO> funding = null;
 
 	// Is the current status showing children or not
-	boolean showChildren = true;
+	boolean showingChildren = true;
 
 	// Programs Summary Grid or Program Details
 	boolean isSummaryRow = false;
@@ -133,37 +133,25 @@ public class ProgramsTableRow extends RowWidget implements
 		this.level = level;
 		this.funding = sortedListOfFunding;
 
-		this.showChildren = (level == 0);
+		this.showingChildren = (level == 0);
 		// Show/ hide this details based on its level on load
-		if (!isSummaryRow) {
-			if (level > 1) {
-				// Only show level 0 and level 1 items - Hide all the rest
-				show(false);
-				setHasChildren(false);
-			} else if (activity.getChildren() != null
-					&& !activity.getChildren().isEmpty()) {
-				setHasChildren(this.showChildren);
-			}
-		} else {
-			this.showChildren = false;// Programs shouldnt initially show
-										// objectives
-			if (level > 0) {
-				// Only show level 0 and level 1 items - Hide all the rest
-				show(false);
-				setHasChildren(false);
-			} else if (activity.getProgramOutcomes() != null
-					&& !activity.getProgramOutcomes().isEmpty()) {
-				setHasChildren(this.showChildren);
-			}
-			
-			if(activity.getType() == ProgramDetailType.PROGRAM){
-				divRowCaret
-				.setVisible((activity.getProgramOutcomes()!=null) 
-						&& (activity.getProgramOutcomes().size() > 0));
-			}
+		
+		List<IsProgramDetail> children = activity.getChildren();
+		if(activity.getType()==ProgramDetailType.PROGRAM){
+			children = activity.getProgramOutcomes();
 			
 		}
-
+		
+		this.showingChildren = false;// Programs shouldnt initially show
+		// objectives
+		if (level > 0) {
+			// Only show level 0 and level 1 items - Hide all the rest
+			show(false);
+			setShowingChildren(false);
+		} 
+		
+		divRowCaret.setVisible((children!=null)	&& (children.size() > 0));
+		
 		// Bind Row to Table
 		setRow(row);
 
@@ -437,7 +425,7 @@ public class ProgramsTableRow extends RowWidget implements
 							.setFontSize(0.8, Unit.EM);
 					amounts.add(allocationPanel);
 					allocations.add(allocationPanel);
-					allocationPanel.setVisible(showChildren || isSummaryRow);
+					allocationPanel.setVisible(showingChildren || isSummaryRow);
 				}
 				// Add to table td
 				createTd(amounts, "10%");
@@ -470,12 +458,12 @@ public class ProgramsTableRow extends RowWidget implements
 			@Override
 			public void onClick(ClickEvent event) {
 				// Toggle
-				toggle(!showChildren);
+				toggle(!showingChildren);
 			}
 		});
 	}
 
-	private void setHasChildren(boolean hasChildren) {
+	private void setShowingChildren(boolean hasChildren) {
 		// divRowCaret.setHref("#home;page=activities;activity="+programId+"d"+activity.getId());
 		if (hasChildren) {
 			divRowCaret.removeStyleName("icon-caret-right");
@@ -491,7 +479,7 @@ public class ProgramsTableRow extends RowWidget implements
 
 	// default toggle
 	private void toggle(boolean isShowChildren) {
-		this.showChildren = isShowChildren;
+		this.showingChildren = isShowChildren;
 
 		FlowPanel panel = (FlowPanel) this.getParent();
 		int idx = panel.getWidgetIndex(this);
@@ -506,7 +494,7 @@ public class ProgramsTableRow extends RowWidget implements
 					.getProgramOutcomes().size();
 		}
 
-		setHasChildren(isShowChildren);
+		setShowingChildren(isShowChildren);
 		if (childCount == 0) {
 			return;
 		}
@@ -515,14 +503,14 @@ public class ProgramsTableRow extends RowWidget implements
 		// loop until you count n children
 		for (int i = idx + 1; (i < panel.getWidgetCount() && childrenCollapsed < childCount); i++) {
 			ProgramsTableRow row = (ProgramsTableRow) panel.getWidget(i);
-			System.err.println("Showing child : "+showChildren);
+			System.err.println("Showing child : "+showingChildren);
 			//if (row.getActivity().getParentId() == activity.getId()) {
 				childrenCollapsed++;
-				if (!showChildren) {
+				if (!showingChildren) {
 					// toggle children of children only when collapsing
-					row.toggle(showChildren);
+					row.toggle(showingChildren);
 				}
-				row.show(showChildren);
+				row.show(showingChildren);
 			//}
 
 		}
@@ -565,17 +553,29 @@ public class ProgramsTableRow extends RowWidget implements
 	public void onProgramDetailSaved(ProgramDetailSavedEvent event) {
 		IsProgramDetail updatedProgram = event.getProgram();
 
-		if (event.isNew() && updatedProgram.getParentId() != null
-				&& updatedProgram.getParentId().equals(activity.getId())) {
+		if (event.isNew() && ((updatedProgram.getParentId() != null && updatedProgram.getParentId().equals(activity.getId())) || 
+				(updatedProgram.getActivityOutcomeId() != null && updatedProgram.getActivityOutcomeId().equals(activity.getId())))) {
+			
+			List<IsProgramDetail> children= activity.getChildren();
+			if(updatedProgram.getType()==ProgramDetailType.ACTIVITY){
+				children= activity.getProgramOutcomes();
+			}
+			
 			// check if this is the parent
-			if (activity.getChildren() == null) {
-				activity.setChildren(new ArrayList<IsProgramDetail>());
+			if (children == null) {
+				children= new ArrayList<IsProgramDetail>();
 			}
 
-			activity.getChildren().add(updatedProgram);
+			children.add(updatedProgram);
+			
+			if(updatedProgram.getType()==ProgramDetailType.ACTIVITY){
+				activity.setProgramOutcomes(children);
+			}else{
+				activity.setChildren(children);
+			}
 			activity.sort();
 
-			int idx = activity.getChildren().indexOf(updatedProgram);
+			int idx = children.indexOf(updatedProgram);
 			assert idx > -1;
 
 			// insert this child at the end of the parent

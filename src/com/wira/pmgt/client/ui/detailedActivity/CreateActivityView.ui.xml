@@ -35,29 +35,8 @@
 				<div class="controls">
 					<d:DateRangeWidget ui:field="dtRange"></d:DateRangeWidget>
 				</div>
-			</div>
-			
-			<div class="control-group" ui:field="divObjectives">
-				<div class="control-label">Objectives:</div>
-				<div class="controls">
-					<a:AutoCompleteField ui:field="outcomesAutoComplete" />
-				</div>
-			</div>
+			</div>					
 						
-			<div class="control-group hidden">
-				<div class="control-label" title="Allocate to users">Assigned To User(s):</div>
-				<div class="controls" title="Allocate to users">
-					<a:AutoCompleteField ui:field="allocatedToUsers"/>
-				</div>
-			</div>
-			
-			<div class="control-group hidden">
-				<div class="control-label" title="Allocate to groups">Assigned to Group(s):</div>
-				<div class="controls" title="Allocate to groups">
-					<a:AutoCompleteField ui:field="allocatedToGroups"/>
-				</div>
-			</div>
-			
 			<div class="control-group" ui:field="divTargetsAndIndicators">
 				<div class="control-label">Targets And Indicators:</div>
 				<div class="controls">

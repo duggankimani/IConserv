@@ -1,14 +1,19 @@
 package com.wira.pmgt.client.ui.outcome;
 
+import static com.wira.pmgt.client.ui.util.StringUtils.isNullOrEmpty;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -20,6 +25,7 @@ import com.wira.pmgt.client.ui.component.grid.AggregationGrid;
 import com.wira.pmgt.client.ui.component.grid.ColumnConfig;
 import com.wira.pmgt.client.ui.component.grid.DataMapper;
 import com.wira.pmgt.client.ui.component.grid.DataModel;
+import com.wira.pmgt.client.ui.util.StringUtils;
 import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.Listable;
 import com.wira.pmgt.shared.model.ProgramDetailType;
@@ -28,6 +34,7 @@ import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
+import com.wira.pmgt.shared.model.program.TargetAndOutcomeDTO;
 
 public class CreateOutcomeView extends ViewImpl implements
 		CreateOutcomePresenter.MyView {
@@ -39,10 +46,12 @@ public class CreateOutcomeView extends ViewImpl implements
 	
 	@UiField IssuesPanel issues;
 	@UiField TextArea txtOutcome;
+	@UiField TextBox txtOutcomeRef;
 	@UiField AggregationGrid gridView;
 	@UiField BulletListPanel crumbContainer;
+	@UiField AggregationGrid gridTargets;
 	@UiField InlineLabel spnPeriod;
-	@UiField AutoCompleteField<IsProgramDetail> autoComplete;
+	@UiField Anchor aCopyTargets;
 
 	List<Listable> donors = new ArrayList<Listable>();
 	ColumnConfig donorField = new ColumnConfig("donor", "Donor Name", DataType.SELECTBASIC);
@@ -53,6 +62,25 @@ public class CreateOutcomeView extends ViewImpl implements
 		createGrid();
 		
 		txtOutcome.getElement().setAttribute("rows", "3");
+		createTargetsAndIndicatorsGrid();
+	}
+	
+	private void createTargetsAndIndicatorsGrid() {
+		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
+//		ColumnConfig config = new ColumnConfig("condition", "Check", DataType.SELECTBASIC);
+//		configs.add(config);
+		
+		ColumnConfig config = new ColumnConfig("target", "Target", DataType.DOUBLE, "1000");
+		configs.add(config);
+		
+		config = new ColumnConfig("indicator", "Indicator", DataType.STRING, "Participants");
+		configs.add(config);
+		
+		config = new ColumnConfig("actual", "Outcome", DataType.DOUBLE, "1000");
+		configs.add(config);
+		
+		gridTargets.setColumnConfigs(configs);
+		gridTargets.setAutoNumber(true);
 	}
 
 	@Override
@@ -137,12 +165,12 @@ public class CreateOutcomeView extends ViewImpl implements
 		}
 	};
 
-	@Override
-	public void setObjectives(List<IsProgramDetail> objectives) {
-		if(objectives!=null){
-			autoComplete.setValues(objectives);
-		}
-	}
+//	@Override
+//	public void setObjectives(List<IsProgramDetail> objectives) {
+//		if(objectives!=null){
+//			autoComplete.setValues(objectives);
+//		}
+//	}
 
 	public void createCrumb(String text,Long id, Boolean isActive){
 		BreadCrumbItem crumb = new BreadCrumbItem();
@@ -155,7 +183,7 @@ public class CreateOutcomeView extends ViewImpl implements
 	public void setBreadCrumbs(List<ProgramSummary> summaries) {
 		for(int i=summaries.size()-1; i>-1; i--){
 			ProgramSummary summary = summaries.get(i);
-			createCrumb(summary.getName(), summary.getId(), i==0);
+			createCrumb(summary.getName()+" - "+summary.getDescription(), summary.getId(), i==0);
 		}
 		
 	}
@@ -163,10 +191,11 @@ public class CreateOutcomeView extends ViewImpl implements
 	@Override
 	public void setParentProgram(IsProgramDetail isProgramActivity) {
 		setBreadCrumbs(isProgramActivity.getProgramSummary());
-	}
-	
-	boolean isNullOrEmpty(String value) {
-		return value == null || value.trim().length() == 0;
+		if(isProgramActivity.getTargetsAndOutcomes()==null || isProgramActivity.getTargetsAndOutcomes().isEmpty()){
+			aCopyTargets.addStyleName("hide");
+		}else{
+			aCopyTargets.removeStyleName("hide");
+		}
 	}
 
 	@Override
@@ -174,6 +203,11 @@ public class CreateOutcomeView extends ViewImpl implements
 		boolean isValid = true;
 		issues.clear();
 
+		if(isNullOrEmpty(txtOutcomeRef.getValue())){
+			isValid = false;
+			issues.addError("Outcome Ref is mandatory");
+		}
+		
 		if(isNullOrEmpty(txtOutcome.getValue())){
 			isValid = false;
 			issues.addError("Outcome is mandatory");
@@ -195,9 +229,8 @@ public class CreateOutcomeView extends ViewImpl implements
 	public IsProgramDetail getOutcome() {
 		ProgramDTO program = new ProgramDTO();
 		program.setDescription(txtOutcome.getValue());
-		program.setName(txtOutcome.getValue());
+		program.setName(txtOutcomeRef.getValue());
 		program.setType(ProgramDetailType.OUTCOME);
-		program.setProgramOutcomes(autoComplete.getSelectedItems());
 		//program.setTargetsAndOutcomes(targetsAndOutcomes);
 		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
 		program.setFunding(funding);
@@ -209,6 +242,11 @@ public class CreateOutcomeView extends ViewImpl implements
 			}
 		}
 		program.setBudgetAmount(totalAmount);
+		
+		//Targets and Outcomes
+		List<TargetAndOutcomeDTO> targets = gridTargets.getData(targetAndOutcomeMapper); 
+		program.setTargetsAndOutcomes(targets);
+				
 		return program;
 		
 	}
@@ -219,8 +257,8 @@ public class CreateOutcomeView extends ViewImpl implements
 			return;		
 		}
 		
+		txtOutcomeRef.setValue(outcome.getName());
 		txtOutcome.setValue(outcome.getDescription());
-		autoComplete.select(outcome.getProgramOutcomes());
 		Collections.sort(outcome.getFunding(), new Comparator<ProgramFundDTO>() {
 			@Override
 			public int compare(ProgramFundDTO o1, ProgramFundDTO o2) {
@@ -236,15 +274,90 @@ public class CreateOutcomeView extends ViewImpl implements
 		
 		List<DataModel> models = programFundMapper.getDataModels(lst); 
 		gridView.setData(models);
+		
+		setTargetsAndOutComes(outcome.getTargetsAndOutcomes());
 	}
+	
+	public void setTargetsAndOutComes(
+			List<TargetAndOutcomeDTO> targetsAndOutComes) {
+		Collections.sort(targetsAndOutComes, new Comparator<TargetAndOutcomeDTO>(){
+			@Override
+			public int compare(TargetAndOutcomeDTO o1, TargetAndOutcomeDTO o2) {
+				
+				return o1.getMeasure().compareTo(o2.getMeasure());
+			}
+		});
+		
+		List<Object> targets = new ArrayList<Object>();
+		
+		if(targetsAndOutComes==null || targetsAndOutComes.isEmpty()){
+			return;
+		}			
+			
+		for(TargetAndOutcomeDTO dto: targetsAndOutComes){
+			targets.add(dto);
+		}	
+		List<DataModel> models = targetAndOutcomeMapper.getDataModels(targets); 
+		gridTargets.setData(models);
+				
+	}
+	
+	DataMapper targetAndOutcomeMapper = new DataMapper() {
+		
+		@Override
+		public List<DataModel> getDataModels(List<Object> funding) {
+
+			List<DataModel> models = new ArrayList<DataModel>();
+			for(Object obj: funding){
+				TargetAndOutcomeDTO target = (TargetAndOutcomeDTO)obj;
+				DataModel model = new DataModel();
+				model.setId(target.getId());
+				model.set("target", target.getTarget());
+				model.set("indicator", target.getMeasure());
+				model.set("actual", target.getActualOutcome());
+				models.add(model);
+			}
+			
+			return models;
+		}
+		
+		@Override
+		public TargetAndOutcomeDTO getData(DataModel model) {
+
+			if(model.isEmpty()){
+				return null;
+			}
+			
+			TargetAndOutcomeDTO dto = new TargetAndOutcomeDTO();
+			dto.setId(model.getId());
+			dto.setMeasure(isNullOrEmpty(model.get("indicator"))? null: 
+					model.get("indicator").toString());
+			
+			dto.setTarget(model.get("target")==null ? null: 
+				(Double)model.get("target"));
+			
+			dto.setActualOutcome(model.get("actual")==null ? null: 
+				(Double)model.get("actual"));
+			
+			dto.setKey(StringUtils.camelCase(dto.getMeasure()));
+			return dto;
+		}
+	};
+
 
 	@Override
 	public void clear() {
 		gridView.setData(new ArrayList<DataModel>());
 		txtOutcome.setValue(null);
+		txtOutcomeRef.setValue(null);
 		crumbContainer.clear();
 		spnPeriod.setText(null);
-		autoComplete.clearSelection();
+	}
+
+	@Override
+	public HasClickHandlers getCopyTargetsLink() {
+		
+		return aCopyTargets;
 	}
 
 
