@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.ProgressBar;
 import com.wira.pmgt.client.ui.component.RowWidget;
-import com.wira.pmgt.client.ui.component.TableView;
 import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent;
 import com.wira.pmgt.client.ui.events.ProgramDeletedEvent;
 import com.wira.pmgt.client.ui.events.ProgramDeletedEvent.ProgramDeletedHandler;
@@ -240,7 +239,10 @@ public class ProgramsTableRow extends RowWidget implements
 			// Summary table
 			divName.setHref("#home;page=activities;activity="
 					+ activity.getId());
-		} else {
+		}else if (isSummaryRow && activity.getType() == ProgramDetailType.OUTCOME){
+			divName.setHref("#home;page=activities;activity=" + activity.getProgramId() + "d"
+					+ activity.getId());
+		}else {
 			divName.setHref("#home;page=activities;activity=" + programId + "d"
 					+ activity.getId());
 		}
