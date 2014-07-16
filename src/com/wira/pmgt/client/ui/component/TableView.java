@@ -66,11 +66,16 @@ public class TableView extends Composite {
 			th.add(label);
 
 			// add to row
-			panelHeader.add(th);
 			if (header.getWidth() != null) {
 				th.getElement().getStyle()
 						.setWidth(header.getWidth(), Unit.PCT);
 			}
+
+			if (header.getStyleName() != null) {
+				th.addStyleName(header.getStyleName());
+			}
+
+			panelHeader.add(th);
 		}
 	}
 
@@ -207,24 +212,29 @@ public class TableView extends Composite {
 		count = 0;
 	}
 
-	public void createHeader(String name, String width, String labelStyle) {
+	public void createHeader(String name, String width, String labelStyle,
+			String thStyle) {
 		HTMLPanel th = new HTMLPanel("");
 		th.addStyleName("th");
+		if (thStyle != null) {
+			th.addStyleName(thStyle);
+		}
 		if (width != null) {
 			th.setWidth(width);
 		}
 		InlineLabel label = new InlineLabel(name);
 		label.setTitle(name);
-		if (labelStyle!=null) {
+		if (labelStyle != null) {
 			label.addStyleName(labelStyle);
 		}
 		th.add(label);
 		panelHeader.add(th);
 	}
-	
-	public void createHeader(String name, String width){
-		createHeader(name, width,null);
+
+	public void createHeader(String name, String width) {
+		createHeader(name, width, null, null);
 	}
+
 	public void createHeader(String name) {
 		createHeader(name, null);
 	}

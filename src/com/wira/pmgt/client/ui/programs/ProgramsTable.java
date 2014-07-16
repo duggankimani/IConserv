@@ -46,7 +46,8 @@ public class ProgramsTable extends Composite {
 		}
 		setActivities(programActivities, -1);
 	}
-
+	
+	
 	private void setActivities(List<IsProgramDetail> programActivities,
 			int level) {
 		level++;
@@ -99,7 +100,7 @@ public class ProgramsTable extends Composite {
 		System.err.println("Goals Table >>>" + isGoalsTable);
 
 		if (isSummaryTable) {
-			th.add(new TableHeader("TITLE", 40.0));
+			th.add(new TableHeader("TITLE", 40.0,"title"));
 			th.add(new TableHeader("TIMELINES", 10.0));
 			th.add(new TableHeader("PROGRESS", 10.0));
 			th.add(new TableHeader("BUDGET", 10.0));
@@ -107,7 +108,7 @@ public class ProgramsTable extends Composite {
 		} else if (isGoalsTable) {
 			th.add(new TableHeader("TITLE", 100.0));
 		} else {
-			th.add(new TableHeader("TITLE", 40.0));
+			th.add(new TableHeader("TITLE", 40.0,"title"));
 			th.add(new TableHeader("TIMELINES", 10.0));
 			th.add(new TableHeader("STATUS", 10.0));
 			th.add(new TableHeader("PROGRESS", 10.0));
@@ -150,11 +151,10 @@ public class ProgramsTable extends Composite {
 			}
 		});
 		
-		System.err.println(">>>Goals Table "+isGoalsTable);
 		if (!isGoalsTable) {
 			createGrid();
 			for (FundDTO fund : funds) {
-				tblView.createHeader(fund.getName() + "(Ksh)", "10%","ellipsis");
+				tblView.createHeader(fund.getName() + "(Ksh)", "10%","ellipsis","budgets");
 			}
 		}
 	}
@@ -170,5 +170,6 @@ public class ProgramsTable extends Composite {
 
 	public void setGoalsTable(boolean isGoalTable) {
 		this.isGoalsTable = isGoalTable;
+		tblView.addStyleName("goals-table");
 	}
 }

@@ -156,6 +156,7 @@
 
 .activities-page .content-top .header .title{
 	margin-left: 11px;
+	color: #0D5C0E;
 }
 
 .activities-page .content-top .title-container{
@@ -220,8 +221,6 @@
 .dialog-filter .form select{
     width: 100%;
 }
-
-
 .activities-page .user-content{
 	margin: 20px;
 }
@@ -239,26 +238,26 @@
 	padding-left: 0px;
 }
 
+/*Set Maximum and Minimum widths for Budgets & Title*/
+.table-programs .table .tr .title{
+	min-width: 310px;
+}
+.table-programs .table .tr .budgets{
+	max-width:84px;
+	
+	font-weight: normal;
+	padding-top: 5px;
+}
+
 .table-programs .table>.thead>.tr>.th>.ellipsis{
-	width:70%;
+	width: 70%;
 }
 
-.table-programs .tbody .td{
-	border: 1px solid #E6E6E6;
-	padding-bottom: 0px;
-	text-align: center;
-	margin: 0px;
+.table-programs.goals-table .table .tr .td .small-container{
+	max-width: 3px;
+	min-width: 3px;
+	margin-right: 2px;
 }
-.table-programs .tbody .hovered{
-	background-color: #fcf8e3;
-	transition: background .25s ease-in-out;
-   -moz-transition: background .25s ease-in-out;
-   -webkit-transition: background .25s ease-in-out;
-}
- .table-programs .tbody .left{
-	text-align: left;
-}
-
 .table-programs .tbody .caret-container{
 	width:5%;
 	line-height: 4;
@@ -273,15 +272,38 @@
 	line-height: 3;
 }
 
+
+.table-programs .tbody .td{
+	border: 1px solid #E6E6E6;
+	padding-bottom: 0px;
+	text-align: center;
+	margin: 0px;
+}
+.table-programs .tbody .hovered{
+	background-color: #E3F7DE !important;
+	transition: background .25s ease-in-out;
+   -moz-transition: background .25s ease-in-out;
+   -webkit-transition: background .25s ease-in-out;
+	font-weight: bolder;
+}
+ .table-programs .tbody .left{
+	text-align: left;
+}
+
+
 .table-programs .tbody .name-container{
-	width: 77%;
+	width: 75%;
 	text-align: left;
 }
 
 .table-programs .tbody .name-container a{
 	color:#000000;
 }
-
+.table-programs .tbody .name-container a.no-link:hover{
+	text-decoration:none;
+	cursor:default;
+	color:#000000 !important;
+}
 .table-programs .tbody .name-container a:hover{
 	text-decoration:underline;
 	cursor:pointer;
@@ -337,7 +359,7 @@
 .activities-page .tabs-below .tabs-container > .nav-tabs{
 	background-color: #eeeeee;
 	margin-top: 0px;
-	padding-bottom: 4px;
+	padding-bottom: 2px;
 	white-space: nowrap;
 	z-index: 0;
 	overflow-x: hidden;
@@ -350,10 +372,12 @@
 .main-container .activities-page .nav-tabs > li.active > a, 
 .main-container .activities-page .nav-tabs > li.active > a:hover, 
 .main-container .activities-page .nav-tabs > li.active > a:focus{
-	border-color: #fff #aaa #aaa #aaa;
+	border-color: #fff #aaa #0D5C0E #aaa;
 	background-color:#fff;
 	cursor:pointer;
 	margin-right: -1px;
+	color: #0D5C0E;
+	border-bottom-width: 2px;
 }
 
 .main-container .activities-page .tabs-below .nav-tabs  a:hover,

@@ -365,7 +365,10 @@ public class ProgramsView extends ViewImpl implements
 				}
 				
 				
-			} else {
+			}else if(tblView.isGoalsTable){
+				System.err.println(">>>Goals Table "+tblView.isGoalsTable);
+				headerContainer.setText("Objectives & Goals");
+			}else {
 				headerContainer.showBudgets(false);
 				setData(Arrays.asList(singleResult));
 			}

@@ -248,22 +248,23 @@ public class ProgramsTableRow extends RowWidget implements
 	private void setActivityName() {
 		divName.getElement().setInnerText(activity.getName());
 
-		if (activity.getStartDate() != null && activity.getEndDate() != null)
+		if (activity.getStartDate() != null && activity.getEndDate() != null){
 			// divName.setTitle(DateUtils.HALFDATEFORMAT.format(activity
 			// .getStartDate())
 			// + " - "
 			// + DateUtils.HALFDATEFORMAT.format(activity.getEndDate()));
 
-			divName.setTitle(activity.getDescription());
-
+			//divName.setTitle(activity.getDescription());
+		}
 		if (activity.getType() == ProgramDetailType.OBJECTIVE ||
 				activity.getType() == ProgramDetailType.OUTCOME) {
-
+			System.err.println("This is an objectivve");
 			if(activity.getProgramId()!=null){
 				divName.setHref("#home;page=activities;activity=" + activity.getProgramId() + "d"
 						+ activity.getId());
 			}else{
 				divName.getElement().removeAttribute("href");
+				divName.addStyleName("no-link");
 			}
 			
 		}else if (isSummaryRow && activity.getType() == ProgramDetailType.PROGRAM) {

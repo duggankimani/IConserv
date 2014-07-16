@@ -2,23 +2,26 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.wira.pmgt.client.ui.component">
 	<g:HTMLPanel styleName="tr" ui:field="row">
-		<g:HTMLPanel styleName="td" ui:field="divCheckbox" width="40%">
-			<g:HTMLPanel styleName="span4 caret-container">
-				<d:ActionLink ui:field="divRowCaret"
-					styleName="icon-caret-right helper-font-16 muted"></d:ActionLink>
-			</g:HTMLPanel>
+		<g:HTMLPanel styleName="td title" ui:field="divCheckbox"
+			width="40%">
+			<div class="row-fluid">
+				<g:HTMLPanel styleName="span4 caret-container small-container">
+					<d:ActionLink ui:field="divRowCaret"
+						styleName="icon-caret-right helper-font-16 muted"></d:ActionLink>
+				</g:HTMLPanel>
 
-			<g:HTMLPanel styleName="span4 strip-container">
-				<span class="color-strip" ui:field="divRowStrip"></span>
-			</g:HTMLPanel>
+				<g:HTMLPanel styleName="span4 strip-container small-container">
+					<span class="color-strip" ui:field="divRowStrip"></span>
+				</g:HTMLPanel>
 
-			<g:HTMLPanel styleName="span4 select-container">
-				<g:CheckBox ui:field="chkSelect"></g:CheckBox>
-			</g:HTMLPanel>
+				<g:HTMLPanel styleName="span4 select-container small-container">
+					<g:CheckBox ui:field="chkSelect"></g:CheckBox>
+				</g:HTMLPanel>
 
-			<g:HTMLPanel styleName="span4 name-container">
-				<d:ActionLink ui:field="divName" styleName=""></d:ActionLink>
-			</g:HTMLPanel>
+				<g:HTMLPanel styleName="span4 name-container">
+					<d:ActionLink ui:field="divName" styleName=""></d:ActionLink>
+				</g:HTMLPanel>
+			</div>
 		</g:HTMLPanel>
 
 		<g:HTMLPanel styleName="td" ui:field="divTimelines" width="10%">
@@ -45,6 +48,7 @@
 			<!-- span ui:field="spnProgress"></span -->
 		</g:HTMLPanel>
 
-		<g:HTMLPanel styleName="td" ui:field="divBudget" title="Budget Amount" width="10%"></g:HTMLPanel>
+		<g:HTMLPanel styleName="td" ui:field="divBudget" title="Budget Amount"
+			width="10%"></g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 

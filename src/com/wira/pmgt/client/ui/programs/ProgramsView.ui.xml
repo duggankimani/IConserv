@@ -129,9 +129,9 @@
 
 
 				<g:HTMLPanel ui:field="divMiddleContent"
-					styleName="tabbable tabs-below hidden full-page no-overflow-x">
+					styleName="tabbable tabs-below hidden full-page">
 
-					<d:MyHTMLPanel cssId="usercontent" styleName="tab-content"
+					<d:MyHTMLPanel styleName="tab-content"
 						ui:field="divProgramsTable">
 						<g:HTMLPanel>
 							<div ui:field="divTab1Content" class="tab-pane fade in active">
