@@ -38,6 +38,21 @@ public class TestProgramDaoImpl {
 	}
 	
 	@Test
+	public void loadProgram(){
+		IsProgramDetail detail = ProgramDaoHelper.getProgramById(176L, true, false);
+		Assert.assertEquals(3,detail.getProgramOutcomes().size());
+	}
+	
+	@Ignore
+	public void load(){
+		List<IsProgramDetail> list = ProgramDaoHelper.getProgramsByType(ProgramDetailType.OBJECTIVE, true, false);
+		for(IsProgramDetail d:list){
+			Assert.assertEquals(2,d.getChildren().size());
+		}
+		
+	}
+	
+	@Ignore
 	public void create(){
 		ProgramDetail objective = new ProgramDetail();
 		objective.setName("Obj 1");

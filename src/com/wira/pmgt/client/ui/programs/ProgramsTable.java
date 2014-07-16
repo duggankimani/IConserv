@@ -52,8 +52,9 @@ public class ProgramsTable extends Composite {
 		level++;
 		sort(programActivities);
 		for (IsProgramDetail activity : programActivities) {
+			System.err.println("Painting :: " + activity.getName());
 			ProgramsTableRow row = new ProgramsTableRow(activity, funds,
-					programId, isSummaryTable, isGoalsTable, level);
+					programId, isSummaryTable,isGoalsTable,level);
 			if (activity.getId() == lastUpdatedId) {
 				row.highlight();
 			}
@@ -64,12 +65,12 @@ public class ProgramsTable extends Composite {
 			if (activity.getType() == ProgramDetailType.PROGRAM) {
 				// this is data for the summary tab
 				if (activity.getProgramOutcomes() != null) {
+					System.err.println("Count >> "
+							+ activity.getProgramOutcomes().size());
 					sort(activity.getProgramOutcomes());
 					setActivities(activity.getProgramOutcomes(), level);
 				}
-			}
-
-			if (activity.getChildren() != null
+			} else if (activity.getChildren() != null
 					&& !activity.getChildren().isEmpty()) {
 				setActivities(activity.getChildren(), level);
 			}
@@ -105,7 +106,7 @@ public class ProgramsTable extends Composite {
 		} else if (isGoalsTable) {
 			th.add(new TableHeader("TITLE", 100.0));
 		} else {
-			th.add(new TableHeader("TITLE", 30.0));
+			th.add(new TableHeader("TITLE", 40.0));
 			th.add(new TableHeader("TIMELINES", 10.0));
 			th.add(new TableHeader("STATUS", 10.0));
 			th.add(new TableHeader("PROGRESS", 10.0));
@@ -147,11 +148,11 @@ public class ProgramsTable extends Composite {
 				return o1.getName().compareTo(o2.getName());
 			}
 		});
-		
+
 		if (!isGoalsTable) {
-		createGrid();
+			createGrid();
 			for (FundDTO fund : funds) {
-				tblView.createHeader(fund.getName() + "(Ksh)", "10%");
+				tblView.createHeader(fund.getName() + "(Ksh)", "10%","ellipsis");
 			}
 		}
 	}

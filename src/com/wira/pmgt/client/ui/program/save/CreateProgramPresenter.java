@@ -18,6 +18,7 @@ import com.wira.pmgt.client.ui.donor.save.DonorSaveView;
 import com.wira.pmgt.client.ui.events.ActivitySavedEvent;
 import com.wira.pmgt.client.ui.events.ProgramsReloadEvent;
 import com.wira.pmgt.client.ui.period.save.PeriodSaveView;
+import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
@@ -57,8 +58,6 @@ public class CreateProgramPresenter extends
 
 		void setPeriods(List<PeriodDTO> periods);
 
-		void setGroups(List<UserGroup> groups);
-
 		ProgramDTO getProgram();
 
 		void setFunds(List<FundDTO> funds);
@@ -70,6 +69,8 @@ public class CreateProgramPresenter extends
 		HasClickHandlers getManageDonors();
 
 		List<PeriodDTO> getPeriods();
+		
+		void setObjectives(List<IsProgramDetail> objectives);
 
 	}
 
@@ -240,8 +241,8 @@ public class CreateProgramPresenter extends
 
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetFundsRequest());
-		action.addRequest(new GetGroupsRequest());
 		action.addRequest(new GetPeriodsRequest());
+		action.addRequest(new GetProgramsRequest(ProgramDetailType.OUTCOME, false));
 		if (programId != null) {
 			action.addRequest(new GetProgramsRequest(programId, false));
 		}
@@ -254,14 +255,13 @@ public class CreateProgramPresenter extends
 								.get(0);
 						getView().setFunds(getFunds.getFunds());
 
-						GetGroupsResponse getGroups = (GetGroupsResponse) aResponse
-								.get(1);
-						getView().setGroups(getGroups.getGroups());
-
 						GetPeriodsResponse getPeriods = (GetPeriodsResponse) aResponse
-								.get(2);
+								.get(1);
 						getView().setPeriods(getPeriods.getPeriods());
 
+						GetProgramsResponse getPrograms = (GetProgramsResponse)aResponse.get(2);
+						getView().setObjectives(getPrograms.getPrograms());
+						
 						if (programId != null) {
 							GetProgramsResponse getProgram = (GetProgramsResponse) aResponse
 									.get(3);

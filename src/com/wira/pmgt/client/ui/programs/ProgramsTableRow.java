@@ -155,10 +155,13 @@ public class ProgramsTableRow extends RowWidget implements
 					&& !activity.getProgramOutcomes().isEmpty()) {
 				setHasChildren(this.showChildren);
 			}
-			divRowCaret
-					.setVisible(activity.getType() == ProgramDetailType.PROGRAM
-							&& (activity.getProgramOutcomes() != null)
-							&& (activity.getProgramOutcomes().size() > 0));
+			
+			if(activity.getType() == ProgramDetailType.PROGRAM){
+				divRowCaret
+				.setVisible((activity.getProgramOutcomes()!=null) 
+						&& (activity.getProgramOutcomes().size() > 0));
+			}
+			
 		}
 
 		// Bind Row to Table
@@ -190,6 +193,7 @@ public class ProgramsTableRow extends RowWidget implements
 			hide(divStatus, true);
 		} else if (isGoalsTable) {
 			hide(divStatus, true);
+			hide(divTimelines,true);
 			hide(divProgress,true);
 			hide(divBudget,true);
 		} else {
@@ -495,7 +499,8 @@ public class ProgramsTableRow extends RowWidget implements
 
 		int childCount = activity.getChildren() == null ? 0 : activity
 				.getChildren().size();
-		if (programId == 0) {
+		
+		if (activity.getType()==ProgramDetailType.PROGRAM) {
 			// summary table
 			childCount = activity.getProgramOutcomes() == null ? 0 : activity
 					.getProgramOutcomes().size();
@@ -510,14 +515,15 @@ public class ProgramsTableRow extends RowWidget implements
 		// loop until you count n children
 		for (int i = idx + 1; (i < panel.getWidgetCount() && childrenCollapsed < childCount); i++) {
 			ProgramsTableRow row = (ProgramsTableRow) panel.getWidget(i);
-			if (row.getActivity().getParentId() == activity.getId()) {
+			System.err.println("Showing child : "+showChildren);
+			//if (row.getActivity().getParentId() == activity.getId()) {
 				childrenCollapsed++;
 				if (!showChildren) {
 					// toggle children of children only when collapsing
 					row.toggle(showChildren);
 				}
 				row.show(showChildren);
-			}
+			//}
 
 		}
 	}

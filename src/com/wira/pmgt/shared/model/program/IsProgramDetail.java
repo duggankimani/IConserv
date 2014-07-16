@@ -194,4 +194,12 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 		
 		programOutcomes.add(programDTO);
 	}
+
+	public void addChild(IsProgramDetail activity) {
+		if(children==null){
+			children = new ArrayList<IsProgramDetail>();
+		}
+		
+		children.add(activity);
+	}
 }

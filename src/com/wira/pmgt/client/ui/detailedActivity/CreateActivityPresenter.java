@@ -53,6 +53,8 @@ public class CreateActivityPresenter extends
 	private Long parentId;
 	private List<TargetAndOutcomeDTO> parentTargetsAndOutcomes=null;
 	private PeriodDTO period;
+
+	private Long outcomeId;
 		
 	@Inject
 	public CreateActivityPresenter(final EventBus eventBus, final MyView view) {
@@ -87,6 +89,7 @@ public class CreateActivityPresenter extends
 		IsProgramDetail viewactivity= getView().getActivity();
 		viewactivity.setParentId(parentId);
 		viewactivity.setPeriod(period);
+		viewactivity.setActivityOutcomeId(outcomeId);
 		if(activity!=null){
 			//update
 			viewactivity.setId(activity.getId());
@@ -98,14 +101,16 @@ public class CreateActivityPresenter extends
 		return viewactivity;
 	}
 
-	public void load(Long outcomeId) {
+	public void load(Long programId,Long outcomeId) {
 		
-		this.parentId = outcomeId;
+		this.parentId = programId;
+		this.outcomeId = outcomeId;
+		
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetFundsRequest());
 		action.addRequest(new GetPeriodRequest());
 		action.addRequest(new GetProgramsRequest(ProgramDetailType.OBJECTIVE, false));
-		action.addRequest(new GetProgramsRequest(outcomeId, false));
+		action.addRequest(new GetProgramsRequest(programId, false));
 				
 		requestHelper.execute(action, new TaskServiceCallback<MultiRequestActionResult>() {
 			@Override

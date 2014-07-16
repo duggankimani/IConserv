@@ -202,6 +202,9 @@ body .breadcrumb a,a:hover{
 .container{
 	/* padding-top: 20px; */
 }
+.table,table{
+	width:100%;
+}
 /*End of my Utility helpers*/
 
 /** font size helper **/

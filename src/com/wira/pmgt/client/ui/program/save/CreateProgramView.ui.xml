@@ -55,6 +55,13 @@
 						</div>
 
 						<div class="control-group">
+							<div class="control-label">Outcomes</div>
+							<div class="controls">
+								<a:AutoCompleteField ui:field="autoComplete" />
+							</div>
+						</div>
+
+						<div class="control-group">
 							<div class="control-label">Donors:</div>
 							<div class="controls">
 								<grid:AggregationGrid ui:field="gridView"></grid:AggregationGrid>
@@ -63,14 +70,7 @@
 								</d:ActionLink>
 							</div>
 						</div>
-
-						<div class="control-group hidden">
-							<div class="control-label">Allocated To:</div>
-							<div class="controls">
-								<a:AutoCompleteField ui:field="autoComplete" />
-							</div>
-						</div>
-
+						
 						<!-- div class="control-group"> <div class="control-label">Allocated 
 							To:</div> <div class="controls"> <a:AutoCompleteField/> </div> </div -->
 

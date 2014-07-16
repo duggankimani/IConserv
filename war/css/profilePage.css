@@ -239,6 +239,10 @@
 	padding-left: 0px;
 }
 
+.table-programs .table>.thead>.tr>.th>.ellipsis{
+	width:70%;
+}
+
 .table-programs .tbody .td{
 	border: 1px solid #E6E6E6;
 	padding-bottom: 0px;
