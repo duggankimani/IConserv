@@ -492,21 +492,13 @@ public class ProgramsPresenter extends
 
 						getView().setLastUpdatedId(
 								createProgramsResponse.getProgram().getId());
+						
 						if (activity.getType() == ProgramDetailType.PROGRAM) {
 							loadData(programId);
 						} else if (activity.getType() == ProgramDetailType.OBJECTIVE) {
 							loadData(null, null, null,
 									ProgramDetailType.OBJECTIVE);
-						}
-
-						// Reloading information in a new request
-						// due to an issue on the server in reloading
-						// uncommitted information
-						// Budget Total Amounts && Parent program allocations
-						// updated values do not reflect
-						// unless the user actively reloads them
-						// This is a hack to prevent that issue
-						if (activity.getType() == ProgramDetailType.ACTIVITY) {
+						}else if (activity.getType() == ProgramDetailType.ACTIVITY) {
 							assert activity.getActivityOutcomeId() != null;
 							afterSave(createProgramsResponse.getProgram()
 									.getId(), activity.getActivityOutcomeId(),
@@ -516,6 +508,7 @@ public class ProgramsPresenter extends
 									.getId(), activity.getParentId(), activity
 									.getId() == null);
 						}
+						
 						fireEvent(new ProcessingCompletedEvent());
 						fireEvent(new ActivitySavedEvent(activity.getType()
 								.name().toLowerCase()

@@ -18,6 +18,10 @@ public class GetProgramsRequest extends BaseRequest<GetProgramsResponse> {
 	
 	private ProgramDetailType type;
 	private boolean loadChildren;
+
+	private Long parentId;
+
+	private Long outcomeId;
 	
 	public GetProgramsRequest() {
 	}
@@ -36,6 +40,12 @@ public class GetProgramsRequest extends BaseRequest<GetProgramsResponse> {
 	public GetProgramsRequest(ProgramDetailType type, boolean loadChildren){
 		this.type = type;
 		this.loadChildren= loadChildren;
+	}
+	
+	public GetProgramsRequest(Long parentId, Long outcomeId){
+		this.parentId = parentId;
+		this.outcomeId = outcomeId;
+		
 	}
 	
 	public Long getId() {
@@ -70,4 +80,13 @@ public class GetProgramsRequest extends BaseRequest<GetProgramsResponse> {
 	public void setCode(String code) {
 		this.code = code;
 	}
+
+	public Long getParentId() {
+		return parentId;
+	}
+	
+	public Long getOutcomeId() {
+		return outcomeId;
+	}
+
 }

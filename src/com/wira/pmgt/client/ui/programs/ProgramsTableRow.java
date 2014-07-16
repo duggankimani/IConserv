@@ -101,7 +101,7 @@ public class ProgramsTableRow extends RowWidget implements
 	int level = 0;
 	long programId = 0;
 	IsProgramDetail activity;
-	List<FundDTO> funding = null;
+	List<FundDTO> donors = null;
 
 	// Is the current status showing children or not
 	boolean showingChildren = true;
@@ -131,7 +131,7 @@ public class ProgramsTableRow extends RowWidget implements
 		this.activity = activity;
 		this.programId = (programId == null ? 0 : programId);
 		this.level = level;
-		this.funding = sortedListOfFunding;
+		this.donors = sortedListOfFunding;
 
 		this.showingChildren = (level == 0);
 		// Show/ hide this details based on its level on load
@@ -200,6 +200,10 @@ public class ProgramsTableRow extends RowWidget implements
 				activity.getType() == ProgramDetailType.OBJECTIVE ? ""
 						: budgetAmount);
 
+		if(activity.getType()==ProgramDetailType.OUTCOME && (isSummaryRow)){
+			chkSelect.addStyleName("hide");
+		}
+		
 		chkSelect.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -252,23 +256,32 @@ public class ProgramsTableRow extends RowWidget implements
 
 			divName.setTitle(activity.getDescription());
 
-		if (isSummaryRow && activity.getType() == ProgramDetailType.PROGRAM) {
+		if (activity.getType() == ProgramDetailType.OBJECTIVE ||
+				activity.getType() == ProgramDetailType.OUTCOME) {
+
+			if(activity.getProgramId()!=null){
+				divName.setHref("#home;page=activities;activity=" + activity.getProgramId() + "d"
+						+ activity.getId());
+			}else{
+				divName.getElement().removeAttribute("href");
+			}
+			
+		}else if (isSummaryRow && activity.getType() == ProgramDetailType.PROGRAM) {
 			// Summary table
 			divName.setHref("#home;page=activities;activity="
 					+ activity.getId());
-		}else if (isSummaryRow && activity.getType() == ProgramDetailType.OUTCOME){
-			divName.setHref("#home;page=activities;activity=" + activity.getProgramId() + "d"
-					+ activity.getId());
-		}else {
+		}else{
 			divName.setHref("#home;page=activities;activity=" + programId + "d"
 					+ activity.getId());
 		}
 
 		divRowStrip.addClassName("label-info");
 
-		if (activity.getType() == ProgramDetailType.OBJECTIVE)
+		if (activity.getType() == ProgramDetailType.OBJECTIVE){
 			divName.getElement().setInnerText(
 					activity.getName() + " - " + activity.getDescription());
+		}
+		
 		if (level == 0) {
 			divName.addStyleName("bold");
 		}
@@ -389,12 +402,13 @@ public class ProgramsTableRow extends RowWidget implements
 
 	private void setFunding() {
 		List<ProgramFundDTO> activityFunding = activity.getFunding();
+		
 		List<FundDTO> activitySourceOfFunds = new ArrayList<FundDTO>();
 		for (ProgramFundDTO dto : activityFunding) {
 			activitySourceOfFunds.add(dto.getFund());
 		}
 
-		for (FundDTO programFund : funding) {
+		for (FundDTO programFund : donors) {
 			int idx = activitySourceOfFunds.indexOf(programFund);
 
 			if (idx == -1) {
@@ -584,7 +598,7 @@ public class ProgramsTableRow extends RowWidget implements
 			// insert this child at the end of the parent
 			FlowPanel parent = ((FlowPanel) this.getParent());
 			ProgramsTableRow newRow = new ProgramsTableRow(updatedProgram,
-					funding, programId, false, false, level + 1);
+					donors, programId, false, false, level + 1);
 			newRow.setSelectionChangeHandler(selectionHandler);
 
 			// Position the row below the parent
@@ -610,7 +624,8 @@ public class ProgramsTableRow extends RowWidget implements
 		// exists
 		if (activity.getId().equals(updatedProgram.getId())) {
 			int count = row.getWidgetCount();
-			for (FundDTO programFund : funding) {
+			
+			for (FundDTO programFund : donors) {
 				assert remove(row.getWidget(--count));
 			}
 

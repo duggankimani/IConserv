@@ -70,7 +70,7 @@ public class ProgramsTable extends Composite {
 		if(activity.getType()==ProgramDetailType.PROGRAM){
 			//this is data for the summary tab
 			if(activity.getProgramOutcomes()!=null){
-				sort(activity.getProgramOutcomes());
+				//sort(activity.getProgramOutcomes());
 				setActivities(activity.getProgramOutcomes(),level);
 			}
 		}else if(activity.getChildren()!=null && !activity.getChildren().isEmpty()){
