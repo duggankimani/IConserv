@@ -39,7 +39,7 @@ import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 import com.wira.pmgt.shared.model.program.ProgramStatus;
 
 public class ProgramsTableRow extends RowWidget implements
-		ProgramDetailSavedHandler,  ProgramDeletedHandler {
+		ProgramDetailSavedHandler, ProgramDeletedHandler {
 
 	private static ActivitiesTableRowUiBinder uiBinder = GWT
 			.create(ActivitiesTableRowUiBinder.class);
@@ -119,11 +119,14 @@ public class ProgramsTableRow extends RowWidget implements
 		}
 	};
 
+	private boolean isGoalsTable;
+
 	public ProgramsTableRow(IsProgramDetail activity,
 			List<FundDTO> sortedListOfFunding, Long programId,
-			boolean isSummaryRow, int level) {
+			boolean isSummaryRow, boolean isGoalsTable, int level) {
 
 		initWidget(uiBinder.createAndBindUi(this));
+		this.isGoalsTable = isGoalsTable;
 		this.isSummaryRow = isSummaryRow;
 		this.activity = activity;
 		this.programId = (programId == null ? 0 : programId);
@@ -175,9 +178,12 @@ public class ProgramsTableRow extends RowWidget implements
 		// listing or program details
 		if (isSummaryRow) {
 			// divProgress.setStyleName("hide");
-			divStatus.setStyleName("hide");
-			divStatus.setWidth("0%");
-
+			hide(divStatus, true);
+		} else if (isGoalsTable) {
+			hide(divStatus, true);
+			hide(divTimelines,true);
+			hide(divProgress,true);
+			hide(divBudget,true);
 		} else {
 
 			// divRating.getElement().setInnerText("N/A");
@@ -209,8 +215,19 @@ public class ProgramsTableRow extends RowWidget implements
 		setFunding();
 	}
 
+	private void hide(HTMLPanel divPanel, boolean show) {
+		if (show) {
+			divPanel.setStyleName("hide");
+			divPanel.setWidth("0%");
+		}else{
+			divPanel.removeStyleName("hide");
+			divPanel.setWidth("10%");
+		}
+	}
+
 	private void setTimeline() {
 		if (activity.getStartDate() != null) {
+			divTimelines.removeStyleName("hide");
 			divDates.removeStyleName("hide");
 			spanStartDay.setInnerText(DateUtils.DAYSHORTFORMAT.format(activity
 					.getStartDate()));
@@ -228,11 +245,11 @@ public class ProgramsTableRow extends RowWidget implements
 		divName.getElement().setInnerText(activity.getName());
 
 		if (activity.getStartDate() != null && activity.getEndDate() != null)
-//			divName.setTitle(DateUtils.HALFDATEFORMAT.format(activity
-//					.getStartDate())
-//					+ " - "
-//					+ DateUtils.HALFDATEFORMAT.format(activity.getEndDate()));
-			
+			// divName.setTitle(DateUtils.HALFDATEFORMAT.format(activity
+			// .getStartDate())
+			// + " - "
+			// + DateUtils.HALFDATEFORMAT.format(activity.getEndDate()));
+
 			divName.setTitle(activity.getDescription());
 
 		if (isSummaryRow && activity.getType() == ProgramDetailType.PROGRAM) {
@@ -274,6 +291,7 @@ public class ProgramsTableRow extends RowWidget implements
 	 */
 	public void setStatus() {
 		ProgramStatus status = activity.getStatus();
+
 		if (status == null) {
 			status = ProgramStatus.CREATED;
 		}
@@ -312,7 +330,7 @@ public class ProgramsTableRow extends RowWidget implements
 		if (status != ProgramStatus.CLOSED) {
 			if (activity.isOverdue()) {
 				spnStatus.setClassName("label label-danger");
-				//divDates.addStyleName("text-danger");
+				// divDates.addStyleName("text-danger");
 				spnStatus
 						.setTitle("This "
 								+ activity.getType().getDisplayName()
@@ -326,7 +344,7 @@ public class ProgramsTableRow extends RowWidget implements
 						+ " should have started by "
 						+ DateUtils.MONTHDAYFORMAT.format(activity
 								.getStartDate()));
-				//divDates.addStyleName("text-warning");
+				// divDates.addStyleName("text-warning");
 			} else if (activity.isUpcoming()) {
 				spnStatus.setTitle("This "
 						+ activity.getType().getDisplayName()
@@ -336,11 +354,11 @@ public class ProgramsTableRow extends RowWidget implements
 			} else {
 				// its ongoing - Work in progress (CREATED, OPEN, REOPENED)
 				// spnStatus.setClassName("label label-info");
-				//divDates.addStyleName("text-success");
+				// divDates.addStyleName("text-success");
 			}
 		} else {
 			spnStatus.setClassName("label label-success");
-			
+
 		}
 
 	}
@@ -381,7 +399,7 @@ public class ProgramsTableRow extends RowWidget implements
 
 			if (idx == -1) {
 				// Add empty to table td
-				createTd(new InlineLabel(""),"10%");
+				createTd(new InlineLabel(""), "10%");
 
 			} else {
 				ProgramFundDTO activityFund = activityFunding.get(idx);
@@ -413,7 +431,7 @@ public class ProgramsTableRow extends RowWidget implements
 					allocationPanel.setVisible(showingChildren || isSummaryRow);
 				}
 				// Add to table td
-				createTd(amounts,"10%");
+				createTd(amounts, "10%");
 			}
 
 		}
@@ -566,7 +584,7 @@ public class ProgramsTableRow extends RowWidget implements
 			// insert this child at the end of the parent
 			FlowPanel parent = ((FlowPanel) this.getParent());
 			ProgramsTableRow newRow = new ProgramsTableRow(updatedProgram,
-					funding, programId, false, level + 1);
+					funding, programId, false, false, level + 1);
 			newRow.setSelectionChangeHandler(selectionHandler);
 
 			// Position the row below the parent
@@ -612,16 +630,17 @@ public class ProgramsTableRow extends RowWidget implements
 
 	@Override
 	public void onProgramDeleted(ProgramDeletedEvent event) {
-		if(activity.getId().equals(event.getProgramId())){
-			if(activity.getChildren()!=null && !activity.getChildren().isEmpty()){
-				//remove children
+		if (activity.getId().equals(event.getProgramId())) {
+			if (activity.getChildren() != null
+					&& !activity.getChildren().isEmpty()) {
+				// remove children
 				toggle(false);
 			}
-			
-			//Widget parent = getParent();
-			//System.err.println("Parent >> "+parent.getClass());
+
+			// Widget parent = getParent();
+			// System.err.println("Parent >> "+parent.getClass());
 			removeFromParent();
-			
+
 		}
 	}
 

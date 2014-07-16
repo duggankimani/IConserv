@@ -68,14 +68,15 @@ import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 public class ProgramsPresenter extends
 		PresenterWidget<ProgramsPresenter.IActivitiesView> implements
 		ActivitySelectionChangedHandler, ProgramsReloadHandler, ResizeHandler {
-	
+
 	@ContentSlot
 	public static final Type<RevealContentHandler<?>> FILTER_SLOT = new Type<RevealContentHandler<?>>();
-	
-	@Inject FilterPresenter filterPresenter;
-	
+
+	@Inject
+	FilterPresenter filterPresenter;
+
 	public interface IActivitiesView extends View {
-		
+
 		HasClickHandlers getNewOutcome();
 
 		HasClickHandlers getNewActivityLink();
@@ -85,7 +86,7 @@ public class ProgramsPresenter extends
 		HasClickHandlers getNewTaskLink();
 
 		HasClickHandlers getEditLink();
-		
+
 		HasClickHandlers getDeleteButton();
 
 		void setData(List<IsProgramDetail> programs);
@@ -97,7 +98,6 @@ public class ProgramsPresenter extends
 		void setSelection(ProgramDetailType type);
 
 		void setPeriods(List<PeriodDTO> periods);
-
 
 		// void setSummaryView(boolean hasProgramId);
 
@@ -120,12 +120,14 @@ public class ProgramsPresenter extends
 		void setActivePeriod(PeriodDTO period);
 
 		void selectTab(Long l);
-		
+
 		void selectTab(String url);
 
 		void setMiddleHeight();
 
 		void removeTab(Long id);
+
+		void setProgramId(Long programId, boolean isGoalsTable);
 
 		void createDefaultTabs();
 	}
@@ -142,29 +144,29 @@ public class ProgramsPresenter extends
 	CreateActivityPresenter createTask;
 	@Inject
 	AssignActivityPresenter assignActivity;
-	
+
 	@Inject
 	ActivityDetailPresenter activityDetail;
-	
-	@Inject PlaceManager placeManager;
+
+	@Inject
+	PlaceManager placeManager;
 
 	Long programId;
 	String programCode;
-	
+
 	Long programDetailId; // Drill Down
-	String programDetailCode; //Drill Down
+	String programDetailCode; // Drill Down
 
 	ProgramDetailType programType = ProgramDetailType.PROGRAM; // last selected
 
 	PeriodDTO period;
-	
+
 	IsProgramDetail selected;
-	
+
 	IsProgramDetail detail;
 
 	@Inject
-	public ProgramsPresenter(final EventBus eventBus,
-			final IActivitiesView view) {
+	public ProgramsPresenter(final EventBus eventBus, final IActivitiesView view) {
 		super(eventBus, view);
 	}
 
@@ -174,28 +176,26 @@ public class ProgramsPresenter extends
 		addRegisteredHandler(ActivitySelectionChangedEvent.TYPE, this);
 		addRegisteredHandler(ProgramsReloadEvent.TYPE, this);
 		addRegisteredHandler(AppResizeEvent.TYPE, this);
-		
-		
-		getView().getPeriodDropDown().addValueChangeHandler(new ValueChangeHandler<PeriodDTO>() {
-			
-			@Override
-			public void onValueChange(ValueChangeEvent<PeriodDTO> event) {
-				PeriodDTO period =event.getValue();
-				//period changed - reload all
-				ProgramsPresenter.this.period = period;
-				periodChanged();
-			}
-		});
-		
+
+		getView().getPeriodDropDown().addValueChangeHandler(
+				new ValueChangeHandler<PeriodDTO>() {
+
+					@Override
+					public void onValueChange(ValueChangeEvent<PeriodDTO> event) {
+						PeriodDTO period = event.getValue();
+						// period changed - reload all
+						ProgramsPresenter.this.period = period;
+						periodChanged();
+					}
+				});
+
 		getView().getDetailButton().addClickHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent event) {
-				placeManager.revealPlace(
-						new PlaceRequest(NameTokens.home)
-						.with("page", "detailed")
-						.with("activityid", selected.getId()+"")
-						);
+				placeManager.revealPlace(new PlaceRequest(NameTokens.home)
+						.with("page", "detailed").with("activityid",
+								selected.getId() + ""));
 			}
 		});
 
@@ -203,20 +203,20 @@ public class ProgramsPresenter extends
 
 			@Override
 			public void onClick(ClickEvent event) {
-				if(selected!=null){
-					assignActivity.load(selected.getId(),selected.getType());
+				if (selected != null) {
+					assignActivity.load(selected.getId(), selected.getType());
 				}
 				AppManager.showPopUp("Assign Activity",
 						assignActivity.getWidget(), new OptionControl() {
 							@Override
 							public void onSelect(String name) {
-							
+
 								if (name.equals("Cancel")) {
 									hide();
 									return;
 								}
 
-								assignActivity.addItems(); //Add all users
+								assignActivity.addItems(); // Add all users
 								TaskInfo taskInfo = assignActivity
 										.getTaskInfo();
 
@@ -226,7 +226,8 @@ public class ProgramsPresenter extends
 									taskInfo.setActivityId(selected.getId());
 									String taskName = "Program-"
 											+ selected.getId();
-									String approvalTaskName = taskName+"-Approval";
+									String approvalTaskName = taskName
+											+ "-Approval";
 									taskInfo.setTaskName(taskName);
 									taskInfo.setApprovalTaskName(approvalTaskName);
 
@@ -249,23 +250,27 @@ public class ProgramsPresenter extends
 			}
 
 		});
-		
+
 		getView().getDeleteButton().addClickHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent event) {
-				final IsProgramDetail program = (selected != null)? selected : detail;
-				AppManager.showPopUp("Delete "+program.getType().getDisplayName(), 
-						"Do you want to delete "+program.getType().getDisplayName()+" '"+program.getName()+"'",
+				final IsProgramDetail program = (selected != null) ? selected
+						: detail;
+				AppManager.showPopUp("Delete "
+						+ program.getType().getDisplayName(),
+						"Do you want to delete "
+								+ program.getType().getDisplayName() + " '"
+								+ program.getName() + "'",
 						new OnOptionSelected() {
-							
+
 							@Override
 							public void onSelect(String name) {
-								if(name.equals("Yes")){
+								if (name.equals("Yes")) {
 									delete(program.getId());
 								}
 							}
-						}, "Cancel","Yes");
+						}, "Cancel", "Yes");
 			}
 		});
 
@@ -342,12 +347,12 @@ public class ProgramsPresenter extends
 			if (edit) {
 				// we are editing the selected item
 				createTask.setActivity(activity);
-				createTask.load(activity.getParentId(),null);
+				createTask.load(activity.getParentId(), null);
 			} else {
 				// selected item is the parent - We are creating a new activity
 				// based on selected item
 				createTask.setActivity(null);
-				createTask.load(activity.getId(),null);
+				createTask.load(activity.getId(), null);
 			}
 
 			AppManager.showPopUp(edit ? "Edit Task" : "Create Task",
@@ -374,16 +379,24 @@ public class ProgramsPresenter extends
 			if (edit) {
 				// we are editing the selected item
 				createActivity.setActivity(activity);
-				createActivity.load(activity.getParentId(),activity.getActivityOutcomeId());
+				createActivity.load(activity.getParentId(),
+						activity.getActivityOutcomeId());
 			} else {
 				// selected item is the parent - We are creating a new activity
 				// based on selected item
 				// User selected an outcome & is now creating a new Activity
 				createActivity.setActivity(null);
-				if(detail!=null){
-					createActivity.load(detail.getId(),selected.getId());// Program is the parent, not the selected Outcome
+				if (detail != null) {
+					createActivity.load(detail.getId(), selected.getId());// Program
+																			// is
+																			// the
+																			// parent,
+																			// not
+																			// the
+																			// selected
+																			// Outcome
 				}
-				
+
 			}
 
 			AppManager.showPopUp(edit ? "Edit Activity" : "Create Activity",
@@ -408,8 +421,7 @@ public class ProgramsPresenter extends
 			break;
 
 		case OBJECTIVE:
-			objectivePresenter
-					.setObjective((edit) ? activity : null);
+			objectivePresenter.setObjective((edit) ? activity : null);
 			AppManager.showPopUp(edit ? "Edit Objective" : "Add Objective",
 					objectivePresenter.getWidget(), new OptionControl() {
 
@@ -433,7 +445,8 @@ public class ProgramsPresenter extends
 
 		case OUTCOME:
 			createOutcome.setOutcome(edit ? activity : null);
-			createOutcome.load(edit ? activity.getParentId() : activity.getId());
+			createOutcome
+					.load(edit ? activity.getParentId() : activity.getId());
 			AppManager.showPopUp(edit ? "Edit Outcome" : "Create Outcome",
 					createOutcome.getWidget(), new OptionControl() {
 
@@ -469,112 +482,129 @@ public class ProgramsPresenter extends
 		// program.setParentId(programId);
 		MultiRequestAction requests = new MultiRequestAction();
 		requests.addRequest(new CreateProgramRequest(activity));
-				
+
 		requestHelper.execute(requests,
 				new TaskServiceCallback<MultiRequestActionResult>() {
 					@Override
 					public void processResult(MultiRequestActionResult aResponse) {
-						CreateProgramResponse createProgramsResponse = (CreateProgramResponse) aResponse.get(0);
-						
+						CreateProgramResponse createProgramsResponse = (CreateProgramResponse) aResponse
+								.get(0);
+
 						getView().setLastUpdatedId(
 								createProgramsResponse.getProgram().getId());
-						if(activity.getType()==ProgramDetailType.PROGRAM){
+						if (activity.getType() == ProgramDetailType.PROGRAM) {
 							loadData(programId);
-						}else if(activity.getType()==ProgramDetailType.OBJECTIVE ){
-							loadData(null,null,null,ProgramDetailType.OBJECTIVE);
+						} else if (activity.getType() == ProgramDetailType.OBJECTIVE) {
+							loadData(null, null, null,
+									ProgramDetailType.OBJECTIVE);
 						}
 
-						//Reloading information in a new request 
-						//due to an issue on the server in reloading uncommitted information
-						//Budget Total Amounts && Parent program allocations updated values do not reflect
-						//unless the user actively reloads them
-						//This is a hack to prevent that issue
-						if(activity.getType()==ProgramDetailType.ACTIVITY){
-							assert activity.getActivityOutcomeId()!=null;
-							afterSave(createProgramsResponse.getProgram().getId(),activity.getActivityOutcomeId(),activity.getId()==null);
-						}else{
-							afterSave(createProgramsResponse.getProgram().getId(),activity.getParentId(),activity.getId()==null);
+						// Reloading information in a new request
+						// due to an issue on the server in reloading
+						// uncommitted information
+						// Budget Total Amounts && Parent program allocations
+						// updated values do not reflect
+						// unless the user actively reloads them
+						// This is a hack to prevent that issue
+						if (activity.getType() == ProgramDetailType.ACTIVITY) {
+							assert activity.getActivityOutcomeId() != null;
+							afterSave(createProgramsResponse.getProgram()
+									.getId(), activity.getActivityOutcomeId(),
+									activity.getId() == null);
+						} else {
+							afterSave(createProgramsResponse.getProgram()
+									.getId(), activity.getParentId(), activity
+									.getId() == null);
 						}
 						fireEvent(new ProcessingCompletedEvent());
 						fireEvent(new ActivitySavedEvent(activity.getType()
 								.name().toLowerCase()
 								+ " successfully saved"));
-						
+
 					}
 				});
-				
+
 	}
-	
-	public void delete(Long programId){
-		requestHelper.execute(new DeleteProgramRequest(programId), new TaskServiceCallback<DeleteProgramResponse>() {
-			@Override
-			public void processResult(DeleteProgramResponse aResponse) {
-				//refresh
-				IsProgramDetail program = (selected != null)? selected : detail;
-				afterDelete(program.getId(), program.getParentId());
-				
-				if(program.getType()==ProgramDetailType.PROGRAM){
-					//remove Program Tab
-					getView().removeTab(program.getId());
-				}
-				
-				if(selected!=null){
-					ProgramsPresenter.this.selected = null;
-					getView().setSelection(detail==null ? null : detail.getType());
-				}else if(detail!=null){
-					ProgramsPresenter.this.detail=null;
-					getView().setSelection(null);
-				}
-				
-			}
-		});
+
+	public void delete(Long programId) {
+		requestHelper.execute(new DeleteProgramRequest(programId),
+				new TaskServiceCallback<DeleteProgramResponse>() {
+					@Override
+					public void processResult(DeleteProgramResponse aResponse) {
+						// refresh
+						IsProgramDetail program = (selected != null) ? selected
+								: detail;
+						afterDelete(program.getId(), program.getParentId());
+
+						if (program.getType() == ProgramDetailType.PROGRAM) {
+							// remove Program Tab
+							getView().removeTab(program.getId());
+						}
+
+						if (selected != null) {
+							ProgramsPresenter.this.selected = null;
+							getView().setSelection(
+									detail == null ? null : detail.getType());
+						} else if (detail != null) {
+							ProgramsPresenter.this.detail = null;
+							getView().setSelection(null);
+						}
+
+					}
+				});
 	}
 
 	protected void afterDelete(Long id, final Long parentId) {
-		
-		//reload parent
-		if(parentId!=null){
+
+		// reload parent
+		if (parentId != null) {
 			MultiRequestAction requests = new MultiRequestAction();
 			requests.addRequest(new GetProgramsRequest(parentId, false));		
 			requestHelper.execute(requests, 
 					new TaskServiceCallback<MultiRequestActionResult>() {
-				@Override
-				public void processResult(MultiRequestActionResult aResponse) {
-					IsProgramDetail parent = ((GetProgramsResponse)(aResponse.get(0))).getSingleResult();
-					fireEvent(new ProgramDetailSavedEvent(parent,false,false));
-				}
-			});
+						@Override
+						public void processResult(
+								MultiRequestActionResult aResponse) {
+							IsProgramDetail parent = ((GetProgramsResponse) (aResponse
+									.get(0))).getSingleResult();
+							fireEvent(new ProgramDetailSavedEvent(parent,
+									false, false));
+						}
+					});
 		}
-		
+
 		fireEvent(new ProgramDeletedEvent(id));
-		
+
 	}
 
-	protected void afterSave(Long saveActivityId, final Long parentId, final boolean isNew) {
+	protected void afterSave(Long saveActivityId, final Long parentId,
+			final boolean isNew) {
 		MultiRequestAction requests = new MultiRequestAction();
 		requests.addRequest(new GetProgramsRequest(saveActivityId, false));
 		//reload parent
 		if(parentId!=null){							
 			requests.addRequest(new GetProgramsRequest(parentId, false));
 		}
-		
-		requestHelper.execute(requests, 
+
+		requestHelper.execute(requests,
 				new TaskServiceCallback<MultiRequestActionResult>() {
-			@Override
-			public void processResult(MultiRequestActionResult aResponse) {
-				
-				IsProgramDetail activity = ((GetProgramsResponse)(aResponse.get(0))).getSingleResult();
-				fireEvent(new ProgramDetailSavedEvent(activity,isNew,true));
-				
-				if(parentId!=null){
-					IsProgramDetail parent = ((GetProgramsResponse)(aResponse.get(1))).getSingleResult();
-					fireEvent(new ProgramDetailSavedEvent(parent,false,false));
-				}
-			}
-		});
+					@Override
+					public void processResult(MultiRequestActionResult aResponse) {
+
+						IsProgramDetail activity = ((GetProgramsResponse) (aResponse
+								.get(0))).getSingleResult();
+						fireEvent(new ProgramDetailSavedEvent(activity, isNew,
+								true));
+
+						if (parentId != null) {
+							IsProgramDetail parent = ((GetProgramsResponse) (aResponse
+									.get(1))).getSingleResult();
+							fireEvent(new ProgramDetailSavedEvent(parent,
+									false, false));
+						}
+					}
+				});
 	}
-	
-	
 
 	public void loadData(final Long activityId) {
 		loadData(activityId, programDetailId);
@@ -583,15 +613,15 @@ public class ProgramsPresenter extends
 	public void loadData(final Long programId, Long detailId) {
 		loadData(programId, detailId, null);
 	}
-	
-	public void loadObjectives(){
+
+	public void loadObjectives() {
 		loadData(null, null, null, ProgramDetailType.OBJECTIVE);
 	}
-	
-	public void loadData(Long programId, Long detailId, Long periodId){
+
+	public void loadData(Long programId, Long detailId, Long periodId) {
 		loadData(programId, detailId, periodId, ProgramDetailType.PROGRAM);
 	}
-	
+
 	/**
 	 * If PeriodId is null; current period is selected
 	 * 
@@ -599,52 +629,56 @@ public class ProgramsPresenter extends
 	 * @param detailId
 	 * @param periodId
 	 */
-	public void loadData(Long programId, Long detailId, Long periodId, final ProgramDetailType typeToLoad) {
+	public void loadData(Long programId, Long detailId, Long periodId,
+			final ProgramDetailType typeToLoad) {
 		fireEvent(new ProcessingEvent());
-		
+
 		this.programId = (programId == null || programId == 0L) ? null
 				: programId;
 		programDetailId = detailId == null ? null : detailId == 0 ? null
 				: detailId;
 
-		getView().setProgramId(this.programId);
-
 		MultiRequestAction action = new MultiRequestAction();
-		
-		if(typeToLoad.equals(ProgramDetailType.OBJECTIVE)){
-			GetProgramsRequest request = new GetProgramsRequest(ProgramDetailType.OBJECTIVE,true);
+
+		if (typeToLoad.equals(ProgramDetailType.OBJECTIVE)) {
+			getView().setProgramId(this.programId, true);
+			GetProgramsRequest request = new GetProgramsRequest(
+					ProgramDetailType.OBJECTIVE, true);
 			action.addRequest(request);
+		} else {
+			getView().setProgramId(this.programId);
 		}
-		
+
 		// List of Programs for tabs
 		{
-			//Withing a given period
-			GetProgramsRequest request = new GetProgramsRequest(ProgramDetailType.PROGRAM,false);
-			if(periodId!=null){
+			// Withing a given period
+			GetProgramsRequest request = new GetProgramsRequest(
+					ProgramDetailType.PROGRAM, false);
+			if (periodId != null) {
 				request.setPeriodId(periodId);
 			}
 			action.addRequest(request);
 		}
-		
-		//Get Periods
+
+		// Get Periods
 		action.addRequest(new GetPeriodsRequest());
-		
-		//Get Funding Sources
+
+		// Get Funding Sources
 		action.addRequest(new GetFundsRequest());
 
-		
 		if (this.programId != null) {
 			// Details of selected program
 			this.programId = programId;
-			
-			if(periodId!=null){
-				//Period is not current period
-				action.addRequest(new GetProgramsRequest(programCode,periodId,programDetailId == null));
-			}else{
+
+			if (periodId != null) {
+				// Period is not current period
+				action.addRequest(new GetProgramsRequest(programCode, periodId,
+						programDetailId == null));
+			} else {
 				action.addRequest(new GetProgramsRequest(programId,
 						programDetailId == null));
 			}
-			
+
 		}
 
 		if (programDetailId != null) {
@@ -666,22 +700,22 @@ public class ProgramsPresenter extends
 				}else{
 					action.addRequest(new GetProgramsRequest(programDetailId,true));
 				}
-				
+
 			}
-			
+
 		}
-		
+
 		requestHelper.execute(action,
 				new TaskServiceCallback<MultiRequestActionResult>() {
 					@Override
 					public void processResult(MultiRequestActionResult aResponse) {
 						int i = 0;
-						if(typeToLoad.equals(ProgramDetailType.OBJECTIVE)){
+						if (typeToLoad.equals(ProgramDetailType.OBJECTIVE)) {
 							GetProgramsResponse response = (GetProgramsResponse) aResponse
 									.get(i++);
 							getView().setData(response.getPrograms());
 						}
-						
+
 						// Programs (Presented as tabs below)
 						GetProgramsResponse response = (GetProgramsResponse) aResponse
 								.get(i++);
@@ -692,7 +726,7 @@ public class ProgramsPresenter extends
 								.get(i++);
 						getView().setPeriods(getPeriod.getPeriods());
 
-						//Funds
+						// Funds
 						GetFundsResponse getFundsReq = (GetFundsResponse) aResponse
 								.get(i++);
 						getView().setFunds(getFundsReq.getFunds());
@@ -702,40 +736,53 @@ public class ProgramsPresenter extends
 						if (ProgramsPresenter.this.programId != null) {
 							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
 									.get(i++);
-							if(response2.getSingleResult()!=null){
-								//The program detail might not be available for the specified period
-								programCode = response2.getSingleResult().getCode();
-								ProgramsPresenter.this.programId = response2.getSingleResult().getId();
+							if (response2.getSingleResult() != null) {
+								// The program detail might not be available for
+								// the specified period
+								programCode = response2.getSingleResult()
+										.getCode();
+								ProgramsPresenter.this.programId = response2
+										.getSingleResult().getId();
 								setActivity(response2.getSingleResult());
 							}
-							
-						} else{
-					
-							if(programDetailId == null && typeToLoad==ProgramDetailType.PROGRAM){
-								//This is a summary table with no program selecte
+
+						} else {
+
+							if (programDetailId == null
+									&& typeToLoad == ProgramDetailType.PROGRAM) {
+								// This is a summary table with no program
+								// selecte
 								getView().setData(response.getPrograms());
 							}
-							
-							getView().selectTab(typeToLoad==ProgramDetailType.OBJECTIVE? "#home;page=objectives":
-								"#home;page=activities;activity="+0);
-							getView().setSelection(typeToLoad==ProgramDetailType.OBJECTIVE? ProgramDetailType.OBJECTIVE: null,false);
+
+							getView()
+									.selectTab(
+											typeToLoad == ProgramDetailType.OBJECTIVE ? "#home;page=objectives"
+													: "#home;page=activities;activity=" + 0);
+							getView()
+									.setSelection(
+											typeToLoad == ProgramDetailType.OBJECTIVE ? ProgramDetailType.OBJECTIVE
+													: null, false);
 						}
 
 						if (programDetailId != null) {
 							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
 									.get(i++);
-							
-							if(response2.getSingleResult()!=null){
-								//The program detail might not be available for the specified period
-								programDetailCode = response2.getSingleResult().getCode();
-								programDetailId = response2.getSingleResult().getId();
+
+							if (response2.getSingleResult() != null) {
+								// The program detail might not be available for
+								// the specified period
+								programDetailCode = response2.getSingleResult()
+										.getCode();
+								programDetailId = response2.getSingleResult()
+										.getId();
 								setActivity(response2.getSingleResult());
-							}							
-							
+							}
+
 						}
-						
+
 						getView().setActivePeriod(period);
-						
+
 						fireEvent(new ProcessingCompletedEvent());
 					}
 				});
@@ -744,11 +791,11 @@ public class ProgramsPresenter extends
 	protected void setActivity(IsProgramDetail activity) {
 		getView().setActivity(activity);
 
-//		if (activity.getType() != ProgramDetailType.PROGRAM
-//				|| programId == null) {
-//			// this is a detail activity
-//			this.detail = activity;
-//		}
+		// if (activity.getType() != ProgramDetailType.PROGRAM
+		// || programId == null) {
+		// // this is a detail activity
+		// this.detail = activity;
+		// }
 		this.detail = activity;
 		programType = activity.getType();
 	}
@@ -772,7 +819,7 @@ public class ProgramsPresenter extends
 	public void onActivitySelectionChanged(ActivitySelectionChangedEvent event) {
 		if (event.isSelected()) {
 			this.selected = event.getProgramActivity();
-			getView().setSelection(event.getProgramActivity().getType(),true);
+			getView().setSelection(event.getProgramActivity().getType(), true);
 		} else {
 			this.selected = null;
 			if (programId == null || programId == 0) {
@@ -802,29 +849,30 @@ public class ProgramsPresenter extends
 						String allocatedPeople = "";
 
 						for (OrgEntity entity : assigned) {
-							allocatedPeople = allocatedPeople+entity.getDisplayName() + ",";
+							allocatedPeople = allocatedPeople
+									+ entity.getDisplayName() + ",";
 						}
 
-
-						afterSave(selected.getId(), selected.getParentId(), false);
+						afterSave(selected.getId(), selected.getParentId(),
+								false);
 						fireEvent(new ActivitySavedEvent(
-								"You successfully assigned '"+taskInfo.getDescription()+"' "+ allocatedPeople));
-						
+								"You successfully assigned '"
+										+ taskInfo.getDescription() + "' "
+										+ allocatedPeople));
+
 					}
 				});
 	}
 
-
 	/**
-	 * On period change
-	 * <br>
-	 * Reload the currently selected program with details for the selected year
-	 * <br>
+	 * On period change <br>
+	 * Reload the currently selected program with details for the selected year <br>
 	 * Programs from different years are related through a shared program code
 	 */
 	protected void periodChanged() {
 		loadData(programId, programDetailId, period.getId());
 	}
+
 	/*
 	 * on Window Resize - Position the middle section to occupy full width
 	 */
@@ -832,16 +880,15 @@ public class ProgramsPresenter extends
 	public void onResize(AppResizeEvent event) {
 		getView().setMiddleHeight();
 	}
-	
-	
+
 	@Override
 	protected void onReset() {
 		super.onReset();
-		//System.err.println(">>>>On reset called");
-		
-		assert(filterPresenter!=null);
+		// System.err.println(">>>>On reset called");
+
+		assert (filterPresenter != null);
 		setInSlot(FILTER_SLOT, filterPresenter);
 		getView().setMiddleHeight();
 	}
-	
+
 }

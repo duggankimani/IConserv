@@ -54,21 +54,22 @@ public class TableView extends Composite {
 
 	public void setTableHeaders(List<TableHeader> headers) {
 		panelHeader.clear();
-//		for (TableHeader header : headers) {
-//			InlineLabel label = new InlineLabel(header.getTitleName());
-		for(TableHeader header: headers){
-			//th
+		// for (TableHeader header : headers) {
+		// InlineLabel label = new InlineLabel(header.getTitleName());
+		for (TableHeader header : headers) {
+			// th
 			HTMLPanel th = new HTMLPanel("");
 			th.addStyleName("th");
-			
-			//Label
+
+			// Label
 			InlineLabel label = new InlineLabel(header.getTitleName());
 			th.add(label);
-			
-			//add to row
+
+			// add to row
 			panelHeader.add(th);
-			if(header.getWidth()!=null){
-				th.getElement().getStyle().setWidth(header.getWidth(), Unit.PCT);
+			if (header.getWidth() != null) {
+				th.getElement().getStyle()
+						.setWidth(header.getWidth(), Unit.PCT);
 			}
 		}
 	}
@@ -79,7 +80,6 @@ public class TableView extends Composite {
 	}
 
 	public void setHeaderWidgets(List<Widget> widgets) {
-
 		panelHeader.clear();
 		if (isAutoNumber) {
 			InlineLabel label = new InlineLabel("#");
@@ -207,16 +207,24 @@ public class TableView extends Composite {
 		count = 0;
 	}
 
-	public void createHeader(String name, String width) {
+	public void createHeader(String name, String width, String labelStyle) {
 		HTMLPanel th = new HTMLPanel("");
-		th.setStyleName("th");
+		th.addStyleName("th");
 		if (width != null) {
 			th.setWidth(width);
 		}
-		th.add(new InlineLabel(name));
+		InlineLabel label = new InlineLabel(name);
+		label.setTitle(name);
+		if (labelStyle!=null) {
+			label.addStyleName(labelStyle);
+		}
+		th.add(label);
 		panelHeader.add(th);
 	}
-
+	
+	public void createHeader(String name, String width){
+		createHeader(name, width,null);
+	}
 	public void createHeader(String name) {
 		createHeader(name, null);
 	}
