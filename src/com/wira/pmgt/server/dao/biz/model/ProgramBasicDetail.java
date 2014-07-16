@@ -17,7 +17,7 @@ public class ProgramBasicDetail extends PO {
 
 	private static final long serialVersionUID = 6975295488889785294L;
 	
-	@Column(unique=true, nullable=false)
+	@Column(nullable=false)
 	private String name;
 	
 	@Column(length=5000)

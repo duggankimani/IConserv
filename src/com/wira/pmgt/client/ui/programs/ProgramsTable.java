@@ -148,7 +148,8 @@ public class ProgramsTable extends Composite {
 				return o1.getName().compareTo(o2.getName());
 			}
 		});
-
+		
+		System.err.println(">>>Goals Table "+isGoalsTable);
 		if (!isGoalsTable) {
 			createGrid();
 			for (FundDTO fund : funds) {

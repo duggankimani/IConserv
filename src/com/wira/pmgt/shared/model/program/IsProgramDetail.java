@@ -21,6 +21,7 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 	private Double actualAmount; //Actual amount spent
 	private List<ProgramFundDTO> funding;
 	private List<TargetAndOutcomeDTO> targetsAndOutcomes;
+	private String budgetLine;
 	private PeriodDTO period;
 	private List<IsProgramDetail> children;
 	private List<ProgramSummary> programSummary; //Used to build breadcrumb 
@@ -201,5 +202,13 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 		}
 		
 		children.add(activity);
+	}
+
+	public String getBudgetLine() {
+		return budgetLine;
+	}
+
+	public void setBudgetLine(String budgetLine) {
+		this.budgetLine = budgetLine;
 	}
 }
