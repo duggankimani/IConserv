@@ -6,7 +6,7 @@
 			width="40%">
 			<div class="row-fluid">
 				<g:HTMLPanel styleName="span4 caret-container small-container">
-					<d:ActionLink ui:field="divRowCaret"
+					<d:ActionLink ui:field="aRowCaret"
 						styleName="icon-caret-right helper-font-16 muted"></d:ActionLink>
 				</g:HTMLPanel>
 
@@ -19,7 +19,7 @@
 				</g:HTMLPanel>
 
 				<g:HTMLPanel styleName="span4 name-container">
-					<d:ActionLink ui:field="divName" styleName=""></d:ActionLink>
+					<d:ActionLink ui:field="aName" styleName=""></d:ActionLink>
 				</g:HTMLPanel>
 			</div>
 		</g:HTMLPanel>

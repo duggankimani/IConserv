@@ -111,5 +111,28 @@ public class AggregationGridRow extends RowWidget{
 		
 		return model;
 	}
+	
+	public List<String> getErrors(){
+		DataModel model = getData(); 
+		if(model.isEmpty()){
+			return null;
+		}
+		
+		List<String> errors = new ArrayList<String>();
+		for(ColumnConfig config: configs){
+			if(config.isMandatory() && model.get(config.getKey())==null){
+				String error = "Column "+config.getDisplayName()+" is mandatory";
+				System.err.println(error);
+				errors.add(error);
+			}
+		}
+		
+		if(errors.isEmpty()){
+			return null;
+		}
+		
+		
+		return errors;
+	}
 
 }
