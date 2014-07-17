@@ -169,6 +169,10 @@ public class CreateProgramView extends PopupViewImpl implements
 				break;
 			}
 		}
+		
+		if(!isValid){
+			issues.getElement().scrollIntoView();
+		}
 	
 		
 		return isValid;

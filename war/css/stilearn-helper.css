@@ -98,12 +98,12 @@ input:focus {
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	font-weight: bold;
 	width: 100px;
-	margin: 0px;
 	position: absolute;
-	right: 40%;
+	right: 50%;
 	top: 0px;
 	height: 20px;
 	z-index: 10;
+	margin-left: -100px;
 }
 
 .full-page {
@@ -119,15 +119,16 @@ input:focus {
 
 .main-body .alert {
 	position: absolute;
-	right: 50%;
-	top: 1%;
-	/* padding-right: 18px; */
+	left: 50%;
+	top: 2%;
 	z-index: 10;
-	/* left: 0; */
-	/*right: 0;*/
-	margin-left: auto;
-	margin-right: auto;
-	/* width:30%; */
+	margin-left: -130px;
+	max-width: 30%;
+	font-weight: bold;
+	width: 200px;
+	transition: reveal .2s ease-out;
+   -moz-transition: reveal .2s ease-out;
+	-webkit-transition: reveal .2s ease-out;
 }
 
 body .main-body .alert a {

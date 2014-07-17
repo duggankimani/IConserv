@@ -215,7 +215,8 @@ public class ProgramsPresenter extends
 									hide();
 									return;
 								}
-
+								fireEvent(new ProcessingEvent());
+								
 								assignActivity.addItems(); // Add all users
 								TaskInfo taskInfo = assignActivity
 										.getTaskInfo();
@@ -839,6 +840,7 @@ public class ProgramsPresenter extends
 				new TaskServiceCallback<AssignTaskResponse>() {
 					@Override
 					public void processResult(AssignTaskResponse aResponse) {
+						fireEvent(new ProcessingCompletedEvent());
 						fireEvent(new LoadAlertsEvent());
 
 						List<OrgEntity> assigned = taskInfo

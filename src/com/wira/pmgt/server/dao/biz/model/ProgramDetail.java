@@ -237,8 +237,8 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	@JoinColumn(name="outcomeid", referencedColumnName="id", nullable=true)
 	private ProgramDetail activityOutcome;
 	
-	
-
+	@Column(length=20)
+	private String budgetLine;
 	private Long processInstanceId;
 	
 	@OneToMany(mappedBy="programDetail",fetch=FetchType.LAZY)
@@ -515,6 +515,14 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 
 	public ProgramDetail getActivityOutcome() {
 		return activityOutcome;
+	}
+
+	public String getBudgetLine() {
+		return budgetLine;
+	}
+
+	public void setBudgetLine(String budgetLine) {
+		this.budgetLine = budgetLine;
 	}
 
 }

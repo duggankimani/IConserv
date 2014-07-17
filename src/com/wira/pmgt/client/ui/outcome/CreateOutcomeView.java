@@ -221,7 +221,9 @@ public class CreateOutcomeView extends ViewImpl implements
 				issues.addError(dto.getFund().getName()+" is repeated");
 			}
 		}
-		
+		if(!isValid){
+			issues.getElement().scrollIntoView();
+		}
 		return isValid;
 	}
 

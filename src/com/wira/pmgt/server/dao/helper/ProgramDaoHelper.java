@@ -161,6 +161,7 @@ public class ProgramDaoHelper {
 		dto.setRating(program.getRating());
 		//dto.setTargetsAndOutcomes(List<TargetAndOutcomeDTO>);
 		dto.setType(program.getType());
+		dto.setBudgetLine(program.getBudgetLine());
 				
 		if(program.getActivityOutcome()!=null){
 			dto.setActivityOutcomeId(program.getActivityOutcome().getId());
@@ -267,6 +268,7 @@ public class ProgramDaoHelper {
 		detail.setPeriod(get(programDTO.getPeriod()));
 		detail.setSourceOfFunds(get(programDTO.getFunding()));
 		detail.setStartDate(programDTO.getStartDate());
+		detail.setBudgetLine(programDTO.getBudgetLine());
 		
 		//detail.setTarget(String);
 		//detail.setTargets(Set<TargetAndOutcome>);

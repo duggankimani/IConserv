@@ -29,7 +29,15 @@
 					<span class="mandatory" title="Required Field">*</span>
 				</div>
 			</div>
-
+			
+			<div class="control-group">
+				<div class="control-label" ui:field="divBudgetLine">Budget Line:</div>
+				<div class="controls">
+					<g:TextBox ui:field="txtBudgetLine" styleName="input-xlarge"></g:TextBox>
+					<span class="mandatory" title="Required Field">*</span>
+				</div>
+			</div>
+			
 			<div class="control-group">
 				<div class="control-label">Start &amp; End Dates:</div>
 				<div class="controls">
