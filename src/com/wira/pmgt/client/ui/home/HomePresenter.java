@@ -287,8 +287,8 @@ public class HomePresenter extends
 				detail = ids[1];
 			}
 			
-			if(project.contains("o")){
-				String[] ids = project.split("o");
+			if(project.contains("O")){
+				String[] ids = project.split("O");
 				project = ids[0];
 				outcome = ids[1];
 			}
@@ -302,10 +302,10 @@ public class HomePresenter extends
 				@Override
 				public void processResult(ProgramsPresenter aResponse) {
 					if(page.equals("activities")){
-						if(!detailId.equals(0L)){
-							aResponse.loadData(programId, detailId);
-						}else if(!outcomeId.equals(0L)){
+						if(!outcomeId.equals(0L)){
 							aResponse.loadActivitiesByOutcome(programId,outcomeId);
+						}else{
+							aResponse.loadData(programId, detailId);
 						}
 						
 					}else{
