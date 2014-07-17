@@ -52,6 +52,11 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 	query="SELECT distinct(p) FROM ProgramDetail p left join p.programAccess access " +
 			"where (true=:isCurrentUserAdmin or (access.userId=:userId or access.groupId in (:groupIds))) " +
 			"and p.isActive=:isActive and p.type=:type and p.period=:period order by p.name"), 
+			
+	@NamedQuery(name="ProgramDetail.findActivitiesByProgramAndOutcome", 
+	query="SELECT p FROM ProgramDetail p " +
+			"where p.parent.id=:parentId and p.activityOutcome.id=:activityOutcomeId " +
+			"and p.isActive=:isActive order by p.name"), 
 
 	@NamedQuery(name="ProgramDetail.findAll", query="SELECT distinct(p) FROM ProgramDetail p left join p.programAccess access " +
 			"where (true=:isCurrentUserAdmin or (access.userId=:userId or access.groupId in (:groupIds))) " +
@@ -180,6 +185,7 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 			})
 	private Set<ProgramFund> sourceOfFunds = new HashSet<>();	
 
+	
 	private Double budgetAmount=0.0; //Total budget amount (accumulation of source of funds)
 	private Double actualAmount=0.0; //Actual amount spent
 	private Double commitedAmount=0.0;

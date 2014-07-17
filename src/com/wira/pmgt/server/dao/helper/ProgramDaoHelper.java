@@ -864,6 +864,20 @@ public class ProgramDaoHelper {
 		dao.delete(detail);
 	}
 
+	public static List<IsProgramDetail> getProgramDetailsByOutcome(
+			Long programId, Long outcomeId, boolean loadChildren) {
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		
+		ProgramDetail detail = dao.getProgramDetail(outcomeId);
+		IsProgramDetail outcomeDTO = get(detail, false);
+		
+		List<ProgramDetail> list = dao.getProgramActivitiesByOutcome(programId, outcomeId);
+		List<IsProgramDetail> children = getActivity(list, loadChildren);
+		outcomeDTO.setChildren(children);
+		outcomeDTO.setProgramId(programId);
+		return Arrays.asList(outcomeDTO);
+	}
+
 //	private static ProgramSummary getSummary(ProgramDetail detail) {
 //		ProgramSummary summary = new ProgramSummary();
 //		summary.setId(detail.getId());

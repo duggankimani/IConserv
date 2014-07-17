@@ -129,7 +129,7 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		
 		return groupIds;
 	}
-
+	
 	public List<ProgramDetail> getProgramDetails(ProgramDetailType type, Period period,String user, List<String> groups){
 		if(type==null){
 			return getProgramDetails(period);
@@ -162,6 +162,17 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		return getProgramDetails(period,getCurrentUserId() , getCurrentUserGroups());
 	}
 	
+	public List<ProgramDetail> getProgramActivitiesByOutcome(Long programId,
+			Long outcomeId) {
+		
+		Query query = em.createNamedQuery("ProgramDetail.findActivitiesByProgramAndOutcome")
+				.setParameter("parentId", programId)
+				.setParameter("activityOutcomeId", outcomeId)
+				.setParameter("isActive", 1);
+				
+		return getResultList(query);
+				
+	}
 	public List<ProgramDetail> getProgramDetails(Period period, String user, List<String> groups) {
 		if(groups==null || groups.isEmpty()){
 			log.warn("Get Program Details- No Results Due To: User '"+user+"'has no groups");
@@ -323,4 +334,5 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		}
 		return list;
 	}
+
 }

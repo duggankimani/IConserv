@@ -279,20 +279,35 @@ public class HomePresenter extends
 		} else if (page != null && (page.equals("activities") || page.equals("objectives"))) {
 			String project = request.getParameter("activity", "0");
 			String detail = "0";
+			String outcome = "0";
+			
 			if (project.contains("d")) {
 				String[] ids = project.split("d");
 				project = ids[0];
 				detail = ids[1];
 			}
+			
+			if(project.contains("o")){
+				String[] ids = project.split("o");
+				project = ids[0];
+				outcome = ids[1];
+			}
 
-			final Long activityId = new Long(project);
+			final Long programId = new Long(project);
 			final Long detailId = new Long(detail);
+			final Long outcomeId = new Long(outcome);
+			
 			Window.setTitle(page.equals("activities")?"Activities":"Objectives");
 			activitiesFactory.get(new ServiceCallback<ProgramsPresenter>() {
 				@Override
 				public void processResult(ProgramsPresenter aResponse) {
 					if(page.equals("activities")){
-						aResponse.loadData(activityId, detailId);
+						if(!detailId.equals(0L)){
+							aResponse.loadData(programId, detailId);
+						}else if(!outcomeId.equals(0L)){
+							aResponse.loadActivitiesByOutcome(programId,outcomeId);
+						}
+						
 					}else{
 						aResponse.loadObjectives();
 					}

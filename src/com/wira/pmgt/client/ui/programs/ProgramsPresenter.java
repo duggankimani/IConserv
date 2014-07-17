@@ -615,6 +615,10 @@ public class ProgramsPresenter extends
 		loadData(programId, detailId, periodId, ProgramDetailType.PROGRAM);
 	}
 
+	public void loadActivitiesByOutcome(Long programId, Long outcomeId) {
+		loadData(programId, outcomeId, null, true, ProgramDetailType.PROGRAM);
+	}
+	
 	/**
 	 * If PeriodId is null; current period is selected
 	 * 
@@ -623,7 +627,12 @@ public class ProgramsPresenter extends
 	 * @param periodId
 	 */
 	public void loadData(Long programId, Long detailId, Long periodId,
-			final ProgramDetailType typeToLoad) {
+			final ProgramDetailType typeToLoad){
+		loadData(programId, detailId, periodId, false, typeToLoad);
+	}
+
+	public void loadData(Long programId, Long detailId, Long periodId,boolean searchByOutcome,
+			final ProgramDetailType typeToLoad){
 		fireEvent(new ProcessingEvent());
 
 		this.programId = (programId == null || programId == 0L) ? null
@@ -675,27 +684,22 @@ public class ProgramsPresenter extends
 		}
 
 		if (programDetailId != null) {
-			//Drill Down
-			if(this.programId==null){
-				//Summary Table Drill down - Load program and objectives only
+			if(searchByOutcome){
 				if(periodId!=null){
 					assert programDetailCode!=null;
-					action.addRequest(new GetProgramsRequest(programDetailCode,periodId,false));
+					action.addRequest(new GetProgramsRequest(programDetailCode,periodId,this.programId!=null));
 				}else{
-					action.addRequest(new GetProgramsRequest(programDetailId,false));
+					action.addRequest(new GetProgramsRequest(programId,programDetailId,this.programId!=null));
 				}
-				
 			}else{
-				//We are loading details of an item under a program
-				//Program Table Drill Down - Load program detail/ activity without the objectives
 				if(periodId!=null){
-					action.addRequest(new GetProgramsRequest(programDetailCode,periodId,true));
+					assert programDetailCode!=null;
+					action.addRequest(new GetProgramsRequest(programDetailCode,periodId,this.programId!=null));
 				}else{
-					action.addRequest(new GetProgramsRequest(programDetailId,true));
+					action.addRequest(new GetProgramsRequest(programDetailId,this.programId!=null));
 				}
-
 			}
-
+			
 		}
 
 		requestHelper.execute(action,

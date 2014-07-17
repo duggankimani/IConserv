@@ -69,6 +69,8 @@ public class GetProgramsRequestHandler extends
 			if(activity!=null){
 				activities.add(activity);
 			}
+		}else if(action.getProgramId()!=null && action.getOutcomeId()!=null){
+			activities.addAll(ProgramDaoHelper.getProgramDetailsByOutcome(action.getProgramId(), action.getOutcomeId(),action.isLoadChildren()));
 		}else if(action.getType()!=null){
 			activities.addAll(ProgramDaoHelper.getProgramsByType(action.getType(), action.isLoadChildren()));
 		}else{

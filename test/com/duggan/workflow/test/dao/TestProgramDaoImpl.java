@@ -37,13 +37,23 @@ public class TestProgramDaoImpl {
 		dao= DB.getProgramDaoImpl();
 	}
 	
+	@Test
+	public void getActivitiesByOutcome(){
+		Long programId = 198L;
+		Long outcomeId= 199L;
+		
+		List<IsProgramDetail> outcomeWithActivities = ProgramDaoHelper.getProgramDetailsByOutcome(programId, outcomeId, true);
+		Assert.assertSame(1, outcomeWithActivities.size());
+		Assert.assertSame(2, outcomeWithActivities.get(0).getChildren().size());
+	}
+	
 	@Ignore
 	public void loadProgram(){
 		IsProgramDetail detail = ProgramDaoHelper.getProgramById(176L, true);
 		Assert.assertEquals(3,detail.getProgramOutcomes().size());
 	}
 	
-	@Test
+	@Ignore
 	public void load(){
 		List<IsProgramDetail> list = ProgramDaoHelper.getProgramsByType(ProgramDetailType.OBJECTIVE, true);
 		System.err.println(">>> Test: "+list.size());		
