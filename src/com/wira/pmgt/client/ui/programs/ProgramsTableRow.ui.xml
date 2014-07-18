@@ -18,8 +18,20 @@
 					<g:CheckBox ui:field="chkSelect"></g:CheckBox>
 				</g:HTMLPanel>
 
+				<g:HTMLPanel ui:field="popOverDiv" styleName="popover fade top in hide">
+					<div class="arrow"></div>
+					<h3 class="popover-title" ui:field="hTitle">HOD Development</h3>
+					<div ui:field="divActors" class="popover-content">
+					</div>
+				</g:HTMLPanel>
+
 				<g:HTMLPanel styleName="span4 name-container">
 					<d:ActionLink ui:field="divName" styleName=""></d:ActionLink>
+					<div class="row-fluid">
+						<g:InlineLabel ui:field="divDesc" styleName="ellipsis"
+							width="70%">
+						</g:InlineLabel>
+					</div>
 				</g:HTMLPanel>
 			</div>
 		</g:HTMLPanel>

@@ -84,14 +84,19 @@ public class ProgramsTableRow extends RowWidget implements
 	@UiField
 	DivElement spanEndDay;
 
-	// @UiField StarRating rating;
-
 	@UiField
 	HTMLPanel divBudget;
 	@UiField
 	HTMLPanel divCheckbox;
+	
+	@UiField
+	InlineLabel divDesc;
+	
 	@UiField
 	CheckBox chkSelect;
+
+	@UiField
+	HTMLPanel popOverDiv;
 
 	@UiField
 	SpanElement spnStatus;
@@ -135,23 +140,23 @@ public class ProgramsTableRow extends RowWidget implements
 
 		this.showingChildren = (level == 0);
 		// Show/ hide this details based on its level on load
-		
+
 		List<IsProgramDetail> children = activity.getChildren();
-		if(activity.getType()==ProgramDetailType.PROGRAM){
+		if (activity.getType() == ProgramDetailType.PROGRAM) {
 			children = activity.getProgramOutcomes();
-			
 		}
-		
+
 		this.showingChildren = false;// Programs shouldnt initially show
+
 		// objectives
 		if (level > 0) {
 			// Only show level 0 and level 1 items - Hide all the rest
 			show(false);
 			setShowingChildren(false);
-		} 
-		
-		divRowCaret.setVisible((children!=null)	&& (children.size() > 0));
-		
+		}
+
+		divRowCaret.setVisible((children != null) && (children.size() > 0));
+
 		// Bind Row to Table
 		setRow(row);
 
@@ -181,12 +186,10 @@ public class ProgramsTableRow extends RowWidget implements
 			hide(divStatus, true);
 		} else if (isGoalsTable) {
 			hide(divStatus, true);
-			hide(divTimelines,true);
-			hide(divProgress,true);
-			hide(divBudget,true);
+			hide(divTimelines, true);
+			hide(divProgress, true);
+			hide(divBudget, true);
 		} else {
-
-			// divRating.getElement().setInnerText("N/A");
 			if (activity.getChildren() == null
 					|| activity.getChildren().isEmpty()) {
 				divRowCaret.addStyleName("hide");
@@ -200,10 +203,10 @@ public class ProgramsTableRow extends RowWidget implements
 				activity.getType() == ProgramDetailType.OBJECTIVE ? ""
 						: budgetAmount);
 
-		if(activity.getType()==ProgramDetailType.OUTCOME && (isSummaryRow)){
+		if (activity.getType() == ProgramDetailType.OUTCOME && (isSummaryRow)) {
 			chkSelect.addStyleName("hide");
 		}
-		
+
 		chkSelect.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -223,7 +226,7 @@ public class ProgramsTableRow extends RowWidget implements
 		if (show) {
 			divPanel.setStyleName("hide");
 			divPanel.setWidth("0%");
-		}else{
+		} else {
 			divPanel.removeStyleName("hide");
 			divPanel.setWidth("10%");
 		}
@@ -248,41 +251,44 @@ public class ProgramsTableRow extends RowWidget implements
 	private void setActivityName() {
 		divName.getElement().setInnerText(activity.getName());
 
-		if (activity.getStartDate() != null && activity.getEndDate() != null){
+		if (activity.getStartDate() != null && activity.getEndDate() != null) {
 			// divName.setTitle(DateUtils.HALFDATEFORMAT.format(activity
 			// .getStartDate())
 			// + " - "
 			// + DateUtils.HALFDATEFORMAT.format(activity.getEndDate()));
 
-			//divName.setTitle(activity.getDescription());
+			// divName.setTitle(activity.getDescription());
 		}
-		if (activity.getType() == ProgramDetailType.OBJECTIVE ||
-				activity.getType() == ProgramDetailType.OUTCOME) {
-			System.err.println("This is an objectivve");
-			if(activity.getProgramId()!=null){
-				divName.setHref("#home;page=activities;activity=" + activity.getProgramId() + "d"
-						+ activity.getId());
-			}else{
+		if (activity.getType() == ProgramDetailType.OBJECTIVE
+				|| activity.getType() == ProgramDetailType.OUTCOME) {
+			// System.err.println("This is an objective");
+			if (activity.getProgramId() != null) {
+				divName.setHref("#home;page=activities;activity="
+						+ activity.getProgramId() + "d" + activity.getId());
+			} else {
 				divName.getElement().removeAttribute("href");
 				divName.addStyleName("no-link");
 			}
-			
-		}else if (isSummaryRow && activity.getType() == ProgramDetailType.PROGRAM) {
+
+		} else if (isSummaryRow
+				&& activity.getType() == ProgramDetailType.PROGRAM) {
 			// Summary table
 			divName.setHref("#home;page=activities;activity="
 					+ activity.getId());
-		}else{
+		} else {
 			divName.setHref("#home;page=activities;activity=" + programId + "d"
 					+ activity.getId());
 		}
 
 		divRowStrip.addClassName("label-info");
 
-		if (activity.getType() == ProgramDetailType.OBJECTIVE){
+		if (activity.getType() == ProgramDetailType.OBJECTIVE) {
 			divName.getElement().setInnerText(
 					activity.getName() + " - " + activity.getDescription());
 		}
-		
+		if (activity.getType() == ProgramDetailType.OUTCOME) {
+			divDesc.setText(activity.getDescription());
+		}
 		if (level == 0) {
 			divName.addStyleName("bold");
 		}
@@ -403,7 +409,7 @@ public class ProgramsTableRow extends RowWidget implements
 
 	private void setFunding() {
 		List<ProgramFundDTO> activityFunding = activity.getFunding();
-		
+
 		List<FundDTO> activitySourceOfFunds = new ArrayList<FundDTO>();
 		for (ProgramFundDTO dto : activityFunding) {
 			activitySourceOfFunds.add(dto.getFund());
@@ -505,8 +511,8 @@ public class ProgramsTableRow extends RowWidget implements
 
 		int childCount = activity.getChildren() == null ? 0 : activity
 				.getChildren().size();
-		
-		if (activity.getType()==ProgramDetailType.PROGRAM) {
+
+		if (activity.getType() == ProgramDetailType.PROGRAM) {
 			// summary table
 			childCount = activity.getProgramOutcomes() == null ? 0 : activity
 					.getProgramOutcomes().size();
@@ -521,15 +527,15 @@ public class ProgramsTableRow extends RowWidget implements
 		// loop until you count n children
 		for (int i = idx + 1; (i < panel.getWidgetCount() && childrenCollapsed < childCount); i++) {
 			ProgramsTableRow row = (ProgramsTableRow) panel.getWidget(i);
-			System.err.println("Showing child : "+showingChildren);
-			//if (row.getActivity().getParentId() == activity.getId()) {
-				childrenCollapsed++;
-				if (!showingChildren) {
-					// toggle children of children only when collapsing
-					row.toggle(showingChildren);
-				}
-				row.show(showingChildren);
-			//}
+			System.err.println("Showing child : " + showingChildren);
+			// if (row.getActivity().getParentId() == activity.getId()) {
+			childrenCollapsed++;
+			if (!showingChildren) {
+				// toggle children of children only when collapsing
+				row.toggle(showingChildren);
+			}
+			row.show(showingChildren);
+			// }
 
 		}
 	}
@@ -571,24 +577,27 @@ public class ProgramsTableRow extends RowWidget implements
 	public void onProgramDetailSaved(ProgramDetailSavedEvent event) {
 		IsProgramDetail updatedProgram = event.getProgram();
 
-		if (event.isNew() && ((updatedProgram.getParentId() != null && updatedProgram.getParentId().equals(activity.getId())) || 
-				(updatedProgram.getActivityOutcomeId() != null && updatedProgram.getActivityOutcomeId().equals(activity.getId())))) {
-			
-			List<IsProgramDetail> children= activity.getChildren();
-			if(updatedProgram.getType()==ProgramDetailType.ACTIVITY){
-				children= activity.getProgramOutcomes();
+		if (event.isNew()
+				&& ((updatedProgram.getParentId() != null && updatedProgram
+						.getParentId().equals(activity.getId())) || (updatedProgram
+						.getActivityOutcomeId() != null && updatedProgram
+						.getActivityOutcomeId().equals(activity.getId())))) {
+
+			List<IsProgramDetail> children = activity.getChildren();
+			if (updatedProgram.getType() == ProgramDetailType.ACTIVITY) {
+				children = activity.getProgramOutcomes();
 			}
-			
+
 			// check if this is the parent
 			if (children == null) {
-				children= new ArrayList<IsProgramDetail>();
+				children = new ArrayList<IsProgramDetail>();
 			}
 
 			children.add(updatedProgram);
-			
-			if(updatedProgram.getType()==ProgramDetailType.ACTIVITY){
+
+			if (updatedProgram.getType() == ProgramDetailType.ACTIVITY) {
 				activity.setProgramOutcomes(children);
-			}else{
+			} else {
 				activity.setChildren(children);
 			}
 			activity.sort();
@@ -603,20 +612,9 @@ public class ProgramsTableRow extends RowWidget implements
 			newRow.setSelectionChangeHandler(selectionHandler);
 
 			// Position the row below the parent
-			parent.insert(newRow, parent.getWidgetIndex(this) + idx + 1); // Indexes
-																			// start
-																			// from
-																			// zero,
-																			// but
-																			// we
-																			// want
-																			// children
-																			// to
-																			// be
-																			// listed
-																			// from
-																			// parents
-																			// position+1
+			parent.insert(newRow, parent.getWidgetIndex(this) + idx + 1);
+			// Indexes start from zero, but we want children to be listed from
+			// parents position+1
 
 			newRow.show(true);
 			return;
@@ -625,7 +623,7 @@ public class ProgramsTableRow extends RowWidget implements
 		// exists
 		if (activity.getId().equals(updatedProgram.getId())) {
 			int count = row.getWidgetCount();
-			
+
 			for (FundDTO programFund : donors) {
 				assert remove(row.getWidget(--count));
 			}
