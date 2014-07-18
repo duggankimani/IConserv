@@ -386,7 +386,7 @@ public class CreateActivityView extends ViewImpl implements
 					.get("donor"));
 			fund.setAmount(model.get("amount") == null ? null : (Double) model
 					.get("amount"));
-			fund.setAmount(model.get("actual") == null ? null : (Double) model
+			fund.setActual(model.get("actual") == null ? null : (Double) model
 					.get("actual"));
 			
 			fund.setId(model.getId());
