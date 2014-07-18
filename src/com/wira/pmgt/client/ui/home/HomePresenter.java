@@ -301,6 +301,7 @@ public class HomePresenter extends
 			activitiesFactory.get(new ServiceCallback<ProgramsPresenter>() {
 				@Override
 				public void processResult(ProgramsPresenter aResponse) {
+					aResponse.clear();
 					if(page.equals("activities")){
 						if(!outcomeId.equals(0L)){
 							aResponse.loadActivitiesByOutcome(programId,outcomeId);

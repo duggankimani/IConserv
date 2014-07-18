@@ -259,7 +259,6 @@ public class ProgramsTableRow extends RowWidget implements
 			aName.getElement().removeAttribute("href");
 			aName.addStyleName("no-link");
 		}else if(activity.getType() == ProgramDetailType.OUTCOME) {
-			System.err.println("This is an objective");
 			
 			if(activity.getProgramId()!=null){
 				aName.setHref("#home;page=activities;activity=" + activity.getProgramId() + "O"

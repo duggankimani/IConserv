@@ -635,7 +635,7 @@ public class ProgramsPresenter extends
 	public void loadData(Long parentProgramId, Long detailId, Long periodId,boolean searchByOutcome,
 			final ProgramDetailType typeToLoad){
 		fireEvent(new ProcessingEvent());
-		System.err.println();
+		
 		this.programId = (parentProgramId == null || parentProgramId == 0L) ? null
 				: parentProgramId;
 		programDetailId = detailId == null ? null : detailId == 0 ? null
@@ -889,6 +889,16 @@ public class ProgramsPresenter extends
 		assert (filterPresenter != null);
 		setInSlot(FILTER_SLOT, filterPresenter);
 		getView().setMiddleHeight();
+	}
+
+	public void clear() {
+		this.selected=null;
+		this.detail=null;
+		this.programId=null;
+		this.programCode=null;
+
+		this.programDetailId=null; // Drill Down
+		this.programDetailCode=null; 
 	}
 
 }
