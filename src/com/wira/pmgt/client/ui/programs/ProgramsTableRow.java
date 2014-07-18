@@ -253,6 +253,39 @@ public class ProgramsTableRow extends RowWidget implements
 			spanEndMonth.setInnerText(DateUtils.MONTHSHORTFORMAT
 					.format(activity.getEndDate()));
 		}
+
+		if (activity.getStatus() != ProgramStatus.CLOSED) {
+			if (activity.isOverdue()) {
+				divDates.setStyleName("text-danger");
+				// divDates.addStyleName("text-danger");
+				divDates.setTitle("This "
+						+ activity.getType().getDisplayName()
+						+ " is Overdue ("
+						+ DateUtils.MONTHDAYFORMAT.format(activity.getEndDate())
+						+ ")");
+			} else if (activity.isNotStarted()) {
+				divDates.setStyleName("text-warning");
+				divDates.setTitle("This "
+						+ activity.getType().getDisplayName()
+						+ " should have started by "
+						+ DateUtils.MONTHDAYFORMAT.format(activity
+								.getStartDate()));
+				// divDates.addStyleName("text-warning");
+			} else if (activity.isUpcoming()) {
+				divDates.setTitle("This "
+						+ activity.getType().getDisplayName()
+						+ " is coming up soon ("
+						+ DateUtils.MONTHDAYFORMAT.format(activity
+								.getStartDate()) + ")");
+			} else {
+				// its ongoing - Work in progress (CREATED, OPEN, REOPENED)
+				// spnStatus.setClassName("label label-info");
+				// divDates.addStyleName("text-success");
+			}
+		} else {
+			spnStatus.setClassName("label label-success");
+
+		}
 	}
 
 	private void setActivityName() {
@@ -324,13 +357,12 @@ public class ProgramsTableRow extends RowWidget implements
 	 */
 	public void setStatus() {
 		ProgramStatus status = activity.getStatus();
-
-		if (status == null && activity.getType() != ProgramDetailType.OUTCOME) {
-			status = ProgramStatus.CREATED;
-		} else {
+		if (activity.getType() == ProgramDetailType.OUTCOME) {
 			spnStatus.addClassName("hide");
+		} else if (status == null) {
+			status = ProgramStatus.CREATED;
 		}
-
+		
 		spnStatus.setInnerText(status.getDisplayName());
 
 		String type = "info";
@@ -365,41 +397,6 @@ public class ProgramsTableRow extends RowWidget implements
 		}
 
 		// spnProgress.setInnerText(activity.getProgress().intValue()+"%");
-
-		if (status != ProgramStatus.CLOSED) {
-			if (activity.isOverdue()) {
-				spnStatus.setClassName("label label-danger");
-				// divDates.addStyleName("text-danger");
-				spnStatus
-						.setTitle("This "
-								+ activity.getType().getDisplayName()
-								+ " is Overdue ("
-								+ DateUtils.MONTHDAYFORMAT.format(activity
-										.getEndDate()) + ")");
-			} else if (activity.isNotStarted()) {
-				spnStatus.setClassName("label label-warning");
-				spnStatus.setTitle("This "
-						+ activity.getType().getDisplayName()
-						+ " should have started by "
-						+ DateUtils.MONTHDAYFORMAT.format(activity
-								.getStartDate()));
-				// divDates.addStyleName("text-warning");
-			} else if (activity.isUpcoming()) {
-				spnStatus.setTitle("This "
-						+ activity.getType().getDisplayName()
-						+ " is coming up soon ("
-						+ DateUtils.MONTHDAYFORMAT.format(activity
-								.getStartDate()) + ")");
-			} else {
-				// its ongoing - Work in progress (CREATED, OPEN, REOPENED)
-				// spnStatus.setClassName("label label-info");
-				// divDates.addStyleName("text-success");
-			}
-		} else {
-			spnStatus.setClassName("label label-success");
-
-		}
-
 	}
 
 	private boolean hasChildren() {

@@ -264,7 +264,7 @@
 }
 
 .table-programs .tbody .strip-container{
-	width:5%;
+	width: 7%;
 }
 
 .table-programs .tbody .select-container{
@@ -319,6 +319,14 @@
 	min-height: 50px;
 	display: inline-block;
 	height: auto;
+}
+.color-strip-new{
+	width: 22px;
+	color: #ffffff;
+	font-weight: bold;
+	height: 22px;
+	margin-top: 12px;
+	display: block;
 }
 
 /* Tabs Below */
