@@ -57,25 +57,24 @@ public class ProgramsTable extends Composite {
 		}
 	}
 
-	private void createRow(IsProgramDetail activity, int level) {
-		System.err.println("Painting :: "+activity.getName());
+	private void createRow(IsProgramDetail programDetail, int level) {
+		//System.err.println("Painting :: "+programDetail.getName());
 		
-		ProgramsTableRow row = new ProgramsTableRow(activity,funds,programId,isSummaryTable,isGoalsTable, level);
-		if(activity.getId()==lastUpdatedId){
+		ProgramsTableRow row = new ProgramsTableRow(programDetail,funds,programId,isSummaryTable,isGoalsTable, level);
+		if(programDetail.getId()==lastUpdatedId){
 			row.highlight();
 		}
 		
 		row.setSelectionChangeHandler(handler);
 		tblView.addRow(row);
 		
-		if(activity.getType()==ProgramDetailType.PROGRAM){
+		if(programDetail.getType()==ProgramDetailType.PROGRAM){
 			//this is data for the summary tab
-			if(activity.getProgramOutcomes()!=null){
-				//sort(activity.getProgramOutcomes());
-				setActivities(activity.getProgramOutcomes(),level);
+			if(programDetail.getProgramOutcomes()!=null){
+				setActivities(programDetail.getProgramOutcomes(),level);
 			}
-		}else if(activity.getChildren()!=null && !activity.getChildren().isEmpty()){
-			setActivities(activity.getChildren(),level);
+		}else if(programDetail.getChildren()!=null && !programDetail.getChildren().isEmpty()){
+			setActivities(programDetail.getChildren(),level);
 		}
 	}
 
@@ -96,8 +95,6 @@ public class ProgramsTable extends Composite {
 
 	private void createGrid() {
 		List<TableHeader> th = new ArrayList<TableHeader>();
-
-		System.err.println("Goals Table >>>" + isGoalsTable);
 
 		if (isSummaryTable) {
 			th.add(new TableHeader("TITLE", 40.0,"title"));

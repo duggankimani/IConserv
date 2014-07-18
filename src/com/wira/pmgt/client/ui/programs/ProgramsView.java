@@ -43,10 +43,10 @@ public class ProgramsView extends ViewImpl implements
 
 	@UiField
 	ActionLink aProgram;
-	
+
 	@UiField
 	ActionLink aDeleteProgram;
-	
+
 	@UiField
 	HTMLPanel divMainContainer;
 
@@ -66,7 +66,7 @@ public class ProgramsView extends ViewImpl implements
 
 	@UiField
 	HTMLPanel divFilterBox;
-	
+
 	@UiField
 	Anchor iFilterdropdown;
 
@@ -122,7 +122,7 @@ public class ProgramsView extends ViewImpl implements
 
 	protected boolean isNotDisplayed;
 
-	private boolean isCurrentPlaceObjectivesPage=false;
+	private boolean isCurrentPlaceObjectivesPage = false;
 
 	@Inject
 	public ProgramsView(final Binder binder) {
@@ -174,7 +174,6 @@ public class ProgramsView extends ViewImpl implements
 		aRight.addClickHandler(clickHandler);
 		aLeft.addClickHandler(clickHandler);
 
-
 		show(aBack, false);
 		show(aDetail, false);
 		show(aAssign, false);
@@ -186,17 +185,16 @@ public class ProgramsView extends ViewImpl implements
 				History.back();
 			}
 		});
-		
-		
+
 		iFilterdropdown.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				if(isNotDisplayed){
-				divFilterBox.removeStyleName("hide");
-				isNotDisplayed=false;
-				}else{
-				divFilterBox.addStyleName("hide");
-				isNotDisplayed=true;
+				if (isNotDisplayed) {
+					divFilterBox.removeStyleName("hide");
+					isNotDisplayed = false;
+				} else {
+					divFilterBox.addStyleName("hide");
+					isNotDisplayed = true;
 				}
 			}
 		});
@@ -249,7 +247,7 @@ public class ProgramsView extends ViewImpl implements
 	public void createTab(String text, long id, boolean active) {
 		createTab(text, "#home;page=activities;activity=" + id, active);
 	}
-	
+
 	public void createTab(String text, String url, boolean active) {
 		BulletPanel li = new BulletPanel();
 		ActionLink a = new ActionLink(text);
@@ -285,22 +283,21 @@ public class ProgramsView extends ViewImpl implements
 
 	@Override
 	public void createProgramTabs(List<IsProgramDetail> programs) {
-		//showContent(!(programs == null || programs.isEmpty()));
+		// showContent(!(programs == null || programs.isEmpty()));
 		showContent(true);
 		this.programs = programs;
-		/*listPanel.clear();
-		if (programs == null) {
-			return;
-		}*/
+		/*
+		 * listPanel.clear(); if (programs == null) { return; }
+		 */
 
 		createDefaultTabs();
-		
+
 		// System.err.println("Size = " + programs.size());
-		if(programs!=null)
-		for (IsProgramDetail activity : programs) {
-			// boolean first = programs.indexOf(activity) == 0;
-			createTab(activity.getName(), activity.getId(), false);
-		}
+		if (programs != null)
+			for (IsProgramDetail activity : programs) {
+				// boolean first = programs.indexOf(activity) == 0;
+				createTab(activity.getName(), activity.getId(), false);
+			}
 	}
 
 	/**
@@ -312,8 +309,9 @@ public class ProgramsView extends ViewImpl implements
 		}
 		setSelection(singleResult.getType(), false);
 
-		if(singleResult.getPeriod()!=null){
-			headerContainer.getPeriodDropdown().setValue(singleResult.getPeriod());
+		if (singleResult.getPeriod() != null) {
+			headerContainer.getPeriodDropdown().setValue(
+					singleResult.getPeriod());
 		}
 
 		if (singleResult.getProgramSummary() != null) {
@@ -322,6 +320,12 @@ public class ProgramsView extends ViewImpl implements
 			panelCrumbs.clear();
 			panelCrumbs.add(breadCrumbs);
 			showBackButton(true);
+		}
+		
+		
+		if (singleResult.getType() == ProgramDetailType.OBJECTIVE) {
+			headerContainer.showBudgets(false);
+			headerContainer.setText("Objectives & Goals");
 		}
 
 		if (singleResult.getType() == ProgramDetailType.PROGRAM) {
@@ -335,45 +339,47 @@ public class ProgramsView extends ViewImpl implements
 						+ singleResult.getName() + "'");
 			}
 
-			headerContainer.setFunding(singleResult.getBudgetAmount(),singleResult.getFunding());
+			// Set Funds
+			headerContainer.setFunding(singleResult.getBudgetAmount(),
+					singleResult.getActualAmount(), singleResult.getType());
+			
+			System.err.println(">>>>Funding called");
 
 			if (!tblView.isSummaryTable) {
 				// select tab
 				selectTab(singleResult.getId());
 				headerContainer.setText(singleResult.getName());
 				headerContainer.showBudgets(true);
-				
-				if(singleResult.getType()==ProgramDetailType.PROGRAM){
+
+				if (singleResult.getType() == ProgramDetailType.PROGRAM) {
 					Map<Long, IsProgramDetail> outcomeActivityMap = new HashMap<Long, IsProgramDetail>();
-					if(singleResult.getProgramOutcomes()!=null){
-						for(IsProgramDetail outcome: singleResult.getProgramOutcomes()){
+					if (singleResult.getProgramOutcomes() != null) {
+						for (IsProgramDetail outcome : singleResult
+								.getProgramOutcomes()) {
 							outcomeActivityMap.put(outcome.getId(), outcome);
-						}	
-						
-						List<IsProgramDetail> activities = singleResult.getChildren();
-						if(activities!=null){
-							for(IsProgramDetail activity: activities){
-								if(outcomeActivityMap.get(activity.getActivityOutcomeId())!=null){
-									outcomeActivityMap.get(activity.getActivityOutcomeId()).addChild(activity);
+						}
+
+						List<IsProgramDetail> activities = singleResult
+								.getChildren();
+						if (activities != null) {
+							for (IsProgramDetail activity : activities) {
+								if (outcomeActivityMap.get(activity
+										.getActivityOutcomeId()) != null) {
+									outcomeActivityMap.get(
+											activity.getActivityOutcomeId())
+											.addChild(activity);
 								}
 							}
 						}
 					}
 					setData(singleResult.getProgramOutcomes());
-				}else{
+				} else {
 					setData(singleResult.getChildren());
 				}
-				
-				
-			}else if(tblView.isGoalsTable){
-				System.err.println(">>>Goals Table "+tblView.isGoalsTable);
-				headerContainer.setText("Objectives & Goals");
-			}else {
-				headerContainer.showBudgets(false);
+
+			} else {
 				setData(Arrays.asList(singleResult));
 			}
-			
-			
 
 		} else {
 			setData(Arrays.asList(singleResult));
@@ -392,10 +398,10 @@ public class ProgramsView extends ViewImpl implements
 	public void selectTab(Long id) {
 		selectTab("#home;page=activities;activity=" + id);
 	}
-	
+
 	public void selectTab(String href) {
-		isCurrentPlaceObjectivesPage=href.equals("#home;page=objectives");
-		
+		isCurrentPlaceObjectivesPage = href.equals("#home;page=objectives");
+
 		int size = listPanel.getWidgetCount();
 		for (int i = 0; i < size; i++) {
 			BulletPanel li = (BulletPanel) listPanel.getWidget(i);
@@ -411,7 +417,7 @@ public class ProgramsView extends ViewImpl implements
 			}
 		}
 	}
-	
+
 	@Override
 	public void removeTab(Long id) {
 		int size = listPanel.getWidgetCount();
@@ -420,9 +426,9 @@ public class ProgramsView extends ViewImpl implements
 
 			Anchor a = (Anchor) li.getWidget(0);
 			String href = "#home;page=activities;activity=" + id;
-			
-			if(a.getHref().endsWith(href)){
-				//hide this
+
+			if (a.getHref().endsWith(href)) {
+				// hide this
 				li.getElement().getStyle().setDisplay(Display.NONE);
 			}
 		}
@@ -466,14 +472,15 @@ public class ProgramsView extends ViewImpl implements
 	public void setSelection(ProgramDetailType type, boolean isRowData) {
 		show(aProgram, false);
 		show(aNewOutcome, false);
-		show(aNewObjective, isCurrentPlaceObjectivesPage && AppContext.isCurrentUserAdmin() && !isRowData);
+		show(aNewObjective,
+				isCurrentPlaceObjectivesPage && AppContext.isCurrentUserAdmin()
+						&& !isRowData);
 		show(aNewActivity, false);
 		show(aNewTask, false);
 		show(aEdit, true);
 		show(aDeleteProgram, isRowData && AppContext.isCurrentUserAdmin());
 		show(aAssign, false);
 		show(aDetail, !isCurrentPlaceObjectivesPage && isRowData);
-		
 
 		if (type == ProgramDetailType.PROGRAM) {
 			// Program can be selected from the SummaryTab == isRowData
@@ -486,12 +493,14 @@ public class ProgramsView extends ViewImpl implements
 			show(aNewOutcome, AppContext.isCurrentUserAdmin() && isRowData);
 			show(aEdit, isCurrentPlaceObjectivesPage && isRowData);
 		} else if (type == ProgramDetailType.OUTCOME) {
-			show(aNewActivity,  AppContext.isCurrentUserAdmin() && isRowData && !isCurrentPlaceObjectivesPage 
-					&& !(programId==null || programId==0));
+			show(aNewActivity, AppContext.isCurrentUserAdmin() && isRowData
+					&& !isCurrentPlaceObjectivesPage
+					&& !(programId == null || programId == 0));
 			show(aAssign, false);
 			show(aDetail, false);
 			show(aEdit, isCurrentPlaceObjectivesPage && isRowData);
-			show(aDeleteProgram, isRowData && AppContext.isCurrentUserAdmin() && isCurrentPlaceObjectivesPage);
+			show(aDeleteProgram, isRowData && AppContext.isCurrentUserAdmin()
+					&& isCurrentPlaceObjectivesPage);
 		} else if (type == ProgramDetailType.ACTIVITY) {
 			show(aNewTask, true);
 			show(aAssign, false);
@@ -501,7 +510,9 @@ public class ProgramsView extends ViewImpl implements
 		} else {
 			show(aDetail, false);
 			show(aAssign, false);
-			show(aProgram, !isCurrentPlaceObjectivesPage && AppContext.isCurrentUserAdmin());
+			show(aProgram,
+					!isCurrentPlaceObjectivesPage
+							&& AppContext.isCurrentUserAdmin());
 			show(aEdit, false);
 			show(aDeleteProgram, false);
 		}
@@ -529,8 +540,8 @@ public class ProgramsView extends ViewImpl implements
 	public HasClickHandlers getDetailButton() {
 		return aDetail;
 	}
-	
-	public HasClickHandlers getDeleteButton(){
+
+	public HasClickHandlers getDeleteButton() {
 		return aDeleteProgram;
 	}
 
@@ -616,6 +627,5 @@ public class ProgramsView extends ViewImpl implements
 		tblView.setGoalsTable(isGoalsTable);
 		headerContainer.setProgramId(programId);
 	}
-
 
 }

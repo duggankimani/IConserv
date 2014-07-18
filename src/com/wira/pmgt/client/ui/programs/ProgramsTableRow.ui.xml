@@ -11,7 +11,7 @@
 				</g:HTMLPanel>
 
 				<g:HTMLPanel styleName="span4 strip-container small-container">
-					<span class="color-strip" ui:field="divRowStrip"></span>
+					<span class="color-strip-new" ui:field="divRowStrip"></span>
 				</g:HTMLPanel>
 
 				<g:HTMLPanel styleName="span4 select-container small-container">
@@ -21,14 +21,14 @@
 				<g:HTMLPanel styleName="span4 name-container">
 					<g:HTMLPanel ui:field="popOverDiv" styleName="popover fade top in hide">
 						<div class="arrow"></div>
-						<h3 class="popover-title" ui:field="hTitle">HOD Development</h3>
-						<div ui:field="divActors" class="popover-content">
-						</div>
+						<h3 class="popover-title" ui:field="hTitle">Description</h3>
+						<span ui:field="spnDescPopUp" class="popover-content">
+						</span>
 					</g:HTMLPanel>
-					
+
 					<d:ActionLink ui:field="aName" styleName=""></d:ActionLink>
 					<div class="row-fluid">
-						<g:InlineLabel ui:field="divDesc" styleName=""
+						<g:InlineLabel ui:field="divDesc" styleName="muted italic helper-font-small"
 							width="70%">
 						</g:InlineLabel>
 					</div>

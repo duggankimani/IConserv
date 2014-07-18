@@ -38,6 +38,7 @@ public class CreateObjectivePresenter extends
 
 	public IsProgramDetail getObjective(){
 		IsProgramDetail viewObjective = getView().getObjective();
+		viewObjective.setParentId(null);
 		if(objective!=null){
 			objective.setDescription(viewObjective.getDescription());
 			objective.setName(viewObjective.getName());

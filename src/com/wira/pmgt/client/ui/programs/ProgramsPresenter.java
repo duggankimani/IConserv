@@ -216,7 +216,7 @@ public class ProgramsPresenter extends
 									return;
 								}
 								fireEvent(new ProcessingEvent());
-								
+
 								assignActivity.addItems(); // Add all users
 								TaskInfo taskInfo = assignActivity
 										.getTaskInfo();
@@ -493,13 +493,13 @@ public class ProgramsPresenter extends
 
 						getView().setLastUpdatedId(
 								createProgramsResponse.getProgram().getId());
-						
+
 						if (activity.getType() == ProgramDetailType.PROGRAM) {
 							loadData(programId);
 						} else if (activity.getType() == ProgramDetailType.OBJECTIVE) {
 							loadData(null, null, null,
 									ProgramDetailType.OBJECTIVE);
-						}else if (activity.getType() == ProgramDetailType.ACTIVITY) {
+						} else if (activity.getType() == ProgramDetailType.ACTIVITY) {
 							assert activity.getActivityOutcomeId() != null;
 							afterSave(createProgramsResponse.getProgram()
 									.getId(), activity.getActivityOutcomeId(),
@@ -509,7 +509,7 @@ public class ProgramsPresenter extends
 									.getId(), activity.getParentId(), activity
 									.getId() == null);
 						}
-						
+
 						fireEvent(new ProcessingCompletedEvent());
 						fireEvent(new ActivitySavedEvent(activity.getType()
 								.name().toLowerCase()
@@ -553,8 +553,8 @@ public class ProgramsPresenter extends
 		// reload parent
 		if (parentId != null) {
 			MultiRequestAction requests = new MultiRequestAction();
-			requests.addRequest(new GetProgramsRequest(parentId, false));		
-			requestHelper.execute(requests, 
+			requests.addRequest(new GetProgramsRequest(parentId, false));
+			requestHelper.execute(requests,
 					new TaskServiceCallback<MultiRequestActionResult>() {
 						@Override
 						public void processResult(
@@ -575,8 +575,8 @@ public class ProgramsPresenter extends
 			final boolean isNew) {
 		MultiRequestAction requests = new MultiRequestAction();
 		requests.addRequest(new GetProgramsRequest(saveActivityId, false));
-		//reload parent
-		if(parentId!=null){							
+		// reload parent
+		if (parentId != null) {
 			requests.addRequest(new GetProgramsRequest(parentId, false));
 		}
 
@@ -619,7 +619,7 @@ public class ProgramsPresenter extends
 	public void loadActivitiesByOutcome(Long programId, Long outcomeId) {
 		loadData(programId, outcomeId, null, true, ProgramDetailType.PROGRAM);
 	}
-	
+
 	/**
 	 * If PeriodId is null; current period is selected
 	 * 
@@ -628,14 +628,14 @@ public class ProgramsPresenter extends
 	 * @param periodId
 	 */
 	public void loadData(Long programId, Long detailId, Long periodId,
-			final ProgramDetailType typeToLoad){
+			final ProgramDetailType typeToLoad) {
 		loadData(programId, detailId, periodId, false, typeToLoad);
 	}
 
-	public void loadData(Long parentProgramId, Long detailId, Long periodId,boolean searchByOutcome,
-			final ProgramDetailType typeToLoad){
+	public void loadData(Long parentProgramId, Long detailId, Long periodId,
+			boolean searchByOutcome, final ProgramDetailType typeToLoad) {
 		fireEvent(new ProcessingEvent());
-		System.err.println();
+
 		this.programId = (parentProgramId == null || parentProgramId == 0L) ? null
 				: parentProgramId;
 		programDetailId = detailId == null ? null : detailId == 0 ? null
@@ -671,7 +671,7 @@ public class ProgramsPresenter extends
 
 		if (this.programId != null) {
 			// Details of selected program
-			//this.programId = programId;
+			// this.programId = programId;
 
 			if (periodId != null) {
 				// Period is not current period
@@ -685,22 +685,26 @@ public class ProgramsPresenter extends
 		}
 
 		if (programDetailId != null) {
-			if(searchByOutcome){
-				if(periodId!=null){
-					assert programDetailCode!=null;
-					action.addRequest(new GetProgramsRequest(programDetailCode,periodId,this.programId!=null));
-				}else{
-					action.addRequest(new GetProgramsRequest(this.programId,programDetailId,this.programId!=null));
+			if (searchByOutcome) {
+				if (periodId != null) {
+					assert programDetailCode != null;
+					action.addRequest(new GetProgramsRequest(programDetailCode,
+							periodId, this.programId != null));
+				} else {
+					action.addRequest(new GetProgramsRequest(this.programId,
+							programDetailId, this.programId != null));
 				}
-			}else{
-				if(periodId!=null){
-					assert programDetailCode!=null;
-					action.addRequest(new GetProgramsRequest(programDetailCode,periodId,this.programId!=null));
-				}else{
-					action.addRequest(new GetProgramsRequest(programDetailId,this.programId!=null));
+			} else {
+				if (periodId != null) {
+					assert programDetailCode != null;
+					action.addRequest(new GetProgramsRequest(programDetailCode,
+							periodId, this.programId != null));
+				} else {
+					action.addRequest(new GetProgramsRequest(programDetailId,
+							this.programId != null));
 				}
 			}
-			
+
 		}
 
 		requestHelper.execute(action,
@@ -717,7 +721,7 @@ public class ProgramsPresenter extends
 						// Programs (Presented as tabs below)
 						GetProgramsResponse response = (GetProgramsResponse) aResponse
 								.get(i++);
-						System.err.println("Tabs >> "+response.getPrograms().size());
+						// System.err.println("Tabs >> "+response.getPrograms().size());
 						getView().createProgramTabs(response.getPrograms());
 
 						// Periods
@@ -750,7 +754,6 @@ public class ProgramsPresenter extends
 							if (programDetailId == null
 									&& typeToLoad == ProgramDetailType.PROGRAM) {
 								// This is a summary table with no program
-								// selecte
 								getView().setData(response.getPrograms());
 							}
 
@@ -889,6 +892,16 @@ public class ProgramsPresenter extends
 		assert (filterPresenter != null);
 		setInSlot(FILTER_SLOT, filterPresenter);
 		getView().setMiddleHeight();
+	}
+
+	public void clear() {
+		this.selected = null;
+		this.detail = null;
+		this.programId = null;
+		this.programCode = null;
+
+		this.programDetailId = null; // Drill Down
+		this.programDetailCode = null;
 	}
 
 }

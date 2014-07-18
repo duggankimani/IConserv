@@ -19,6 +19,7 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 	private String code;
 	private Double budgetAmount; //Total budget amount (accumulation of source of funds)
 	private Double actualAmount; //Actual amount spent
+	private Double commitedAmount;
 	private List<ProgramFundDTO> funding;
 	private List<TargetAndOutcomeDTO> targetsAndOutcomes;
 	private String budgetLine;
@@ -211,5 +212,13 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 
 	public void setBudgetLine(String budgetLine) {
 		this.budgetLine = budgetLine;
+	}
+
+	public Double getCommitedAmount() {
+		return commitedAmount;
+	}
+
+	public void setCommitedAmount(Double commitedAmount) {
+		this.commitedAmount = commitedAmount;
 	}
 }

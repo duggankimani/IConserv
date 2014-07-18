@@ -101,10 +101,12 @@ public class CreateActivityView extends ViewImpl implements
 
 		ColumnConfig config = new ColumnConfig("target", "Target",
 				DataType.DOUBLE, "1000");
+		config.setMandatory(true);
 		configs.add(config);
 
 		config = new ColumnConfig("indicator", "Indicator", DataType.STRING,
 				"Participants");
+		config.setMandatory(true);
 		configs.add(config);
 
 		config = new ColumnConfig("actual", "Outcome", DataType.DOUBLE, "1000");
@@ -117,11 +119,13 @@ public class CreateActivityView extends ViewImpl implements
 	public void createGrid() {
 		gridView.refresh();
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
+		donorField.setMandatory(true);
 		configs.add(donorField);
 
 		ColumnConfig config = new ColumnConfig("amount", "Amount",
 				DataType.DOUBLE);
 		config.setAggregationColumn(true);
+		config.setMandatory(true);
 		configs.add(config);
 
 		config = new ColumnConfig("actual", "Actual Exp", DataType.DOUBLE);
@@ -248,6 +252,15 @@ public class CreateActivityView extends ViewImpl implements
 			}
 		}
 
+		List<String> gridErrors = gridTargets.getErrors();
+		if(gridErrors!=null){
+			isValid=false;
+			issues.addError(gridErrors.get(0)+" (Target and Outcomes Grid)");
+		}else if((gridErrors=gridView.getErrors())!=null){
+			isValid=false;
+			issues.addError(gridErrors.get(0)+" (Budgets Grid)");
+		}
+		
 		if (!isValid) {
 			issues.getElement().scrollIntoView();
 		}
@@ -373,6 +386,9 @@ public class CreateActivityView extends ViewImpl implements
 					.get("donor"));
 			fund.setAmount(model.get("amount") == null ? null : (Double) model
 					.get("amount"));
+			fund.setActual(model.get("actual") == null ? null : (Double) model
+					.get("actual"));
+			
 			fund.setId(model.getId());
 			return fund;
 		}
@@ -386,6 +402,7 @@ public class CreateActivityView extends ViewImpl implements
 				model.set("donor", fund.getFund());
 				model.setId(fund.getId());
 				model.set("amount", fund.getAmount());
+				model.set("actual", fund.getActual());
 				models.add(model);
 			}
 

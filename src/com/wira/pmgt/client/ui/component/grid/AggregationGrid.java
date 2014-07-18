@@ -247,4 +247,19 @@ public class AggregationGrid extends Composite {
 		setData(new ArrayList<DataModel>());
 	}
 	
+	public List<String> getErrors(){
+		int rowCount = tblView.getRowCount();
+		for(int i=0; i<rowCount; i++){
+			Widget rowWidget = tblView.getRow(i);
+			AggregationGridRow gridRow = (AggregationGridRow)rowWidget;
+			
+			List<String> err = gridRow.getErrors(); 
+			if(err!=null){
+				return err;
+			}
+		}
+		
+		return null;
+	}
+	
 }

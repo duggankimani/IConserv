@@ -20,8 +20,8 @@ import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.Dropdown;
 import com.wira.pmgt.client.ui.util.NumberUtils;
+import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
-import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 
 public class ProgramHeader extends Composite {
@@ -172,29 +172,37 @@ public class ProgramHeader extends Composite {
 		}
 	}
 
-	public void setFunding(Double budget,List<ProgramFundDTO> funding) {
+	public void setFunding(Double budget, Double actualAmount, ProgramDetailType type) {
 		if (budget == null) {
 			budget=0.0;
 		}
 		
 		setBudget(NumberUtils.CURRENCYFORMAT.format(budget));
-		Double totalAllocated = 0.0;
-		if(funding!=null){
-			for(ProgramFundDTO dto: funding){
-				Double allocation = dto.getAllocation();
-				if(allocation==null){
-					allocation=0.0;
-				}
-				totalAllocated=allocation+totalAllocated;
-			}
-		}
+//		Double totalAllocated = 0.0;
+//		if(funding!=null){
+//			for(ProgramFundDTO dto: funding){
+//				Double allocation = dto.getAllocation();
+//				if(allocation==null){
+//					allocation=0.0;
+//				}
+//				totalAllocated=allocation+totalAllocated;
+//			}
+//		}
 		
-		if (totalAllocated > budget) {
+		if (actualAmount > budget) {
 			spnActuals.addClassName("text-error bold");
 		} else {
 			spnActuals.addClassName("text-success bold");
 		}
-		spnActuals.setInnerText(NumberUtils.CURRENCYFORMAT.format(budget-totalAllocated));
+		spnActuals.setInnerText(NumberUtils.CURRENCYFORMAT.format(actualAmount));
+		
+		System.err.println(">>>> Funding is called...");
+		
+		if(type!=ProgramDetailType.OBJECTIVE){
+			showBudgets(true);
+		}else{
+			showBudgets(false);
+		}
 	}
 	
 	public void showBudgets(boolean show){

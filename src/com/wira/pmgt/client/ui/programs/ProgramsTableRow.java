@@ -75,6 +75,9 @@ public class ProgramsTableRow extends RowWidget implements
 	HTMLPanel divTimelines;
 
 	@UiField
+	SpanElement spnDescPopUp;
+
+	@UiField
 	DivElement spanStartMonth;
 	@UiField
 	DivElement spanStartDay;
@@ -263,12 +266,14 @@ public class ProgramsTableRow extends RowWidget implements
 
 			// divName.setTitle(activity.getDescription());
 		}
-		if (activity.getType() == ProgramDetailType.OBJECTIVE
-				|| activity.getType() == ProgramDetailType.OUTCOME) {
-			// System.err.println("This is an objective");
+		if (activity.getType() == ProgramDetailType.OBJECTIVE) {
+			aName.getElement().removeAttribute("href");
+			aName.addStyleName("no-link");
+		} else if (activity.getType() == ProgramDetailType.OUTCOME) {
+
 			if (activity.getProgramId() != null) {
 				aName.setHref("#home;page=activities;activity="
-						+ activity.getProgramId() + "d" + activity.getId());
+						+ activity.getProgramId() + "O" + activity.getId());
 			} else {
 				aName.getElement().removeAttribute("href");
 				aName.addStyleName("no-link");
@@ -283,14 +288,19 @@ public class ProgramsTableRow extends RowWidget implements
 					+ activity.getId());
 		}
 
-		divRowStrip.addClassName("label-info");
-
 		if (activity.getType() == ProgramDetailType.OBJECTIVE) {
 			aName.getElement().setInnerText(
 					activity.getName() + " - " + activity.getDescription());
 		}
 		if (activity.getType() == ProgramDetailType.OUTCOME) {
-			divDesc.setText(activity.getDescription());
+			String text = activity.getDescription();
+			System.err.println("Length>>" + text.length());
+			if (text.length() > 100) {
+				String newText = text.substring(0, 90);
+				divDesc.setText(newText + "...");
+			}
+			divDesc.setTitle(text);
+			spnDescPopUp.setInnerText(text);
 		}
 		if (level == 0) {
 			aName.addStyleName("bold");
@@ -346,7 +356,7 @@ public class ProgramsTableRow extends RowWidget implements
 
 		}
 		spnStatus.addClassName("label-" + type);
-		
+
 		if (activity.getType() == ProgramDetailType.OUTCOME) {
 			progressBar.addStyleName("hide");
 		} else if (activity.getProgress() != null) {
@@ -403,16 +413,30 @@ public class ProgramsTableRow extends RowWidget implements
 	}
 
 	private void setPadding() {
+		switch (activity.getType()) {
+		case OUTCOME:
+			divRowStrip.addClassName("label-info");
+			break;
+		case OBJECTIVE:
+			divRowStrip.addClassName("label-warning");
+			break;
+		case ACTIVITY:
+			divRowStrip.addClassName("label-success");
+			break;
+		case TASK:
+			divRowStrip.addClassName("label-default");
+			break;
+		default:
+			divRowStrip.addClassName("label-default");
+			break;
+		}
+
+		String firstName = activity.getType().getDisplayName().substring(0, 1);
+		divRowStrip.setInnerText(firstName);
+
 		if (level > 0) {
-
-			if (level == 2) {
-				divRowStrip.addClassName("label-info");
-			}
-
 			divCheckbox.getElement().getStyle()
 					.setPaddingLeft(level * 40.0, Unit.PX);
-			divRowStrip.removeClassName("label-info");
-			divRowStrip.addClassName("label-default");
 		}
 	}
 
@@ -536,7 +560,7 @@ public class ProgramsTableRow extends RowWidget implements
 		// loop until you count n children
 		for (int i = idx + 1; (i < panel.getWidgetCount() && childrenCollapsed < childCount); i++) {
 			ProgramsTableRow row = (ProgramsTableRow) panel.getWidget(i);
-			System.err.println("Showing child : " + showingChildren);
+			// System.err.println("Showing child : " + showingChildren);
 			// if (row.getActivity().getParentId() == activity.getId()) {
 			childrenCollapsed++;
 			if (!showingChildren) {

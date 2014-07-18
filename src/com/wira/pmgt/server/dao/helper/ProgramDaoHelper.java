@@ -162,6 +162,8 @@ public class ProgramDaoHelper {
 		//dto.setTargetsAndOutcomes(List<TargetAndOutcomeDTO>);
 		dto.setType(program.getType());
 		dto.setBudgetLine(program.getBudgetLine());
+		dto.setActualAmount(program.getActualAmount());
+		dto.setCommitedAmount(program.getCommitedAmount());
 				
 		if(program.getActivityOutcome()!=null){
 			dto.setActivityOutcomeId(program.getActivityOutcome().getId());
@@ -233,6 +235,7 @@ public class ProgramDaoHelper {
 		programFundDTO.setId(programFund.getId());
 		programFundDTO.setProgramId(programFund.getProgramDetail().getId());
 		programFundDTO.setAllocation(programFund.getAllocatedAmount());
+		programFundDTO.setActual(programFund.getActualAmount());
 		
 		return programFundDTO;
 	}
@@ -269,7 +272,7 @@ public class ProgramDaoHelper {
 		detail.setSourceOfFunds(get(programDTO.getFunding()));
 		detail.setStartDate(programDTO.getStartDate());
 		detail.setBudgetLine(programDTO.getBudgetLine());
-		
+		//detail.setActualAmount(programDTO.getActualAmount());
 		//detail.setTarget(String);
 		//detail.setTargets(Set<TargetAndOutcome>);
 		detail.setType(programDTO.getType());
@@ -360,6 +363,7 @@ public class ProgramDaoHelper {
 		}
 		programFund.setAmount(dto.getAmount());
 		programFund.setFund(get(dto.getFund()));
+		programFund.setActualAmount(dto.getActual());
 		
 		return programFund;
 	}
