@@ -54,10 +54,10 @@ public class ProgramsTableRow extends RowWidget implements
 	@UiField
 	SpanElement divRowStrip;
 	@UiField
-	Anchor divRowCaret;
+	Anchor aRowCaret;
 
 	@UiField
-	Anchor divName;
+	Anchor aName;
 
 	// @UiField HTMLPanel divRowNo;
 	@UiField
@@ -88,10 +88,10 @@ public class ProgramsTableRow extends RowWidget implements
 	HTMLPanel divBudget;
 	@UiField
 	HTMLPanel divCheckbox;
-	
+
 	@UiField
 	InlineLabel divDesc;
-	
+
 	@UiField
 	CheckBox chkSelect;
 
@@ -155,7 +155,7 @@ public class ProgramsTableRow extends RowWidget implements
 			setShowingChildren(false);
 		}
 
-		divRowCaret.setVisible((children != null) && (children.size() > 0));
+		aRowCaret.setVisible((children != null) && (children.size() > 0));
 
 		// Bind Row to Table
 		setRow(row);
@@ -192,16 +192,20 @@ public class ProgramsTableRow extends RowWidget implements
 		} else {
 			if (activity.getChildren() == null
 					|| activity.getChildren().isEmpty()) {
-				divRowCaret.addStyleName("hide");
+				aRowCaret.addStyleName("hide");
 			}
 		}
 
 		// Budgeting & Allocations information
 		String budgetAmount = activity.getBudgetAmount() == null ? ""
 				: CURRENCYFORMAT.format(activity.getBudgetAmount());
-		divBudget.getElement().setInnerText(
-				activity.getType() == ProgramDetailType.OBJECTIVE ? ""
-						: budgetAmount);
+
+		if ((activity.getType() == ProgramDetailType.OBJECTIVE)
+				|| (activity.getType() == ProgramDetailType.OUTCOME)) {
+			divBudget.getElement().setInnerText("");
+		} else {
+			divBudget.getElement().setInnerText(budgetAmount);
+		}
 
 		if (activity.getType() == ProgramDetailType.OUTCOME && (isSummaryRow)) {
 			chkSelect.addStyleName("hide");
@@ -249,7 +253,7 @@ public class ProgramsTableRow extends RowWidget implements
 	}
 
 	private void setActivityName() {
-		divName.getElement().setInnerText(activity.getName());
+		aName.getElement().setInnerText(activity.getName());
 
 		if (activity.getStartDate() != null && activity.getEndDate() != null) {
 			// divName.setTitle(DateUtils.HALFDATEFORMAT.format(activity
@@ -263,34 +267,33 @@ public class ProgramsTableRow extends RowWidget implements
 				|| activity.getType() == ProgramDetailType.OUTCOME) {
 			// System.err.println("This is an objective");
 			if (activity.getProgramId() != null) {
-				divName.setHref("#home;page=activities;activity="
+				aName.setHref("#home;page=activities;activity="
 						+ activity.getProgramId() + "d" + activity.getId());
 			} else {
-				divName.getElement().removeAttribute("href");
-				divName.addStyleName("no-link");
+				aName.getElement().removeAttribute("href");
+				aName.addStyleName("no-link");
 			}
 
 		} else if (isSummaryRow
 				&& activity.getType() == ProgramDetailType.PROGRAM) {
 			// Summary table
-			divName.setHref("#home;page=activities;activity="
-					+ activity.getId());
+			aName.setHref("#home;page=activities;activity=" + activity.getId());
 		} else {
-			divName.setHref("#home;page=activities;activity=" + programId + "d"
+			aName.setHref("#home;page=activities;activity=" + programId + "d"
 					+ activity.getId());
 		}
 
 		divRowStrip.addClassName("label-info");
 
 		if (activity.getType() == ProgramDetailType.OBJECTIVE) {
-			divName.getElement().setInnerText(
+			aName.getElement().setInnerText(
 					activity.getName() + " - " + activity.getDescription());
 		}
 		if (activity.getType() == ProgramDetailType.OUTCOME) {
 			divDesc.setText(activity.getDescription());
 		}
 		if (level == 0) {
-			divName.addStyleName("bold");
+			aName.addStyleName("bold");
 		}
 
 	}
@@ -312,8 +315,10 @@ public class ProgramsTableRow extends RowWidget implements
 	public void setStatus() {
 		ProgramStatus status = activity.getStatus();
 
-		if (status == null) {
+		if (status == null && activity.getType() != ProgramDetailType.OUTCOME) {
 			status = ProgramStatus.CREATED;
+		} else {
+			spnStatus.addClassName("hide");
 		}
 
 		spnStatus.setInnerText(status.getDisplayName());
@@ -341,10 +346,14 @@ public class ProgramsTableRow extends RowWidget implements
 
 		}
 		spnStatus.addClassName("label-" + type);
-		if (activity.getProgress() != null) {
+		
+		if (activity.getType() == ProgramDetailType.OUTCOME) {
+			progressBar.addStyleName("hide");
+		} else if (activity.getProgress() != null) {
 			progressBar.setValue(activity.getProgress().intValue());
 			progressBar.setText(activity.getProgress().intValue() + "%");
 		}
+
 		// spnProgress.setInnerText(activity.getProgress().intValue()+"%");
 
 		if (status != ProgramStatus.CLOSED) {
@@ -477,7 +486,7 @@ public class ProgramsTableRow extends RowWidget implements
 		super.onLoad();
 		addRegisteredHandler(ProgramDetailSavedEvent.TYPE, this);
 		addRegisteredHandler(ProgramDeletedEvent.TYPE, this);
-		divRowCaret.addClickHandler(new ClickHandler() {
+		aRowCaret.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -490,11 +499,11 @@ public class ProgramsTableRow extends RowWidget implements
 	private void setShowingChildren(boolean hasChildren) {
 		// divRowCaret.setHref("#home;page=activities;activity="+programId+"d"+activity.getId());
 		if (hasChildren) {
-			divRowCaret.removeStyleName("icon-caret-right");
-			divRowCaret.addStyleName("icon-caret-down");
+			aRowCaret.removeStyleName("icon-caret-right");
+			aRowCaret.addStyleName("icon-caret-down");
 		} else {
-			divRowCaret.removeStyleName("icon-caret-down");
-			divRowCaret.addStyleName("icon-caret-right");
+			aRowCaret.removeStyleName("icon-caret-down");
+			aRowCaret.addStyleName("icon-caret-right");
 		}
 
 		if (level != 0)

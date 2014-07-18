@@ -26,15 +26,15 @@
 			</div>
 			<g:HTMLPanel styleName="span3 budget" ui:field="divBudget">
 				<div class="span6">
-					<div class="bold muted helper-font-small">TOTAL</div>
+					<div class="bold muted helper-font-small">BUDGET</div>
 					<div>
 						<span class="bold" ui:field="spnBudget" title="Total Budgeted Amount"></span>
 					</div>
 				</div>
 				<div class="span6">
-					<div class="bold muted helper-font-small">REMAINING</div>
+					<div class="bold muted helper-font-small">ACTUALS</div>
 					<div>
-						<span class="bold" ui:field="spnAllocation" title="Remaining Amount"></span>
+						<span class="bold" ui:field="spnActuals" title="Remaining Amount"></span>
 					</div>
 				</div>
 			</g:HTMLPanel>

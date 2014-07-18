@@ -35,7 +35,7 @@ public class ProgramHeader extends Composite {
 	@UiField
 	SpanElement spnBudget;
 	@UiField
-	SpanElement spnAllocation;
+	SpanElement spnActuals;
 	@UiField
 	InlineLabel spnDates;
 	@UiField
@@ -190,11 +190,11 @@ public class ProgramHeader extends Composite {
 		}
 		
 		if (totalAllocated > budget) {
-			spnAllocation.addClassName("text-error bold");
+			spnActuals.addClassName("text-error bold");
 		} else {
-			spnAllocation.addClassName("text-success bold");
+			spnActuals.addClassName("text-success bold");
 		}
-		spnAllocation.setInnerText(NumberUtils.CURRENCYFORMAT.format(budget-totalAllocated));
+		spnActuals.setInnerText(NumberUtils.CURRENCYFORMAT.format(budget-totalAllocated));
 	}
 	
 	public void showBudgets(boolean show){

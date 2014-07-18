@@ -6,7 +6,7 @@
 			width="40%">
 			<div class="row-fluid">
 				<g:HTMLPanel styleName="span4 caret-container small-container">
-					<d:ActionLink ui:field="divRowCaret"
+					<d:ActionLink ui:field="aRowCaret"
 						styleName="icon-caret-right helper-font-16 muted"></d:ActionLink>
 				</g:HTMLPanel>
 
@@ -18,17 +18,17 @@
 					<g:CheckBox ui:field="chkSelect"></g:CheckBox>
 				</g:HTMLPanel>
 
-				<g:HTMLPanel ui:field="popOverDiv" styleName="popover fade top in hide">
-					<div class="arrow"></div>
-					<h3 class="popover-title" ui:field="hTitle">HOD Development</h3>
-					<div ui:field="divActors" class="popover-content">
-					</div>
-				</g:HTMLPanel>
-
 				<g:HTMLPanel styleName="span4 name-container">
-					<d:ActionLink ui:field="divName" styleName=""></d:ActionLink>
+					<g:HTMLPanel ui:field="popOverDiv" styleName="popover fade top in hide">
+						<div class="arrow"></div>
+						<h3 class="popover-title" ui:field="hTitle">HOD Development</h3>
+						<div ui:field="divActors" class="popover-content">
+						</div>
+					</g:HTMLPanel>
+					
+					<d:ActionLink ui:field="aName" styleName=""></d:ActionLink>
 					<div class="row-fluid">
-						<g:InlineLabel ui:field="divDesc" styleName="ellipsis"
+						<g:InlineLabel ui:field="divDesc" styleName=""
 							width="70%">
 						</g:InlineLabel>
 					</div>
