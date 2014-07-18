@@ -13,7 +13,16 @@ public class ProgramFundDTO implements Serializable{
 	private Long programId;
 	private Double amount;//fund amount 
 	private Double allocation;//amount already allocated from this fund
+	private Double actual;
 	
+	public Double getActual() {
+		return actual;
+	}
+
+	public void setActual(Double actual) {
+		this.actual = actual;
+	}
+
 	public ProgramFundDTO() {
 	}
 	

@@ -53,6 +53,8 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		if(po instanceof ProgramDetail && po.getId()!=null){
 			//This only happens in an update
 			ProgramDetail detail = (ProgramDetail)po;
+			
+			if(detail.getType()!=ProgramDetailType.PROGRAM)
 			if(detail.getStatus()!=ProgramStatus.CREATED && detail.getStatus()!=ProgramStatus.COMPLETED){
 				Collection<ProgramFund> funds = detail.getSourceOfFunds();
 				for(ProgramFund fund: funds){
