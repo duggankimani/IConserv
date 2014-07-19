@@ -1,21 +1,21 @@
-INSERT INTO buser VALUES (nextval('buser_id_seq'), now(), 'Administrator', 1, '2014-05-15 12:17:40.429', 'Administrator', 'tosh0948@gmail.com', 'Administrator', false, 'Administrator', 'pass', 'Administrator');
-INSERT INTO buser VALUES (nextval('buser_id_seq'), now(), 'Administrator', 1, '2014-05-15 12:17:40.429', 'Administrator', 'tosh0948@gmail.com', 'Kimani', false, 'Tom', 'pass', 'TomKim');
-INSERT INTO buser VALUES (nextval('buser_id_seq'), now(), 'TomKim', 1, NULL, NULL, 'tkmuriranja@gmail.com', 'Josephat', false, 'M. Musyima', 'pass','Josephat');
-INSERT INTO buser VALUES (nextval('buser_id_seq'), now(), 'TomKim', 1, NULL, NULL, 'tkmuriranja@gmail.com', 'Gilbert', false, 'Momanyi', 'pass', 'Gilbert');
-INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Anthony', false, 'M. Ochino', 'pass', 'Anthony');
-INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'James', false, 'K. Mwangi', 'pass', 'James');
-INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Samuel', false, 'N. Wanjau', 'pass', 'Samuel');
-INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Jackson', false, 'M. Njari', 'pass', 'Jackson');
-INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Sandra', false, ' A. Obudo', 'pass', 'Sandra');
-INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Rosemary', false, 'A. Oyugi', 'pass', 'Rosemary');
-INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Diana', false, 'A. Olale', 'pass', 'Diana');
-INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Stephen', false, 'Macharia', 'pass', 'Stephen');
-INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'David', false, 'Masere', 'pass', 'David');
-INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Virginia', false, 'Wahome', 'pass', 'Virginia');
-INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Joseph', false, 'Mosiany', 'pass', 'Joseph');
+INSERT INTO buser VALUES (nextval('buser_id_seq'), now(), 'Administrator', 1, '2014-05-15 12:17:40.429', 'Administrator', 'tosh0948@gmail.com', 'Administrator', false, 'Administrator', '6MSzRFoF3qDWD5B3NqXzf2rIXjTByj3p', 'Administrator');
+INSERT INTO buser VALUES (nextval('buser_id_seq'), now(), 'Administrator', 1, '2014-05-15 12:17:40.429', 'Administrator', 'tosh0948@gmail.com', 'Kimani', false, 'Tom', '6MSzRFoF3qDWD5B3NqXzf2rIXjTByj3p', 'TomKim');
+INSERT INTO buser VALUES (nextval('buser_id_seq'), now(), 'TomKim', 1, NULL, NULL, 'tkmuriranja@gmail.com', 'Josephat', false, 'M. Musyima', '6MSzRFoF3qDWD5B3NqXzf2rIXjTByj3p','Josephat');
+INSERT INTO buser VALUES (nextval('buser_id_seq'), now(), 'TomKim', 1, NULL, NULL, 'tkmuriranja@gmail.com', 'Gilbert', false, 'Momanyi', '6MSzRFoF3qDWD5B3NqXzf2rIXjTByj3p', 'Gilbert');
+INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Anthony', false, 'M. Ochino', '6MSzRFoF3qDWD5B3NqXzf2rIXjTByj3p', 'Anthony');
+INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'James', false, 'K. Mwangi', '6MSzRFoF3qDWD5B3NqXzf2rIXjTByj3p', 'James');
+INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Samuel', false, 'N. Wanjau', '6MSzRFoF3qDWD5B3NqXzf2rIXjTByj3p', 'Samuel');
+INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Jackson', false, 'M. Njari', '6MSzRFoF3qDWD5B3NqXzf2rIXjTByj3p', 'Jackson');
+INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Sandra', false, ' A. Obudo', '6MSzRFoF3qDWD5B3NqXzf2rIXjTByj3p', 'Sandra');
+INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Rosemary', false, 'A. Oyugi', '6MSzRFoF3qDWD5B3NqXzf2rIXjTByj3p', 'Rosemary');
+INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Diana', false, 'A. Olale', '6MSzRFoF3qDWD5B3NqXzf2rIXjTByj3p', 'Diana');
+INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Stephen', false, 'Macharia', '6MSzRFoF3qDWD5B3NqXzf2rIXjTByj3p', 'Stephen');
+INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'David', false, 'Masere', '6MSzRFoF3qDWD5B3NqXzf2rIXjTByj3p', 'David');
+INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Virginia', false, 'Wahome', '6MSzRFoF3qDWD5B3NqXzf2rIXjTByj3p', 'Virginia');
+INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Joseph', false, 'Mosiany', '6MSzRFoF3qDWD5B3NqXzf2rIXjTByj3p', 'Joseph');
 INSERT INTO buser VALUES (nextval('buser_id_seq'),now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Martin', false, 'Kahindi', 'pas', 'Martin');
-INSERT INTO buser VALUES (nextval('buser_id_seq'), now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Stephen', false, 'Nyaga', 'pass', 'Nyaga');
-INSERT INTO buser VALUES (nextval('buser_id_seq'), now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Brian', false, 'Silas', 'pass', 'Brian');
+INSERT INTO buser VALUES (nextval('buser_id_seq'), now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Stephen', false, 'Nyaga', '6MSzRFoF3qDWD5B3NqXzf2rIXjTByj3p', 'Nyaga');
+INSERT INTO buser VALUES (nextval('buser_id_seq'), now(), 'TomKim', 1, NULL, NULL, 'tosh0948@gmail.com', 'Brian', false, 'Silas', '6MSzRFoF3qDWD5B3NqXzf2rIXjTByj3p', 'Brian');
 
 
 INSERT INTO bgroup VALUES (nextval('bgroup_id_seq'), '2014-05-15 12:22:27.179', 'Administrator', 1, '2014-05-15 12:22:27.179', 'Administrator', 'Administrator', false, 'ADMIN');
