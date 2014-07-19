@@ -147,7 +147,10 @@ public class UserSaveView extends PopupViewImpl implements
 		HTUser user = new HTUser();
 		user.setEmail(txtEmail.getValue());
 		user.setName(txtFirstname.getValue());
-		user.setPassword(txtPassword.getValue());
+		if(!isNullOrEmpty(txtPassword.getValue())){
+			user.setPassword(txtPassword.getValue());
+		}
+		
 		user.setSurname(txtLastname.getValue());
 		user.setUserId(txtUserName.getValue());
 		user.setGroups(lstGroups.getSelectedItems());
@@ -188,8 +191,8 @@ public class UserSaveView extends PopupViewImpl implements
 		}
 		
 		if(isNullOrEmpty(txtPassword.getText())){
-			valid=false;
-			issues.addError("Password is mandatory");
+//			valid=false;
+//			issues.addError("Password is mandatory");
 		}else{
 			if(!txtPassword.getValue().equals(txtConfirmPassword.getValue())){
 				issues.addError("Password and confirm password fields do not match");

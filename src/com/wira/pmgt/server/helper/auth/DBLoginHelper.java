@@ -24,7 +24,7 @@ public class DBLoginHelper implements LoginIntf{
 		
 		User user = DB.getUserGroupDao().getUser(username);
 		
-		return user!=null && user.getPassword().equals(password);
+		return user!=null && user.checkPassword(password);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class DBLoginHelper implements LoginIntf{
 		htuser.setEmail(user.getEmail());
 		htuser.setUserId(user.getUserId());
 		htuser.setName(user.getFirstName());
-		htuser.setPassword(user.getPassword());
+		//htuser.setPassword(user.getPassword());
 		htuser.setSurname(user.getLastName());
 		htuser.setId(user.getId());
 		
@@ -133,7 +133,10 @@ public class DBLoginHelper implements LoginIntf{
 		user.setEmail(htuser.getEmail());
 		user.setFirstName(htuser.getName());
 		user.setLastName(htuser.getSurname());
-		user.setPassword(htuser.getPassword());
+		if(htuser.getPassword()!=null){
+			//Passwords are never read from the db to the FE due to one way encryption
+			user.setPassword(htuser.getPassword());
+		}
 		user.setUserId(htuser.getUserId());
 		user.setGroups(get(htuser.getGroups()));
 		

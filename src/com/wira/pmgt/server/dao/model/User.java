@@ -19,11 +19,14 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.TypeDef;
+
+import com.wira.pmgt.server.util.CryptoUtils;
 
 @Entity(name="BUser")
 @Table(uniqueConstraints={@UniqueConstraint(columnNames="userId")})
 @NamedQuery(name="User.getUserByUserId", query="from BUser u where u.userId=:userId")
-
 public class User extends PO {
 
 	
@@ -109,12 +112,12 @@ public class User extends PO {
 		this.id = id;
 	}
 
-	public String getPassword() {
-		return password;
+	public boolean checkPassword(String plainPassword){
+		return CryptoUtils.getInstance().checkPassword(plainPassword, password);
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setPassword(String plainPassword) {
+		this.password = CryptoUtils.getInstance().encryptPassword(plainPassword);
 	}
 
 	public String getEmail() {
