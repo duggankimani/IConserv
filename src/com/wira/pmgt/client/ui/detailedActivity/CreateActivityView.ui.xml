@@ -11,25 +11,25 @@
 		<!-- BreadCrump -->
 		<d:BulletListPanel styleName="breadcrumb" ui:field="crumbContainer">
 		</d:BulletListPanel>
-		
+
 		<d:IssuesPanel ui:field="issues">
 		</d:IssuesPanel>
-			
+
 		<fieldset>
 			<div class="control-group">
 				<div class="controls">
 					<g:InlineLabel ui:field="spnPeriod" styleName="muted"></g:InlineLabel>
 				</div>
 			</div>
-			
+
 			<div class="control-group">
 				<div class="control-label" ui:field="divActivityName">Activity Name:</div>
 				<div class="controls">
-					<g:TextArea ui:field="txtActivity" width="90%"/>
+					<g:TextArea ui:field="txtActivity" width="90%" />
 					<span class="mandatory" title="Required Field">*</span>
 				</div>
 			</div>
-			
+
 			<div class="control-group">
 				<div class="control-label" ui:field="divBudgetLine">Budget Line:</div>
 				<div class="controls">
@@ -37,18 +37,19 @@
 					<span class="mandatory" title="Required Field">*</span>
 				</div>
 			</div>
-			
+
 			<div class="control-group">
 				<div class="control-label">Start &amp; End Dates:</div>
 				<div class="controls">
 					<d:DateRangeWidget ui:field="dtRange"></d:DateRangeWidget>
 				</div>
-			</div>					
-						
+			</div>
+
 			<div class="control-group" ui:field="divTargetsAndIndicators">
 				<div class="control-label">Targets And Indicators:</div>
 				<div class="controls">
-				    <g:Anchor ui:field="aCopyTargets" title="Copy Indicators and Targets from parent activity or task">Copy Targets</g:Anchor>
+					<d:ActionLink ui:field="aCopyTargets"
+						title="Copy Indicators and Targets from parent activity or task">Copy Targets</d:ActionLink>
 					<grid:AggregationGrid ui:field="gridTargets"></grid:AggregationGrid>
 				</div>
 			</div>

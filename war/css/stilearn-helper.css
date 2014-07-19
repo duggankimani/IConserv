@@ -206,6 +206,10 @@ body .breadcrumb a,a:hover{
 .table,table{
 	width:100%;
 }
+
+.modal .input-group .form-control{
+	width: 96%;
+}
 /*End of my Utility helpers*/
 
 /** font size helper **/

@@ -43,7 +43,11 @@
 /*Uploader Modal */
 .modal {
 	max-width: 70%;
-	min-width: 45%;
+	min-width: 50%;
+}
+
+.generic-popup{
+	/* width:70%; */
 }
 
 .modal .popupContent {
@@ -57,11 +61,12 @@
 
 .modal .form-actions {
 	margin-bottom: 0px;
+	margin-top: 0px;
 }
 
 .modal-admin .modal-body {
-	/*max-height: 100%;*/
 	
+	padding: 15px 21px;
 }
 
 .modal .modal-body .select2-container {
@@ -1318,6 +1323,7 @@ body .dateBoxPopup {
 	font-size: 12px;
 	border: none;
 	width: auto;
+	width: 90%;
 }
 
 #grid .td select {
