@@ -426,18 +426,23 @@ public class ProgramsTableRow extends RowWidget implements
 	}
 
 	private void setAssignment() {
-		if ((activity.getAssignedUsers() != null)
-				|| (activity.getAssignedGroups() != null)) {
-			
-			if (!activity.getAssignedUsers().isEmpty()) {
-				System.err.println("Activity has been assigned..");
-				spnAssigned.removeClassName("hide");
-			}
+		ProgramDetailType type = activity.getType();
+
+		if ((type == ProgramDetailType.OUTCOME)
+				|| (type == ProgramDetailType.OBJECTIVE)) {
+			spnAssigned.addClassName("hide");
+			divRowStrip.getStyle().clearPaddingRight();
+		}else{
+			divRowStrip.setTitle(type.getDisplayName()+" has been assigned.");
 		}
+
 	}
 
 	private void setPadding() {
 		switch (activity.getType()) {
+		case PROGRAM:
+			divRowStrip.addClassName("label-success");
+			break;
 		case OUTCOME:
 			divRowStrip.addClassName("label-info");
 			break;
@@ -456,6 +461,10 @@ public class ProgramsTableRow extends RowWidget implements
 		}
 
 		String firstName = activity.getType().getDisplayName().substring(0, 1);
+
+		if (activity.getType() == ProgramDetailType.OBJECTIVE) {
+			firstName = "B";
+		}
 		spnLabel.setInnerText(firstName);
 
 		// Text Padding
