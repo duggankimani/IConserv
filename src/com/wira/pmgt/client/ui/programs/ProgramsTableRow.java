@@ -78,6 +78,12 @@ public class ProgramsTableRow extends RowWidget implements
 	SpanElement spnDescPopUp;
 
 	@UiField
+	SpanElement spnAssigned;
+
+	@UiField
+	SpanElement spnLabel;
+
+	@UiField
 	DivElement spanStartMonth;
 	@UiField
 	DivElement spanStartDay;
@@ -179,13 +185,15 @@ public class ProgramsTableRow extends RowWidget implements
 		// Padding based on the child level
 		setPadding();
 
+		// Set Assignment
+		setAssignment();
+
 		// set widths for the tables
 		// setRowWidths();
 
 		// Show different cols based on whether this is a program summary
 		// listing or program details
 		if (isSummaryRow) {
-			// divProgress.setStyleName("hide");
 			hide(divStatus, true);
 		} else if (isGoalsTable) {
 			hide(divStatus, true);
@@ -206,6 +214,7 @@ public class ProgramsTableRow extends RowWidget implements
 		if ((activity.getType() == ProgramDetailType.OBJECTIVE)
 				|| (activity.getType() == ProgramDetailType.OUTCOME)) {
 			divBudget.getElement().setInnerText("");
+
 		} else {
 			divBudget.getElement().setInnerText(budgetAmount);
 		}
@@ -240,6 +249,10 @@ public class ProgramsTableRow extends RowWidget implements
 	}
 
 	private void setTimeline() {
+		if (activity.getType() == ProgramDetailType.OUTCOME) {
+			return;
+		}
+
 		if (activity.getStartDate() != null) {
 			divTimelines.removeStyleName("hide");
 			divDates.removeStyleName("hide");
@@ -264,7 +277,7 @@ public class ProgramsTableRow extends RowWidget implements
 						+ DateUtils.MONTHDAYFORMAT.format(activity.getEndDate())
 						+ ")");
 			} else if (activity.isNotStarted()) {
-				divDates.setStyleName("text-warning");
+				divDates.setStyleName("text-info");
 				divDates.setTitle("This "
 						+ activity.getType().getDisplayName()
 						+ " should have started by "
@@ -272,18 +285,18 @@ public class ProgramsTableRow extends RowWidget implements
 								.getStartDate()));
 				// divDates.addStyleName("text-warning");
 			} else if (activity.isUpcoming()) {
+				divDates.setStyleName("text-warning");
 				divDates.setTitle("This "
 						+ activity.getType().getDisplayName()
 						+ " is coming up soon ("
 						+ DateUtils.MONTHDAYFORMAT.format(activity
 								.getStartDate()) + ")");
 			} else {
-				// its ongoing - Work in progress (CREATED, OPEN, REOPENED)
-				// spnStatus.setClassName("label label-info");
-				// divDates.addStyleName("text-success");
+				divDates.setStyleName("text-success");
+				divDates.setTitle("This task is On-going");
 			}
 		} else {
-			spnStatus.setClassName("label label-success");
+			// spnStatus.setClassName("label label-success");
 
 		}
 	}
@@ -327,11 +340,14 @@ public class ProgramsTableRow extends RowWidget implements
 		}
 		if (activity.getType() == ProgramDetailType.OUTCOME) {
 			String text = activity.getDescription();
-			System.err.println("Length>>" + text.length());
+			// System.err.println("Length>>" + text.length());
 			if (text.length() > 100) {
 				String newText = text.substring(0, 90);
 				divDesc.setText(newText + "...");
+			} else {
+				divDesc.setText(text);
 			}
+
 			divDesc.setTitle(text);
 			spnDescPopUp.setInnerText(text);
 		}
@@ -362,7 +378,7 @@ public class ProgramsTableRow extends RowWidget implements
 		} else if (status == null) {
 			status = ProgramStatus.CREATED;
 		}
-		
+
 		spnStatus.setInnerText(status.getDisplayName());
 
 		String type = "info";
@@ -409,6 +425,17 @@ public class ProgramsTableRow extends RowWidget implements
 		// divRowNo.getElement().setInnerText(""+number);
 	}
 
+	private void setAssignment() {
+		if ((activity.getAssignedUsers() != null)
+				|| (activity.getAssignedGroups() != null)) {
+			
+			if (!activity.getAssignedUsers().isEmpty()) {
+				System.err.println("Activity has been assigned..");
+				spnAssigned.removeClassName("hide");
+			}
+		}
+	}
+
 	private void setPadding() {
 		switch (activity.getType()) {
 		case OUTCOME:
@@ -429,8 +456,9 @@ public class ProgramsTableRow extends RowWidget implements
 		}
 
 		String firstName = activity.getType().getDisplayName().substring(0, 1);
-		divRowStrip.setInnerText(firstName);
+		spnLabel.setInnerText(firstName);
 
+		// Text Padding
 		if (level > 0) {
 			divCheckbox.getElement().getStyle()
 					.setPaddingLeft(level * 40.0, Unit.PX);

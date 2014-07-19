@@ -327,6 +327,14 @@
 	height: 22px;
 	margin-top: 12px;
 	display: block;
+	position: relative;
+	padding-right: 4px;
+}
+.color-strip-new .icon-user{
+    font-size: 10px;
+	 
+    position: absolute;
+    bottom: 0px;
 }
 
 /* Tabs Below */
