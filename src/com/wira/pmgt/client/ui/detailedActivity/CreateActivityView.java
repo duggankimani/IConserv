@@ -364,6 +364,7 @@ public class CreateActivityView extends ViewImpl implements
 
 	@Override
 	public void clear() {
+		txtBudgetLine.setValue(null);
 		gridView.setData(new ArrayList<DataModel>());
 		txtActivity.setValue(null);
 		crumbContainer.clear();
