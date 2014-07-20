@@ -60,6 +60,17 @@
 					<grid:AggregationGrid ui:field="gridView"></grid:AggregationGrid>
 				</div>
 			</div>
+			
+			<div class="control-group">
+				<div class="control-label">				
+				</div>
+				<div class="controls">
+					<g:CheckBox ui:field="chkMarkCompleted" text="Mark Activity as complete."
+					title="Mark Activity as complete to close it.
+					 Completed Activities/Tasks will not be updated by changes in tasks under them."></g:CheckBox>
+					<span class="muted">Note that this will close this activitiy/task.</span>
+				</div>
+			</div>
 		</fieldset>
 	</g:HTMLPanel>
 

@@ -13,6 +13,7 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -37,6 +38,7 @@ import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
+import com.wira.pmgt.shared.model.program.ProgramStatus;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 import com.wira.pmgt.shared.model.program.TargetAndOutcomeDTO;
 
@@ -70,6 +72,8 @@ public class CreateActivityView extends ViewImpl implements
 	DivElement divTargetsAndIndicators;
 	@UiField
 	Anchor aCopyTargets;
+	
+	@UiField CheckBox chkMarkCompleted;
 
 	@UiField
 	DateRangeWidget dtRange;
@@ -79,6 +83,8 @@ public class CreateActivityView extends ViewImpl implements
 			DataType.SELECTBASIC);
 
 	ProgramDetailType type = ProgramDetailType.ACTIVITY;
+
+	private IsProgramDetail persistedActivity;
 
 	@Inject
 	public CreateActivityView(final Binder binder) {
@@ -250,6 +256,14 @@ public class CreateActivityView extends ViewImpl implements
 				isValid = false;
 				issues.addError(dto.getFund().getName() + " is repeated");
 			}
+			
+			//if its a leaf task/activity (has no children, we can update actuals directly) - can we? No
+			if(dto.getActual()!=null && dto.getFund()!=null)
+			if(hasChanged(dto) && !chkMarkCompleted.getValue()){
+				isValid=false;
+				issues.addError("Please tick the 'Mark as Completed' box below the budgets to "
+						+ "save the expenditure(Actual) value for "+dto.getFund().getName());
+			}
 		}
 
 		List<String> gridErrors = gridTargets.getErrors();
@@ -269,6 +283,26 @@ public class CreateActivityView extends ViewImpl implements
 
 	}
 
+	private boolean hasChanged(ProgramFundDTO dto) {
+		if(dto.getId()==null){
+			return true;
+		}
+		List<ProgramFundDTO> programFundDtos =persistedActivity.getFunding();
+		for(ProgramFundDTO fund: programFundDtos){
+			if(fund.getId().equals(dto.getId())){
+				if(fund.getActual()==null){
+					return true;
+				}
+				
+				if(!fund.getActual().equals(dto.getActual())){
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+
 	@Override
 	public IsProgramDetail getActivity() {
 		ProgramDTO program = new ProgramDTO();
@@ -278,6 +312,9 @@ public class CreateActivityView extends ViewImpl implements
 		program.setStartDate(dtRange.getStartDate());
 		program.setEndDate(dtRange.getEndDate());
 		program.setBudgetLine(txtBudgetLine.getValue());
+		if(chkMarkCompleted.getValue()){
+			program.setStatus(ProgramStatus.COMPLETED);
+		}
 
 		// Targets and Outcomes
 		List<TargetAndOutcomeDTO> targets = gridTargets
@@ -302,10 +339,11 @@ public class CreateActivityView extends ViewImpl implements
 
 	@Override
 	public void setActivity(IsProgramDetail activity) {
+		this.persistedActivity = activity;
 		if (activity == null) {
 			return;
 		}
-
+		
 		txtActivity.setValue(activity.getDescription());
 
 		txtBudgetLine.setValue(activity.getBudgetLine());

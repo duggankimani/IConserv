@@ -8,6 +8,7 @@ import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
@@ -87,9 +88,7 @@ public abstract class RowWidget extends Composite {
 	 * @return
 	 */
 	public boolean remove(Widget w){
-		if(w.getParent()!=row){
-			System.err.println("This is not a child of row!!!!");
-		}
+		
 		return row.remove(w);
 	}
 	

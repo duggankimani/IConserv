@@ -17,6 +17,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -692,8 +693,21 @@ public class ProgramsTableRow extends RowWidget implements
 			int count = row.getWidgetCount();
 
 			for (FundDTO programFund : donors) {
-				assert remove(row.getWidget(--count));
+				Widget widgetToRemove = row.getWidget(--count);
+				boolean removed= remove(widgetToRemove);
+				if(!removed){
+					Window.alert("Cannot remove Widget in index >> "+count
+							+"; Row.isAttached="+isAttached()
+							+";  WidgetToRemove >>"+widgetToRemove);
+				}
+//				else{
+//					Window.alert("Removed Widget in index >> "+count
+//							+"; Row.isAttached="+isAttached()
+//							+"; RemovedWidget >>"+widgetToRemove);
+//				
+//				}
 			}
+			
 
 			allocations.clear();
 
