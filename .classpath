@@ -161,6 +161,12 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-17.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-gwt-17.0-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-gwt-17.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/poi-3.10-FINAL-20140208.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/poi-ooxml-3.10-FINAL-20140208.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/poi-ooxml-schemas-3.10-FINAL-20140208.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/xmlbeans-2.3.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jasypt-1.9.2-lite.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jasypt-1.9.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gflot-3.2.0.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
