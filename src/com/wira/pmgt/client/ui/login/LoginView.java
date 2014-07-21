@@ -11,81 +11,83 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 import com.wira.pmgt.client.ui.component.IssuesPanel;
 
-public class LoginView extends ViewImpl implements LoginPresenter.ILoginView{
+public class LoginView extends ViewImpl implements LoginPresenter.ILoginView {
 
 	private final Widget widget;
 
 	public interface Binder extends UiBinder<Widget, LoginView> {
 	}
 
-	@UiField Anchor aLogin;
-	@UiField IssuesPanel issues;
-	@UiField TextBox username;
-	@UiField TextBox password;
-	@UiField SpanElement loading;
-	@UiField HTMLPanel loadingbox;
-	
-	@UiField SpanElement spnCompanyName;
+	@UiField
+	Anchor aLogin;
+	@UiField
+	IssuesPanel issues;
+	@UiField
+	TextBox username;
+	@UiField
+	TextBox password;
+	@UiField
+	SpanElement loading;
+	@UiField
+	HTMLPanel loadingbox;
 
-	
+	// @UiField SpanElement spnCompanyName;
+
 	@Inject
 	public LoginView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
 		username.getElement().setAttribute("Placeholder", "Username");
 		username.getElement().setId("userid");
 		username.removeStyleName("gwt-TextBox");
-		
+
 		issues.addStyleName("alert alert-danger");
 		issues.addStyleName("hide");
-	
-		
+
 		password.getElement().setAttribute("Placeholder", "Password");
 		password.getElement().setId("userid");
 		password.removeStyleName("gwt-TextBox");
-		
+
 	}
-	
-	public String getUsername(){
+
+	public String getUsername() {
 		return username.getValue();
 	};
-	
 
 	@Override
 	public Widget asWidget() {
 		return widget;
 	}
-	
-	public String getPassword(){
-		return password.getValue();	
+
+	public String getPassword() {
+		return password.getValue();
 	};
-	
-	public Anchor getLoginBtn(){
+
+	public Anchor getLoginBtn() {
 		return aLogin;
 	}
 
 	@Override
 	public boolean isValid() {
-		String username=getUsername();
-		String pass=getPassword();
-		boolean isValid=true;
+		String username = getUsername();
+		String pass = getPassword();
+		boolean isValid = true;
 		issues.clear();
-		if(isNullOrEmpty(username)){
+		if (isNullOrEmpty(username)) {
 			issues.addError("Username required");
 			issues.removeStyleName("hide");
-			isValid=false;
+			isValid = false;
 		}
-		if(isNullOrEmpty(pass)){
+		if (isNullOrEmpty(pass)) {
 			issues.addError("Password required");
 			issues.removeStyleName("hide");
-			isValid=false;
+			isValid = false;
 		}
 		return isValid;
 	}
-	
-	boolean isNullOrEmpty(String value){
-		return value==null || value.trim().length()==0;
-	}
 
+	boolean isNullOrEmpty(String value) {
+		return value == null || value.trim().length() == 0;
+	}
 
 	@Override
 	public void setError(String error) {
@@ -93,12 +95,12 @@ public class LoginView extends ViewImpl implements LoginPresenter.ILoginView{
 		issues.addError(error);
 		issues.removeStyleName("hide");
 	}
-	
-	public TextBox getUserNameBox(){
+
+	public TextBox getUserNameBox() {
 		return username;
 	}
-	
-	public TextBox getPasswordBox(){
+
+	public TextBox getPasswordBox() {
 		return password;
 	}
 
@@ -113,7 +115,7 @@ public class LoginView extends ViewImpl implements LoginPresenter.ILoginView{
 		loadingbox.addStyleName("loading");
 		loading.removeClassName("hide");
 	}
-	
+
 	@Override
 	public void clearLoginProgress() {
 		issues.removeStyleName("hide");
@@ -123,18 +125,18 @@ public class LoginView extends ViewImpl implements LoginPresenter.ILoginView{
 
 	@Override
 	public void clearViewItems(boolean status) {
-		//remove loading
+		// remove loading
 		loadingbox.removeStyleName("loading");
 		loading.addClassName("hide");
 		issues.addStyleName("hide");
-		
-		//remove any Data written
+
+		// remove any Data written
 		username.setText("");
-		password.setText("");		
+		password.setText("");
 	}
 
 	@Override
 	public void setOrgName(String orgName) {
-		spnCompanyName.setInnerText(orgName);
+		// spnCompanyName.setInnerText(orgName);
 	}
 }

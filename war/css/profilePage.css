@@ -257,7 +257,7 @@
 	max-width: 3px;
 	min-width: 3px;
 	margin-right: 2px;
-}
+	/* margin-left: 16px; */}
 .table-programs .tbody .caret-container{
 	width:5%;
 	line-height: 4;
