@@ -37,7 +37,16 @@ public class TestProgramDaoImpl {
 		dao= DB.getProgramDaoImpl();
 	}
 	
+	
 	@Test
+	public void getAmounts(){
+		//Test against this :  select sum(allocatedamount),sum(commitedamount) commited,sum(actualamount) actual from programfund where programid in(select id from programdetail where parentid=1) and fundid=4; 
+		
+		Double[] amounts = dao.getAmounts(1L, 4L);
+		System.err.println(amounts[0]+", "+amounts[1]);
+	}
+	
+	@Ignore
 	public void getActivitiesByOutcome(){
 		Long programId = 198L;
 		Long outcomeId= 199L;

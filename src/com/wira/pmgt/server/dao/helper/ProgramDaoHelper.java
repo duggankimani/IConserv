@@ -40,6 +40,7 @@ import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramAnalysis;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
+import com.wira.pmgt.shared.model.program.ProgramStatus;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 import com.wira.pmgt.shared.model.program.ProgramTaskForm;
 import com.wira.pmgt.shared.model.program.TargetAndOutcomeDTO;
@@ -104,7 +105,6 @@ public class ProgramDaoHelper {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		ProgramDetail program = get(programDTO);
 		ProgramDetail parent = program.getParent();
-		boolean hasFunds=false;
 		//Parent must have a preset set of funds before child source of funds are generated
 		if(parent!=null){
 			
@@ -116,7 +116,6 @@ public class ProgramDaoHelper {
 			}
 						
 			Set<ProgramFund> childFunds =  program.getSourceOfFunds();
-			hasFunds = childFunds!=null && !childFunds.isEmpty();
 			for(ProgramFund childFund: childFunds){					
 				if(fundSources.contains(childFund.getFund())){
 					continue;
@@ -262,14 +261,23 @@ public class ProgramDaoHelper {
 			detail.setParent(parent);
 		}
 		
+		Set<ProgramFund> funds = get(programDTO.getFunding());
+		detail.setSourceOfFunds(funds);		
+		if(detail.getStatus()!=null && detail.getStatus().equals(ProgramStatus.CLOSED)){
+			if(programDTO.getStatus()==null || !programDTO.getStatus().equals(ProgramStatus.CLOSED)){
+				resetProgramFunds(funds);
+			}
+		}
+		
 		//detail.setActual(String);
 		detail.setActualAmount(programDTO.getActualAmount()==null? 0.0: programDTO.getActualAmount());
 		detail.setDescription(programDTO.getDescription());
 		detail.setEndDate(programDTO.getEndDate());
+		detail.setStatus(programDTO.getStatus());
+		
 		//detail.setIndicator(String);
 		detail.setName(programDTO.getName());
 		detail.setPeriod(get(programDTO.getPeriod()));
-		detail.setSourceOfFunds(get(programDTO.getFunding()));
 		detail.setStartDate(programDTO.getStartDate());
 		detail.setBudgetLine(programDTO.getBudgetLine());
 		//detail.setActualAmount(programDTO.getActualAmount());
@@ -291,6 +299,19 @@ public class ProgramDaoHelper {
 			detail.setProgramOutcomes(programOutcomes);
 		}
 		return detail;
+	}
+
+	private static void resetProgramFunds(Set<ProgramFund> funds) {
+		if(funds==null){
+			return;
+		}
+		
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		for(ProgramFund programFund: funds){
+			Double[] amounts = dao.getAmounts(programFund.getProgramDetail().getId(), programFund.getFund().getId());
+			programFund.setCommitedAmount(amounts[0]);
+			programFund.setActualAmount(amounts[1]);
+		}
 	}
 
 	private static Collection<TargetAndOutcome> getTargets(List<TargetAndOutcomeDTO> targets) {

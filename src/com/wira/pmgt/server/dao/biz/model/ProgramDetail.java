@@ -258,6 +258,10 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	
 	private Double progress=0.0;
 	
+	public void setProgress(Double progress) {
+		this.progress = progress;
+	}
+
 	private Double rating;
 	
 	@Transient

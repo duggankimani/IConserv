@@ -36,6 +36,10 @@ public class ProgramFund extends PO {
 	private Double amount;
 	private Double allocatedAmount;//allocated during budgeting
 	private Double commitedAmount;//Committed at program start
+	public void setCommitedAmount(Double commitedAmount) {
+		this.commitedAmount = commitedAmount;
+	}
+
 	private Double actualAmount;//Report actual utilization
 	
 	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})

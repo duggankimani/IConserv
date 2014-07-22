@@ -337,4 +337,36 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		return list;
 	}
 
+	public Double[] getAmounts(Long programId, Long fundid) {
+		String countQuery = "select count(*) from programdetail where parentid=:parentId";
+		Query query = em.createNativeQuery(countQuery).setParameter("parentId", programId);
+		Integer count = ((Number)getSingleResultOrNull(query)).intValue(); 
+		
+		//Commited amount, Actual amount
+		Double[] values = new Double[2];
+		
+		if(count==0){
+			values[0]=0.0;
+			values[1]=0.0;
+			return values;
+		}
+		
+		String aggregateQuery= "select sum(commitedamount) commited,sum(actualamount) actual "
+				+ "from programfund "
+				+ "where programid in(select id from programdetail where parentid=:parentid) "
+				+ "and fundid=:fundid";
+		
+		query = em.createNativeQuery(aggregateQuery)
+				.setParameter("parentid", programId)
+				.setParameter("fundid", fundid);
+		
+		List<Object[]> rows = getResultList(query);
+		if(!rows.isEmpty()){
+			Object[] row = rows.get(0);
+			values[0] = (Double)row[0];
+			values[1] = (Double)row[1];
+		}
+		return values;
+	}
+
 }

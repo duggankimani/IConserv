@@ -62,13 +62,17 @@
 			</div>
 			
 			<div class="control-group">
-				<div class="control-label">				
+				<div class="control-label">								
 				</div>
 				<div class="controls">
-					<g:CheckBox ui:field="chkMarkCompleted" text="Mark Activity as complete."
-					title="Mark Activity as complete to close it.
-					 Completed Activities/Tasks will not be updated by changes in tasks under them."></g:CheckBox>
-					<span class="muted">Note that this will close this activitiy/task.</span>
+					<g:CheckBox ui:field="chkMarkClosed" text="Mark Activity as closed."
+					title="Mark Activity as closed to close it. Closed Activities/Tasks will not be updated by changes in their sub-tasks."></g:CheckBox>
+					<span class="muted">Note that this will close this activitiy/task. Changes in this Activity's sub-tasks will not
+					update its budgets or its outcomes.
+					</span>
+					<span class="red hide" ui:field="spnWarn">
+						Reopening a previously closed activity will reset the expenditure to the sum of its subtasks expenditure or zero if there are no subtasks.
+					</span>
 				</div>
 			</div>
 		</fieldset>

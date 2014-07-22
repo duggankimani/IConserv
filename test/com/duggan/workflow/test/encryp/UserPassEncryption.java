@@ -10,5 +10,7 @@ public class UserPassEncryption {
 		String encryptedPassword = CryptoUtils.getInstance().encryptPassword(plainPass);
 		
 		System.err.println(encryptedPassword);
+		
+		System.err.println(CryptoUtils.getInstance().checkPassword(plainPass, encryptedPassword));
 	}
 }
