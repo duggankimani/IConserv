@@ -1,7 +1,6 @@
 package com.wira.pmgt.shared.model;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.util.Date;
 
 public class Attachment implements Serializable {
@@ -15,6 +14,7 @@ public class Attachment implements Serializable {
 	private String name;
 	private boolean archived;
 	private Long documentid;
+	private String fieldName;
 	private Long processDefId;
 	private Long size;
 	private String sizeStr;
@@ -85,5 +85,11 @@ public class Attachment implements Serializable {
 	}
 	public void setProcessDefId(Long processDefId) {
 		this.processDefId = processDefId;
+	}
+	public String getFieldName() {
+		return fieldName;
+	}
+	public void setFieldName(String fieldName) {
+		this.fieldName = fieldName;
 	}
 }

@@ -20,7 +20,9 @@ public interface HasProperties {
 	public static final String SQLDS="SQLDS";
 	public static final String SQLSELECT="SQLSELECT";
 	public static final String FORMULA="FORMULA";
+	public static final String UPLOADERTYPE="UPLOADERTYPE";
 	public static final String MAXVALUE="MAXVALUE";
+	public static final String ACCEPT = "ACCEPT";
 	
 	void addProperty(Property property);
 	

@@ -1,16 +1,17 @@
 package com.wira.pmgt.client.ui.upload.custom;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import gwtupload.client.IUploadStatus.Status;
-import static gwtupload.client.IUploader.*;
 import gwtupload.client.IUploader;
 import gwtupload.client.IUploader.OnCancelUploaderHandler;
-import gwtupload.client.IUploader.UploadedInfo;
+import gwtupload.client.IUploader.OnFinishUploaderHandler;
+import gwtupload.client.IUploader.OnStartUploaderHandler;
 import gwtupload.client.MultiUploader;
 import gwtupload.client.PreloadedImage;
+import gwtupload.client.SingleUploader;
 import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -41,14 +42,25 @@ public class Uploader extends Composite {
 	@UiField
 	HTMLPanel uploaderPanel;
 
-	MultiUploader uploader;
+	IUploader uploader;
 	
 	UploadContext context;
-
+	
 	public Uploader() {
+		this(false);
+	}
+	
+	public Uploader(boolean isSingleUploader) {
 		initWidget(binder.createAndBindUi(this));
-		uploader = new MultiUploader();		
-		uploader.setAutoSubmit(true);		
+		
+		if(isSingleUploader){
+			uploader = new SingleUploader();
+		}else{
+			uploader = new MultiUploader();
+		}
+		
+		uploader.setAutoSubmit(true);	
+		uploader.setMultipleSelection(!isSingleUploader);
 		uploaderPanel.add(uploader);
 		uploader.addOnFinishUploadHandler(onFinishHandler);
 		uploader.addOnStartUploadHandler(uploadStarted);
@@ -60,7 +72,13 @@ public class Uploader extends Composite {
 	}
 	
 	public void setAvoidRepeatFiles(boolean allow){
-		uploader.setAvoidRepeatFiles(allow);
+		if(uploader instanceof MultiUploader){
+			((MultiUploader)uploader).setAvoidRepeatFiles(allow);
+		}
+		
+		if(uploader instanceof SingleUploader){
+			((SingleUploader)uploader).setAvoidRepeatFiles(allow);
+		}
 	}
 	
 	public void setContext(UploadContext context){
@@ -121,7 +139,14 @@ public class Uploader extends Composite {
 	};
 	
 	public void cancel(){
-		List<IUploader> uploaders = uploader.getUploaders();
+		List<IUploader> uploaders = new ArrayList<IUploader>();
+		if(uploader instanceof MultiUploader){
+			 uploaders = ((MultiUploader)uploader).getUploaders();
+		}else{
+			//Single Uploader
+			uploaders.add(uploader);
+		}	
+		
 		if(uploaders!=null){
 			List<IUploader> uplodas = new ArrayList<IUploader>();
 			uplodas.addAll(uploaders);

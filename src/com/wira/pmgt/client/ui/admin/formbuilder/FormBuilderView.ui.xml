@@ -120,6 +120,10 @@
 									    <f:RatingField></f:RatingField>	
 									</fb:PalettePanel>
 									
+									<fb:PalettePanel ui:field="vFileUploadPanel">	
+									    <f:FileUploadField></f:FileUploadField>	
+									</fb:PalettePanel>
+									
 			                      </fieldset>
 		                      </div>
 	                      </g:HTMLPanel>
