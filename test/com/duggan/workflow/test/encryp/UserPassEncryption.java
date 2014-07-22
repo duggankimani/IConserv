@@ -12,5 +12,6 @@ public class UserPassEncryption {
 		System.err.println(encryptedPassword);
 		
 		System.err.println(CryptoUtils.getInstance().checkPassword(plainPass, encryptedPassword));
+		System.err.println( CryptoUtils.getInstance().checkPassword(plainPass, "cMp460N4Uxb3mQHKE9YQCFNoKcO+ARQn"));
 	}
 }

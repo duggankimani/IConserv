@@ -180,12 +180,16 @@ body .dateBoxPopup {
 
 /* Login Logo - Placed Here coz SignIn CSS is not formated*/
 .login-wrapper .brand {
-	text-decoration: none;
-	font-size: 2em;
-	color: #ffffff;
-	margin: 20px;
-	text-shadow: 1px 1px #1B1464;
+	width: 260px;
+	height: 86px;
+	display: inline-block;
+	box-shadow: 3px 4px 7px 3px #383838;
 }
+.login-wrapper .brand img {
+	width: 260px;
+	height: 86px;
+}
+
 
 /* navbar settings and logout icons */
 .navbar .settings i {

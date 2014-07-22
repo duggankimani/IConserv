@@ -99,6 +99,7 @@ public class FormBuilderView extends ViewImpl implements
 	@UiField PalettePanel vLabelPanel;
 	@UiField PalettePanel vGridPanel;
 	@UiField PalettePanel vStarRatingPanel;
+	@UiField PalettePanel vFileUploadPanel;
 	
 	@UiField PalettePanel vHRPanel;
 //	@UiField PalettePanel vGridPanel;
@@ -286,6 +287,7 @@ public class FormBuilderView extends ViewImpl implements
 		//Star Rating
 		vStarRatingPanel.registerDragController(widgetDragController);
 		vLabelPanel.registerDragController(widgetDragController);
+		vFileUploadPanel.registerDragController(widgetDragController);
 		
 		//select
 		vInlineRadioPanel.registerDragController(widgetDragController);

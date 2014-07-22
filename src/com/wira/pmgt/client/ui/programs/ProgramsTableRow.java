@@ -428,11 +428,11 @@ public class ProgramsTableRow extends RowWidget implements
 
 	private void setAssignment() {
 		ProgramDetailType type = activity.getType();
-
+		
 		if ((type == ProgramDetailType.OUTCOME)
 				|| (type == ProgramDetailType.OBJECTIVE)) {
 			spnAssigned.addClassName("hide");
-			divRowStrip.getStyle().clearPaddingRight();
+			divRowStrip.getStyle().setPaddingRight(0.0, Unit.PX);
 		}else{
 			divRowStrip.setTitle(type.getDisplayName()+" has been assigned.");
 		}
