@@ -85,8 +85,14 @@
 								<i class="icon-google-share icon-button"></i>
 							</d:ActionLink>
 						</div>
+						
+						<div class="span3">
+							<d:ActionLink ui:field="aExport" styleName="btn btn-default"
+								dataToggle="tooltip">Export</d:ActionLink>
+						</div>
+						
 					</div>
-					<div class="span3 right-side">
+					<div class="span3 right-side hide">
 						<div class="program-search">
 							<div class="input-append">
 								<input type="text" styleName="search-query"
@@ -100,6 +106,7 @@
 							
 							<g:HTMLPanel ui:field="divFilterBox" styleName="hide search-box">
 							</g:HTMLPanel>
+							
 						</div>
 					</div>
 				</div>

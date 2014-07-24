@@ -12,7 +12,7 @@ public class GetProgramsRequest extends BaseRequest<GetProgramsResponse> {
 	/**
 	 * Id of the program to load
 	 */
-	private Long id;
+	private Long programId;
 	
 	//if null, use id
 	private String code;
@@ -27,7 +27,7 @@ public class GetProgramsRequest extends BaseRequest<GetProgramsResponse> {
 	 * Program; Outcome set for searching activities
 	 * This is necessitated but the fact that outcomes do not have a direct (parent-child) relationship with activities 
 	 */
-	private Long programId,outcomeId;
+	private Long outcomeId;
 	
 	/**
 	 * Return all Programs
@@ -40,8 +40,8 @@ public class GetProgramsRequest extends BaseRequest<GetProgramsResponse> {
 	 * @param id
 	 * @param loadChildren
 	 */
-	public GetProgramsRequest(Long id, boolean loadChildren) {
-		this.id = id;
+	public GetProgramsRequest(Long programId, boolean loadChildren) {
+		this.programId=programId;
 		this.loadChildren = loadChildren;
 	}
 	
@@ -82,11 +82,7 @@ public class GetProgramsRequest extends BaseRequest<GetProgramsResponse> {
 		this.outcomeId = outcomeId;
 		this.loadChildren = loadChildren;
 	}
-	
-	public Long getId() {
-		return id;
-	}
-	
+
 	@Override
 	public BaseResponse createDefaultActionResponse() {
 		return new GetProgramsResponse();

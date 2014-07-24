@@ -905,6 +905,45 @@ public class ProgramDaoHelper {
 		return Arrays.asList(outcomeDTO);
 	}
 
+	public static List<IsProgramDetail> loadById(Long programId, Long outcomeId, ProgramDetailType programType, boolean isLoadChildren) {
+		List<IsProgramDetail> activities = new ArrayList<>();
+		if(programId!=null && outcomeId!=null){
+			activities.addAll(
+					getProgramDetailsByOutcome(programId, outcomeId,isLoadChildren));
+		}else if(programId!=null){
+			IsProgramDetail activity = getProgramById(programId, isLoadChildren);
+			if(activity!=null){
+				activities.add(activity);
+			}
+		}else if(programType!=null){
+			activities.addAll(getProgramsByType(programType, isLoadChildren));
+		}else{
+			activities.addAll(getPrograms(isLoadChildren));
+		}
+		
+		return activities;
+	}
+
+	public static List<IsProgramDetail> loadByCode(String code, Long periodId, ProgramDetailType programType, boolean isLoadChildren) {
+		List<IsProgramDetail> activities = new ArrayList<>();
+		if(code!=null){
+			IsProgramDetail activity = ProgramDaoHelper.getProgramByCode(code, periodId,
+					isLoadChildren);
+			
+			if(activity!=null){
+				activities.add(activity);
+			}
+		}else if(programType!=null){
+			activities.addAll(ProgramDaoHelper.getProgramByTypeAndPeriod(programType, periodId,
+					isLoadChildren));
+		}else{
+			activities.addAll(ProgramDaoHelper.getProgramsByPeriod(periodId,
+					isLoadChildren));
+		}
+		
+		return activities;
+	}
+
 //	private static ProgramSummary getSummary(ProgramDetail detail) {
 //		ProgramSummary summary = new ProgramSummary();
 //		summary.setId(detail.getId());
