@@ -36,6 +36,8 @@ import com.wira.pmgt.shared.model.form.Form;
 import com.wira.pmgt.shared.model.form.Property;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
+import com.wira.pmgt.shared.model.program.Metric;
+import com.wira.pmgt.shared.model.program.PerformanceModel;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramAnalysis;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
@@ -942,6 +944,10 @@ public class ProgramDaoHelper {
 		}
 		
 		return activities;
+	}
+
+	public static List<PerformanceModel> getPerformanceData(Metric metric) {
+		return DB.getProgramDaoImpl().getBudgetPerformanceData(metric);
 	}
 
 //	private static ProgramSummary getSummary(ProgramDetail detail) {

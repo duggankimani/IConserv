@@ -21,6 +21,8 @@ import com.wira.pmgt.server.helper.session.SessionHelper;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
+import com.wira.pmgt.shared.model.program.Metric;
+import com.wira.pmgt.shared.model.program.PerformanceModel;
 import com.wira.pmgt.shared.model.program.ProgramAnalysis;
 import com.wira.pmgt.shared.model.program.ProgramStatus;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
@@ -367,6 +369,63 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 			values[1] = (Double)row[1];
 		}
 		return values;
+	}
+	
+	public List<PerformanceModel> getBudgetPerformanceData(Metric metric){
+		List<PerformanceModel> list = new ArrayList<>();
+		String analysis = null;
+		switch (metric) {
+		case BUDGET:
+			analysis = "ProgramDetail.getBudgetAnalysis";
+			break;
+		case TARGETS:
+			analysis = "ProgramDetail.getPerformanceByKPIs";
+			break;
+		
+		case THROUGHPUT:
+			
+			break;
+			
+		case TIMELINES:
+			analysis = "ProgramDetail.getPerfomanceByTimelines";
+			break;
+		}
+		
+		if(analysis==null){
+			return list;
+		}
+		
+		Query query = em.createNamedQuery(analysis);	
+		List<Object[]> rows = getResultList(query); 
+		
+		for(Object[] row: rows){
+			int i=0;
+			Object value=null;
+			String name = (value=row[i++])==null? null: value.toString();
+			String description=(value=row[i++])==null? null: value.toString();
+			Long id= (value=row[i++])==null? null: new Long(value.toString());
+			int countSuccess=(value=row[i++])==null? null: new Integer(value.toString());
+			int countFail=(value=row[i++])==null? null: new Integer(value.toString());
+			int countNoData=(value=row[i++])==null? null: new Integer(value.toString());
+			double percSuccess=(value=row[i++])==null? null: new Double(value.toString());
+			double percFail=(value=row[i++])==null? null: new Double(value.toString());
+			double avgPerSuccess=(value=row[i++])==null? null: new Double(value.toString());
+			
+			
+			PerformanceModel perf = new PerformanceModel();
+			perf.setProgramId(id);
+			perf.setName(name);
+			perf.setDescription(description);
+			perf.setCountSuccess(countSuccess);
+			perf.setCountFail(countFail);
+			perf.setCountNoData(countNoData);
+			perf.setPercSuccess(percSuccess);
+			perf.setPercFail(percFail);
+			perf.setAvgPerSuccess(avgPerSuccess);
+			
+			list.add(perf);
+		}
+		return list;
 	}
 
 }

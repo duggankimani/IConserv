@@ -1,5 +1,6 @@
 package com.wira.pmgt.client.ui.admin.formbuilder.component;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.aspectj.weaver.patterns.PerFromSuper;
@@ -15,6 +16,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.MyHTMLPanel;
 import com.wira.pmgt.client.ui.reports.Performance;
 import com.wira.pmgt.client.ui.reports.Performance.PerformanceType;
+import com.wira.pmgt.shared.model.program.PerformanceModel;
 
 public class ColorWidget extends Composite {
 
@@ -31,6 +33,15 @@ public class ColorWidget extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 		chartContainer.getElement().getStyle().setMarginTop(0.0, Unit.PX);
 	}
+	
+	public ColorWidget(PerformanceModel model, String title, String titleNoData){
+		
+		this(Arrays.asList(
+				new Performance(title,model.getPercCountWithData(),PerformanceType.getType(model.getPercSuccess(),model.getAvgPerSuccess())),
+				new Performance(titleNoData, model.getPercCountWithNoData(), PerformanceType.NODATA)));
+		//System.err.println(title+":: "+model.getPercCountWithData()+", "+model.getPercCountWithNoData());
+	}
+	
 
 	public ColorWidget(List<Performance> performances) {
 		this();
@@ -53,6 +64,10 @@ public class ColorWidget extends Composite {
 			panel.getElement().getStyle().setWidth(width, Unit.PX);
 			panel.getElement().getStyle().setMarginLeft(0, Unit.PX);
 			panel.add(label);
+			
+			if(p1.getPercentage()<1){
+				panel.addStyleName("hide");
+			}
 			chartContainer.add(panel);
 		}
 

@@ -108,7 +108,20 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 		resultSetMapping="ProgramDetail.analysisDataMapping",
 		query=("select id,name,description,budgetamount,actualamount,totalallocation,commitedamount" +
 				" from programdetail where type='PROGRAM' and periodid=:periodid order by name")),
-			
+	
+	@NamedNativeQuery(name="ProgramDetail.getBudgetAnalysis",
+			resultSetMapping="ProgramDetail.performanceAnalysis",
+			query=("select * from func_calculateperformance()")),
+	
+	@NamedNativeQuery(name="ProgramDetail.getPerfomanceByTimelines",
+			resultSetMapping="ProgramDetail.performanceAnalysis",
+			query=("select * from func_getPerformanceByTimelines()")),
+	
+	@NamedNativeQuery(name="ProgramDetail.getPerformanceByKPIs",
+		resultSetMapping="ProgramDetail.performanceAnalysis",
+		query=("select * from func_getPerformanceByKPIs()"))
+	
+	
 })
 
 @SqlResultSetMappings({
@@ -141,8 +154,20 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 	@ColumnResult(name="actualAmount"),
 	@ColumnResult(name="commitedAmount"),
 	@ColumnResult(name="totalAllocation")
-	}
-)
+	}),
+	
+	@SqlResultSetMapping(name="ProgramDetail.performanceAnalysis",
+			columns={
+			@ColumnResult(name="name"),
+			@ColumnResult(name="description"),
+			@ColumnResult(name="id"),
+			@ColumnResult(name="countsuccess"),
+			@ColumnResult(name="countfail"),
+			@ColumnResult(name="countnodata"),
+			@ColumnResult(name="percsuccess"),
+			@ColumnResult(name="percfail"),
+			@ColumnResult(name="avegpercsuccess")
+	})
 })	
 public class ProgramDetail 	extends ProgramBasicDetail{
 	
@@ -266,6 +291,8 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	
 	@Transient
 	private Long programId;
+	
+	private Date dateCompleted;
 	
 	public ProgramDetail() {
 	}
@@ -527,6 +554,14 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 
 	public void setBudgetLine(String budgetLine) {
 		this.budgetLine = budgetLine;
+	}
+
+	public Date getDateCompleted() {
+		return dateCompleted;
+	}
+
+	public void setDateCompleted(Date dateCompleted) {
+		this.dateCompleted = dateCompleted;
 	}
 
 }

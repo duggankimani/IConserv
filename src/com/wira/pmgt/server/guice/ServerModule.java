@@ -33,6 +33,7 @@ import com.wira.pmgt.server.actionhandlers.GetGroupsRequestActionHandler;
 import com.wira.pmgt.server.actionhandlers.GetItemActionHandler;
 import com.wira.pmgt.server.actionhandlers.GetLongTasksRequestActionHandler;
 import com.wira.pmgt.server.actionhandlers.GetNotificationsActionHandler;
+import com.wira.pmgt.server.actionhandlers.GetPerformanceDataRequestHandler;
 import com.wira.pmgt.server.actionhandlers.GetProcessRequestActionHandler;
 import com.wira.pmgt.server.actionhandlers.GetProcessStatusRequestActionHandler;
 import com.wira.pmgt.server.actionhandlers.GetProcessesRequestActionHandler;
@@ -87,6 +88,7 @@ import com.wira.pmgt.shared.requests.GetGroupsRequest;
 import com.wira.pmgt.shared.requests.GetItemRequest;
 import com.wira.pmgt.shared.requests.GetLongTasksRequest;
 import com.wira.pmgt.shared.requests.GetNotificationsAction;
+import com.wira.pmgt.shared.requests.GetPerformanceDataRequest;
 import com.wira.pmgt.shared.requests.GetProcessRequest;
 import com.wira.pmgt.shared.requests.GetProcessStatusRequest;
 import com.wira.pmgt.shared.requests.GetProcessesRequest;
@@ -368,5 +370,9 @@ public class ServerModule extends HandlerModule {
 
 		bindHandler(DeleteProgramRequest.class,
 				DeleteProgramRequestActionHandler.class, SessionValidator.class);
+		
+		bindHandler(GetPerformanceDataRequest.class,
+				GetPerformanceDataRequestHandler.class,
+				SessionValidator.class);
 	}
 }
