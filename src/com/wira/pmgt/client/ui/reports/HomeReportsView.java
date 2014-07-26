@@ -75,54 +75,6 @@ public class HomeReportsView extends ViewImpl implements
 	}
 
 	public void setData() {
-		String budgetMeasureTip = "Measure of activities accomplished within budgets";
-		String budgetNoData = "Percentage of Activities without actual expenditure information";
-		String targetMeasure = "Measure of activities that met their Targets";
-		String targetNoData = "Percentage of Activities without actual outcome information";
-		String timelinesMeasure = "Measure of ability to meet planned timelines.";
-		String throughPut = "Average amount of documentation available compared to other programs";
-		
-		/* Other Analysis */
-//		tableAnalysis.addRow(
-//				new InlineLabel("Wildlife Program"),
-//				new ColorWidget(Arrays.asList(new Performance(budgetMeasureTip,
-//						80, PerformanceType.GOOD), new Performance(
-//						budgetNoData, 20, PerformanceType.NODATA))),
-//				new ColorWidget(Arrays.asList(new Performance(targetMeasure,
-//						55, PerformanceType.GOOD), new Performance(
-//						targetNoData, 45, PerformanceType.NODATA))),
-//				new ColorWidget(Arrays.asList(new Performance(timelinesMeasure,
-//						100, PerformanceType.GOOD, false))),
-//				new ColorWidget(Arrays.asList(new Performance(throughPut, 100,
-//						PerformanceType.AVERAGE))));
-//
-//		tableAnalysis.addRow(
-//				new InlineLabel("Education & Ecoliteracy Program"),
-//				new ColorWidget(Arrays.asList(new Performance(budgetMeasureTip,
-//						60, PerformanceType.AVERAGE), new Performance(
-//						budgetNoData, 40, PerformanceType.NODATA))),
-//				new ColorWidget(Arrays.asList(new Performance(targetMeasure,
-//						78, PerformanceType.GOOD), new Performance(
-//						targetNoData, 23, PerformanceType.NODATA))),
-//				new ColorWidget(Arrays.asList(new Performance(timelinesMeasure,
-//						100, PerformanceType.POOR, false))),
-//				new ColorWidget(Arrays.asList(new Performance(throughPut, 100,
-//						PerformanceType.AVERAGE))));
-//
-//		tableAnalysis.addRow(
-//				new InlineLabel("Forestry Program"),
-//				new ColorWidget(Arrays.asList(new Performance(budgetMeasureTip,
-//						36, PerformanceType.AVERAGE), new Performance(
-//						budgetNoData, 64, PerformanceType.NODATA))),
-//				new ColorWidget(Arrays.asList(new Performance(targetMeasure,
-//						78, PerformanceType.GOOD), new Performance(
-//						targetNoData, 23, PerformanceType.NODATA))),
-//				new ColorWidget(Arrays.asList(new Performance(timelinesMeasure,
-//						100, PerformanceType.AVERAGE, false))),
-//				new ColorWidget(Arrays.asList(new Performance(throughPut, 100,
-//						PerformanceType.AVERAGE))));
-
-
 		pieChartTimelines.setData(Arrays.asList(new Data("Within deadlines",
 				75, "60%"), new Data("Failed Deadlines", 25, "30%")));
 
@@ -209,7 +161,11 @@ public class HomeReportsView extends ViewImpl implements
 		for(PerformanceModel model: budgetsPerfomance){
 			PerformanceModel targetModel = targetsPerfomance.get(i);
 			PerformanceModel timelineModel = timelinesPerfomance.get(i);
-			
+			if(model.isEmpty() && targetModel.isEmpty() && timelineModel.isEmpty()){
+				//do not show empty rows
+				++i;
+				continue;
+			}
 			tableAnalysis.addRow(
 					new InlineLabel(model.getName()+" ("+(model.getTotalCount())+")"),
 					new ColorWidget(model, budgetMeasureTip, budgetNoData),

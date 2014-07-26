@@ -119,5 +119,10 @@ public class PerformanceModel implements Serializable{
 		return ((Double)total).intValue();
 		
 	}
+
+	public boolean isEmpty() {
+		
+		return getTotalCount()==0;
+	}
 	
 }
