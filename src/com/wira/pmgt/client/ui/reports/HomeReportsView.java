@@ -209,7 +209,7 @@ public class HomeReportsView extends ViewImpl implements
 		double kpiTotal = totalKPISuccessCount +totalKPIFailCount +totalKPINoDataCount;
 		if(kpiTotal!=0){
 			int t = ((Double)kpiTotal).intValue();
-			spnTargetsTitle.setInnerText(t+" KPI Values Analysed");
+			spnTargetsTitle.setInnerText(t+" Key Performance Indicators Analysed");
 			List<Data> pieData = new ArrayList<Data>();
 			if(totalKPISuccessCount!=0){
 				pieData.add(new Data("Within Targets", totalKPISuccessCount,
