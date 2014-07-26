@@ -111,6 +111,7 @@
 						</h3>
 					</div>
 					<g:HTMLPanel styleName="portlet-content" ui:field="panelTurnAroundTime2">
+					    <span class="muted" ui:field="spnTimelinesTitle"></span>
 						<c:PieChart ui:field="pieChartTimelines"></c:PieChart>
 					</g:HTMLPanel>
 				</div>
@@ -125,6 +126,7 @@
 						</h3>
 					</div>
 					<g:HTMLPanel styleName="portlet-content" ui:field="panelTotalRequestsPerDoc2">
+					<span class="muted" ui:field="spnTargetsTitle"></span>
 						<c:PieChart ui:field="pieChartTargets"></c:PieChart>
 					</g:HTMLPanel>
 				</div>
