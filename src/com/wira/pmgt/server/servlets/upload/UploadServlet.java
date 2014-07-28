@@ -98,6 +98,7 @@ public class UploadServlet extends UploadAction {
 		FileExecutor executor = null;
 		
 		switch (uploadAction) {
+		case UPLOADDOCFILE:
 		case ATTACHDOCUMENT:
 			executor = new DocumentAttachmentExecutor();
 			break;

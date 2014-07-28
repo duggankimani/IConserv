@@ -627,6 +627,10 @@ public abstract class FieldWidget extends AbsolutePanel implements
 		case RATING:
 			widget = new RatingField();
 			break;
+		
+		case FILEUPLOAD:
+			widget = new FileUploadField();
+			break;
 		}
 
 		widget.designMode = activatePopup;

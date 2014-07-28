@@ -45,12 +45,10 @@ public class FormPanel extends Composite {
 	}
 
 	@UiField HTMLPanel panelFields;
-	//@UiField InlineLabel panelLabel;
 	@UiField HTMLPanel panelItem;
 	@UiField LegendElement divFormCaption;
 	@UiField SpanElement divFormHelp;
 	@UiField IssuesPanel issues;
-	
 	FormDelegate formDelegate = new FormDelegate();
 	MODE mode = MODE.VIEW;
 	
@@ -111,8 +109,6 @@ public class FormPanel extends Composite {
 				((TextArea) fieldWidget).getContainer().removeStyleName("hidden");
 			}
 			
-			//System.err.println("||| "+field.getCaption()+" :: "+
-			//(field.getValue()==null? "null" : field.getValue().getValue()));
 			panelFields.add(fieldWidget);
 		}
 		
