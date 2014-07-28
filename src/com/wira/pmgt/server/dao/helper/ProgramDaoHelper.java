@@ -272,14 +272,21 @@ public class ProgramDaoHelper {
 		}
 		
 		//detail.setActual(String);
-		detail.setActualAmount(programDTO.getActualAmount()==null? 0.0: programDTO.getActualAmount());
+		/**
+		 * This generates a conflict between value keyed in directly and value computed by programfund trigger#procedure
+		 */
+		//detail.setActualAmount(programDTO.getActualAmount()==null? 0.0: programDTO.getActualAmount());
 		detail.setDescription(programDTO.getDescription());
 		detail.setEndDate(programDTO.getEndDate());
 		detail.setStatus(programDTO.getStatus());
 		
 		//detail.setIndicator(String);
 		detail.setName(programDTO.getName());
-		detail.setPeriod(get(programDTO.getPeriod()));
+		
+		if(programDTO.getPeriod()!=null && programDTO.getPeriod().getId()!=null){
+			detail.setPeriod(dao.getPeriod(programDTO.getPeriod().getId()));
+		}
+		
 		detail.setStartDate(programDTO.getStartDate());
 		detail.setBudgetLine(programDTO.getBudgetLine());
 		//detail.setActualAmount(programDTO.getActualAmount());
@@ -379,11 +386,13 @@ public class ProgramDaoHelper {
 	}
 
 	private static ProgramFund get(ProgramFundDTO dto) {
+		
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		ProgramFund programFund = new ProgramFund();
 		if(dto.getId()!=null){
 			programFund = dao.getById(ProgramFund.class,dto.getId());
 		}
+		//log.debug("READRING ProgramFund For Save: Id="+dto.getId()+", BudgetAmount= "+);
 		programFund.setAmount(dto.getAmount());
 		programFund.setFund(get(dto.getFund()));
 		programFund.setActualAmount(dto.getActual());
