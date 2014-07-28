@@ -408,7 +408,7 @@ public class ProgramsTableRow extends RowWidget implements
 
 		if (activity.getType() == ProgramDetailType.OUTCOME) {
 			progressBar.addStyleName("hide");
-		} else if (activity.getProgress() != null) {
+		}else if (activity.getProgress() != null) {
 			progressBar.setValue(activity.getProgress().intValue());
 			progressBar.setText(activity.getProgress().intValue() + "%");
 		}

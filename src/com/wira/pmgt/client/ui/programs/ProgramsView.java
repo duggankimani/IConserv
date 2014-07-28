@@ -21,15 +21,20 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
+import com.wira.pmgt.client.model.UploadContext;
+import com.wira.pmgt.client.model.UploadContext.UPLOADACTION;
 import com.wira.pmgt.client.ui.component.ActionLink;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
 import com.wira.pmgt.client.ui.component.Dropdown;
+import com.wira.pmgt.client.ui.resources.ICONS;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
@@ -41,6 +46,8 @@ public class ProgramsView extends ViewImpl implements
 
 	private final Widget widget;
 
+	@UiField ActionLink aExport;
+	
 	@UiField
 	ActionLink aProgram;
 
@@ -128,6 +135,7 @@ public class ProgramsView extends ViewImpl implements
 	public ProgramsView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
 		listPanel.setId("mytab");
+		//imgExport.setResource(ICONS.INSTANCE.excel());
 
 		// registerEditFocus()
 		MouseDownHandler downHandler = new MouseDownHandler() {
@@ -196,6 +204,14 @@ public class ProgramsView extends ViewImpl implements
 					divFilterBox.addStyleName("hide");
 					isNotDisplayed = true;
 				}
+			}
+		});
+		
+		aExport.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				Window.open(downloadUrl,"_blank",null);
 			}
 		});
 
@@ -626,6 +642,29 @@ public class ProgramsView extends ViewImpl implements
 	public void setProgramId(Long programId, boolean isGoalsTable) {
 		tblView.setGoalsTable(isGoalsTable);
 		headerContainer.setProgramId(programId);
+	}
+	
+	String downloadUrl = null;
+	@Override
+	public void setDownloadUrl(Long programid, Long outcomeid, Long activityId, String programType){
+		final UploadContext context = new UploadContext(AppContext.getBaseURL()+"/getreport");
+		context.setAction(UPLOADACTION.EXPORTPROGRAMS);
+		
+		if(programid!=null)
+			context.setContext("programid", programid+"");
+		
+		if(activityId!=null)
+			context.setContext("activityid", activityId+"");
+		
+		if(outcomeid!=null)
+			context.setContext("outcomeid", outcomeid+"");
+		
+		if(programType!=null){
+			context.setContext("programType", programType);
+		}
+		
+		downloadUrl = context.toUrl();
+		
 	}
 
 }

@@ -139,4 +139,5 @@ public class CreateActivityPresenter extends
 	public void setType(ProgramDetailType type) {
 		getView().setType(type);
 	}
+	
 }

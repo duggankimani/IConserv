@@ -1,5 +1,7 @@
 package com.wira.pmgt.client.ui.reports;
 
+import com.wira.pmgt.client.ui.reports.Performance.PerformanceType;
+
 public class Performance {
 	private String title;
 	private Integer percentage;
@@ -51,6 +53,20 @@ public class Performance {
 		
 		public String getDisplayName() {
 			return displayName;
+		}
+
+		public static PerformanceType getType(double percSuccess,
+				double avgPerSuccess) {
+			
+			if(percSuccess<40){
+				return POOR;
+			}
+			
+			if(percSuccess>60){
+				return GOOD;
+			}
+			
+			return AVERAGE;
 		}
 	}
 

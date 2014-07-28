@@ -4,6 +4,7 @@ DROP FUNCTION IF EXISTS func_savetargets() cascade;
 CREATE FUNCTION func_savetargets() RETURNS trigger AS $savetargets$
 DECLARE
 	v_parentprogramid numeric; --parent outcome id
+	v_parentstatus varchar(20);--parent status
 	v_parentoutcomentid numeric; --parent outcome id
 	v_parentcurrentactual numeric; -- Total actual outcoment value in parent program so far
 	v_previousactual numeric; -- Actual outcome value child prior to this update
@@ -15,18 +16,23 @@ BEGIN
 	
 	if(TG_OP='DELETE') then
 		v_previousactual=OLD.actualoutcome;
-		v_parentprogramid = (select parentid from programdetail where id=OLD.programid);
+--		v_parentprogramid = (select parentid from programdetail where id=OLD.programid);
+		select parentid,status into v_parentprogramid,v_parentstatus from programdetail where id=OLD.programid;
+
 		select id,actualoutcome into v_parentoutcomentid,v_parentcurrentactual from targetandoutcome where key=OLD.key and programid=v_parentprogramid;	
 		
 	elsif(TG_OP='INSERT') then
 		v_newactual=NEW.actualoutcome;
-		v_parentprogramid = (select parentid from programdetail where id=NEW.programid);
+--		v_parentprogramid = (select parentid from programdetail where id=NEW.programid);
+		select parentid,status into v_parentprogramid,v_parentstatus from programdetail where id=NEW.programid;
+
 		select id,actualoutcome into v_parentoutcomentid,v_parentcurrentactual from targetandoutcome where key=NEW.key and programid=v_parentprogramid;
 		
 	else
 		v_newactual=NEW.actualoutcome;
 		v_previousactual=OLD.actualoutcome;
-		v_parentprogramid = (select parentid from programdetail where id=OLD.programid);
+--		v_parentprogramid = (select parentid from programdetail where id=OLD.programid);
+		select parentid,status into v_parentprogramid,v_parentstatus from programdetail where id=OLD.programid;
 		select id,actualoutcome into v_parentoutcomentid,v_parentcurrentactual from targetandoutcome where key=OLD.key and programid=v_parentprogramid;
 	
 	end if;
@@ -34,8 +40,8 @@ BEGIN
 	v_newactual=COALESCE(v_newactual,0.0);
 	v_previousactual = COALESCE(v_previousactual,0.0);
 	
-	--find corresponding fund;
-	IF(v_parentoutcomentid is not null and  v_newactual != v_previousactual) THEN
+	--only update targetsandoutcomes of programs that are still open (!closed)
+	IF(v_parentstatus!='CLOSED' and v_parentoutcomentid is not null and  v_newactual != v_previousactual) THEN
 		--RAISE INFO 'parentoutcomeid=%, actual=%, previousactual=% ', v_parentoutcomentid, v_newactual, v_previousactual;
 		--calculate new allocation
 		v_parentcurrentactual=COALESCE(v_parentcurrentactual,0.0) + COALESCE(v_newactual,0.0) - COALESCE(v_previousactual,0.0);

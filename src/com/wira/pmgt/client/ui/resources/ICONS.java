@@ -18,4 +18,6 @@ public interface ICONS extends ClientBundle{
     
     ImageResource attachment();
     
+    ImageResource excel();
+    
 }

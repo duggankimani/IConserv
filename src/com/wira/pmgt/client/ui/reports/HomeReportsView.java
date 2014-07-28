@@ -7,6 +7,7 @@ import java.util.List;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
@@ -19,6 +20,7 @@ import com.wira.pmgt.client.ui.component.TableView;
 import com.wira.pmgt.client.ui.reports.Performance.PerformanceType;
 import com.wira.pmgt.client.ui.util.NumberUtils;
 import com.wira.pmgt.shared.model.dashboard.Data;
+import com.wira.pmgt.shared.model.program.PerformanceModel;
 import com.wira.pmgt.shared.model.program.ProgramAnalysis;
 
 public class HomeReportsView extends ViewImpl implements
@@ -32,6 +34,8 @@ public class HomeReportsView extends ViewImpl implements
 	@UiField SpanElement spnTotalFunding;
 	@UiField SpanElement spnActual;
 	@UiField SpanElement spnRemaining;
+	@UiField SpanElement spnTimelinesTitle;
+	@UiField SpanElement spnTargetsTitle;
 	
 	@UiField
 	TableView tableAnalysis;
@@ -57,7 +61,6 @@ public class HomeReportsView extends ViewImpl implements
 
 		tableAnalysis.setHeaders(Arrays.asList("PROGRAM NAME", "BUDGET",
 				"MEETING TARGETS", "MEETING TIMELINES", "THROUGH PUT"));
-		setData();
 	}
 
 	InlineLabel getInlineLabel(String amount, String color) {
@@ -71,64 +74,6 @@ public class HomeReportsView extends ViewImpl implements
 	InlineLabel getInlineLabel(String amount) {
 		InlineLabel label = getInlineLabel(amount, "");
 		return label;
-	}
-
-	public void setData() {
-		String budgetMeasureTip = "Measure of activities accomplished within budgets";
-		String budgetNoData = "Percentage of Activities without actual expenditure information";
-		String targetMeasure = "Measure of activities that met their Targets";
-		String targetNoData = "Percentage of Activities without actual outcome information";
-		String timelinesMeasure = "Measure of ability to meet planned timelines.";
-		String throughPut = "Average amount of documentation available compared to other programs";
-		
-		/* Other Analysis */
-		tableAnalysis.addRow(
-				new InlineLabel("Wildlife Program"),
-				new ColorWidget(Arrays.asList(new Performance(budgetMeasureTip,
-						80, PerformanceType.GOOD), new Performance(
-						budgetNoData, 20, PerformanceType.NODATA))),
-				new ColorWidget(Arrays.asList(new Performance(targetMeasure,
-						55, PerformanceType.GOOD), new Performance(
-						targetNoData, 45, PerformanceType.NODATA))),
-				new ColorWidget(Arrays.asList(new Performance(timelinesMeasure,
-						100, PerformanceType.GOOD, false))),
-				new ColorWidget(Arrays.asList(new Performance(throughPut, 100,
-						PerformanceType.AVERAGE))));
-
-		tableAnalysis.addRow(
-				new InlineLabel("Education & Ecoliteracy Program"),
-				new ColorWidget(Arrays.asList(new Performance(budgetMeasureTip,
-						60, PerformanceType.AVERAGE), new Performance(
-						budgetNoData, 40, PerformanceType.NODATA))),
-				new ColorWidget(Arrays.asList(new Performance(targetMeasure,
-						78, PerformanceType.GOOD), new Performance(
-						targetNoData, 23, PerformanceType.NODATA))),
-				new ColorWidget(Arrays.asList(new Performance(timelinesMeasure,
-						100, PerformanceType.POOR, false))),
-				new ColorWidget(Arrays.asList(new Performance(throughPut, 100,
-						PerformanceType.AVERAGE))));
-
-		tableAnalysis.addRow(
-				new InlineLabel("Forestry Program"),
-				new ColorWidget(Arrays.asList(new Performance(budgetMeasureTip,
-						36, PerformanceType.AVERAGE), new Performance(
-						budgetNoData, 64, PerformanceType.NODATA))),
-				new ColorWidget(Arrays.asList(new Performance(targetMeasure,
-						78, PerformanceType.GOOD), new Performance(
-						targetNoData, 23, PerformanceType.NODATA))),
-				new ColorWidget(Arrays.asList(new Performance(timelinesMeasure,
-						100, PerformanceType.AVERAGE, false))),
-				new ColorWidget(Arrays.asList(new Performance(throughPut, 100,
-						PerformanceType.AVERAGE))));
-
-
-		pieChartTimelines.setData(Arrays.asList(new Data("Within deadlines",
-				75, "60%"), new Data("Failed Deadlines", 25, "30%")));
-
-		pieChartTargets.setData(Arrays.asList(new Data("Within Targets", 60,
-				"60%"), new Data("Failed Targets", 30, "30%"), new Data(
-				"No Data", 10, "10%")));
-
 	}
 
 	@Override
@@ -190,5 +135,99 @@ public class HomeReportsView extends ViewImpl implements
 	private String formatShort(Double budgetAmount) {
 		
 		return NumberUtils.NUMBERFORMAT.format(budgetAmount);
+	}
+
+	@Override
+	public void setAnalysis(List<PerformanceModel> budgetsPerfomance,
+			List<PerformanceModel> targetsPerfomance,
+			List<PerformanceModel> timelinesPerfomance,
+			List<PerformanceModel> throughputPerfomance) {
+		String budgetMeasureTip = "Measure of activities accomplished within budgets";
+		String budgetNoData = "Percentage of Activities without actual expenditure information";
+		String targetMeasure = "Measure of activities that met their Targets";
+		String targetNoData = "Percentage of Activities without actual outcome information";
+		String timelinesMeasure = "Measure of ability to meet planned timelines.";
+		String throughPut = "Average amount of documentation available compared to other programs";
+		
+		double totalTimelinesSuccessCount = 0;
+		double totalTimelinesFailCount = 0;
+		double totalTimelinesNoDataCount = 0;
+		
+		double totalKPISuccessCount = 0;
+		double totalKPIFailCount = 0;
+		double totalKPINoDataCount = 0;
+		
+		int i=0;
+		for(PerformanceModel model: budgetsPerfomance){
+			PerformanceModel targetModel = targetsPerfomance.get(i);
+			PerformanceModel timelineModel = timelinesPerfomance.get(i);
+			if(model.isEmpty() && targetModel.isEmpty() && timelineModel.isEmpty()){
+				//do not show empty rows
+				++i;
+				continue;
+			}
+			
+			totalTimelinesSuccessCount+=timelineModel.getCountSuccess();
+			totalTimelinesFailCount+=timelineModel.getCountFail();
+			totalTimelinesNoDataCount+=timelineModel.getCountNoData();
+			
+			totalKPISuccessCount += targetModel.getCountSuccess();;
+			totalKPIFailCount += targetModel.getCountFail();
+			totalKPINoDataCount += targetModel.getCountNoData();
+			
+			ActionLink aName = new ActionLink(model.getName()+" ("+(model.getTotalCount())+")");
+			aName.setHref("#home;page=activities;activity="+model.getProgramId());
+			tableAnalysis.addRow(
+					aName,
+					new ColorWidget(model, budgetMeasureTip, budgetNoData),
+					new ColorWidget(targetModel, targetMeasure, targetNoData),
+					new ColorWidget(timelineModel, timelinesMeasure, ""),							
+					new ColorWidget(Arrays.asList(new Performance(throughPut, 0,
+							PerformanceType.NODATA))));
+			
+			++i;
+		}
+		
+		
+		double timelineTotal = totalTimelinesSuccessCount+totalTimelinesFailCount +totalTimelinesNoDataCount;
+		if(timelineTotal!=0){
+			int t = ((Double)timelineTotal).intValue();
+			spnTimelinesTitle.setInnerText(""+t+" Activities And Tasks Analysed");
+			List<Data> pieData = new ArrayList<Data>();
+			if(totalTimelinesSuccessCount>0){
+				pieData.add(new Data("Within deadlines",
+						totalTimelinesSuccessCount, (int)(totalTimelinesSuccessCount*100/timelineTotal)+"%"));
+			}
+			
+			if(totalTimelinesFailCount!=0){
+				pieData.add(new Data("Failed Deadlines",totalTimelinesFailCount , 
+						(int)(totalTimelinesFailCount*100/timelineTotal)+"%"));
+			}
+			pieChartTimelines.setData(pieData);
+		}
+		
+		double kpiTotal = totalKPISuccessCount +totalKPIFailCount +totalKPINoDataCount;
+		if(kpiTotal!=0){
+			int t = ((Double)kpiTotal).intValue();
+			spnTargetsTitle.setInnerText(t+" Key Performance Indicators Analysed");
+			List<Data> pieData = new ArrayList<Data>();
+			if(totalKPISuccessCount!=0){
+				pieData.add(new Data("Within Targets", totalKPISuccessCount,
+						(int)(totalKPISuccessCount*100/kpiTotal)+"%"));
+			}
+			
+			if(totalKPIFailCount!=0){
+				pieData.add(new Data("Failed Targets", totalKPIFailCount, 
+						(int)(totalKPIFailCount*100/kpiTotal)+"%"));
+			}
+			
+			if(totalKPINoDataCount!=0){
+				pieData.add(new Data("No Data", totalKPINoDataCount, 
+						(int)(totalKPINoDataCount*100/kpiTotal)+"%"));
+			}
+			
+			pieChartTargets.setData(pieData);
+		}
+		
 	}
 }

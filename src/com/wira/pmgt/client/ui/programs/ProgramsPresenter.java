@@ -130,6 +130,9 @@ public class ProgramsPresenter extends
 		void setProgramId(Long programId, boolean isGoalsTable);
 
 		void createDefaultTabs();
+
+		void setDownloadUrl(Long programid, Long outcomeid, Long activityId,
+				String programType);
 	}
 
 	@Inject
@@ -641,6 +644,8 @@ public class ProgramsPresenter extends
 		programDetailId = detailId == null ? null : detailId == 0 ? null
 				: detailId;
 
+		getView().setDownloadUrl(programId, searchByOutcome?programDetailId:null, searchByOutcome?null:programDetailId, typeToLoad.name());
+		
 		MultiRequestAction action = new MultiRequestAction();
 
 		if (typeToLoad.equals(ProgramDetailType.OBJECTIVE)) {
@@ -654,7 +659,7 @@ public class ProgramsPresenter extends
 
 		// List of Programs for tabs
 		{
-			// Withing a given period
+			// Within a given period
 			GetProgramsRequest request = new GetProgramsRequest(
 					ProgramDetailType.PROGRAM, false);
 			if (periodId != null) {

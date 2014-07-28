@@ -113,8 +113,13 @@ public class User extends PO {
 	}
 
 	public boolean checkPassword(String plainPassword){
-		return true;
-		//return CryptoUtils.getInstance().checkPassword(plainPassword, password);
+		
+		assert plainPassword!=null && password!=null;
+		if(password==null){
+			throw new NullPointerException("DB password should not be null");
+		}
+		
+		return CryptoUtils.getInstance().checkPassword(plainPassword, password);
 	}
 
 	public void setPassword(String plainPassword) {

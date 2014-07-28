@@ -9,7 +9,12 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
@@ -20,6 +25,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
+import com.wira.pmgt.client.ui.AppManager;
+import com.wira.pmgt.client.ui.OnOptionSelected;
 import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.DateRangeWidget;
@@ -73,10 +80,12 @@ public class CreateActivityView extends ViewImpl implements
 	@UiField
 	Anchor aCopyTargets;
 	
-	@UiField CheckBox chkMarkCompleted;
+	@UiField CheckBox chkMarkClosed;
 
 	@UiField
 	DateRangeWidget dtRange;
+	
+	@UiField SpanElement spnWarn;
 
 	List<Listable> donors = new ArrayList<Listable>();
 	ColumnConfig donorField = new ColumnConfig("donor", "Donor Name",
@@ -92,6 +101,37 @@ public class CreateActivityView extends ViewImpl implements
 		createGrid();
 		txtActivity.getElement().setAttribute("rows", "3");
 		createTargetsAndIndicatorsGrid();
+		chkMarkClosed.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+			
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				spnWarn.addClassName("hide");
+				if(event.getValue()){
+					return;
+				}
+				
+				List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
+				if(funding.isEmpty()){
+					return;
+				}
+				
+				if(persistedActivity!=null && persistedActivity.getStatus().equals(ProgramStatus.CLOSED)){
+					//this is an update
+					boolean isReopen=false;
+					for (ProgramFundDTO dto : funding) {
+						//if its a leaf task/activity (has no children, we can update actuals directly) - can we? No
+						if(dto.getActual()!=null && dto.getFund()!=null){
+							isReopen=true;
+						}
+						
+					}
+					
+					if(isReopen){
+						spnWarn.removeClassName("hide");
+					}
+				}
+			}
+		});
 	}
 
 	@Override
@@ -249,6 +289,17 @@ public class CreateActivityView extends ViewImpl implements
 			issues.addError(err);
 		}
 
+		//Mandatory checks - Grids
+		List<String> gridErrors = gridTargets.getErrors();
+		if(gridErrors!=null){
+			isValid=false;
+			issues.addError(gridErrors.get(0)+" (Target and Outcomes Grid)");
+		}else if((gridErrors=gridView.getErrors())!=null){
+			isValid=false;
+			issues.addError(gridErrors.get(0)+" (Budgets Grid)");
+		}
+		
+		//Actuals
 		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
 		for (ProgramFundDTO dto : funding) {
 			int frequency = Collections.frequency(funding, dto);
@@ -259,20 +310,22 @@ public class CreateActivityView extends ViewImpl implements
 			
 			//if its a leaf task/activity (has no children, we can update actuals directly) - can we? No
 			if(dto.getActual()!=null && dto.getFund()!=null)
-			if(hasChanged(dto) && !chkMarkCompleted.getValue()){
+			if(hasChanged(dto) && !chkMarkClosed.getValue()){
 				isValid=false;
-				issues.addError("Please tick the 'Mark as Completed' box below the budgets to "
+				issues.addError("Please tick the \"Mark Activity as closed\" box below the budgets to "
 						+ "save the expenditure(Actual) value for "+dto.getFund().getName());
 			}
 		}
-
-		List<String> gridErrors = gridTargets.getErrors();
-		if(gridErrors!=null){
-			isValid=false;
-			issues.addError(gridErrors.get(0)+" (Target and Outcomes Grid)");
-		}else if((gridErrors=gridView.getErrors())!=null){
-			isValid=false;
-			issues.addError(gridErrors.get(0)+" (Budgets Grid)");
+		
+		//Outcomes
+		List<TargetAndOutcomeDTO> targets = gridTargets.getData(targetAndOutcomeMapper);
+		for(TargetAndOutcomeDTO dto: targets){
+			if(dto.getActualOutcome()!=null && dto.getActualOutcome()!=0)
+			if(hasChanged(dto) && !chkMarkClosed.getValue()){
+				isValid=false;
+				issues.addError("Please tick the \"Mark Activity as closed\" box below the budgets to "
+						+ "save the outcome for indicator \""+dto.getMeasure()+"\"");
+			}
 		}
 		
 		if (!isValid) {
@@ -281,6 +334,27 @@ public class CreateActivityView extends ViewImpl implements
 
 		return isValid;
 
+	}
+
+	private boolean hasChanged(TargetAndOutcomeDTO dto) {
+		if(dto.getId()==null){
+			return true;
+		}
+		
+		List<TargetAndOutcomeDTO> outcomes = persistedActivity.getTargetsAndOutcomes();
+		for(TargetAndOutcomeDTO outcome: outcomes){
+			if(outcome.getId().equals(dto.getId())){
+				if(outcome.getActualOutcome()==null){
+					return true;
+				}
+				
+				if(!outcome.getActualOutcome().equals(dto.getActualOutcome())){
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	private boolean hasChanged(ProgramFundDTO dto) {
@@ -312,8 +386,19 @@ public class CreateActivityView extends ViewImpl implements
 		program.setStartDate(dtRange.getStartDate());
 		program.setEndDate(dtRange.getEndDate());
 		program.setBudgetLine(txtBudgetLine.getValue());
-		if(chkMarkCompleted.getValue()){
-			program.setStatus(ProgramStatus.COMPLETED);
+		if(chkMarkClosed.getValue()){
+			program.setStatus(ProgramStatus.CLOSED);
+		}else if(persistedActivity!=null){
+			if(persistedActivity.getStatus()==ProgramStatus.CLOSED){
+				if(program.getProgress()>0){
+					program.setStatus(ProgramStatus.OPENED);
+				}else{
+					program.setStatus(ProgramStatus.CREATED);
+				}
+			}else{
+				program.setStatus(persistedActivity.getStatus());
+			}
+			
 		}
 
 		// Targets and Outcomes
@@ -342,6 +427,11 @@ public class CreateActivityView extends ViewImpl implements
 		this.persistedActivity = activity;
 		if (activity == null) {
 			return;
+		}
+		
+		if(activity.getStatus()!=null)
+		if(activity.getStatus().equals(ProgramStatus.CLOSED)){
+			chkMarkClosed.setValue(true);
 		}
 		
 		txtActivity.setValue(activity.getDescription());
@@ -402,6 +492,8 @@ public class CreateActivityView extends ViewImpl implements
 
 	@Override
 	public void clear() {
+		chkMarkClosed.setValue(false);
+		spnWarn.addClassName("hide");
 		txtBudgetLine.setValue(null);
 		gridView.setData(new ArrayList<DataModel>());
 		txtActivity.setValue(null);

@@ -16,6 +16,7 @@ import com.wira.pmgt.server.dao.model.DocumentModel;
 import com.wira.pmgt.server.dao.model.LocalAttachment;
 import com.wira.pmgt.server.dao.model.ProcessDefModel;
 import com.wira.pmgt.server.db.DB;
+import com.wira.pmgt.server.reports.GenerateActivityReport;
 import com.wira.pmgt.shared.model.settings.SETTINGNAME;
 
 import org.apache.log4j.Logger;
@@ -108,7 +109,55 @@ public class GetReport extends HttpServlet {
 		if(action.equals("GetLogo")){
 			processSettingsImage(req, resp);
 		}
+		
+		if(action.equals("EXPORTPROGRAMS")){
+			processExportProgramRequest(req, resp);
+		}
 
+	}
+
+	private void processExportProgramRequest(HttpServletRequest req,
+			HttpServletResponse resp) throws IOException {
+		
+		String param1 = req.getParameter("programid");
+		String param2 = req.getParameter("activityid");
+		String param3 = req.getParameter("outcomeid");
+		String param4 = req.getParameter("periodid");
+		String programType = req.getParameter("programType");
+		String code = req.getParameter("code");
+		
+		Long programId=null,activityId=null,outcomeId  = null, periodid=null;
+		
+		if(param1!=null){
+			programId = getValue(param1);
+			//export all
+		}
+		
+		if(param2!=null){
+			activityId = getValue(param2);
+			//export all
+		}
+		
+		if(param3!=null){
+			outcomeId = getValue(param3);
+			//export all
+		}
+		
+		if(param4!=null){
+			periodid = getValue(param4);
+		}
+				
+		GenerateActivityReport report = new GenerateActivityReport(programId,code, outcomeId, activityId,periodid,programType, "xlsx");
+		processAttachmentRequest(resp,report.getBytes(), report.getName());
+	}
+
+	private Long getValue(String param) {
+		try{
+			return Long.parseLong(param);
+		}catch(Exception e){}
+		
+		return null;
+		
 	}
 
 	private void processSettingsImage(HttpServletRequest req,

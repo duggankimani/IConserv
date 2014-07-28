@@ -6,7 +6,6 @@ import com.google.inject.Inject;
 import com.google.gwt.event.shared.EventBus;
 import com.gwtplatform.mvp.client.proxy.TokenFormatter;
 import com.wira.pmgt.client.place.DefaultPlace;
-import com.wira.pmgt.client.util.AppContext;
 
 public class ClientPlaceManager extends PlaceManagerImpl {
 
@@ -22,12 +21,7 @@ public class ClientPlaceManager extends PlaceManagerImpl {
 
 	@Override
 	public void revealDefaultPlace() {
-		if(AppContext.isCurrentUserAdmin()){
-			revealPlace(new PlaceRequest(NameTokens.adminhome), true);
-		}else{
-			revealPlace(defaultPlaceRequest, true);
-		}
-		
+		revealPlace(defaultPlaceRequest, true);		
 	}
 	
 	@Override
