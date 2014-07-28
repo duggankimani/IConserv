@@ -39,6 +39,11 @@ public class TestProgramDaoImpl {
 	
 	
 	@Test
+	public void resetAmounts(){
+		IsProgramDetail detail = ProgramDaoHelper.getProgramById(127L, false);
+		ProgramDaoHelper.save(detail);
+	}
+	@Ignore
 	public void getAmounts(){
 		//Test against this :  select sum(allocatedamount),sum(commitedamount) commited,sum(actualamount) actual from programfund where programid in(select id from programdetail where parentid=1) and fundid=4; 
 		

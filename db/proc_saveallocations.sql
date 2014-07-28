@@ -75,15 +75,17 @@ BEGIN
 		select parentid into v_parentprogramid from programdetail where id=OLD.programid;
 		select status into v_parentstatus from programdetail where id=v_parentprogramid;
 
+		--RAISE INFO 'Id= %     Actual= %    Previous= % ', NEW.id, COALESCE(NEW.actualAmount,0), COALESCE(OLD.actualAmount,0);
 		--total budget for an activity or outcome from various sources
 		update programdetail set budgetamount= (COALESCE(budgetamount,0.0) + COALESCE(v_newbudget,0.0) - COALESCE(v_previousbudget,0.0)),
 		actualAmount= (COALESCE(actualAmount,0.0) + COALESCE(v_newactual,0.0) - COALESCE(v_previousactual,0.0)),
 		commitedAmount= (COALESCE(commitedAmount,0.0) + COALESCE(v_newcommitedamount,0.0) - COALESCE(v_previouscommitedamount,0.0))
 		where id=OLD.programid;
+                
 	end if;
 	
 	--find activity parent fund and update it if its not marked as closed. This is meant to give support for keying in historical information
-	IF(v_parentprogramid is not null and v_parentstatus!='CLOSED' and 
+	IF(v_parentprogramid is not null and (v_parentstatus is null or v_parentstatus!='CLOSED') and 
 	   (
             COALESCE(v_newbudget,0.0) != COALESCE(v_previousbudget,0.0) or 
 	    COALESCE(v_newactual,0.0) != COALESCE(v_previousactual,0.0) or

@@ -376,7 +376,9 @@ public class ProgramsTableRow extends RowWidget implements
 		ProgramStatus status = activity.getStatus();
 		if (activity.getType() == ProgramDetailType.OUTCOME) {
 			spnStatus.addClassName("hide");
-		} else if (status == null) {
+		}
+		
+		if (status == null) {
 			status = ProgramStatus.CREATED;
 		}
 
@@ -406,7 +408,7 @@ public class ProgramsTableRow extends RowWidget implements
 		}
 		spnStatus.addClassName("label-" + type);
 
-		if (activity.getType() == ProgramDetailType.OUTCOME) {
+		if (activity.getType() == ProgramDetailType.OUTCOME) {	
 			progressBar.addStyleName("hide");
 		}else if (activity.getProgress() != null) {
 			progressBar.setValue(activity.getProgress().intValue());

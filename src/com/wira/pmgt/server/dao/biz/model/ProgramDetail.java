@@ -327,9 +327,9 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 		return actualAmount;
 	}
 
-	public void setActualAmount(double actualAmount) {
-		this.actualAmount = actualAmount;
-	}
+//	public void setActualAmount(double actualAmount) {
+//		this.actualAmount = actualAmount;
+//	}
 
 	public Set<TargetAndOutcome> getTargets() {
 		return targets;

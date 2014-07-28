@@ -115,7 +115,8 @@ public class CreateActivityView extends ViewImpl implements
 					return;
 				}
 				
-				if(persistedActivity!=null && persistedActivity.getStatus().equals(ProgramStatus.CLOSED)){
+				if(persistedActivity!=null && persistedActivity.getStatus()!=null
+						&& persistedActivity.getStatus().equals(ProgramStatus.CLOSED)){
 					//this is an update
 					boolean isReopen=false;
 					for (ProgramFundDTO dto : funding) {
@@ -409,15 +410,17 @@ public class CreateActivityView extends ViewImpl implements
 		// Activity Funds
 		List<ProgramFundDTO> funding = gridView.getData(programFundMapper);
 		program.setFunding(funding);
-
-		Double totalAmount = 0.0;
-		for (ProgramFundDTO programFund : funding) {
-			Double val = programFund.getAmount();
-			if (val != null) {
-				totalAmount += val;
-			}
+		for(ProgramFundDTO dto: funding){
+			System.err.println(dto);
 		}
-		program.setBudgetAmount(totalAmount);
+//		Double totalAmount = 0.0;
+//		for (ProgramFundDTO programFund : funding) {
+//			Double val = programFund.getAmount();
+//			if (val != null) {
+//				totalAmount += val;
+//			}
+//		}
+//		program.setBudgetAmount(totalAmount);
 		return program;
 
 	}
