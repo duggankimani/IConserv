@@ -122,6 +122,10 @@ body .dateBoxPopup {
 	z-index: 1060;
 }
 
+body .dateBoxPopup{
+	max-width: 20%;
+}
+
 .modal-document .dialogMiddleCenter {
 	width: 100%;
 }

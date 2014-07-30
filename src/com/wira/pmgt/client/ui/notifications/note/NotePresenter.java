@@ -67,10 +67,10 @@ public class NotePresenter extends
 									notification.getOwner(),
 									notification.getTargetUserId(),time,
 									notification.IsRead()==null? false: notification.IsRead(),
-											notification.getCreatedBy(),
-											notification.getApproverAction(),
-											notification.getProcessInstanceId(),
-											notification.getDocumentId(),
+									notification.getCreatedBy(),
+									notification.getApproverAction(),
+									notification.getProcessInstanceId(),
+									notification.getDocumentId(),
 											isNotification);
 //							
 //							PlaceRequest request = new PlaceRequest("home")
