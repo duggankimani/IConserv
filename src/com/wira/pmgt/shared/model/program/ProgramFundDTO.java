@@ -26,6 +26,10 @@ public class ProgramFundDTO implements Serializable{
 	public ProgramFundDTO() {
 	}
 	
+	public ProgramFundDTO(FundDTO fundDTO) {
+		this.fund = fundDTO;
+	}
+
 	public Long getId() {
 		return id;
 	}
