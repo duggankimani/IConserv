@@ -1,5 +1,6 @@
 package com.wira.pmgt.server.dao;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -66,30 +67,30 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 	 * <a href="http://stackoverflow.com/questions/6980875/database-trigger-and-hibernate">database-trigger-and-hibernate</a>
 	 */
 	public void save(PO po) {
-		if(po instanceof ProgramDetail && po.getId()!=null){
-			//This only happens in an update
-			ProgramDetail detail = (ProgramDetail)po;
-			
-			if(detail.getType()!=ProgramDetailType.PROGRAM)
-			if(detail.getStatus()!=ProgramStatus.CREATED && detail.getStatus()!=ProgramStatus.COMPLETED){
-				Collection<ProgramFund> funds = detail.getSourceOfFunds();
-				for(ProgramFund fund: funds){
-					if(fund.getCommitedAmount()!=fund.getAmount()){//Amount budget vs amount
-						fund.commitFunds();
-					}
-				}
-				detail.setSourceOfFunds(funds);
-			}
-			
-		}
+//		if(po instanceof ProgramDetail && po.getId()!=null){
+//			//This only happens in an update
+//			ProgramDetail detail = (ProgramDetail)po;
+//			
+//			if(detail.getType()!=ProgramDetailType.PROGRAM)
+//			if(detail.getStatus()!=ProgramStatus.CREATED && detail.getStatus()!=ProgramStatus.COMPLETED){
+//				Collection<ProgramFund> funds = detail.getSourceOfFunds();
+//				for(ProgramFund fund: funds){
+//					if(fund.getCommitedAmount()!=fund.getAmount()){//Amount budget vs amount
+//						fund.commitFunds();
+//					}
+//				}
+//				//detail.setSourceOfFunds(funds);
+//			}
+//			
+//		}
 		super.save(po);
 		
-		try{
-			assert DB.hasActiveTrx();
-		}catch(SystemException | NamingException e){e.printStackTrace();}		
+//		try{
+//			assert DB.hasActiveTrx();
+//		}catch(SystemException | NamingException e){e.printStackTrace();}		
 		
-		em.flush();
-		em.refresh(po);
+		//em.flush();
+		//em.refresh(po);
 		
 	}
 	
@@ -225,7 +226,7 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		return getSingleResultOrNull(query);
 	}
 
-	public long getPreviousFundId(Long programFundId) {
+	public long getSourceOfFundId(Long programFundId) {
 		Query query = em.createNativeQuery("select fundid from ProgramFund where id=?")
 				.setParameter(1, programFundId);
 		return ((Number) query.getSingleResult()).longValue();
@@ -471,6 +472,36 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		
 		return values;
 		
+	}
+
+	public void flush() {
+		em.flush();
+	}
+
+	public void refresh(ProgramDetail managedPO) {
+		em.refresh(managedPO);
+	}
+
+	public void deleteProgramFunds(List<Long> idsToDelete) {
+		if(idsToDelete==null || idsToDelete.isEmpty()){
+			return;
+		}
+		
+		Query query = em.createNativeQuery("delete from ProgramFund where id in (:ids)")
+				.setParameter("ids", idsToDelete);
+		query.executeUpdate();
+	}
+
+	public List<Long> getPreviousFundIds(Long programId) {
+		Query query = em.createNativeQuery("select id from ProgramFund where programid=?")
+				.setParameter(1, programId);
+		List<Long> ids = new ArrayList<>();
+		
+		List<BigInteger> values =  getResultList(query);
+		for(BigInteger programfundId: values){
+			ids.add(programfundId.longValue());
+		}
+		return ids;
 	}
 
 }

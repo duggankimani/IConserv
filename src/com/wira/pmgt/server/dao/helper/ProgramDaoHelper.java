@@ -135,11 +135,58 @@ public class ProgramDaoHelper {
 		
 		dao.save(program);
 		
+		saveFunding(programDTO, program);
+		
 		//Database triggers update fund amounts & we'd like to get the committed values from the database
 		//in the get method below
 	
 		return get(program,false);
 	}
+	
+	private static void saveFunding(IsProgramDetail programDTO, ProgramDetail managedPO) {
+		List<ProgramFundDTO> funding = programDTO.getFunding();
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		
+		List<Long> idsToDelete=dao.getPreviousFundIds(programDTO.getId()); //Ids to be deleted
+		
+		if(funding!=null)
+			for(ProgramFundDTO dto: funding){
+				if(dto.getId()!=null && dto.getFund()!=null){
+					//find previous fund
+					idsToDelete.remove(dto.getId());
+					long donorId = dto.getFund().getId();
+					long previousDonorId = dao.getSourceOfFundId(dto.getId());
+					
+					//Check if donor/ source of funds has changed
+					if(previousDonorId!=donorId){
+						ProgramFund pfund = dao.getById(ProgramFund.class, dto.getId());
+						assert pfund!=null;
+						System.err.println("Changing Donor for PFid "+pfund+" ["+donorId+" >> "+previousDonorId+"]");
+						dao.delete(pfund);
+						//funds changed
+						dto.setId(null); //generate new programfund entry
+					}
+				}
+				
+				ProgramFund fund = get(dto);
+				System.err.println("Saving "+fund);
+				if(managedPO.getStatus()!=null && managedPO.getStatus().equals(ProgramStatus.CLOSED)){
+					if(programDTO.getStatus()==null || !programDTO.getStatus().equals(ProgramStatus.CLOSED)){
+						resetProgramFund(fund);
+					}
+				}
+				fund.setProgramDetail(managedPO);
+				dao.save(fund);
+			}
+		
+		if(!idsToDelete.isEmpty()){
+			dao.deleteProgramFunds(idsToDelete);
+		}
+		
+		dao.flush();
+		dao.refresh(managedPO);
+	}
+
 	
 	private static ProgramDTO get(ProgramDetail program, boolean loadChildren) {
 		if(program==null){
@@ -263,13 +310,13 @@ public class ProgramDaoHelper {
 			detail.setParent(parent);
 		}
 		
-		Set<ProgramFund> funds = get(programDTO.getFunding());
-		detail.setSourceOfFunds(funds);		
-		if(detail.getStatus()!=null && detail.getStatus().equals(ProgramStatus.CLOSED)){
-			if(programDTO.getStatus()==null || !programDTO.getStatus().equals(ProgramStatus.CLOSED)){
-				resetProgramFunds(funds);
-			}
-		}
+//		Set<ProgramFund> funds = get(programDTO.getFunding());
+//		detail.setSourceOfFunds(funds);		
+//		if(detail.getStatus()!=null && detail.getStatus().equals(ProgramStatus.CLOSED)){
+//			if(programDTO.getStatus()==null || !programDTO.getStatus().equals(ProgramStatus.CLOSED)){
+//				resetProgramFunds(funds);
+//			}
+//		}
 		
 		
 		
@@ -312,17 +359,21 @@ public class ProgramDaoHelper {
 		return detail;
 	}
 
-	private static void resetProgramFunds(Set<ProgramFund> funds) {
+	private static void resetProgramFunds(Collection<ProgramFund> funds) {
 		if(funds==null){
 			return;
 		}
 		
-		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		for(ProgramFund programFund: funds){
-			Double[] amounts = dao.getAmounts(programFund.getProgramDetail().getId(), programFund.getFund().getId());
-			programFund.setCommitedAmount(amounts[0]);
-			programFund.setActualAmount(amounts[1]);
+			resetProgramFund(programFund);
 		}
+	}
+
+	private static void resetProgramFund(ProgramFund programFund) {
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();	
+		Double[] amounts = dao.getAmounts(programFund.getProgramDetail().getId(), programFund.getFund().getId());
+		programFund.setCommitedAmount(amounts[0]);
+		programFund.setActualAmount(amounts[1]);
 	}
 
 	private static Collection<TargetAndOutcome> getTargets(List<TargetAndOutcomeDTO> targets) {
@@ -380,7 +431,7 @@ public class ProgramDaoHelper {
 				//find previous fund
 				
 				long fundid = dto.getFund().getId();
-				long previousFundId = dao.getPreviousFundId(dto.getId());			
+				long previousFundId = dao.getSourceOfFundId(dto.getId());			
 				
 				if(previousFundId!=fundid){
 					//funds changed
@@ -411,7 +462,6 @@ public class ProgramDaoHelper {
 		
 		//programFund.setFund(get(dto.getFund()));
 		programFund.setActualAmount(dto.getActual());
-		System.err.println("Adding ProgramFund>> "+programFund);
 		return programFund;
 	}
 

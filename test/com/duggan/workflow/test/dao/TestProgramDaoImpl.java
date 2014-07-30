@@ -50,13 +50,13 @@ public class TestProgramDaoImpl {
 		for(ProgramFundDTO fund: dtos){
 			System.err.println(fund.getFund().getName()+" :: "+fund.getAmount());
 			long fundid = fund.getFund().getId().longValue();
-//			if(fundid==1L){
-//				fund.getFund().setId(3L);
-//			}
-//			if(fundid==3L){
-//				fund.getFund().setId(1L);
-//			}
-			
+			if(fundid==1L){
+				fund.getFund().setId(3L);
+			}
+			if(fundid==3L){
+				fund.getFund().setId(1L);
+			}
+//			
 			if(fundid==2L){
 				fund.getFund().setId(4L);
 			}
