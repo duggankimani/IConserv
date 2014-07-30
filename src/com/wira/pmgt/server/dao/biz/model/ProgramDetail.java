@@ -196,16 +196,11 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	@JoinColumn(name="periodid", referencedColumnName="id", nullable=true)
 	private Period period;	//Calendar year within which this 
 	
+	//we manage this manually
 	@OneToMany(mappedBy="programDetail")
-	@Cascade(value={org.hibernate.annotations.CascadeType.DELETE_ORPHAN,
-			org.hibernate.annotations.CascadeType.SAVE_UPDATE,
-			org.hibernate.annotations.CascadeType.PERSIST,
-			org.hibernate.annotations.CascadeType.MERGE,
+	@Cascade(value={
 			org.hibernate.annotations.CascadeType.DELETE,
-			org.hibernate.annotations.CascadeType.EVICT,
 			org.hibernate.annotations.CascadeType.REMOVE,
-			org.hibernate.annotations.CascadeType.REFRESH,
-			org.hibernate.annotations.CascadeType.LOCK,
 			})
 	private Set<ProgramFund> sourceOfFunds = new HashSet<>();	
 
@@ -362,15 +357,15 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 		return sourceOfFunds;
 	}
 
-	public void setSourceOfFunds(Collection<ProgramFund> sourceOfFundz) {
-				
-		this.sourceOfFunds.clear();
-		
-		for(ProgramFund fund: sourceOfFundz){
-			fund.setProgramDetail(this);
-			this.sourceOfFunds.add(fund);
-		}
-	}
+//	public void setSourceOfFunds(Collection<ProgramFund> sourceOfFundz) {
+//				
+//		this.sourceOfFunds.clear();
+//		
+//		for(ProgramFund fund: sourceOfFundz){
+//			fund.setProgramDetail(this);
+//			this.sourceOfFunds.add(fund);
+//		}
+//	}
 
 	public ProgramDetail getParent() {
 		return parent;
