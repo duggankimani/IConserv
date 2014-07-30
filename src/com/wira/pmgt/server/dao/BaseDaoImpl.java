@@ -50,7 +50,4 @@ public class BaseDaoImpl {
 		return em.find(clazz, id);
 	}
 	
-	public void flush() {
-		em.flush();
-	}
 }

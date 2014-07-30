@@ -6,8 +6,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.transaction.SystemException;
 
 import org.apache.log4j.Logger;
 
@@ -16,6 +18,7 @@ import com.wira.pmgt.server.dao.biz.model.Period;
 import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
 import com.wira.pmgt.server.dao.biz.model.ProgramFund;
 import com.wira.pmgt.server.dao.model.PO;
+import com.wira.pmgt.server.db.DB;
 import com.wira.pmgt.server.helper.auth.LoginHelper;
 import com.wira.pmgt.server.helper.session.SessionHelper;
 import com.wira.pmgt.shared.model.HTUser;
@@ -47,9 +50,20 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 	 * ProgramDetail status change from CREATED to Assigned should 
 	 * commit the budget amount; ideally indicating the amount budgeted
 	 * as already used(before the end user comes in to indicate what the actual expenditure is)
-	 * <p>
 	 * 
 	 * For this reason, we override save to update all program funds
+	 * <p>
+	 * 
+	 * Saving Source of Funds {@link ProgramFund} updates ProgramDetail 
+	 * bugetAmount, actualAmount, commitedAmount through a trigger procedure
+	 * proc_saveallocations(). <br>
+	 * This leads to an inconsistency between the uncommited DB row & the hibernate's 
+	 * cached ProgramDetail entity, we need to synchronize the updates 
+	 * made to the ProgramDetail record by the trigger with the ProgramDetail Entity.
+	 * We do this by flushing the EntityManager & Refreshing the PO
+	 * <p>
+	 * 
+	 * <a href="http://stackoverflow.com/questions/6980875/database-trigger-and-hibernate">database-trigger-and-hibernate</a>
 	 */
 	public void save(PO po) {
 		if(po instanceof ProgramDetail && po.getId()!=null){
@@ -62,14 +76,22 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 				for(ProgramFund fund: funds){
 					if(fund.getCommitedAmount()!=fund.getAmount()){//Amount budget vs amount
 						fund.commitFunds();
-						save(fund);
 					}
 				}
+				detail.setSourceOfFunds(funds);
 			}
 			
 		}
 		super.save(po);
-	};
+		
+		try{
+			assert DB.hasActiveTrx();
+		}catch(SystemException | NamingException e){e.printStackTrace();}		
+		
+		em.flush();
+		em.refresh(po);
+		
+	}
 	
 	public Period getActivePeriod(){
 		Query query = em.createNamedQuery("Period.findActive")
@@ -426,6 +448,29 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 			list.add(perf);
 		}
 		return list;
+	}
+	
+	public Double[] getComputedAmounts(Long id){
+		String sql = "select budgetamount, actualamount,commitedamount from programdetail where id=:id";
+		Query query = em.createNativeQuery(sql).setParameter("id", id);	
+		List<Object[]> rows = getResultList(query);
+		
+		Double[] values = new Double[3];
+		if(rows.size()==1){
+			Object[] row = rows.get(0);
+			Object value=null;
+			int i=0;
+			double budgetAmount=(value=row[i++])==null? null: new Double(value.toString());
+			double actualAmount=(value=row[i++])==null? null: new Double(value.toString());
+			double commitedAmount=(value=row[i++])==null? null: new Double(value.toString());
+			
+			values[0]=budgetAmount;
+			values[1]=actualAmount;
+			values[2]=commitedAmount;
+		}
+		
+		return values;
+		
 	}
 
 }

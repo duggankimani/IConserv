@@ -137,7 +137,7 @@ public class ProgramDaoHelper {
 		
 		//Database triggers update fund amounts & we'd like to get the committed values from the database
 		//in the get method below
-		
+	
 		return get(program,false);
 	}
 	
@@ -271,6 +271,8 @@ public class ProgramDaoHelper {
 			}
 		}
 		
+		
+		
 		//detail.setActual(String);
 		/**
 		 * This generates a conflict between value keyed in directly and value computed by programfund trigger#procedure
@@ -360,6 +362,14 @@ public class ProgramDaoHelper {
 		return details;
 	}
 
+	/**
+	 * This method transforms ProgramFundDTO's into ProgramFund entities
+	 * <br>
+	 * If fund(donor) has changed, this is treated like a new source of fund entry
+	 * 
+	 * @param fundingDtos
+	 * @return
+	 */
 	private static Set<ProgramFund> get(List<ProgramFundDTO> fundingDtos) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		Set<ProgramFund> funding = new HashSet<>();
@@ -374,12 +384,12 @@ public class ProgramDaoHelper {
 				
 				if(previousFundId!=fundid){
 					//funds changed
-					dto.setId(null); //generate new entry
+					dto.setId(null); //generate new programfund entry
 				}
 			}
+
 			
 			ProgramFund programFund = get(dto);
-			
 			funding.add(programFund);
 		}
 		return funding;
@@ -394,9 +404,14 @@ public class ProgramDaoHelper {
 		}
 		//log.debug("READRING ProgramFund For Save: Id="+dto.getId()+", BudgetAmount= "+);
 		programFund.setAmount(dto.getAmount());
-		programFund.setFund(get(dto.getFund()));
-		programFund.setActualAmount(dto.getActual());
+		Long fundId = dto.getFund().getId();
+		if(fundId!=null){
+			programFund.setFund(dao.getById(Fund.class, fundId));
+		}
 		
+		//programFund.setFund(get(dto.getFund()));
+		programFund.setActualAmount(dto.getActual());
+		System.err.println("Adding ProgramFund>> "+programFund);
 		return programFund;
 	}
 

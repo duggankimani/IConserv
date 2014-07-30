@@ -23,6 +23,11 @@ public class FundDTO implements Serializable,Listable {
 	
 	public FundDTO() {
 	}
+	
+
+	public FundDTO(Long id) {
+		this.id = id;
+	}
 
 	public Long getId() {
 		return id;

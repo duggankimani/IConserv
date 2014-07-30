@@ -3,6 +3,9 @@ package com.duggan.workflow.test.dao;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.naming.NamingException;
+import javax.transaction.SystemException;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,6 +26,7 @@ import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.ProgramAnalysis;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
+import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 import com.wira.pmgt.shared.model.program.ProgramTaskForm;
 
@@ -37,8 +41,53 @@ public class TestProgramDaoImpl {
 		dao= DB.getProgramDaoImpl();
 	}
 	
-	
 	@Test
+	public void saveProgram() throws SystemException, NamingException{
+		IsProgramDetail detail = ProgramDaoHelper.getProgramById(1L, false);
+		List<ProgramFundDTO> dtos = detail.getFunding();
+		Assert.assertTrue(DB.hasActiveTrx());
+		boolean zero=false;
+		for(ProgramFundDTO fund: dtos){
+			System.err.println(fund.getFund().getName()+" :: "+fund.getAmount());
+			long fundid = fund.getFund().getId().longValue();
+//			if(fundid==1L){
+//				fund.getFund().setId(3L);
+//			}
+//			if(fundid==3L){
+//				fund.getFund().setId(1L);
+//			}
+			
+			if(fundid==2L){
+				fund.getFund().setId(4L);
+			}
+			if(fundid==4L){
+				fund.getFund().setId(2L);
+			}
+			
+			if(fund.getAmount()>0){
+				fund.setAmount(0.0);
+				zero=true;
+				
+			}else{
+				fund.setAmount(1000.0);
+				zero=false;
+			}
+		}
+		detail = ProgramDaoHelper.save(detail);
+		
+//		Long id = detail.getId();
+//		Double[] values = dao.getComputedAmounts(id);
+//		System.err.println(values[0]+" | "+values[1]+" | "+values[2]);
+		
+		if(zero){
+			Assert.assertEquals(new Double(0.0), detail.getBudgetAmount());
+		}else{
+			Assert.assertEquals(new Double(2000.0), detail.getBudgetAmount());
+		}
+		
+	}
+	
+	@Ignore
 	public void resetAmounts(){
 		IsProgramDetail detail = ProgramDaoHelper.getProgramById(127L, false);
 		ProgramDaoHelper.save(detail);
@@ -224,6 +273,7 @@ public class TestProgramDaoImpl {
 		
 		DB.commitTransaction();
 		DB.closeSession();
+		DBTrxProvider.close();
 	}
 
 }
