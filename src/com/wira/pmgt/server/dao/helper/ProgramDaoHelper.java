@@ -147,7 +147,10 @@ public class ProgramDaoHelper {
 		List<ProgramFundDTO> funding = programDTO.getFunding();
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		
-		List<Long> idsToDelete=dao.getPreviousFundIds(programDTO.getId()); //Ids to be deleted
+		List<Long> idsToDelete= new ArrayList<>();
+		if(programDTO.getId()!=null){
+			idsToDelete = dao.getPreviousFundIds(programDTO.getId()); //Ids to be deleted
+		}
 		
 		if(funding!=null)
 			for(ProgramFundDTO dto: funding){
