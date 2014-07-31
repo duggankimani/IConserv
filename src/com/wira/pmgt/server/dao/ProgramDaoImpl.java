@@ -504,4 +504,17 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		return ids;
 	}
 
+	/**
+	 * 
+	 * @param programId
+	 * @return true is program is assigned
+	 */
+	public boolean isProgramAssigned(Long programId) {
+		String countQuery = "select count(*) from programaccess where type!='INITIATOR' and programdetailid=:programId";
+		Query query = em.createNativeQuery(countQuery).setParameter("programId", programId);
+		Integer count = ((Number)getSingleResultOrNull(query)).intValue(); 
+		
+		return count>0;
+	}
+
 }

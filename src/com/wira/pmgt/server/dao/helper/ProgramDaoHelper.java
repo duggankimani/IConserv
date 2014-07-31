@@ -215,7 +215,9 @@ public class ProgramDaoHelper {
 		dto.setBudgetLine(program.getBudgetLine());
 		dto.setActualAmount(program.getActualAmount());
 		dto.setCommitedAmount(program.getCommitedAmount());
-				
+		
+		dto.setAssigned(DB.getProgramDaoImpl().isProgramAssigned(dto.getId()));
+		
 		if(program.getActivityOutcome()!=null){
 			dto.setActivityOutcomeId(program.getActivityOutcome().getId());
 		}

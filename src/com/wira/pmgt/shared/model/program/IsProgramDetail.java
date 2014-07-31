@@ -33,6 +33,7 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 	private Double progress = 0.0; 
 	private Double rating;
 	private Long activityOutcomeId;
+	private boolean isAssigned;
 	
 	public Long getDocumentId() {
 		return documentId;
@@ -220,5 +221,13 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 
 	public void setCommitedAmount(Double commitedAmount) {
 		this.commitedAmount = commitedAmount;
+	}
+
+	public boolean isAssigned() {
+		return isAssigned;
+	}
+
+	public void setAssigned(boolean isAssigned) {
+		this.isAssigned = isAssigned;
 	}
 }
