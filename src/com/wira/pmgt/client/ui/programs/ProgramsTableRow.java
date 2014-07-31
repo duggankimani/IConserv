@@ -432,7 +432,8 @@ public class ProgramsTableRow extends RowWidget implements
 		ProgramDetailType type = activity.getType();
 		
 		if ((type == ProgramDetailType.OUTCOME)
-				|| (type == ProgramDetailType.OBJECTIVE)) {
+				|| (type == ProgramDetailType.OBJECTIVE)
+				|| !activity.isAssigned()) {
 			spnAssigned.addClassName("hide");
 			divRowStrip.getStyle().setPaddingRight(0.0, Unit.PX);
 		}else{

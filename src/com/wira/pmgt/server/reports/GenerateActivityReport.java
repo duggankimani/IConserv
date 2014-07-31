@@ -236,24 +236,9 @@ public class GenerateActivityReport {
 
 			Row row = sheet.createRow(rownum);
 			IsProgramDetail detail = data.get(i);
-			System.err.println("Row "+rownum+" : "+detail.getName());
 			bindData(detail, helper, sheet, row, i);
-			// System.err.println(rownum+">>"+detail.getName());
 			
 			rownum=paintRows(detail.getChildren(), rownum+1, helper, sheet);
-			
-//			if (detail.getChildren() != null && !detail.getChildren().isEmpty()) {
-//				List<IsProgramDetail> children = detail.getChildren();
-//				++rownum;
-//				for (int j = 0; j < children.size(); j++, rownum++) {
-//					row = sheet.createRow(rownum);
-//					IsProgramDetail child = children.get(j);
-//					// System.out.println(rownum+">>"+child.getName());
-//					bindData(child, helper, sheet, row, rownum);
-//				}
-//				--rownum;
-//			}
-			//--rownum;
 		}
 		
 		return --rownum;
