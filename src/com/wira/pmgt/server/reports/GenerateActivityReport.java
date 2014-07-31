@@ -1,6 +1,7 @@
 package com.wira.pmgt.server.reports;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -159,12 +160,26 @@ public class GenerateActivityReport {
 
 	public static void main(String[] args) throws Exception {
 		setup();
+		Long programId=1L;
+		String code = null;
+		Long outcomeId=23L;
+		Long activityId=null;
+		Long periodId=null;
+		String programType="PROGRAM";
+		String type="xlsx";
+		
+		byte[] bites = new GenerateActivityReport(programId, code, outcomeId,
+				activityId,periodId,programType,type).getBytes();
+		
+		FileOutputStream os = new FileOutputStream(new File("programout.xlsx"));
+		os.write(bites);
+		os.close();
 	}
 
-	public static void generate(Workbook wb, String programName,
+	public static void generate(Workbook wb, String sheetName,
 			List<IsProgramDetail> data) {
 
-		Sheet sheet = wb.createSheet(programName);
+		Sheet sheet = wb.createSheet(sheetName);
 
 		// sheet.setDisplayGridlines(false);
 		// sheet.setPrintGridlines(false);
@@ -184,7 +199,7 @@ public class GenerateActivityReport {
 		headingRow.setHeightInPoints(30f);
 		Cell headingCell = headingRow.createCell(0);
 		headingCell.setCellStyle(styles.get("sheet_heading"));
-		headingCell.setCellValue(programName);
+		headingCell.setCellValue(sheetName);
 		sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 7));
 
 		Row headerRow = sheet.createRow(1);
@@ -197,26 +212,7 @@ public class GenerateActivityReport {
 
 		CreationHelper helper = wb.getCreationHelper();
 		int rownum = 2;
-		for (int i = 0; i < data.size(); i++, rownum++) {
-
-			Row row = sheet.createRow(rownum);
-			IsProgramDetail detail = data.get(i);
-			bindData(detail, helper, sheet, row, i);
-			// System.err.println(rownum+">>"+detail.getName());
-
-			if (detail.getChildren() != null && !detail.getChildren().isEmpty()) {
-				List<IsProgramDetail> children = detail.getChildren();
-				++rownum;
-				for (int j = 0; j < children.size(); j++, rownum++) {
-					row = sheet.createRow(rownum);
-					IsProgramDetail child = children.get(j);
-					// System.out.println(rownum+">>"+child.getName());
-					bindData(child, helper, sheet, row, rownum);
-				}
-				--rownum;
-			}
-
-		}
+		paintRows(data, rownum, helper,sheet);
 
 		sheet.setColumnWidth(0, 256 * 20);
 		sheet.setColumnWidth(1, 256 * 60);
@@ -228,6 +224,39 @@ public class GenerateActivityReport {
 		sheet.setColumnWidth(7, 256 * 10);// Monitoring test
 		sheet.setZoom(3, 4);
 
+	}
+
+	private static int paintRows(List<IsProgramDetail> data, Integer rownum,
+			CreationHelper helper, Sheet sheet) {
+		if(data==null || data.isEmpty()){
+			return rownum-1;
+		}
+		
+		for (Integer i = 0; i < data.size(); i++, rownum++) {
+
+			Row row = sheet.createRow(rownum);
+			IsProgramDetail detail = data.get(i);
+			System.err.println("Row "+rownum+" : "+detail.getName());
+			bindData(detail, helper, sheet, row, i);
+			// System.err.println(rownum+">>"+detail.getName());
+			
+			rownum=paintRows(detail.getChildren(), rownum+1, helper, sheet);
+			
+//			if (detail.getChildren() != null && !detail.getChildren().isEmpty()) {
+//				List<IsProgramDetail> children = detail.getChildren();
+//				++rownum;
+//				for (int j = 0; j < children.size(); j++, rownum++) {
+//					row = sheet.createRow(rownum);
+//					IsProgramDetail child = children.get(j);
+//					// System.out.println(rownum+">>"+child.getName());
+//					bindData(child, helper, sheet, row, rownum);
+//				}
+//				--rownum;
+//			}
+			//--rownum;
+		}
+		
+		return --rownum;
 	}
 
 	private static void bindData(IsProgramDetail detail, CreationHelper helper,
@@ -295,8 +324,10 @@ public class GenerateActivityReport {
 			case 5: {
 				// "Status"
 				styleName = isHeader ? "cell_bg" : "cell_g";
-				if (!isHeader)
-					cell.setCellValue(detail.getStatus().toString());
+				if (!isHeader){
+					
+					cell.setCellValue(detail.getStatus()==null? "": detail.getStatus().toString());
+				}
 				break;
 			}
 			case 6: {
