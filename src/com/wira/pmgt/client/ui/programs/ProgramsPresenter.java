@@ -391,14 +391,11 @@ public class ProgramsPresenter extends
 				// User selected an outcome & is now creating a new Activity
 				createActivity.setActivity(null);
 				if (detail != null) {
-					createActivity.load(detail.getId(), selected.getId());// Program
-																			// is
-																			// the
-																			// parent,
-																			// not
-																			// the
-																			// selected
-																			// Outcome
+					/*Drilling down to an outcome results in the outcome being set as the parent of 
+					the new activity; which results in incorrect data storage. This is why we have to
+					use programId at this point.
+					*/ 
+					createActivity.load(programId, selected.getId());
 				}
 
 			}
