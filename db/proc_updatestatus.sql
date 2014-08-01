@@ -39,7 +39,7 @@ BEGIN
 			and (NEW.progress is not null and OLD.progress is not null) 
 			and NEW.progress!=OLD.progress) then
 			--RAISE INFO 'UPDATEOP Id=%     NewProgress=%    OldProgress=%', NEW.id, NEW.progress, OLD.progress;
-			update programdetail set progress=progress+(NEW.progress-OLD.progress)/v_count where id=NEW.parentId and status!='CLOSED';
+			update programdetail set progress=progress+(NEW.progress-OLD.progress)/v_count where id=NEW.parentId and (status is null or status!='CLOSED');
 		end if;
 		
 	elsif(TG_OP = 'INSERT' and NEW.parentId is not null) then
@@ -50,7 +50,7 @@ BEGIN
 			NEW.datecompleted=now();		
 		end if;
 
-		update programdetail set progress=(progress*v_count)/(v_count+1) where id=NEW.parentId and status!='CLOSED';
+		update programdetail set progress=((progress*v_count)+COALESCE(NEW.progress,0))/(v_count+1) where id=NEW.parentId and (status is null or status!='CLOSED');
 		
 	elsif(TG_OP='DELETE') then
 		--Deleting	
@@ -58,12 +58,12 @@ BEGIN
 		if(OLD.parentId is not null and OLD.progress is not null) then
 			
 
-			RAISE INFO 'DELETOP Id=%   OldProgress=% parentChildCount=%', OLD.id, OLD.progress,v_count;
+			--RAISE INFO 'DELETOP Id=%   OldProgress=% parentChildCount=%', OLD.id, OLD.progress,v_count;
 			
 			if(v_count!=0) then
-				update programdetail set progress=progress-(OLD.progress)/v_count where id=OLD.parentId and status!='CLOSED';
+				update programdetail set progress=progress-(OLD.progress)/v_count where id=OLD.parentId and (status is null or status!='CLOSED');
 			else
-				update programdetail set progress=0 where id=OLD.parentId and status!='CLOSED';
+				update programdetail set progress=0 where id=OLD.parentId and (status is null or status!='CLOSED');
 			end if;
 		end if;
 		
