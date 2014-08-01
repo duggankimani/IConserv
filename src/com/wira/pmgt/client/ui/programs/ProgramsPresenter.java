@@ -42,6 +42,7 @@ import com.wira.pmgt.client.ui.events.ProgramsReloadEvent.ProgramsReloadHandler;
 import com.wira.pmgt.client.ui.filter.FilterPresenter;
 import com.wira.pmgt.client.ui.objective.CreateObjectivePresenter;
 import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
+import com.wira.pmgt.client.ui.programs.tree.TreeWidget;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.OrgEntity;
 import com.wira.pmgt.shared.model.ParticipantType;
@@ -133,6 +134,8 @@ public class ProgramsPresenter extends
 
 		void setDownloadUrl(Long programid, Long outcomeid, Long activityId,
 				String programType);
+
+		HasClickHandlers getaMove();
 	}
 
 	@Inject
@@ -246,7 +249,25 @@ public class ProgramsPresenter extends
 
 			}
 		});
-		//
+		
+		
+		getView().getaMove().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				AppManager.showPopUp("Move",new TreeWidget(),new OptionControl(){
+					@Override
+					public void onSelect(String name) {
+						if (name.equals("Cancel")) {
+							hide();
+							return;
+						}
+						
+					}
+				},"Done","Cancel");
+			}
+		});
+		
+		//Add Button
 		getView().getAddButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

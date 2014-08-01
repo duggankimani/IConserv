@@ -16,7 +16,9 @@
 					<div class="span9">
 						<div class="span3">
 							<d:ActionLink ui:field="aProgram" styleName="btn btn-danger"
-								dataToggle="tooltip">Create Program</d:ActionLink>
+								dataToggle="tooltip">
+								Create Program
+							</d:ActionLink>
 						</div>
 
 						<div class="span3 hide">
@@ -79,34 +81,40 @@
 							</d:ActionLink>
 						</div>
 						
+						<div class="span3">
+							<d:ActionLink ui:field="aMove" styleName="btn btn-default"
+								dataToggle="tooltip" dataPlacement="bottom" title="Move">
+								<i class="icon-folder-open icon-button"></i>
+							</d:ActionLink>
+						</div>
+
 						<div class="span3 hide">
 							<d:ActionLink ui:field="aAssign" styleName="btn btn-default"
 								dataToggle="tooltip" dataPlacement="bottom" title="Assign to Individual/Group">
 								<i class="icon-google-share icon-button"></i>
 							</d:ActionLink>
 						</div>
-						
+
 						<div class="span3">
 							<d:ActionLink ui:field="aExport" styleName="btn btn-default"
 								dataToggle="tooltip">Export</d:ActionLink>
 						</div>
-						
+
 					</div>
 					<div class="span3 right-side hide">
 						<div class="program-search">
 							<div class="input-append">
-								<input type="text" styleName="search-query"
-									placeholder="Search here">
+								<input type="text" styleName="search-query" placeholder="Search here">
 								</input>
 								<g:Anchor styleName="icon-caret-down muted" ui:field="iFilterdropdown"></g:Anchor>
 								<button type="submit" class="btn">
 									<i class="icon-search"></i>
 								</button>
 							</div>
-							
+
 							<g:HTMLPanel ui:field="divFilterBox" styleName="hide search-box">
 							</g:HTMLPanel>
-							
+
 						</div>
 					</div>
 				</div>
@@ -138,8 +146,7 @@
 				<g:HTMLPanel ui:field="divMiddleContent"
 					styleName="tabbable tabs-below hidden full-page">
 
-					<d:MyHTMLPanel styleName="tab-content"
-						ui:field="divProgramsTable">
+					<d:MyHTMLPanel styleName="tab-content" ui:field="divProgramsTable">
 						<g:HTMLPanel>
 							<div ui:field="divTab1Content" class="tab-pane fade in active">
 								<programs:ProgramsTable ui:field="tblView"></programs:ProgramsTable>

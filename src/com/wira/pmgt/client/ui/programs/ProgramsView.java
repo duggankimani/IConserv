@@ -24,7 +24,6 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
@@ -34,7 +33,7 @@ import com.wira.pmgt.client.ui.component.ActionLink;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
 import com.wira.pmgt.client.ui.component.Dropdown;
-import com.wira.pmgt.client.ui.resources.ICONS;
+import com.wira.pmgt.client.ui.component.MyHTMLPanel;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.FundDTO;
@@ -53,6 +52,9 @@ public class ProgramsView extends ViewImpl implements
 
 	@UiField
 	ActionLink aDeleteProgram;
+
+	@UiField
+	ActionLink aMove;
 
 	@UiField
 	HTMLPanel divMainContainer;
@@ -78,7 +80,7 @@ public class ProgramsView extends ViewImpl implements
 	Anchor iFilterdropdown;
 
 	@UiField
-	com.wira.pmgt.client.ui.component.MyHTMLPanel divProgramsTable;
+	MyHTMLPanel divProgramsTable;
 
 	@UiField
 	ActionLink aNewOutcome;
@@ -559,6 +561,10 @@ public class ProgramsView extends ViewImpl implements
 
 	public HasClickHandlers getDeleteButton() {
 		return aDeleteProgram;
+	}
+	
+	public HasClickHandlers getaMove() {
+		return aMove;
 	}
 
 	@Override
