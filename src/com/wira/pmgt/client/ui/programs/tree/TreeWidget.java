@@ -29,7 +29,7 @@ public class TreeWidget extends Composite implements MoveTargetSelectedHandler{
 	
 	@UiField HTMLPanel divContainer;
 	@UiField Tree treeComponent;
-
+	
 	private ProgramDetailType typeToMove;
 
 	interface TreeWidgetUiBinder extends UiBinder<Widget,TreeWidget> {
