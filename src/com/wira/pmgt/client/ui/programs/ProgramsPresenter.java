@@ -971,14 +971,14 @@ public class ProgramsPresenter extends
 				Long previousParentId;
 				Long newParentId;
 				if(selectedTargetModel.getType()==ProgramDetailType.OUTCOME){
-					selected.setActivityOutcomeId(selectedTargetModel.getId());
 					previousParentId = selected.getActivityOutcomeId();
 					newParentId = selectedTargetModel.getId();
+					selected.setActivityOutcomeId(newParentId);
 					fireEvent(new MoveProgramEvent(selected, previousParentId, newParentId));
 				}else{
 					previousParentId = selected.getParentId();
 					newParentId = selectedTargetModel.getId();
-					selected.setParentId(selectedTargetModel.getId());
+					selected.setParentId(newParentId);
 					fireEvent(new MoveProgramEvent(selected, previousParentId, newParentId));
 				}
 				

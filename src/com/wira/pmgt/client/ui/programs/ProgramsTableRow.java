@@ -719,22 +719,21 @@ public class ProgramsTableRow extends RowWidget implements
 		Long newParentId = event.getNewParentId();
 		
 		if(activity.getId().equals(previousParentId)){
+			//we need to remove moved item from this parent
 			removeChild(event.getItemMoved());
 		}
 		
 		if(activity.getId().equals(newParentId)){
+			//we need to add moved item to this parent
 			addChild(event.getItemMoved());
 		}
+		
 		
 	}
 
 	private void addChild(IsProgramDetail newItem) {
 
 		List<IsProgramDetail> children = activity.getChildren();
-		if (newItem.getType() == ProgramDetailType.ACTIVITY) {
-			children = activity.getProgramOutcomes();
-		}
-
 		// check if this is the parent
 		if (children == null) {
 			children = new ArrayList<IsProgramDetail>();
@@ -742,11 +741,7 @@ public class ProgramsTableRow extends RowWidget implements
 
 		children.add(newItem);
 
-		if (newItem.getType() == ProgramDetailType.ACTIVITY) {
-			activity.setProgramOutcomes(children);
-		} else {
-			activity.setChildren(children);
-		}
+		activity.setChildren(children);
 		activity.sort();
 
 		int idx = children.indexOf(newItem);
@@ -763,7 +758,8 @@ public class ProgramsTableRow extends RowWidget implements
 		// Indexes start from zero, but we want children to be listed from
 		// parents position+1
 
-		newRow.show(true);
+		toggle(true);
+		//newRow.show(true);
 
 	}
 
@@ -773,12 +769,28 @@ public class ProgramsTableRow extends RowWidget implements
 		
 		int idx = activity.getChildren().indexOf(itemMoved);
 		assert idx> -1;
+		//remove the item from activity
+		activity.getChildren().remove(idx);
 		
-		ProgramsTableRow childRow= (ProgramsTableRow)parent.getWidget(parentIdx+idx+1);
-		IsProgramDetail detail = childRow.getActivity();
+		int childIndex = parentIdx+idx+1;
+		removeChild(childIndex, itemMoved);	
+		removeRecursive(childIndex,itemMoved.getChildren());
+	}
+
+	private void removeRecursive(int parentIdx, List<IsProgramDetail> children) {
+		if(children==null){
+			return;
+		}
 		
-		assert detail.equals(itemMoved);
-		
+		for(IsProgramDetail child:children){
+			removeChild(parentIdx,child);
+			removeRecursive(parentIdx, child.getChildren());
+		}
+	}
+
+	private void removeChild(int widgetIndex, IsProgramDetail child) {
+		FlowPanel parent = ((FlowPanel) this.getParent());
+		ProgramsTableRow childRow= (ProgramsTableRow)parent.getWidget(widgetIndex);
 		childRow.removeFromParent();
 	}
 

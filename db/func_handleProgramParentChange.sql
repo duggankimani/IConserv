@@ -45,7 +45,7 @@ BEGIN
 		  end loop; 
 	end if;
          
-         select count(*) into v_count from programdetail where parentid=OLD.parentId; 	
+         select count(*) into v_count-1 from programdetail where parentid=OLD.parentId; 	
 	 if(v_count!=0) then
 		update programdetail set progress=progress-(OLD.progress)/v_count where id=OLD.parentId;
 	 else
