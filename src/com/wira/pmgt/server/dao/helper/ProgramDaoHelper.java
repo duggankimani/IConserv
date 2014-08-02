@@ -1070,6 +1070,7 @@ public class ProgramDaoHelper {
 					outcome = new ProgramTreeModel();
 					outcome.setName(model.getOutcomeName());
 					outcome.setId(model.getOutcomeId());
+					outcome.setType(ProgramDetailType.OUTCOME);
 					outcomes.add(outcome);
 				}
 				
@@ -1090,6 +1091,14 @@ public class ProgramDaoHelper {
 		}		
 		
 		return rootList;
+	}
+
+	public static void moveParent(Long itemToMoveId, Long parentId) {
+		DB.getProgramDaoImpl().moveToParent(itemToMoveId,parentId);
+	}
+
+	public static void moveToOutcome(Long itemToMoveId, Long outcomeId) {
+		DB.getProgramDaoImpl().moveToOutcome(itemToMoveId,outcomeId);
 	}
 
 //	private static ProgramSummary getSummary(ProgramDetail detail) {

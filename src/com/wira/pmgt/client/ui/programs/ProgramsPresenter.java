@@ -33,6 +33,7 @@ import com.wira.pmgt.client.ui.events.AppResizeEvent;
 import com.wira.pmgt.client.ui.events.AppResizeEvent.ResizeHandler;
 import com.wira.pmgt.client.ui.events.CreateProgramEvent;
 import com.wira.pmgt.client.ui.events.LoadAlertsEvent;
+import com.wira.pmgt.client.ui.events.MoveProgramEvent;
 import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent;
 import com.wira.pmgt.client.ui.events.ProcessingEvent;
 import com.wira.pmgt.client.ui.events.ProgramDeletedEvent;
@@ -51,12 +52,15 @@ import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
+import com.wira.pmgt.shared.model.program.ProgramTreeModel;
 import com.wira.pmgt.shared.requests.AssignTaskRequest;
 import com.wira.pmgt.shared.requests.CreateProgramRequest;
 import com.wira.pmgt.shared.requests.DeleteProgramRequest;
 import com.wira.pmgt.shared.requests.GetFundsRequest;
 import com.wira.pmgt.shared.requests.GetPeriodsRequest;
 import com.wira.pmgt.shared.requests.GetProgramsRequest;
+import com.wira.pmgt.shared.requests.GetProgramsTreeRequest;
+import com.wira.pmgt.shared.requests.MoveItemRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
 import com.wira.pmgt.shared.responses.AssignTaskResponse;
 import com.wira.pmgt.shared.responses.CreateProgramResponse;
@@ -64,6 +68,8 @@ import com.wira.pmgt.shared.responses.DeleteProgramResponse;
 import com.wira.pmgt.shared.responses.GetFundsResponse;
 import com.wira.pmgt.shared.responses.GetPeriodsResponse;
 import com.wira.pmgt.shared.responses.GetProgramsResponse;
+import com.wira.pmgt.shared.responses.GetProgramsTreeResponse;
+import com.wira.pmgt.shared.responses.MoveItemResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
 
 public class ProgramsPresenter extends
@@ -254,16 +260,28 @@ public class ProgramsPresenter extends
 		getView().getaMove().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				AppManager.showPopUp("Move",new TreeWidget(),new OptionControl(){
+				
+				requestHelper.execute(new GetProgramsTreeRequest(programId,null),
+						new TaskServiceCallback<GetProgramsTreeResponse>() {
+				
 					@Override
-					public void onSelect(String name) {
-						if (name.equals("Cancel")) {
-							hide();
-							return;
-						}
-						
+					public void processResult(
+							GetProgramsTreeResponse aResponse) {
+						List<ProgramTreeModel> rootModels= aResponse.getModels();
+						final TreeWidget tree = new TreeWidget(selected.getType(),rootModels);
+						if(!rootModels.isEmpty())
+						AppManager.showPopUp("Move '"+selected.getName()+"'",tree,new OptionControl(){
+							@Override
+							public void onSelect(String name) {
+								if (name.equals("Done")) {
+									moveProgramDetail(selected.getId(), tree.getSelectedTargetModel());
+								}
+								hide();
+							}
+
+						},"Done","Cancel");
 					}
-				},"Done","Cancel");
+				});
 			}
 		});
 		
@@ -927,4 +945,44 @@ public class ProgramsPresenter extends
 		this.programDetailCode = null;
 	}
 
+	private void moveProgramDetail(Long activityToMove,
+			final ProgramTreeModel selectedTargetModel) {
+		if(selectedTargetModel==null){
+			return;
+		}
+		
+		if(activityToMove.equals(selectedTargetModel.getId())){
+			return;
+		}
+		
+		Long parentId=null;
+		Long outcomeId=null;
+		if(selectedTargetModel.getType()==ProgramDetailType.OUTCOME){
+			outcomeId = selectedTargetModel.getId();
+		}else{
+			parentId = selectedTargetModel.getId();
+		}
+		
+		requestHelper.execute(new MoveItemRequest(activityToMove, parentId, outcomeId), 
+				new TaskServiceCallback<MoveItemResponse>() {
+			@Override
+			public void processResult(MoveItemResponse aResponse) {
+				//fire Move Event
+				Long previousParentId;
+				Long newParentId;
+				if(selectedTargetModel.getType()==ProgramDetailType.OUTCOME){
+					selected.setActivityOutcomeId(selectedTargetModel.getId());
+					previousParentId = selected.getActivityOutcomeId();
+					newParentId = selectedTargetModel.getId();
+					fireEvent(new MoveProgramEvent(selected, previousParentId, newParentId));
+				}else{
+					previousParentId = selected.getParentId();
+					newParentId = selectedTargetModel.getId();
+					selected.setParentId(selectedTargetModel.getId());
+					fireEvent(new MoveProgramEvent(selected, previousParentId, newParentId));
+				}
+				
+			}
+		});
+	}
 }

@@ -564,4 +564,16 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		return summaries;
 	}
 
+	public void moveToOutcome(Long itemToMoveId, Long outcomeId) {
+		String sql="update programdetail set outcomeId=? where id=?";
+		Query query = em.createNativeQuery(sql).setParameter(1, outcomeId).setParameter(2, itemToMoveId);
+		query.executeUpdate();
+	}
+
+	public void moveToParent(Long itemToMoveId, Long parentId) {
+		String sql="update programdetail set parentId=? where id=?";
+		Query query = em.createNativeQuery(sql).setParameter(1, parentId).setParameter(2, itemToMoveId);
+		query.executeUpdate();
+	}
+
 }

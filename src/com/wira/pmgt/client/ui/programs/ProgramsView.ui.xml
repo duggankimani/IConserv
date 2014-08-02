@@ -81,7 +81,7 @@
 							</d:ActionLink>
 						</div>
 						
-						<div class="span3">
+						<div class="span3 hide">
 							<d:ActionLink ui:field="aMove" styleName="btn btn-default"
 								dataToggle="tooltip" dataPlacement="bottom" title="Move">
 								<i class="icon-folder-open icon-button"></i>
