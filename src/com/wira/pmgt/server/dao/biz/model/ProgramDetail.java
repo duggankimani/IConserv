@@ -117,9 +117,18 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 	
 	@NamedNativeQuery(name="ProgramDetail.getPerformanceByKPIs",
 		resultSetMapping="ProgramDetail.performanceAnalysis",
-		query=("select * from func_getPerformanceByKPIs()"))
+		query=("select * from func_getPerformanceByKPIs()")),
 	
-	
+	@NamedNativeQuery(name="ProgramDetail.getProgramTree",
+		resultSetMapping="ProgramDetail.programTreeMapping",
+		query=("with recursive programdetail_tree as ( "+
+			"select m.id as programId,m.id,m.name, m.parentid,m.type,status,m.outcomeid,(select i.name from programdetail i where i.id=m.outcomeid) outcomename, 1 as level, array[id] as path_info "+ 
+			"from programdetail m where m.id in (select id from programdetail where type='PROGRAM' and periodid=:periodId and id in (:programIds))  "+
+			"union all "+
+			"select path_info[1] as programId,c.id,c.name,c.parentid,c.type,c.status,c.outcomeid,(select i.name from programdetail i where i.id=c.outcomeid) outcomename, p.level+1, p.path_info||c.id "+ 
+			"from programdetail c join programdetail_tree p on c.parentid=p.id) "+
+			"select programId,id,name,parentid,type,status,outcomeid,outcomename from programdetail_tree order by programid,outcomeid"))
+
 })
 
 @SqlResultSetMappings({
@@ -165,6 +174,18 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 			@ColumnResult(name="percsuccess"),
 			@ColumnResult(name="percfail"),
 			@ColumnResult(name="avegpercsuccess")
+	}),
+	
+	@SqlResultSetMapping(name="ProgramDetail.programTreeMapping",
+		columns={
+		@ColumnResult(name="programId"),
+		@ColumnResult(name="id"),
+		@ColumnResult(name="parentid"),
+		@ColumnResult(name="type"),
+		@ColumnResult(name="status"),
+		@ColumnResult(name="outcomeid"),
+		@ColumnResult(name="name"),
+		@ColumnResult(name="outcomename")
 	})
 })	
 public class ProgramDetail 	extends ProgramBasicDetail{

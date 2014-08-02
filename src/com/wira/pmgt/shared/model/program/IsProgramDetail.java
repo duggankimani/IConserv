@@ -170,7 +170,7 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 		}
 		IsProgramDetail other = (IsProgramDetail)obj;
 		
-		return getId()==other.getId();
+		return getId().equals(other.getId());
 	}
 
 	public Long getActivityOutcomeId() {

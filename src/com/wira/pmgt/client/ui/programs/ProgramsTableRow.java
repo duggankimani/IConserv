@@ -27,6 +27,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.ProgressBar;
 import com.wira.pmgt.client.ui.component.RowWidget;
 import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent;
+import com.wira.pmgt.client.ui.events.MoveProgramEvent;
+import com.wira.pmgt.client.ui.events.MoveProgramEvent.MoveProgramHandler;
 import com.wira.pmgt.client.ui.events.ProgramDeletedEvent;
 import com.wira.pmgt.client.ui.events.ProgramDeletedEvent.ProgramDeletedHandler;
 import com.wira.pmgt.client.ui.events.ProgramDetailSavedEvent;
@@ -40,7 +42,7 @@ import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 import com.wira.pmgt.shared.model.program.ProgramStatus;
 
 public class ProgramsTableRow extends RowWidget implements
-		ProgramDetailSavedHandler, ProgramDeletedHandler {
+		ProgramDetailSavedHandler, ProgramDeletedHandler, MoveProgramHandler {
 
 	private static ActivitiesTableRowUiBinder uiBinder = GWT
 			.create(ActivitiesTableRowUiBinder.class);
@@ -444,6 +446,8 @@ public class ProgramsTableRow extends RowWidget implements
 
 	private void setPadding() {
 		switch (activity.getType()) {
+		
+		/*Set color for ProgramTypes*/
 		case PROGRAM:
 			divRowStrip.addClassName("label-success");
 			break;
@@ -548,6 +552,7 @@ public class ProgramsTableRow extends RowWidget implements
 		super.onLoad();
 		addRegisteredHandler(ProgramDetailSavedEvent.TYPE, this);
 		addRegisteredHandler(ProgramDeletedEvent.TYPE, this);
+		addRegisteredHandler(MoveProgramEvent.TYPE, this);
 		aRowCaret.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -654,40 +659,7 @@ public class ProgramsTableRow extends RowWidget implements
 						.getActivityOutcomeId() != null && updatedProgram
 						.getActivityOutcomeId().equals(activity.getId())))) {
 
-			List<IsProgramDetail> children = activity.getChildren();
-			if (updatedProgram.getType() == ProgramDetailType.ACTIVITY) {
-				children = activity.getProgramOutcomes();
-			}
-
-			// check if this is the parent
-			if (children == null) {
-				children = new ArrayList<IsProgramDetail>();
-			}
-
-			children.add(updatedProgram);
-
-			if (updatedProgram.getType() == ProgramDetailType.ACTIVITY) {
-				activity.setProgramOutcomes(children);
-			} else {
-				activity.setChildren(children);
-			}
-			activity.sort();
-
-			int idx = children.indexOf(updatedProgram);
-			assert idx > -1;
-
-			// insert this child at the end of the parent
-			FlowPanel parent = ((FlowPanel) this.getParent());
-			ProgramsTableRow newRow = new ProgramsTableRow(updatedProgram,
-					donors, programId, false, false, level + 1);
-			newRow.setSelectionChangeHandler(selectionHandler);
-
-			// Position the row below the parent
-			parent.insert(newRow, parent.getWidgetIndex(this) + idx + 1);
-			// Indexes start from zero, but we want children to be listed from
-			// parents position+1
-
-			newRow.show(true);
+			addChild(updatedProgram);
 			return;
 		}
 
@@ -738,8 +710,76 @@ public class ProgramsTableRow extends RowWidget implements
 			// Widget parent = getParent();
 			// System.err.println("Parent >> "+parent.getClass());
 			removeFromParent();
-
 		}
+	}
+	
+	@Override
+	public void onMoveProgram(MoveProgramEvent event) {
+		Long previousParentId = event.getPreviousParentId();
+		Long newParentId = event.getNewParentId();
+		
+		if(activity.getId().equals(previousParentId)){
+			removeChild(event.getItemMoved());
+		}
+		
+		if(activity.getId().equals(newParentId)){
+			addChild(event.getItemMoved());
+		}
+		
+	}
+
+	private void addChild(IsProgramDetail newItem) {
+
+		List<IsProgramDetail> children = activity.getChildren();
+		if (newItem.getType() == ProgramDetailType.ACTIVITY) {
+			children = activity.getProgramOutcomes();
+		}
+
+		// check if this is the parent
+		if (children == null) {
+			children = new ArrayList<IsProgramDetail>();
+		}
+
+		children.add(newItem);
+
+		if (newItem.getType() == ProgramDetailType.ACTIVITY) {
+			activity.setProgramOutcomes(children);
+		} else {
+			activity.setChildren(children);
+		}
+		activity.sort();
+
+		int idx = children.indexOf(newItem);
+		assert idx > -1;
+
+		// insert this child at the end of the parent
+		FlowPanel parent = ((FlowPanel) this.getParent());
+		ProgramsTableRow newRow = new ProgramsTableRow(newItem,
+				donors, programId, false, false, level + 1);
+		newRow.setSelectionChangeHandler(selectionHandler);
+
+		// Position the row below the parent
+		parent.insert(newRow, parent.getWidgetIndex(this) + idx + 1);
+		// Indexes start from zero, but we want children to be listed from
+		// parents position+1
+
+		newRow.show(true);
+
+	}
+
+	private void removeChild(IsProgramDetail itemMoved) {
+		FlowPanel parent = ((FlowPanel) this.getParent());
+		int parentIdx = parent.getWidgetIndex(this);
+		
+		int idx = activity.getChildren().indexOf(itemMoved);
+		assert idx> -1;
+		
+		ProgramsTableRow childRow= (ProgramsTableRow)parent.getWidget(parentIdx+idx+1);
+		IsProgramDetail detail = childRow.getActivity();
+		
+		assert detail.equals(itemMoved);
+		
+		childRow.removeFromParent();
 	}
 
 }

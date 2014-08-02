@@ -37,6 +37,7 @@ import com.wira.pmgt.server.actionhandlers.GetPerformanceDataRequestHandler;
 import com.wira.pmgt.server.actionhandlers.GetProcessRequestActionHandler;
 import com.wira.pmgt.server.actionhandlers.GetProcessStatusRequestActionHandler;
 import com.wira.pmgt.server.actionhandlers.GetProcessesRequestActionHandler;
+import com.wira.pmgt.server.actionhandlers.GetProgramsTreeRequestHandler;
 import com.wira.pmgt.server.actionhandlers.GetSettingsRequestActionHandler;
 import com.wira.pmgt.server.actionhandlers.GetTaskCompletionDataActionHandler;
 import com.wira.pmgt.server.actionhandlers.GetTaskListActionHandler;
@@ -45,6 +46,7 @@ import com.wira.pmgt.server.actionhandlers.GetUsersRequestActionHandler;
 import com.wira.pmgt.server.actionhandlers.LoginRequestActionHandler;
 import com.wira.pmgt.server.actionhandlers.LogoutActionHandler;
 import com.wira.pmgt.server.actionhandlers.ManageKnowledgeBaseResponseHandler;
+import com.wira.pmgt.server.actionhandlers.MoveItemRequestHandler;
 import com.wira.pmgt.server.actionhandlers.MultiRequestActionHandler;
 import com.wira.pmgt.server.actionhandlers.SaveCommentRequestActionHandler;
 import com.wira.pmgt.server.actionhandlers.SaveDSConfigRequestHandler;
@@ -92,6 +94,7 @@ import com.wira.pmgt.shared.requests.GetPerformanceDataRequest;
 import com.wira.pmgt.shared.requests.GetProcessRequest;
 import com.wira.pmgt.shared.requests.GetProcessStatusRequest;
 import com.wira.pmgt.shared.requests.GetProcessesRequest;
+import com.wira.pmgt.shared.requests.GetProgramsTreeRequest;
 import com.wira.pmgt.shared.requests.GetSettingsRequest;
 import com.wira.pmgt.shared.requests.GetTaskCompletionRequest;
 import com.wira.pmgt.shared.requests.GetTaskList;
@@ -100,6 +103,7 @@ import com.wira.pmgt.shared.requests.GetUsersRequest;
 import com.wira.pmgt.shared.requests.LoginRequest;
 import com.wira.pmgt.shared.requests.LogoutAction;
 import com.wira.pmgt.shared.requests.ManageKnowledgeBaseRequest;
+import com.wira.pmgt.shared.requests.MoveItemRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
 import com.wira.pmgt.shared.requests.SaveCommentRequest;
 import com.wira.pmgt.shared.requests.SaveDSConfigRequest;
@@ -374,5 +378,9 @@ public class ServerModule extends HandlerModule {
 		bindHandler(GetPerformanceDataRequest.class,
 				GetPerformanceDataRequestHandler.class,
 				SessionValidator.class);
+		
+		bindHandler(GetProgramsTreeRequest.class, GetProgramsTreeRequestHandler.class , SessionValidator.class);
+		
+		bindHandler(MoveItemRequest.class, MoveItemRequestHandler.class,SessionValidator.class);
 	}
 }

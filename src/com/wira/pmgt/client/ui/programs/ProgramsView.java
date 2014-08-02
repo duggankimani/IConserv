@@ -499,6 +499,7 @@ public class ProgramsView extends ViewImpl implements
 		show(aDeleteProgram, isRowData && AppContext.isCurrentUserAdmin());
 		show(aAssign, false);
 		show(aDetail, !isCurrentPlaceObjectivesPage && isRowData);
+		show(aMove, false);
 
 		if (type == ProgramDetailType.PROGRAM) {
 			// Program can be selected from the SummaryTab == isRowData
@@ -522,9 +523,11 @@ public class ProgramsView extends ViewImpl implements
 		} else if (type == ProgramDetailType.ACTIVITY) {
 			show(aNewTask, true);
 			show(aAssign, false);
+			show(aMove, isRowData);
 		} else if (type == ProgramDetailType.TASK) {
 			show(aNewTask, true);
 			show(aAssign, isRowData);
+			show(aMove, isRowData);
 		} else {
 			show(aDetail, false);
 			show(aAssign, false);

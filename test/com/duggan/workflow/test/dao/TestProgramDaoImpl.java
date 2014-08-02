@@ -29,6 +29,7 @@ import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 import com.wira.pmgt.shared.model.program.ProgramTaskForm;
+import com.wira.pmgt.shared.model.program.ProgramTreeModel;
 
 public class TestProgramDaoImpl {
 
@@ -42,6 +43,27 @@ public class TestProgramDaoImpl {
 	}
 	
 	@Test
+	public void getProgramTree(){
+		Long periodId= 1L;
+		Long programId = null;
+		List<ProgramTreeModel> lst=ProgramDaoHelper.getProgramTree(periodId,programId);
+		recursiveLoop(lst);
+		System.err.println(count);
+		
+	}
+	int count;
+	private void recursiveLoop(List<ProgramTreeModel> lst) {
+		if(lst==null){
+			return;
+		}
+		for(ProgramTreeModel m: lst){
+			++count;
+			System.err.println(m.getProgramId()+" : "+m.getOutcomeId()+" : "+m.getId()+" : "+m.getParentId()+" : "+m.getName());
+			recursiveLoop(m.getChildren());
+		}
+	}
+
+	@Ignore
 	public void saveProgram() throws SystemException, NamingException{
 		IsProgramDetail detail = ProgramDaoHelper.getProgramById(1L, false);
 		List<ProgramFundDTO> dtos = detail.getFunding();
