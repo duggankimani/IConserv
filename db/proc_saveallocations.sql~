@@ -90,7 +90,11 @@ BEGIN
 		v_parentactual=COALESCE(v_parentactual,0.0) + COALESCE(v_newactual,0.0) - COALESCE(v_previousactual,0.0);
 		v_parentcommitedamount=COALESCE(v_parentcommitedamount,0.0) + COALESCE(v_newcommitedamount,0.0) - COALESCE(v_previouscommitedamount,0.0);
 		
-		update programfund set allocatedAmount=v_parentallocation,actualAmount=v_parentactual,commitedamount=v_parentcommitedamount where programid=v_parentprogramid and fundid=v_fundid;
+		update programfund set allocatedAmount=v_parentallocation,actualAmount=v_parentactual,commitedamount=v_parentcommitedamount where programid=v_parentprogramid and fundid=v_fundid;		
+ 
+		if(NEW.programid!=OLD.programId) then
+			‪--delete previous
+		end if;
 	END IF;
 	if(TG_OP='DELETE') then
     	RETURN OLD;

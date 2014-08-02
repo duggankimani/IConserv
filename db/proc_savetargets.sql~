@@ -33,7 +33,7 @@ BEGIN
 		v_previousactual=OLD.actualoutcome;
 --		v_parentprogramid = (select parentid from programdetail where id=OLD.programid);
 		select parentid,status into v_parentprogramid,v_parentstatus from programdetail where id=NEW.programid;
-		select id,actualoutcome into v_parentoutcomentid,v_parentcurrentactual from targetandoutcome where key=NEW.key and programid=v_parentprogramid;
+		select id,actualoutcome into v_parentoutcomentid,v_parentcurrentactual from targetandoutcome where key=OLD.key and programid=v_parentprogramid;
 	
 	end if;
 	

@@ -3,6 +3,7 @@ package com.wira.pmgt.server.dao.helper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import com.wira.pmgt.server.dao.biz.model.ProgramFund;
 import com.wira.pmgt.server.dao.biz.model.TargetAndOutcome;
 import com.wira.pmgt.server.db.DB;
 import com.wira.pmgt.server.helper.auth.LoginHelper;
+import com.wira.pmgt.server.helper.session.SessionHelper;
 import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.OrgEntity;
@@ -34,6 +36,7 @@ import com.wira.pmgt.shared.model.Value;
 import com.wira.pmgt.shared.model.form.Field;
 import com.wira.pmgt.shared.model.form.Form;
 import com.wira.pmgt.shared.model.form.Property;
+import com.wira.pmgt.shared.model.program.BasicProgramDetails;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.Metric;
@@ -45,6 +48,7 @@ import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 import com.wira.pmgt.shared.model.program.ProgramStatus;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 import com.wira.pmgt.shared.model.program.ProgramTaskForm;
+import com.wira.pmgt.shared.model.program.ProgramTreeModel;
 import com.wira.pmgt.shared.model.program.TargetAndOutcomeDTO;
 
 public class ProgramDaoHelper {
@@ -1027,6 +1031,65 @@ public class ProgramDaoHelper {
 
 	public static List<PerformanceModel> getPerformanceData(Metric metric) {
 		return DB.getProgramDaoImpl().getBudgetPerformanceData(metric);
+	}
+
+	public static List<ProgramTreeModel> getProgramTree(Long periodId,Long programId) {
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		List<ProgramTreeModel> list = null;
+		
+		if(periodId==null){
+			Period p = dao.getActivePeriod();
+			if (p!=null) {
+				periodId = p.getId();
+			}
+		}
+		
+		if(programId!=null){
+			list= dao.getProgramTree(periodId, Arrays.asList(programId));
+		}else{
+			list = dao.getProgramTree(periodId, dao.getProgramIds(SessionHelper.getCurrentUser().getUserId()));
+		}
+		
+		List<ProgramTreeModel> rootList = new ArrayList<>();
+		List<ProgramTreeModel> outcomes=new ArrayList<>();
+		ProgramTreeModel outcome=null;
+		ProgramTreeModel program=null;
+		Map<Long, ProgramTreeModel> idActivityMap = new HashMap<Long, ProgramTreeModel>();
+		
+		for(ProgramTreeModel model: list){
+			if(model.getType()==ProgramDetailType.PROGRAM){
+				program = model;
+				model.setChildren(outcomes);
+				rootList.add(program);
+				outcomes = new ArrayList<>();
+			}
+			
+			if(model.getType()==ProgramDetailType.ACTIVITY){
+				
+				if(outcome==null || !model.getOutcomeId().equals(outcome.getId())){
+					outcome = new ProgramTreeModel();
+					outcome.setName(model.getOutcomeName());
+					outcome.setId(model.getOutcomeId());
+					outcomes.add(outcome);
+				}
+				
+				model.setParentNodeId(outcome.getId());
+				outcome.addChild(model);
+				idActivityMap.put(model.getId(), model);
+			}
+			
+			if(model.getType()==ProgramDetailType.TASK){
+				
+				ProgramTreeModel parent=idActivityMap.get(model.getParentId());
+				assert parent!=null;
+				model.setParentNodeId(parent.getId());
+				parent.addChild(model);
+				
+				idActivityMap.put(model.getId(), model);
+			}
+		}		
+		
+		return rootList;
 	}
 
 //	private static ProgramSummary getSummary(ProgramDetail detail) {

@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.naming.NamingException;
+import javax.persistence.ColumnResult;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.transaction.SystemException;
@@ -25,12 +26,14 @@ import com.wira.pmgt.server.helper.session.SessionHelper;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
+import com.wira.pmgt.shared.model.program.BasicProgramDetails;
 import com.wira.pmgt.shared.model.program.Metric;
 import com.wira.pmgt.shared.model.program.PerformanceModel;
 import com.wira.pmgt.shared.model.program.ProgramAnalysis;
 import com.wira.pmgt.shared.model.program.ProgramStatus;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 import com.wira.pmgt.shared.model.program.ProgramTaskForm;
+import com.wira.pmgt.shared.model.program.ProgramTreeModel;
 
 /**
  * Dao Implementation Class for managing
@@ -298,7 +301,7 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 	 * @param userId
 	 * @return
 	 */
-	private List<Long> getProgramIds(String userId) {
+	public List<Long> getProgramIds(String userId) {
 		List<String> groups = getCurrentUserGroups(userId);
 		if(groups==null || groups.isEmpty()){
 			return new ArrayList<>();
@@ -515,6 +518,50 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		Integer count = ((Number)getSingleResultOrNull(query)).intValue(); 
 		
 		return count>0;
+	}
+
+	/**
+	 * 
+	 * @param periodId
+	 * @param programId
+	 * @return
+	 */
+	public List<ProgramTreeModel> getProgramTree(Long periodId,
+			List<Long> programIds) {
+		
+		if(programIds==null || programIds.isEmpty()){
+			return new ArrayList<>();
+		}
+		
+		Query query = em.createNamedQuery("ProgramDetail.getProgramTree")
+				.setParameter("programIds", programIds)
+				.setParameter("periodId", periodId);	
+		
+		List<Object[]> rows = getResultList(query); 
+		
+		List<ProgramTreeModel> summaries = new ArrayList<>();
+		
+		for(Object[] row: rows){
+			//programId,id,parentid,type,startdate,enddate,status
+			int i=0;
+			Object value=null;
+			Long programId= (value=row[i++])==null? null: new Long(value.toString());
+			Long id=(value=row[i++])==null? null: new Long(value.toString());
+			Long parentid=(value=row[i++])==null? null: new Long(value.toString());
+			String type=(value=row[i++])==null? null: value.toString();
+			String status=(value=row[i++])==null? ProgramStatus.CREATED.name(): value.toString();
+			Long outcomeId=(value=row[i++])==null? null: new Long(value.toString());
+			String name = (value=row[i++])==null? null: value.toString();
+			String outcomeName = (value=row[i++])==null? null: value.toString();
+			
+			ProgramTreeModel summary = new ProgramTreeModel(name,
+					programId,id,parentid,ProgramDetailType.valueOf(type),
+					ProgramStatus.valueOf(status), outcomeId,outcomeName);
+			
+			summaries.add(summary);
+		}
+		
+		return summaries;
 	}
 
 }
