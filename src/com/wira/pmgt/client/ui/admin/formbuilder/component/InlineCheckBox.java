@@ -14,7 +14,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.shared.model.BooleanValue;
 import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.Value;
-import com.wira.pmgt.shared.model.form.Field;
 import com.wira.pmgt.shared.model.form.Property;
 
 public class InlineCheckBox extends FieldWidget {

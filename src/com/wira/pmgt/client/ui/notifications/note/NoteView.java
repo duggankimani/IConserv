@@ -114,9 +114,11 @@ public class NoteView extends ViewImpl implements NotePresenter.MyView {
 		SafeHtml safeHtml2 = null;
 		// System.err.println("NotificationType: "+notificationType+": Subject="+subject+": isNotification="+isNotification);
 		switch (notificationType) {
+		
 		case APPROVALREQUEST_APPROVERNOTE:
 			safeHtml = Template1.render(subject, owner, time);
 			break;
+		
 		case TASKASSIGNMENT_ASSIGNORNOTE:
 			safeHtml = taskAssignmentAssigneeTemplate.render(subject, owner,
 					time);
@@ -204,6 +206,7 @@ public class NoteView extends ViewImpl implements NotePresenter.MyView {
 		return aDocument;
 	}
 
+	
 	interface APPROVALREQUEST_APPROVERNOTE_TEMPLATE extends SafeHtmlTemplates {
 		@Template("<i class=\"icon-signin\"></i>"
 				+ "<span class=\"bluename\" >{0}</span>"
@@ -213,6 +216,7 @@ public class NoteView extends ViewImpl implements NotePresenter.MyView {
 				+ "."
 				+ "<span class=\"time\" ><i class=\"icon-time\"> {2}</i></span>")
 		public SafeHtml render(String subject, String owner, String time);
+		
 		// eg Request for approval - Invoice INV/001/2013 from Calcacuervo. (2
 		// mins ago)
 	}
@@ -221,7 +225,6 @@ public class NoteView extends ViewImpl implements NotePresenter.MyView {
 		@Template("<i class=\"icon-signin\"></i>"
 				+ "<span class=\"bluename\" >{0}</span>"
 				+
-
 				" Task assigned by <span class=\"bluename\">{1}</span>"
 				+ "."
 				+ "<span class=\"time\" ><i class=\"icon-time\"> {2}</i></span>")

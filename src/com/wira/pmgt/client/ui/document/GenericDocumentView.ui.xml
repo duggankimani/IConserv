@@ -20,39 +20,39 @@
 					</span>
 				</div>
 				<div class="action-buttons pull-right">
-					<d:ActionLink ui:field="aProcess" styleName="btn btn-default hidden"
+					<d:ActionLink ui:field="aProcess" styleName="btn btn-default hide"
 						title="Show Business Process">
 						<i class="icon-info"></i>
 						<!-- Process -->
 					</d:ActionLink>
 
-					<d:ActionLink ui:field="aAttach2" styleName="btn btn-default hidden"
+					<d:ActionLink ui:field="aAttach2" styleName="btn btn-default hide"
 						title="Attach word, pdf, scanned documents etc">
 						<i class="icon-upload-alt color-black"></i>
 					</d:ActionLink>
 
-					<d:ActionLink ui:field="aStart" styleName="btn btn-success hidden"
+					<d:ActionLink ui:field="aStart" styleName="btn btn-success hide"
 						title="Start working on the task">
 						<i class="icon-play"></i>
 						Start
 					</d:ActionLink>
 
-					<d:ActionLink ui:field="aResume" styleName="btn btn-success hidden">
+					<d:ActionLink ui:field="aResume" styleName="btn btn-success hide">
 						<i class="icon-play"></i>
 						Resume
 					</d:ActionLink>
 
-					<d:ActionLink ui:field="aComplete" styleName="btn btn-success hidden">
+					<d:ActionLink ui:field="aComplete" styleName="btn btn-success hide">
 						<i class="icon-ok"></i>
 						Complete
 					</d:ActionLink>
 
-					<d:ActionLink ui:field="aStop" styleName="btn btn-default hidden">
+					<d:ActionLink ui:field="aStop" styleName="btn btn-default hide">
 						<i class="icon-stop"></i>
 						Stop
 					</d:ActionLink>
 
-					<d:ActionLink ui:field="aForward" styleName="btn btn-success hidden">
+					<d:ActionLink ui:field="aForward" styleName="btn btn-success hide">
 						<i class="icon-share-alt"></i>
 						Forward for Approval
 					</d:ActionLink>
@@ -73,7 +73,7 @@
 						Reject
 					</d:ActionLink>
 
-					<d:ActionLink ui:field="aSimulate" styleName="btn btn-default hidden">
+					<d:ActionLink ui:field="aSimulate" styleName="btn btn-default hide">
 						<i class="icon-play"></i>
 						Simulate
 					</d:ActionLink>
@@ -96,7 +96,7 @@
 
 						<ul class="dropdown-menu" role="menu" ui:field="ulMenu">
 							<li>
-								<d:ActionLink ui:field="aRevoke" styleName="btn hidden"
+								<d:ActionLink ui:field="aRevoke" styleName="btn hide"
 									title="Revoke this task so that its re-assignable to other users in your group">
 									<i class="icon-minus"></i>
 									Revoke
@@ -111,7 +111,7 @@
 							</li>
 
 							<li>
-								<d:ActionLink ui:field="aDelegate" styleName="hidden"
+								<d:ActionLink ui:field="aDelegate" styleName="hide"
 									title="Delegate this task">
 									<i class="icon-group"></i>
 									Delegate
@@ -146,7 +146,7 @@
 				<div class="span3">
 					<div style="float:right; text-align:right">
 						<span ui:field="spnCreated" class="tasktimelines"></span>
-						<span ui:field="spnDeadline" class="tasktimelines hidden"></span>
+						<span ui:field="spnDeadline" class="tasktimelines hide"></span>
 					</div>
 				</div>
 			</g:HTMLPanel>
@@ -159,11 +159,11 @@
 						<strong>Document Date:</strong>
 						<span ui:field="spnDate" class="subject"></span>
 					</div>
-					<div class="row-fluid item hidden" ui:field="divValue">
+					<div class="row-fluid item hide" ui:field="divValue">
 						<strong>Value:</strong>
 						<span ui:field="spnValue" class="subject"></span>
 					</div>
-					<div class="row-fluid item hidden" ui:field="divPartner">
+					<div class="row-fluid item hide" ui:field="divPartner">
 						<strong>Business Partner:</strong>
 						<span ui:field="spnPartner" class="subject"></span>
 					</div>
@@ -175,17 +175,17 @@
 					<g:HTMLPanel ui:field="fldForm" styleName="form-horizontal">
 					</g:HTMLPanel>
 
-					<div class="title attachment hidden" ui:field="divAttachment">
+					<div class="title attachment hide" ui:field="divAttachment">
 						<h4>
 							<span ui:field="spnAttachmentNo"></span>
 						</h4>
-						<g:Anchor styleName="hand hidden"> - Download All</g:Anchor>
+						<g:Anchor styleName="hand hide"> - Download All</g:Anchor>
 					</div>
 
 					<g:HTMLPanel ui:field="panelAttachments" styleName="attachment-panel row-fluid">
 					</g:HTMLPanel>
 
-					<div class="uploader hidden">
+					<div class="uploader hide">
 						<up:Uploader ui:field="uploader"></up:Uploader>
 					</div>
 				</g:HTMLPanel>

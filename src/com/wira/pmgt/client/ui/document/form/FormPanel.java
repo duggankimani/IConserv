@@ -6,12 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.LegendElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -45,12 +43,10 @@ public class FormPanel extends Composite {
 	}
 
 	@UiField HTMLPanel panelFields;
-	//@UiField InlineLabel panelLabel;
 	@UiField HTMLPanel panelItem;
 	@UiField LegendElement divFormCaption;
 	@UiField SpanElement divFormHelp;
 	@UiField IssuesPanel issues;
-	
 	FormDelegate formDelegate = new FormDelegate();
 	MODE mode = MODE.VIEW;
 	
@@ -111,8 +107,7 @@ public class FormPanel extends Composite {
 				((TextArea) fieldWidget).getContainer().removeStyleName("hidden");
 			}
 			
-			//System.err.println("||| "+field.getCaption()+" :: "+
-			//(field.getValue()==null? "null" : field.getValue().getValue()));
+			fieldWidget.addStyleName("control-group");
 			panelFields.add(fieldWidget);
 		}
 		

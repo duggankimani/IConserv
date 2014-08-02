@@ -304,14 +304,6 @@ public class GenericDocumentPresenter extends
 			
 			@Override
 			public void onClick(ClickEvent event) {
-//				Document doc = new Document();
-//				doc.setCreated(new Date());
-//				doc.setDateDue(new Date());
-//				doc.setSubject("CNT/B&C/01/2013");
-//				doc.setDescription("Contract for the constrution of Hall6");
-//				doc.setPartner("B&C Contactors");
-//				doc.setValue("5.5Mil");
-//				doc.setType(DocumentType.CONTRACT);
 				
 				requestHelper.execute(new ApprovalRequest(AppContext.getUserId(), (Document)doc), new TaskServiceCallback<ApprovalRequestResult>(){
 					@Override
