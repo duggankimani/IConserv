@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
+import com.wira.pmgt.client.ui.programs.tree.item.TreeWidgetItem;
 
 public class TreeWidget extends Composite {
 	
@@ -27,16 +28,15 @@ public class TreeWidget extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		TreeItem outerRoot = new TreeItem();
-		outerRoot.setHTML("Wildlife Program");
+		outerRoot.setWidget(new TreeWidgetItem("Wildlife Program"));
 		
 		TreeItem innerRoot = new TreeItem();
-		innerRoot.setHTML("Outcome 1.3");
-		CheckBox check1 = new CheckBox("Facilitate community meeting in each Unit..");
-		outerRoot.addItem(check1);
+		innerRoot.setWidget(new TreeWidgetItem("Outcome 1.2"));
+		innerRoot.addItem(new TreeWidgetItem("Facilitate community meeting in each Unit.."));
+	
 		outerRoot.addItem(innerRoot);
 		
-		CheckBox check2 = new CheckBox("Outcome 1.3");
-		outerRoot.addItem(check2);
+		outerRoot.addItem(new TreeWidgetItem("Outcome 1.3"));
 		
 		treeComponent.addItem(outerRoot);
 	}

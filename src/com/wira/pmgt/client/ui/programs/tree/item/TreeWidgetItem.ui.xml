@@ -1,0 +1,22 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.wira.pmgt.client.ui.component">
+
+	<g:HTMLPanel styleName="title row-fluid">
+		<g:HTMLPanel styleName="span4 strip-container small-container">
+			<span class="color-strip-new label-default" ui:field="divRowStrip">
+				<span ui:field="spnLabel"></span>
+				<span class="icon-user" ui:field="spnAssigned"></span>
+			</span>
+		</g:HTMLPanel>
+
+		<g:HTMLPanel styleName="span4 select-container small-container">
+			<g:CheckBox ui:field="chkSelect"></g:CheckBox>
+		</g:HTMLPanel>
+
+		<g:HTMLPanel styleName="span4 name-container">
+			<g:InlineLabel ui:field="aName" styleName=""></g:InlineLabel>
+		</g:HTMLPanel>
+
+	</g:HTMLPanel>
+</ui:UiBinder> 

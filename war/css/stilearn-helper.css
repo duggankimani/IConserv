@@ -206,10 +206,19 @@ body .breadcrumb a,a:hover{
 .table,table{
 	width:100%;
 }
-
 .modal .input-group .form-control{
 	width: 96%;
 }
+
+/*Moving Style*/
+.modal-body div.small-container{
+	width: 5%;
+}
+.modal-body div.name-container{
+	padding-left:10px;
+	padding-top:2px;
+}
+
 /*End of my Utility helpers*/
 
 /** font size helper **/
