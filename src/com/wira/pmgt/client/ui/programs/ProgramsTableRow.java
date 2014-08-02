@@ -446,6 +446,8 @@ public class ProgramsTableRow extends RowWidget implements
 
 	private void setPadding() {
 		switch (activity.getType()) {
+		
+		/*Set color for ProgramTypes*/
 		case PROGRAM:
 			divRowStrip.addClassName("label-success");
 			break;

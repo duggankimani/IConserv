@@ -206,10 +206,46 @@ body .breadcrumb a,a:hover{
 .table,table{
 	width:100%;
 }
-
 .modal .input-group .form-control{
 	width: 96%;
 }
+
+/*Move widget Style*/
+.modal-body .gwt-Tree{
+    width: 100%;	
+}
+
+.modal-body .gwt-Tree .gwt-TreeItem{
+    /* border-bottom: 1px solid #ccc; */
+    display: inline-block !important;
+    padding: 4px;
+    width: 100%;
+}
+
+.modal-body .gwt-Tree table > tbody >tr:first-child{
+	width:4%;
+}
+
+.modal-body div.small-container{
+	width: 0%;
+	padding-top: 4px;
+}
+
+.modal-body div.strip-container{
+	width: 6%;
+	padding-top: 1px;
+	text-align: center;
+}
+
+.modal-body div.strip-container .color-strip-new{
+	margin-top: 4px;
+}
+.modal-body div.name-container{
+	padding-left:10px;
+	padding-top: 6px;
+	width: 70%;
+}
+
 /*End of my Utility helpers*/
 
 /** font size helper **/

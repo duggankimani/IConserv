@@ -7,15 +7,13 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Tree;
-import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.events.MoveTargetSelectedEvent;
 import com.wira.pmgt.client.ui.events.MoveTargetSelectedEvent.MoveTargetSelectedHandler;
@@ -31,7 +29,7 @@ public class TreeWidget extends Composite implements MoveTargetSelectedHandler{
 	
 	@UiField HTMLPanel divContainer;
 	@UiField Tree treeComponent;
-
+	
 	private ProgramDetailType typeToMove;
 
 	interface TreeWidgetUiBinder extends UiBinder<Widget,TreeWidget> {
@@ -68,8 +66,7 @@ public class TreeWidget extends Composite implements MoveTargetSelectedHandler{
 	public void onMoveTargetSelected(MoveTargetSelectedEvent event) {
 		if(selected!=null){
 			selected.setItemSelected(false);
-		}
-		
+		}		
 		if(event.isSelected()){
 			selected =event.getItem();
 			selected.setItemSelected(true);
