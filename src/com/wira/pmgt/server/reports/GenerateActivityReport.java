@@ -387,7 +387,7 @@ public class GenerateActivityReport {
 			} else {
 				TargetAndOutcomeDTO dto = targetsAndOutcomes.get(i);
 				font_style = dto.getActualOutcome() == null ? "_nodata" : dto
-						.getActualOutcome() > dto.getTarget() ? "font-success"
+						.getActualOutcome() >= dto.getTarget() ? "font-success"
 						: "font-failure";
 			}
 
