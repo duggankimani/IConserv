@@ -39,10 +39,10 @@ select count(*) from programdetail p where p.status='CLOSED' and datecompleted i
 
 with recursive programdetail_tree as (
 select m.id as programId,m.id,m.name, m.parentid,m.type,status,m.outcomeid,(select i.name from programdetail i where i.id=m.outcomeid) outcomename, 1 as level, array[id] as path_info 
-from programdetail where m.id in (select id from programdetail where type='PROGRAM' and periodid=1) 
+from programdetail m where m.id in (1) 
 union all
 select path_info[1] as programId,c.id,c.name,c.parentid,c.type,c.status,c.outcomeid,(select i.name from programdetail i where i.id=c.outcomeid) outcomename, p.level+1, p.path_info||c.id 
 from programdetail c join programdetail_tree p on c.parentid=p.id)
-select programId,id,name,parentid,type,status,outcomeid,outcomename from programdetail_tree order by path_info;
+select programId,id,name,parentid,type,status,outcomeid,outcomename from programdetail_tree order by programid,outcomeid;
 
 select id, name,description from programdetail where type='OUTCOME';

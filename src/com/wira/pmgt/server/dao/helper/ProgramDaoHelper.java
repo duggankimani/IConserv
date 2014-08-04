@@ -109,6 +109,11 @@ public class ProgramDaoHelper {
 
 	public static ProgramDTO save(IsProgramDetail programDTO) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		ProgramStatus previousStatus = null;
+		if(programDTO.getId()!=null){
+			previousStatus = dao.getStatus(programDTO.getId()); 
+		}
+		
 		ProgramDetail program = get(programDTO);
 		ProgramDetail parent = program.getParent();
 		//Parent must have a preset set of funds before child source of funds are generated
@@ -137,17 +142,35 @@ public class ProgramDaoHelper {
 			
 		}
 		
+		if(previousStatus!=null){
+			if(previousStatus!=null && previousStatus.equals(ProgramStatus.CLOSED)){
+				if(programDTO.getStatus()==null || !programDTO.getStatus().equals(ProgramStatus.CLOSED)){
+					//reset program targets and outcomes
+					Collection<TargetAndOutcome> targets = program.getTargets();
+					for(TargetAndOutcome target: targets){
+						resetTarget(target);
+					}
+				}
+			}
+			
+		}
+		
 		dao.save(program);
 		
-		saveFunding(programDTO, program);
-		
+		saveFunding(programDTO, program, previousStatus);
 		//Database triggers update fund amounts & we'd like to get the committed values from the database
 		//in the get method below
 	
 		return get(program,false);
 	}
 	
-	private static void saveFunding(IsProgramDetail programDTO, ProgramDetail managedPO) {
+	private static void resetTarget(TargetAndOutcome target) {
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		double outcome= dao.getOutcome(target.getKey(), target.getProgramDetail().getId());
+		target.setActualOutcome(outcome);
+	}
+
+	private static void saveFunding(IsProgramDetail programDTO, ProgramDetail managedPO, ProgramStatus previousStatus) {
 		List<ProgramFundDTO> funding = programDTO.getFunding();
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		
@@ -168,7 +191,7 @@ public class ProgramDaoHelper {
 					if(previousDonorId!=donorId){
 						ProgramFund pfund = dao.getById(ProgramFund.class, dto.getId());
 						assert pfund!=null;
-						System.err.println("Changing Donor for PFid "+pfund+" ["+donorId+" >> "+previousDonorId+"]");
+						log.debug("Changing Donor for PFid "+pfund+" ["+donorId+" >> "+previousDonorId+"]");
 						dao.delete(pfund);
 						//funds changed
 						dto.setId(null); //generate new programfund entry
@@ -176,8 +199,8 @@ public class ProgramDaoHelper {
 				}
 				
 				ProgramFund fund = get(dto);
-				System.err.println("Saving "+fund);
-				if(managedPO.getStatus()!=null && managedPO.getStatus().equals(ProgramStatus.CLOSED)){
+				log.debug("Saving "+fund);
+				if(previousStatus!=null && previousStatus.equals(ProgramStatus.CLOSED)){
 					if(programDTO.getStatus()==null || !programDTO.getStatus().equals(ProgramStatus.CLOSED)){
 						resetProgramFund(fund);
 					}
@@ -338,7 +361,6 @@ public class ProgramDaoHelper {
 		detail.setEndDate(programDTO.getEndDate());
 		detail.setStatus(programDTO.getStatus());
 		
-		//detail.setIndicator(String);
 		detail.setName(programDTO.getName());
 		
 		if(programDTO.getPeriod()!=null && programDTO.getPeriod().getId()!=null){
@@ -347,9 +369,6 @@ public class ProgramDaoHelper {
 		
 		detail.setStartDate(programDTO.getStartDate());
 		detail.setBudgetLine(programDTO.getBudgetLine());
-		//detail.setActualAmount(programDTO.getActualAmount());
-		//detail.setTarget(String);
-		//detail.setTargets(Set<TargetAndOutcome>);
 		detail.setType(programDTO.getType());
 		List<TargetAndOutcomeDTO> targets = programDTO.getTargetsAndOutcomes();
 		detail.setTargets(getTargets(targets));
@@ -379,11 +398,14 @@ public class ProgramDaoHelper {
 	}
 
 	private static void resetProgramFund(ProgramFund programFund) {
+		log.debug("Resetting fund "+programFund);
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();	
 		Double[] amounts = dao.getAmounts(programFund.getProgramDetail().getId(), programFund.getFund().getId());
 		programFund.setCommitedAmount(amounts[0]);
 		programFund.setActualAmount(amounts[1]);
 	}
+	
+	
 
 	private static Collection<TargetAndOutcome> getTargets(List<TargetAndOutcomeDTO> targets) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
