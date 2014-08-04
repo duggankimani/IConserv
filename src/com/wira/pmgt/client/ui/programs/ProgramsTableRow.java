@@ -588,7 +588,8 @@ public class ProgramsTableRow extends RowWidget implements
 		int childCount = activity.getChildren() == null ? 0 : activity
 				.getChildren().size();
 
-		if (activity.getType() == ProgramDetailType.PROGRAM) {
+		ProgramDetailType activityType = activity.getType(); 
+		if (activityType == ProgramDetailType.PROGRAM) {
 			// summary table
 			childCount = activity.getProgramOutcomes() == null ? 0 : activity
 					.getProgramOutcomes().size();
@@ -603,15 +604,27 @@ public class ProgramsTableRow extends RowWidget implements
 		// loop until you count n children
 		for (int i = idx + 1; (i < panel.getWidgetCount() && childrenCollapsed < childCount); i++) {
 			ProgramsTableRow row = (ProgramsTableRow) panel.getWidget(i);
-			// System.err.println("Showing child : " + showingChildren);
-			// if (row.getActivity().getParentId() == activity.getId()) {
-			childrenCollapsed++;
-			if (!showingChildren) {
-				// toggle children of children only when collapsing
-				row.toggle(showingChildren);
+			Long childParentId = row.getActivity().getParentId();
+			Long childOutcomeId = row.getActivity().getActivityOutcomeId();
+			Long parentProgramId = row.getActivity().getProgramId();
+			
+			boolean toggle=false;
+			if(activityType.equals(ProgramDetailType.PROGRAM) && parentProgramId!=null && parentProgramId.equals(activity.getId())){
+				toggle=true;
+			}else if (activityType.equals(ProgramDetailType.OUTCOME) && childOutcomeId!=null && childOutcomeId.equals(activity.getId())) {
+				toggle=true;
+			}else if (childParentId!=null && childParentId.equals(activity.getId())){
+				toggle=true;
 			}
-			row.show(showingChildren);
-			// }
+				
+			if(toggle){
+				childrenCollapsed++;
+				if (!showingChildren) {
+					// toggle children of children only when collapsing
+					row.toggle(showingChildren);
+				}
+				row.show(showingChildren);
+			}
 
 		}
 	}

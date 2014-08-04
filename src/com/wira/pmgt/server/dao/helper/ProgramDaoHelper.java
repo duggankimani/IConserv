@@ -1076,18 +1076,50 @@ public class ProgramDaoHelper {
 				
 				model.setParentNodeId(outcome.getId());
 				outcome.addChild(model);
-				idActivityMap.put(model.getId(), model);
+			
+				//Check if placeholder already exists
+				//happens if children are loaded before the parent
+				
+				{
+					//Check if placeholder for this task already exists
+					//happens if the children of a task/activity are loaded before the parent
+					ProgramTreeModel placeHolder = idActivityMap.get(model.getId());
+					if(placeHolder!=null){
+						//copy children from placeholder
+						model.setChildren(placeHolder.getChildren());
+					}
+					idActivityMap.put(model.getId(), model);
+				}
 			}
 			
 			if(model.getType()==ProgramDetailType.TASK){
 				
 				ProgramTreeModel parent=idActivityMap.get(model.getParentId());
-				assert parent!=null;
+				
+				if(parent==null){
+					//Create a place holder
+					ProgramTreeModel placeHolder = new ProgramTreeModel();
+					placeHolder.setId(model.getParentId());
+					placeHolder.setName("PlaceHolder for Item: "+model.getParentId());
+					parent = placeHolder;
+					idActivityMap.put(model.getParentId(), placeHolder);
+				}
+				
 				model.setParentNodeId(parent.getId());
 				parent.addChild(model);
 				
-				idActivityMap.put(model.getId(), model);
+				{
+					//Check if placeholder for this task already exists
+					//happens if the children of a task/activity are loaded before the parent
+					ProgramTreeModel placeHolder = idActivityMap.get(model.getId());
+					if(placeHolder!=null){
+						//copy children from placeholder
+						model.setChildren(placeHolder.getChildren());
+					}
+					idActivityMap.put(model.getId(), model);
+				}
 			}
+			
 		}		
 		
 		return rootList;
