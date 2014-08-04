@@ -101,7 +101,6 @@ public class ProgramsTable extends Composite {
 			th.add(new TableHeader("TIMELINES", 10.0));
 			th.add(new TableHeader("PROGRESS", 10.0));
 			th.add(new TableHeader("BUDGET", 10.0));
-
 		} else if (isGoalsTable) {
 			th.add(new TableHeader("TITLE", 100.0));
 		} else {

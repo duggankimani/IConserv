@@ -228,7 +228,6 @@ public class ProgramsPresenter extends
 									return;
 								}
 								fireEvent(new ProcessingEvent());
-
 								assignActivity.addItems(); // Add all users
 								TaskInfo taskInfo = assignActivity
 										.getTaskInfo();

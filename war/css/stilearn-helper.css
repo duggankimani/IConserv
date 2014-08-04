@@ -213,6 +213,9 @@ body .breadcrumb a,a:hover{
 /*Move widget Style*/
 .modal-body .gwt-Tree{
     width: 100%;	
+    border: 1px solid #cccccc;
+    border-radius: 7px;
+    padding-left: 8px;
 }
 
 .modal-body .gwt-Tree .gwt-TreeItem{
@@ -222,17 +225,24 @@ body .breadcrumb a,a:hover{
     width: 100%;
 }
 
-.modal-body .gwt-Tree table > tbody >tr:first-child{
-	width:4%;
+.modal-body .gwt-Tree table{
+	width:auto;
+}
+
+.modal-body .gwt-Tree table .gwt-TreeItem{
+	width:250px
 }
 
 .modal-body div.small-container{
-	width: 0%;
+	width: 10%;
 	padding-top: 4px;
 }
 
+.modal-body .gwt-TreeItem div.strip-container{
+	width: 35px;
+}
 .modal-body div.strip-container{
-	width: 6%;
+	width: 16%;
 	padding-top: 1px;
 	text-align: center;
 }
@@ -241,9 +251,10 @@ body .breadcrumb a,a:hover{
 	margin-top: 4px;
 }
 .modal-body div.name-container{
-	padding-left:10px;
+	padding-left: 0px;
 	padding-top: 6px;
 	width: 70%;
+	margin-left: 0px;
 }
 
 /*End of my Utility helpers*/
