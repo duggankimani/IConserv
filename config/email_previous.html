@@ -19,7 +19,7 @@
 					</tr>
 
 					<tr>
-						<td colspan="2">${subject}&nbsp;&nbsp; <span
+						<td colspan="2">${Request}&nbsp;&nbsp; <span
 							style="text-decoration: underline; font-weight: bold; color: #000000; cursor: pointer;">
 						</span>
 						</td>
@@ -30,12 +30,12 @@
 						<td colspan="2"></td>
 					</tr>
 
-					<!-- tr>
+					<tr>
 						<td style="border-top: 1px dashed #000000; padding-top: 10px;"
 							colspan="2"><a
 							style="text-decoration: underline; font-weight: bold; color: #000000; font-size: 16px;"
-							href="${DocumentURL}"> ${subject} </a></td>
-					</tr-->
+							href="${DocumentURL}"> ${DocSubject} </a></td>
+					</tr>
 					<tr>
 						<td width="5%" valign="top"><img class="imgLogo"
 							 src="cid:imageUser" width="70px" height="70px"
@@ -44,23 +44,30 @@
 							<table>
 								<tr>
 									<td style="margin-bottom: 5px; padding-bottom: 5px;"
-										width="95%">
-										You have a new item ${subject} awaiting your action. 
-										Please click on the following link to take action: ${DocumentURL}</td>
+										width="95%"><span style="font-weight: bold">Document
+											Type</span> : ${DocType}</td>
 								</tr>
 								<tr>
 									<td style="margin-bottom: 5px; padding-bottom: 5px;"><span
-										style="font-weight: bold">Initiated by</span> : ${OwnerId}</td>
+										style="font-weight: bold">Requested By</span> : ${OwnerId}</td>
+								</tr>
+								<tr>
+									<td style="margin-bottom: 5px; padding-bottom: 5px;"><span
+										style="font-weight: bold">Sent To</span> : ${Office}</td>
+								</tr>
+								<tr>
+									<td style="margin-bottom: 5px; padding-bottom: 5px;"><span
+										style="font-weight: bold">Document Date</span> ${DocumentDate}</td>
 								</tr>
 								<tr>
 									<td style="margin-bottom: 5px; padding-bottom: 5px;">
-										Detail: ${description}</td>
+										${Description}</td>
 								</tr>
 
 								<tr>
 									<td style="padding-top: 10px;"><a
 										style="display: inline-block; padding: 8px 12px; margin-bottom: 0; font-size: 14px; font-weight: 500; line-height: 1.428571429; text-align: center; white-space: nowrap; vertical-align: middle; cursor: pointer; border: 1px solid transparent; border-radius: 4px; color: #ffffff; background-color: #5cb85c; border-color: #5cb85c; text-decoration: none;"
-										href="${DocumentURL}">View Task</a>
+										href="${DocumentURL}"> View</a>
 								</tr>
 
 							</table>

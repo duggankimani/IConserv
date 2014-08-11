@@ -59,6 +59,7 @@ public class EmailServiceHelper {
 			Object port = SettingsDaoHelper.getSettingValue(SETTINGNAME.SMTP_PORT);
 			Object protocol = SettingsDaoHelper.getSettingValue(SETTINGNAME.SMTP_PROTOCOL);
 			Object starttls= SettingsDaoHelper.getSettingValue(SETTINGNAME.SMTP_STARTTLS);
+			Object orgName= SettingsDaoHelper.getSettingValue(SETTINGNAME.ORGNAME);
 			
 			props.setProperty(SETTINGNAME.SMTP_AUTH.getKey(), auth==null?null: auth.toString());
 			props.setProperty(SETTINGNAME.SMTP_HOST.getKey(), host==null?null: host.toString());
@@ -67,6 +68,7 @@ public class EmailServiceHelper {
 			props.setProperty(SETTINGNAME.SMTP_PORT.getKey(), port==null?null: port.toString());
 			props.setProperty(SETTINGNAME.SMTP_PROTOCOL.getKey(), protocol==null?null: protocol.toString());
 			props.setProperty(SETTINGNAME.SMTP_STARTTLS.getKey(), starttls==null?null: starttls.toString());
+			props.setProperty(SETTINGNAME.ORGNAME.getKey(), orgName==null?null: orgName.toString());
 			
 			for(Object prop: props.keySet()){
 				log.debug(prop+" : "+props.getProperty(prop.toString()));
@@ -99,7 +101,9 @@ public class EmailServiceHelper {
 		initProperties();
 		assert session!=null;
 		MimeMessage message = new MimeMessage(session);
-		message.setFrom(new InternetAddress(getProperties().getProperty("mail.smtp.from"),"WIRA BPMS"));
+		message.setFrom(new InternetAddress(getProperties().getProperty("mail.smtp.from"),
+				props.getProperty(SETTINGNAME.ORGNAME.getKey())==null? "WIRA BPMS":
+						props.getProperty(SETTINGNAME.ORGNAME.getKey())));
 		
 		InternetAddress dests[] = new InternetAddress[recipients.size()];
 		for (int i = 0; i < recipients.size(); i++) {
@@ -184,7 +188,10 @@ public class EmailServiceHelper {
 		initProperties();
 		assert session!=null;
 		MimeMessage message = new MimeMessage(session);
-		message.setFrom(new InternetAddress("WIRA BPM",getProperties().getProperty("mail.smtp.from")));
+		//message.setFrom(new InternetAddress("WIRA BPM",getProperties().getProperty("mail.smtp.from")));
+		message.setFrom(new InternetAddress(getProperties().getProperty("mail.smtp.from"),
+				props.getProperty(SETTINGNAME.ORGNAME.getKey())==null? "WIRA BPMS":
+						props.getProperty(SETTINGNAME.ORGNAME.getKey())));
 		
 		String[] emails = recipient.split(",");
 		InternetAddress dests[] = new InternetAddress[emails.length];

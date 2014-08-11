@@ -117,11 +117,11 @@ public class SendMailWorkItemHandler implements WorkItemHandler {
 		
 		switch (type) {
 		case APPROVALREQUEST_OWNERNOTE:
-			subject = subject+" Approval Request Submitted";
+			//subject = subject+" Approval Request Submitted";
 			body = "Your document #"+subject+" was submitted to "+approver;
 			break;
 		case APPROVALREQUEST_APPROVERNOTE:
-			subject = subject+" Approval Request from "+getOwner(ownerId);
+			//subject = subject+" Approval Request from "+getOwner(ownerId);
 			body =  "The following document requires your review/ approval.";
 			owner = users;
 			break;
