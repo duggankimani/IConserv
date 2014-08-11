@@ -104,9 +104,10 @@ public class PeriodSaveView extends Composite {
 		if(periods!=null){
 			PeriodDTO period = getPeriod();
 			for(PeriodDTO dto: periods){
-				period.overlaps(dto);
-				isValid = false;
-				issues.addError("This period overlaps period '"+dto.getDescription()+"'");
+				if(period.overlaps(dto)){
+					isValid = false;
+					issues.addError("This period overlaps period '"+dto.getDescription()+"'");
+				}
 			}
 		}
 		

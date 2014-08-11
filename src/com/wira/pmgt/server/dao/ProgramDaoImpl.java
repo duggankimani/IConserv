@@ -576,4 +576,22 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		query.executeUpdate();
 	}
 
+	public ProgramStatus getStatus(Long programDetailId) {
+		String countQuery = "select status from programdetail where id=:programId";
+		Query query = em.createNativeQuery(countQuery).setParameter("programId", programDetailId);
+		String value = getSingleResultOrNull(query);
+		return value==null? ProgramStatus.CREATED: ProgramStatus.valueOf(value);
+	}
+
+	public double getOutcome(String key, Long programId) {
+		String sql = "select sum(actualoutcome) from targetandoutcome "
+				+ "where key=:key "
+				+ "and programid in (select id from programdetail where parentid=:programId)";
+		Query query = em.createNativeQuery(sql)
+				.setParameter("programId", programId)
+				.setParameter("key", key);
+		Number value = getSingleResultOrNull(query);
+		return value==null? 0.0: value.doubleValue();
+	}
+
 }

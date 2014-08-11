@@ -27,6 +27,7 @@ import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.ProgramAnalysis;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
 import com.wira.pmgt.shared.model.program.ProgramFundDTO;
+import com.wira.pmgt.shared.model.program.ProgramStatus;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
 import com.wira.pmgt.shared.model.program.ProgramTaskForm;
 import com.wira.pmgt.shared.model.program.ProgramTreeModel;
@@ -43,6 +44,23 @@ public class TestProgramDaoImpl {
 	}
 	
 	@Test
+	public void changeStatus(){
+		IsProgramDetail detail = ProgramDaoHelper.getProgramById(41L, false);
+		detail.setStatus(ProgramStatus.CREATED);
+		ProgramDaoHelper.save(detail);
+	}
+	
+	@Ignore
+	public void getSum(){
+		System.err.println(dao.getOutcome("noOfExchangeVisits", 200L));
+	}
+	
+	@Ignore
+	public void getStatus(){
+		System.out.println(dao.getStatus(200L));
+	}
+	
+	@Ignore
 	public void getProgramTree(){
 		Long periodId= 1L;
 		Long programId = null;
