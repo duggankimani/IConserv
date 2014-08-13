@@ -9,7 +9,6 @@ import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.mail.Authenticator;
-import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -29,9 +28,7 @@ import com.wira.pmgt.server.dao.helper.SettingsDaoHelper;
 import com.wira.pmgt.server.dao.model.LocalAttachment;
 import com.wira.pmgt.server.db.DB;
 import com.wira.pmgt.shared.model.HTUser;
-import com.wira.pmgt.shared.model.LongValue;
 import com.wira.pmgt.shared.model.settings.SETTINGNAME;
-import com.wira.pmgt.shared.model.settings.Setting;
 
 public class EmailServiceHelper {
 

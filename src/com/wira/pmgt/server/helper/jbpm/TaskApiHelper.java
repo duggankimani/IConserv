@@ -11,7 +11,6 @@ import org.jbpm.task.User;
 import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
 import com.wira.pmgt.server.dao.helper.DocumentDaoHelper;
 import com.wira.pmgt.server.dao.helper.ProgramDaoHelper;
-import com.wira.pmgt.server.dao.model.DocumentModel;
 import com.wira.pmgt.server.db.DB;
 import com.wira.pmgt.shared.exceptions.IllegalApprovalRequestException;
 import com.wira.pmgt.shared.model.DocStatus;
