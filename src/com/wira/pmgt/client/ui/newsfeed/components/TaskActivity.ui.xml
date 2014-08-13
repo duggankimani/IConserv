@@ -20,8 +20,8 @@
         				<span ui:field="spnTo" class="hide">&nbsp;to&nbsp;</span>
 					    <g:Anchor ui:field="aDocument" styleName="item unread hand">
         				</g:Anchor>  
-						<!-- span ui:field="spnSubject">Core Admin</span -->
 					</strong>
+					<span ui:field="spnDescription">Visit to Magadi school</span>					
 				</span>
 				<span class="time">
 					<i class="icon-time"></i>

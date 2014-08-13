@@ -1,5 +1,6 @@
 package com.wira.pmgt.server.dao.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -29,6 +30,9 @@ public class NotificationModel extends PO {
 	private String targetUserId;
 	
 	private String subject;
+	
+	@Column(length=5000)
+	private String description;
 	
 	/**
 	 * Document Owner
@@ -129,6 +133,14 @@ public class NotificationModel extends PO {
 
 	public void setFileId(Long fileId) {
 		this.fileId = fileId;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

@@ -24,6 +24,7 @@ public class Notification extends Activity{
 	private ApproverAction approverAction;
 	private Long processInstanceId;
 	private String fileName;
+	private String description;
 	private Long fileId;
 	
 	public Notification() {
@@ -99,7 +100,7 @@ public class Notification extends Activity{
 		note.setTargetUserId(targetUserId);
 		note.setApproverAction(approverAction);
 		note.setProcessInstanceId(processInstanceId);
-		
+		note.setDescription(description);
 		return note;
 	}
 
@@ -174,5 +175,13 @@ public class Notification extends Activity{
 
 	public void setFileId(Long fileId) {
 		this.fileId = fileId;
+	}
+
+	public void setDescription(String description) {
+		this.description=description;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 }

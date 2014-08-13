@@ -40,6 +40,7 @@ public class TaskActivity extends Composite {
 	@UiField Anchor aFile;
 	@UiField SpanElement spnTo;
 	@UiField Anchor aDocument;
+	@UiField SpanElement spnDescription;
 	
 	@UiField SpanElement spnTime;
 	@UiField SpanElement spnUser;
@@ -60,6 +61,7 @@ public class TaskActivity extends Composite {
 		String text = "";
 		
 		String subject=notification.getSubject();
+		String description = notification.getDescription();
 		DocumentType documentType=notification.getDocumentType();
 		
 		NotificationType notificationType=notification.getNotificationType();
@@ -189,7 +191,8 @@ public class TaskActivity extends Composite {
 		}else if(processInstanceId!=null){
 			aDocument.setHref("#home;type=search;pid="+processInstanceId);
 		}
-
+		
+		spnDescription.setInnerText(description);
 		spnAction.setInnerText(text);
 		spnTime.setInnerText(time);
 	}

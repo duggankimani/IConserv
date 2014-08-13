@@ -110,6 +110,7 @@ public class NotificationDaoHelper {
 		notificationTo.setApproverAction(modelFrom.getApproverAction());
 		notificationTo.setFileId(modelFrom.getFileId());
 		notificationTo.setFileName(modelFrom.getFileName());
+		notificationTo.setDescription(modelFrom.getDescription());
 	}
 	
 	private static void copyData(Notification notificationTo,
@@ -124,6 +125,7 @@ public class NotificationDaoHelper {
 		notificationTo.setNotificationType(modelFrom.getNotificationType());
 		notificationTo.setRead(modelFrom.IsRead());	
 		notificationTo.setSubject(modelFrom.getSubject());
+		notificationTo.setDescription(modelFrom.getDescription());
 		notificationTo.setCreated(modelFrom.getCreated());
 		if(modelFrom.getTargetUserId()!=null)
 			notificationTo.setTargetUserId(LoginHelper.get().getUser(modelFrom.getTargetUserId()));

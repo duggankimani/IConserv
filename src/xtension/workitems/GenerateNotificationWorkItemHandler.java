@@ -72,6 +72,7 @@ public class GenerateNotificationWorkItemHandler implements WorkItemHandler {
 		notification.setRead(false);
 		notification.setSubject(subject);
 		Document doc = DocumentDaoHelper.getDocument(notification.getDocumentId());
+		notification.setDescription(doc.getDescription());
 		notification.setDocumentType(doc.getType());
 		
 		List<HTUser> actors = null;
