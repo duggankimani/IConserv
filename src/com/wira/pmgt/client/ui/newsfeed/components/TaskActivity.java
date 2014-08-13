@@ -187,9 +187,9 @@ public class TaskActivity extends Composite {
 		aDocument.setText(subject);
 		
 		if(notification.getDocumentId()!=null){
-			aDocument.setHref("#home;type=search;did="+notification.getDocumentId());
+			aDocument.setHref("#home;did="+notification.getDocumentId()+";type=search");
 		}else if(processInstanceId!=null){
-			aDocument.setHref("#home;type=search;pid="+processInstanceId);
+			aDocument.setHref("#home;pid="+processInstanceId+";type=search");
 		}
 		
 		spnDescription.setInnerText(description);

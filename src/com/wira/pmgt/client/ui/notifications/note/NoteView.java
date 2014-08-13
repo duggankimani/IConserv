@@ -197,9 +197,9 @@ public class NoteView extends ViewImpl implements NotePresenter.MyView {
 		}
 
 		if (documentId != null) {
-			aDocument.setHref("#home;type=search;did=" + documentId);
+			aDocument.setHref("#home;did=" + documentId+";type=search");
 		} else if (processInstanceId != null) {
-			aDocument.setHref("#home;type=search;pid=" + processInstanceId);
+			aDocument.setHref("#home;pid=" + processInstanceId+";type=search");
 		}
 
 	}

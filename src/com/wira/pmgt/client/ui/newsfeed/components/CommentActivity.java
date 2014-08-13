@@ -76,7 +76,8 @@ public class CommentActivity extends Composite {
 		}
 		
 		aDocument.setText(docType+" "+subject);
-		aDocument.setHref("#home;type=search;did="+documentId);
+		//aDocument.setHref("#home;type=search;did="+documentId);
+		aDocument.setHref("#home;did="+ documentId+";type=search");
 		
 		img.setUrl(AppContext.getUserImageUrl(createdBy));
 		
