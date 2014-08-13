@@ -126,6 +126,9 @@ public class NotificationDaoHelper {
 		notificationTo.setRead(modelFrom.IsRead());	
 		notificationTo.setSubject(modelFrom.getSubject());
 		notificationTo.setDescription(modelFrom.getDescription());
+		if(notificationTo.getDescription()==null){
+			notificationTo.setDescription(DB.getDocumentDao().getDescription(modelFrom.getDocumentId()));
+		}
 		notificationTo.setCreated(modelFrom.getCreated());
 		if(modelFrom.getTargetUserId()!=null)
 			notificationTo.setTargetUserId(LoginHelper.get().getUser(modelFrom.getTargetUserId()));

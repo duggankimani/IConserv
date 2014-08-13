@@ -3,7 +3,6 @@ package com.wira.pmgt.shared.requests;
 import com.wira.pmgt.shared.model.Notification;
 import com.wira.pmgt.shared.requests.BaseRequest;
 import com.wira.pmgt.shared.responses.BaseResponse;
-import com.wira.pmgt.shared.responses.SaveCommentResponse;
 import com.wira.pmgt.shared.responses.SaveNotificationResponse;
 
 public class SaveNotificationRequest extends BaseRequest<SaveNotificationResponse> {

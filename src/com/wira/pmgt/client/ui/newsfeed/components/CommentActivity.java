@@ -34,6 +34,7 @@ public class CommentActivity extends Composite {
 	@UiField SpanElement spnTime;
 	@UiField Element spnUser;
 	@UiField SpanElement commentText;
+	@UiField SpanElement spnDescription;
 	Long commentid;
 
 	public CommentActivity(Comment comment) {
@@ -50,7 +51,7 @@ public class CommentActivity extends Composite {
 	
 	void bind(Comment comment) {
 		
-		setComment(comment.getId(),comment.getDocType(), comment.getSubject(),
+		setComment(comment.getId(),comment.getDocType(), comment.getSubject(),comment.getDescription(),
 				comment.getComment(), comment.getCreatedBy(),
 				comment.getCreated(), comment.getUpdatedBy(), comment.getUpdated(),
 				comment.getDocumentId(), comment.getParentId()!=null);
@@ -58,7 +59,7 @@ public class CommentActivity extends Composite {
 
 
 	public void setComment(Long commentId, 
-			String docType, String subject,
+			String docType, String subject,String description,
 			String comment, HTUser createdBy,
 			Date created, String updatedby, Date updated, long documentId, boolean isChild) {
 		

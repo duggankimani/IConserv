@@ -71,7 +71,8 @@ public class NoteView extends ViewImpl implements NotePresenter.MyView {
 	}
 
 	@Override
-	public void setValues(String subject, DocumentType documentType,
+	public void setValues(String subject, String description, 
+			DocumentType documentType,
 			NotificationType notificationType, HTUser ownerObj,
 			HTUser targetUser, String time, boolean isRead, HTUser createdBy,
 			ApproverAction approverAction, Long processInstanceId,
@@ -183,6 +184,7 @@ public class NoteView extends ViewImpl implements NotePresenter.MyView {
 			// break;
 		}
 
+		aDocument.setTitle(description);
 		if (safeHtml != null) {
 			aDocument.setHTML(safeHtml);
 			aDocument.removeStyleName("hidden");

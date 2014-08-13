@@ -93,6 +93,7 @@ public class CommentDaoHelper {
 		commentTo.setUserId(commentTo.getUserId());
 		commentTo.setComment(modelFrom.getComment());
 		commentTo.setParentId(modelFrom.getParentId());
+		commentTo.setDescription(DB.getDocumentDao().getDescription(modelFrom.getDocumentId()));
 		
 		DocumentDaoImpl dao = DB.getDocumentDao();
 		String name = dao.getDocumentTypeByDocumentId(modelFrom.getDocumentId()).getDisplay();

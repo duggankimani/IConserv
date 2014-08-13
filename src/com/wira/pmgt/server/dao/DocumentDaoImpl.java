@@ -723,5 +723,14 @@ public class DocumentDaoImpl extends BaseDaoImpl{
 		
 		return result>0;
 	}
+
+	public String getDescription(Long documentId) {
+		if(documentId==null){
+			return null;
+		}
+		String sql = "select description from DocumentModel where id=:id";
+		Query query = em.createQuery(sql).setParameter("id", documentId);
+		return getSingleResultOrNull(query);
+	}
 	
 }

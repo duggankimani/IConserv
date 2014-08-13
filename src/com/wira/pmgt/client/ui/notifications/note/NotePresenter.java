@@ -27,7 +27,8 @@ public class NotePresenter extends
 		
 		HasClickHandlers getDocumentBtn();
 
-		void setValues(String subject, DocumentType documentType,
+		void setValues(String subject, String description,
+				DocumentType documentType,
 				NotificationType notificationType, HTUser owner,
 				HTUser targetUserId, String time, boolean isRead, 
 				HTUser createdBy,ApproverAction approverAction, Long processInstanceId,
@@ -61,7 +62,7 @@ public class NotePresenter extends
 						public void processResult(UpdateNotificationRequestResult result) {
 							Notification notification = result.getNotification();
 							String time=getTimeDifferenceAsString(notification.getCreated());
-							getView().setValues(notification.getSubject(),
+							getView().setValues(notification.getSubject(),notification.getDescription(),
 									notification.getDocumentType(),
 									notification.getNotificationType(),
 									notification.getOwner(),
@@ -90,7 +91,7 @@ public class NotePresenter extends
 		this.isNotification=isNotification;
 		this.note = notification;
 		String time=getTimeDifferenceAsString(notification.getCreated());
-		getView().setValues(notification.getSubject(),
+		getView().setValues(notification.getSubject(),notification.getDescription(),
 				notification.getDocumentType(),
 				notification.getNotificationType(),
 				notification.getOwner(),

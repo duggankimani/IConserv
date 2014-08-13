@@ -332,6 +332,7 @@ public class TaskItemPresenter extends
 		notification.setApproverAction(ApproverAction.DELEGATE);
 		HTSummary summary = (HTSummary)task;
 		notification.setDocumentId(summary.getDocumentRef());
+		notification.setDescription(summary.getDescription());
 		//notification.setDocumentType(summary.getDocStatus());
 		//notification.setOwner(summary.getOwner());
 		notification.setProcessInstanceId(summary.getProcessInstanceId());
