@@ -3,13 +3,11 @@ package com.wira.pmgt.client.ui.newsfeed.components;
 import static com.wira.pmgt.client.ui.util.DateUtils.getTimeDifferenceAsString;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ErrorEvent;
 import com.google.gwt.event.dom.client.ErrorHandler;
-import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
@@ -40,7 +38,7 @@ public class TaskActivity extends Composite {
 	@UiField Anchor aFile;
 	@UiField SpanElement spnTo;
 	@UiField Anchor aDocument;
-	@UiField SpanElement spnDescription;
+	//@UiField SpanElement spnDescription;
 	
 	@UiField SpanElement spnTime;
 	@UiField SpanElement spnUser;
@@ -184,7 +182,7 @@ public class TaskActivity extends Composite {
 			break;
 		}
 		
-		aDocument.setText(subject);
+		aDocument.setText(subject+" "+description);
 		
 		if(notification.getDocumentId()!=null){
 			aDocument.setHref("#home;did="+notification.getDocumentId()+";type=search");
@@ -192,7 +190,7 @@ public class TaskActivity extends Composite {
 			aDocument.setHref("#home;pid="+processInstanceId+";type=search");
 		}
 		
-		spnDescription.setInnerText(description);
+		//spnDescription.setInnerText(description);
 		spnAction.setInnerText(text);
 		spnTime.setInnerText(time);
 	}

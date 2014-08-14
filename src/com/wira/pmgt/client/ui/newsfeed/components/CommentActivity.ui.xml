@@ -16,7 +16,7 @@
 						<g:Anchor ui:field="aDocument" styleName="item unread hand">
         				</g:Anchor> 
 					</strong>
-					<span ui:field="spnDescription">Visit to Magadi school</span>
+					<!-- span ui:field="spnDescription">Visit to Magadi school</span> -->
 				</span>
 				<span class="time">
 					<i class="icon-time"></i>

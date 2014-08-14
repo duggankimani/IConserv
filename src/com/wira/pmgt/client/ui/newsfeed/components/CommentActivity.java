@@ -34,7 +34,7 @@ public class CommentActivity extends Composite {
 	@UiField SpanElement spnTime;
 	@UiField Element spnUser;
 	@UiField SpanElement commentText;
-	@UiField SpanElement spnDescription;
+	//@UiField SpanElement spnDescription;
 	Long commentid;
 
 	public CommentActivity(Comment comment) {
@@ -75,7 +75,7 @@ public class CommentActivity extends Composite {
 			
 		}
 		
-		aDocument.setText(docType+" "+subject);
+		aDocument.setText(docType+" "+subject +" "+description);
 		//aDocument.setHref("#home;type=search;did="+documentId);
 		aDocument.setHref("#home;did="+ documentId+";type=search");
 		
