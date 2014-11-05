@@ -1,5 +1,7 @@
 <project name="iconserv" basedir="." default="war">
 	
+	<property name="gwt.lib.path" value="/home/duggan/Projects/gwt-2.5.1"/>
+	
 	<target name="war" depends="update-version-string">
 	    <copy file="src/Version.properties" todir="war/WEB-INF/classes" overwrite="true"></copy>
 		<war basedir="war" destfile="lwf.war" webxml="war/WEB-INF/web.xml">
@@ -88,6 +90,36 @@
            <arg value="--assume-unchanged"/>
            <arg value="src/Version.properties"/>
         </exec>
+	</target>
+	
+	<path id="build.classpath">
+        <pathelement location="war/WEB-INF/classes" />
+        <fileset dir="war/WEB-INF/lib" includes="**/*.jar" />
+		<fileset dir="${gwt.lib.path}" includes="**/*.jar" />		
+    </path>
+
+	<target name="generate-docs" depends="update-version-string">
+		<javadoc
+	           destdir="docs/api"
+	           author="true"
+	           version="true"
+	           use="true"
+	           windowtitle="iConserve API"
+			   classpathref="build.classpath">
+
+	    <packageset dir="src" defaultexcludes="yes">
+	      <include name="**"/>
+	      <!-- exclude name="com/dummy/test/doc-files/**"/ -->
+	    </packageset>
+
+	    <doctitle><![CDATA[<h1>iConserve  Version]]> ${version} <![CDATA[</h1>]]></doctitle>
+	    <bottom><![CDATA[<i>Copyright &#169; 2000 Workpoint Limited. All Rights Reserved.</i>]]></bottom>
+	    <group title="UI Packages" packages="com.wira.pmgt.client.*"/>
+	    <group title="Data Transfer Packages" packages="com.wira.pmgt.shared.*"/>
+		<group title="Server Side Packages" packages="com.wira.pmgt.server.*:xtension.*"/>
+	    <link offline="true" href="http://wira.io/iconserve/${version}/docs/api/" packagelistLoc="/tmp"/>
+	    <link href="http://wira.io/iconserve/${version}/docs/api/"/>
+	  </javadoc>
 	</target>
 </project>
 <!-- http://blog.elitecoderz.net/gwt-and-tomcat-create-war-using-eclipse-to-deploy-war-on-tomcat/2009/12/ -->
