@@ -1,5 +1,6 @@
 package com.wira.pmgt.server.dao.biz.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,7 +40,7 @@ public class TargetAndOutcome extends PO{
 	
 	private String outcomeRemarks;//this may be provided in place of counts
 	
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.LAZY,cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinColumn(name="programid",nullable=false,referencedColumnName="id")
 	private ProgramDetail programDetail;
 	

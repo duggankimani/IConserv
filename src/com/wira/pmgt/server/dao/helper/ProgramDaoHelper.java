@@ -142,31 +142,56 @@ public class ProgramDaoHelper {
 			
 		}
 		
+		dao.save(program);
+		dao.flush();
+		//dao.refresh(program);
+		
+		saveTargetsAndOutcomes(programDTO, program, previousStatus);
+		saveFunding(programDTO, program, previousStatus);
+		dao.flush();
+		//dao.refresh(managedPO);
+		
+		//Database triggers update fund amounts & we'd like to get the committed values from the database
+		//in the get method below
+	
+		//reload program
+		dao.refresh(program);
+		return get(program,false);
+	}
+	
+	private static void saveTargetsAndOutcomes(IsProgramDetail programDTO, ProgramDetail detail, ProgramStatus previousStatus) {
+		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		
+		Collection<TargetAndOutcome> dbTargets =  getTargets(programDTO.getTargetsAndOutcomes());
+		
+		boolean isSave = true;
+		//Targets And Outcomes
 		if(previousStatus!=null){
 			if(previousStatus!=null && previousStatus.equals(ProgramStatus.CLOSED)){
 				if(programDTO.getStatus()==null || !programDTO.getStatus().equals(ProgramStatus.CLOSED)){
 					//reset program targets and outcomes
-					Collection<TargetAndOutcome> targets = program.getTargets();
-					for(TargetAndOutcome target: targets){
+					for(TargetAndOutcome target: dbTargets){
 						resetTarget(target);
 					}
+					
+					isSave=false;
 				}
 			}
-			
 		}
 		
-		dao.save(program);
-
-		dao.flush();
-		dao.refresh(program);
+		if(isSave){
+			List<Long> ids = new ArrayList<>();
+			for(TargetAndOutcome target: dbTargets){
+				target.setProgramDetail(detail);
+				dao.save(target);
+				ids.add(target.getId());				
+			}
+			
+			dao.deleteTargetsNotIn(detail, ids);
+		}
 		
-		saveFunding(programDTO, program, previousStatus);
-		//Database triggers update fund amounts & we'd like to get the committed values from the database
-		//in the get method below
-	
-		return get(program,false);
 	}
-	
+
 	private static void resetTarget(TargetAndOutcome target) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		double outcome= dao.getOutcome(target.getKey(), target.getProgramDetail().getId());
@@ -216,8 +241,6 @@ public class ProgramDaoHelper {
 			dao.deleteProgramFunds(idsToDelete);
 		}
 		
-		dao.flush();
-		dao.refresh(managedPO);
 	}
 
 	
@@ -373,8 +396,6 @@ public class ProgramDaoHelper {
 		detail.setStartDate(programDTO.getStartDate());
 		detail.setBudgetLine(programDTO.getBudgetLine());
 		detail.setType(programDTO.getType());
-		List<TargetAndOutcomeDTO> targets = programDTO.getTargetsAndOutcomes();
-		detail.setTargets(getTargets(targets));
 		
 		if(programDTO.getActivityOutcomeId()!=null){
 			detail.setActivityOutcome(dao.getProgramDetail(programDTO.getActivityOutcomeId()));

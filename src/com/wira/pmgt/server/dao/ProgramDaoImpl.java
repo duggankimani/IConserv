@@ -19,6 +19,7 @@ import com.wira.pmgt.server.dao.biz.model.Fund;
 import com.wira.pmgt.server.dao.biz.model.Period;
 import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
 import com.wira.pmgt.server.dao.biz.model.ProgramFund;
+import com.wira.pmgt.server.dao.biz.model.TargetAndOutcome;
 import com.wira.pmgt.server.dao.model.PO;
 import com.wira.pmgt.server.db.DB;
 import com.wira.pmgt.server.helper.auth.LoginHelper;
@@ -592,6 +593,24 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 				.setParameter("key", key);
 		Number value = getSingleResultOrNull(query);
 		return value==null? 0.0: value.doubleValue();
+	}
+
+	public void deleteTargetsNotIn(ProgramDetail detail, List<Long> ids) {
+		if(ids.isEmpty()){
+			return;
+		}
+		
+		Query query = em.createQuery("FROM TargetAndOutcome t where t.programDetail=:programDetail "
+						+ "and t.id not in (:ids)")
+						.setParameter("programDetail", detail)
+						.setParameter("ids", ids);
+		
+		List<TargetAndOutcome> ts = getResultList(query);
+		
+		for(TargetAndOutcome t: ts){
+			delete(t);
+		}
+		
 	}
 
 }
