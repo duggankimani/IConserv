@@ -156,6 +156,9 @@ public class ProgramDaoHelper {
 		}
 		
 		dao.save(program);
+
+		dao.flush();
+		dao.refresh(program);
 		
 		saveFunding(programDTO, program, previousStatus);
 		//Database triggers update fund amounts & we'd like to get the committed values from the database
@@ -619,15 +622,35 @@ public class ProgramDaoHelper {
 		return getActivity(details, loadChildren);
 	}
 
-	public static List<FundDTO> getFunds() {
+	public static List<FundDTO> getFunds(Long parentId) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
-		List<Fund> funds = dao.getFunds();
-		
+		List<Fund> funds = new ArrayList<>();
 		List<FundDTO> fundsDto = new ArrayList<>();
+		
+		if(parentId==null){
+			funds = dao.getFunds();
+		}else{
+			//find all funds available to this program/activity's parent
+			ProgramDetail parent = dao.getProgramDetail(parentId);
+			assert parent!=null;
+
+			if(parent!=null){
+				Collection<ProgramFund> pfunds = parent.getSourceOfFunds();
+				if(pfunds!=null)
+				for(ProgramFund fund: pfunds){
+					funds.add(fund.getFund());
+				}
+			}else{
+				//no parent
+				funds = dao.getFunds();
+			}
+		}
+		
 		if(funds!=null)
 			for(Fund fund: funds){
 				fundsDto.add(get(fund));
 			}
+		
 		return fundsDto;
 	}
 

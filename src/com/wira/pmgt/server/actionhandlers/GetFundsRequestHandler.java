@@ -19,7 +19,8 @@ public class GetFundsRequestHandler extends
 	public void execute(GetFundsRequest action, BaseResponse actionResult,
 			ExecutionContext execContext) throws ActionException {
 		GetFundsResponse response = (GetFundsResponse)actionResult;
-		response.setFunds(ProgramDaoHelper.getFunds());
+		
+		response.setFunds(ProgramDaoHelper.getFunds(action.getParentId()));
 	}
 
 	@Override

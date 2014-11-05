@@ -23,6 +23,7 @@ import com.wira.pmgt.shared.model.ParticipantType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.UserGroup;
+import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.ProgramAnalysis;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
@@ -44,6 +45,15 @@ public class TestProgramDaoImpl {
 	}
 	
 	@Test
+	public void test(){
+		Long id=209L;
+		List<FundDTO> funds = ProgramDaoHelper.getFunds(id);
+		
+		System.err.println(funds);
+		
+	}
+	
+	@Ignore
 	public void changeStatus(){
 		IsProgramDetail detail = ProgramDaoHelper.getProgramById(41L, false);
 		detail.setStatus(ProgramStatus.CREATED);

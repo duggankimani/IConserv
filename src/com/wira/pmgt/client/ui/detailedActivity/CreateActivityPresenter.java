@@ -96,15 +96,15 @@ public class CreateActivityPresenter extends
 		return viewactivity;
 	}
 
-	public void load(Long programId,Long outcomeId) {
+	public void load(Long parentId,Long outcomeId) {
 		
-		this.parentId = programId;
+		this.parentId = parentId;
 		this.outcomeId = outcomeId;
 		
 		MultiRequestAction action = new MultiRequestAction();
-		action.addRequest(new GetFundsRequest());
+		action.addRequest(new GetFundsRequest(parentId));
 		action.addRequest(new GetPeriodRequest());
-		action.addRequest(new GetProgramsRequest(programId, false));
+		action.addRequest(new GetProgramsRequest(parentId, false));
 				
 		requestHelper.execute(action, new TaskServiceCallback<MultiRequestActionResult>() {
 			@Override
