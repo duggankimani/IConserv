@@ -6,6 +6,11 @@
 			<d:ActionLink href="#" target="_blank" styleName="btn btn-success"
 				ui:field="aCreateForm">Create form
 			</d:ActionLink>
+
+			<d:ActionLink styleName="btn btn-default"
+				ui:field="aReload">
+				<span class="icon-refresh" ui:field="spnRefresh"></span>
+			</d:ActionLink>
 		</div>
 
 		<div class="row-fluid">
