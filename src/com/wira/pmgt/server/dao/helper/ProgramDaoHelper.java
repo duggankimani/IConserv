@@ -110,6 +110,8 @@ public class ProgramDaoHelper {
 
 	public static ProgramDTO save(IsProgramDetail programDTO) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
+		boolean isNew = programDTO.getId()==null;
+		
 		ProgramStatus previousStatus = null;
 		if(programDTO.getId()!=null){
 			previousStatus = dao.getStatus(programDTO.getId()); 
@@ -144,6 +146,9 @@ public class ProgramDaoHelper {
 		}
 		
 		dao.save(program);
+		if(isNew && program.getType()==ProgramDetailType.PROGRAM){
+			createWriteAccess(program);
+		}
 		dao.flush();
 		//dao.refresh(program);
 		
@@ -157,9 +162,18 @@ public class ProgramDaoHelper {
 	
 		//reload program
 		dao.refresh(program);
+		
 		return get(program,false);
 	}
 	
+	private static void createWriteAccess(ProgramDetail program) {
+		TaskInfo info = new TaskInfo();
+		info.setActivityId(program.getId());
+		info.addParticipant(SessionHelper.getCurrentUser(), PermissionType.CAN_EDIT);
+		
+		saveTaskInfo(info);
+	}
+
 	private static void saveTargetsAndOutcomes(IsProgramDetail programDTO, ProgramDetail detail, ProgramStatus previousStatus) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		
