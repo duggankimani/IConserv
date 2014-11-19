@@ -10,8 +10,6 @@ import java.util.List;
 
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.SpanElement;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -25,8 +23,6 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
-import com.wira.pmgt.client.ui.AppManager;
-import com.wira.pmgt.client.ui.OnOptionSelected;
 import com.wira.pmgt.client.ui.component.BreadCrumbItem;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.DateRangeWidget;
@@ -156,7 +152,7 @@ public class CreateActivityView extends ViewImpl implements
 		config.setMandatory(true);
 		configs.add(config);
 
-		config = new ColumnConfig("actual", "Outcome", DataType.DOUBLE, "1000");
+		config = new ColumnConfig("actual", "Output", DataType.DOUBLE, "1000");
 		configs.add(config);
 
 		gridTargets.setColumnConfigs(configs);
