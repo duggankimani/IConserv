@@ -10,6 +10,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.PresenterWidget;
@@ -845,6 +846,7 @@ public class ProgramsPresenter extends
 
 	protected void setPermissions(HashMap<Long, PermissionType> permissions) {
 		this.permissions = permissions;
+		Window.alert("Permissions = "+permissions);
 	}
 
 	protected void setActivity(IsProgramDetail activity) {

@@ -21,7 +21,8 @@ public class GetPermissionsRequestActionHandler extends
 			BaseResponse actionResult, ExecutionContext execContext)
 			throws ActionException {
 		
-		ProgramDaoHelper.getUserPermissions(action.getUserId(), action.getPeriodId());
+		((GetPermissionsResponse)actionResult).setPermissions(
+		ProgramDaoHelper.getUserPermissions(action.getUserId(), action.getPeriodId()));
 	}
 
 	

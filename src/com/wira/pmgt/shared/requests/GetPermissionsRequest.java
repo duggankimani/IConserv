@@ -21,7 +21,7 @@ public class GetPermissionsRequest extends BaseRequest<GetPermissionsResponse> {
 	@Override
 	public BaseResponse createDefaultActionResponse() {
 		
-		return new ApprovalRequestResult(false);
+		return new GetPermissionsResponse();
 	}
 
 	public String getUserId() {
