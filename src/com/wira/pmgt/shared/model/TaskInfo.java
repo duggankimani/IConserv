@@ -27,7 +27,7 @@ public class TaskInfo implements Serializable{
 	private String approvalTaskName;
 	private String taskName;
 	
-	Map<ParticipantType, List<OrgEntity>> participants = new HashMap<ParticipantType, List<OrgEntity>>();
+	Map<PermissionType, List<OrgEntity>> participants = new HashMap<PermissionType, List<OrgEntity>>();
 	
 	//for serialization purposes
 	public TaskInfo(){	
@@ -38,18 +38,18 @@ public class TaskInfo implements Serializable{
 	 * @param participants
 	 * @param type
 	 */
-	public void setParticipants(List<OrgEntity> participantList, ParticipantType type){
+	public void setParticipants(List<OrgEntity> participantList, PermissionType type){
 		participants.put(type, participantList);
 	}
 	
-	public void addParticipants(List<OrgEntity> participants, ParticipantType type ){
+	public void addParticipants(List<OrgEntity> participants, PermissionType type ){
 		if(participants!=null)
 			for(OrgEntity entity: participants){
 				addParticipant(entity, type);
 			}
 	}
 	
-	public void addParticipant(OrgEntity participant, ParticipantType type ){
+	public void addParticipant(OrgEntity participant, PermissionType type ){
 		List<OrgEntity> entities = getParticipants(type);
 		
 		//To avoid repetition
@@ -67,7 +67,7 @@ public class TaskInfo implements Serializable{
 	 * @param type
 	 * @return List of participants based on type
 	 */
-	public List<OrgEntity> getParticipants(ParticipantType type){
+	public List<OrgEntity> getParticipants(PermissionType type){
 		List<OrgEntity> entities = participants.get(type);
 		if(entities==null){
 			return new ArrayList<OrgEntity>();
@@ -84,7 +84,7 @@ public class TaskInfo implements Serializable{
 	 * @param type
 	 * @return first participant in the map
 	 */
-	public OrgEntity getParticipant(ParticipantType type){
+	public OrgEntity getParticipant(PermissionType type){
 		List<OrgEntity> entities = participants.get(type);
 		if(type==null || entities==null || entities.isEmpty()){
 			return null;
@@ -109,11 +109,11 @@ public class TaskInfo implements Serializable{
 		this.message = message;
 	}
 
-	public Map<ParticipantType, List<OrgEntity>> getParticipants() {
+	public Map<PermissionType, List<OrgEntity>> getParticipants() {
 		return participants;
 	}
 
-	public void setParticipants(Map<ParticipantType, List<OrgEntity>> participants) {
+	public void setParticipants(Map<PermissionType, List<OrgEntity>> participants) {
 		this.participants = participants;
 	}
 
@@ -157,7 +157,7 @@ public class TaskInfo implements Serializable{
 		this.taskName = taskName;
 	}
 
-	public boolean contains(ParticipantType type) {
+	public boolean contains(PermissionType type) {
 		return getParticipant(type)!=null;
 	}
 	

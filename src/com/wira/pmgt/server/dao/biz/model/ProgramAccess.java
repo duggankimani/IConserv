@@ -15,7 +15,7 @@ import javax.persistence.NamedQuery;
 import org.hibernate.annotations.Index;
 
 import com.wira.pmgt.server.dao.model.PO;
-import com.wira.pmgt.shared.model.ParticipantType;
+import com.wira.pmgt.shared.model.PermissionType;
 
 /**
  * User/ Group Access permissions
@@ -55,7 +55,7 @@ public class ProgramAccess extends PO{
 	
 	@Column(nullable=false)
 	@Enumerated(EnumType.STRING)
-	private ParticipantType type;
+	private PermissionType type;
 
 	public Long getId() {
 		return id;
@@ -65,11 +65,11 @@ public class ProgramAccess extends PO{
 		this.id = id;
 	}
 
-	public ParticipantType getType() {
+	public PermissionType getType() {
 		return type;
 	}
 
-	public void setType(ParticipantType type) {
+	public void setType(PermissionType type) {
 		this.type = type;
 	}
 

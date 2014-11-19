@@ -18,7 +18,7 @@ import com.wira.pmgt.shared.model.Document;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.LongValue;
 import com.wira.pmgt.shared.model.OrgEntity;
-import com.wira.pmgt.shared.model.ParticipantType;
+import com.wira.pmgt.shared.model.PermissionType;
 import com.wira.pmgt.shared.model.StringValue;
 import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.UserGroup;
@@ -35,7 +35,7 @@ public class TaskApiHelper {
 
 		//Save permissions
 		ProgramDaoHelper.saveTaskInfo(info);
-		if(!info.contains(ParticipantType.ASSIGNEE)){
+		if(!info.contains(PermissionType.CAN_EXECUTE)){
 			return;
 		}
 		
@@ -51,11 +51,11 @@ public class TaskApiHelper {
 		document = DocumentDaoHelper.save(document);
 				
 		//initiator
-		OrgEntity initiator = info.getParticipant(ParticipantType.INITIATOR);		
+		OrgEntity initiator = info.getParticipant(PermissionType.CAN_EDIT);		
 		document.setOwner((HTUser)initiator);
 				
 		//Assignees
-		List<OrgEntity> assignees = info.getParticipants(ParticipantType.ASSIGNEE);
+		List<OrgEntity> assignees = info.getParticipants(PermissionType.CAN_EXECUTE);
 //		List<OrganizationalEntity> potentialOwners = new ArrayList<OrganizationalEntity>();
 //		potentialOwners.addAll(getEntities(assignees));
 		

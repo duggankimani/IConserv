@@ -1,5 +1,6 @@
 package com.wira.pmgt.client.ui.programs;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -9,6 +10,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.PresenterWidget;
@@ -46,7 +48,7 @@ import com.wira.pmgt.client.ui.outcome.CreateOutcomePresenter;
 import com.wira.pmgt.client.ui.programs.tree.TreeWidget;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.OrgEntity;
-import com.wira.pmgt.shared.model.ParticipantType;
+import com.wira.pmgt.shared.model.PermissionType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.program.FundDTO;
@@ -58,6 +60,7 @@ import com.wira.pmgt.shared.requests.CreateProgramRequest;
 import com.wira.pmgt.shared.requests.DeleteProgramRequest;
 import com.wira.pmgt.shared.requests.GetFundsRequest;
 import com.wira.pmgt.shared.requests.GetPeriodsRequest;
+import com.wira.pmgt.shared.requests.GetPermissionsRequest;
 import com.wira.pmgt.shared.requests.GetProgramsRequest;
 import com.wira.pmgt.shared.requests.GetProgramsTreeRequest;
 import com.wira.pmgt.shared.requests.MoveItemRequest;
@@ -67,6 +70,7 @@ import com.wira.pmgt.shared.responses.CreateProgramResponse;
 import com.wira.pmgt.shared.responses.DeleteProgramResponse;
 import com.wira.pmgt.shared.responses.GetFundsResponse;
 import com.wira.pmgt.shared.responses.GetPeriodsResponse;
+import com.wira.pmgt.shared.responses.GetPermissionsResponse;
 import com.wira.pmgt.shared.responses.GetProgramsResponse;
 import com.wira.pmgt.shared.responses.GetProgramsTreeResponse;
 import com.wira.pmgt.shared.responses.MoveItemResponse;
@@ -176,6 +180,9 @@ public class ProgramsPresenter extends
 	IsProgramDetail selected;
 
 	IsProgramDetail detail;
+
+	//ProgramId, PermissionType Map
+	private HashMap<Long, PermissionType> permissions = new HashMap<Long, PermissionType>();
 
 	@Inject
 	public ProgramsPresenter(final EventBus eventBus, final IActivitiesView view) {
@@ -691,6 +698,9 @@ public class ProgramsPresenter extends
 		} else {
 			getView().setProgramId(this.programId);
 		}
+		
+		//Load Program Permissions
+		action.addRequest(new GetPermissionsRequest(AppContext.getUserId(), periodId));
 
 		// List of Programs for tabs
 		{
@@ -757,6 +767,10 @@ public class ProgramsPresenter extends
 									.get(i++);
 							getView().setData(response.getPrograms());
 						}
+						
+						//Get Program Permissions
+						GetPermissionsResponse permissionsResp = (GetPermissionsResponse)aResponse.get(i++);
+						setPermissions(permissionsResp.getPermissions());
 
 						// Programs (Presented as tabs below)
 						GetProgramsResponse response = (GetProgramsResponse) aResponse
@@ -830,6 +844,11 @@ public class ProgramsPresenter extends
 				});
 	}
 
+	protected void setPermissions(HashMap<Long, PermissionType> permissions) {
+		this.permissions = permissions;
+		//Window.alert("Permissions = "+permissions);
+	}
+
 	protected void setActivity(IsProgramDetail activity) {
 		getView().setActivity(activity);
 
@@ -888,7 +907,7 @@ public class ProgramsPresenter extends
 						fireEvent(new LoadAlertsEvent());
 
 						List<OrgEntity> assigned = taskInfo
-								.getParticipants(ParticipantType.ASSIGNEE);
+								.getParticipants(PermissionType.CAN_EXECUTE);
 						String allocatedPeople = "";
 
 						for (OrgEntity entity : assigned) {

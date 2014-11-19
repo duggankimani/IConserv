@@ -12,7 +12,7 @@ import com.wira.pmgt.server.helper.auth.LoginHelper;
 import com.wira.pmgt.server.helper.jbpm.ProcessMigrationHelper;
 import com.wira.pmgt.server.helper.jbpm.TaskApiHelper;
 import com.wira.pmgt.shared.model.HTUser;
-import com.wira.pmgt.shared.model.ParticipantType;
+import com.wira.pmgt.shared.model.PermissionType;
 import com.wira.pmgt.shared.model.TaskInfo;
 
 public class TestProgramActivityTask {
@@ -42,8 +42,8 @@ public class TestProgramActivityTask {
 		info.setDescription(detail.getDescription());
 		
 		//Assignees
-		info.addParticipant(new HTUser("Administrator"), ParticipantType.INITIATOR);
-		info.addParticipant(new HTUser("calcacuervo"), ParticipantType.ASSIGNEE);
+		info.addParticipant(new HTUser("Administrator"), PermissionType.CAN_EDIT);
+		info.addParticipant(new HTUser("calcacuervo"), PermissionType.CAN_EXECUTE);
 		
 		TaskApiHelper.createTask(info);
 	}

@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.autocomplete.AutoCompleteField;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.OrgEntity;
-import com.wira.pmgt.shared.model.ParticipantType;
+import com.wira.pmgt.shared.model.PermissionType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 
 public class UserAssign extends Composite {
@@ -81,13 +81,17 @@ public class UserAssign extends Composite {
 		for (OrgEntity entity : entities) {
 			if (!selectedSet.contains(entity)) {
 				selectedSet.add(entity);
-				ParticipantType type = detailType == ProgramDetailType.PROGRAM ? ParticipantType.STAKEHOLDER
-						: ParticipantType.ASSIGNEE;
+				PermissionType type = detailType==ProgramDetailType.PROGRAM? PermissionType.CAN_VIEW
+						:PermissionType.CAN_EXECUTE;
 
 				if (entity.equals(AppContext.getContextUser())) {
-					type = ParticipantType.INITIATOR;
+					type = PermissionType.CAN_EDIT;
+					createTaskAllocation(entity, type,false);
+				}else{
+					createTaskAllocation(entity, type,true);
 				}
-				createTaskAllocation(entity, type);
+		
+				
 			}
 		}
 
@@ -103,9 +107,9 @@ public class UserAssign extends Composite {
 	}
 	
 	
-	public void createTaskAllocation(OrgEntity entity, ParticipantType type) {
+	public void createTaskAllocation(OrgEntity entity, PermissionType type, boolean isEditable) {
 
-		final TaskAllocation allocation = new TaskAllocation(detailType,entity, type);
+		final TaskAllocation allocation = new TaskAllocation(detailType,entity, type,isEditable);
 		divAllocations.add(allocation);
 
 		allocation.getRemoveLink().addClickHandler(new ClickHandler() {

@@ -19,7 +19,7 @@ import com.wira.pmgt.server.dao.helper.ProgramDaoHelper;
 import com.wira.pmgt.server.db.DB;
 import com.wira.pmgt.server.db.DBTrxProvider;
 import com.wira.pmgt.shared.model.HTUser;
-import com.wira.pmgt.shared.model.ParticipantType;
+import com.wira.pmgt.shared.model.PermissionType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.UserGroup;
@@ -280,9 +280,9 @@ public class TestProgramDaoImpl {
 		info.setDescription(detail.getDescription());
 		
 		//Assignees
-		info.addParticipant(new HTUser("Administrator"), ParticipantType.INITIATOR);
-		info.addParticipant(new UserGroup("CEO"), ParticipantType.STAKEHOLDER);
-		info.addParticipant(new UserGroup("HOD_DEV"), ParticipantType.BUSINESSADMIN);
+		info.addParticipant(new HTUser("Administrator"), PermissionType.CAN_EDIT);
+		info.addParticipant(new UserGroup("CEO"), PermissionType.CAN_VIEW);
+		info.addParticipant(new UserGroup("HOD_DEV"), PermissionType.CAN_EDIT);
 		
 		ProgramDaoHelper.saveTaskInfo(info);
 	}
