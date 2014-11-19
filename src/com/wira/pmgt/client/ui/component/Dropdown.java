@@ -26,6 +26,7 @@ public class Dropdown<T extends Listable> extends Composite implements HasValue<
 	@UiField BulletListPanel ulMenu;
 	private T selected=null;
 	private List<T> items=null;
+	private boolean editable;
 	
 	public Dropdown() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -99,5 +100,14 @@ public class Dropdown<T extends Listable> extends Composite implements HasValue<
 				}
 			});
 		}
+	}
+
+
+	public void setEditable(boolean isEditable) {
+		this.editable = isEditable;
+		if(items!=null){
+			setValues(items);
+		}
+		
 	}
 }

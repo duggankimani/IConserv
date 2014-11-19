@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.naming.NamingException;
@@ -25,6 +26,7 @@ import com.wira.pmgt.server.db.DB;
 import com.wira.pmgt.server.helper.auth.LoginHelper;
 import com.wira.pmgt.server.helper.session.SessionHelper;
 import com.wira.pmgt.shared.model.HTUser;
+import com.wira.pmgt.shared.model.PermissionType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.program.BasicProgramDetails;
@@ -514,7 +516,7 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 	 * @return true is program is assigned
 	 */
 	public boolean isProgramAssigned(Long programId) {
-		String countQuery = "select count(*) from programaccess where type!='INITIATOR' and programdetailid=:programId";
+		String countQuery = "select count(*) from programaccess where type!='CAN_EDIT' and programdetailid=:programId";
 		Query query = em.createNativeQuery(countQuery).setParameter("programId", programId);
 		Integer count = ((Number)getSingleResultOrNull(query)).intValue(); 
 		
@@ -612,5 +614,27 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		}
 		
 	}
+	
+	public HashMap<Long, PermissionType> getPermissions(String userId, List<String> groupIds, Long periodId){
+		String sql = "select distinct p.id pid, a.type from programdetail p "
+				+ "inner join programaccess a on(a.programdetailid=p.id) "
+				+ "where p.type='PROGRAM' "
+				+ "and p.periodId=:periodId "
+				+ "and (userId=:userId "
+				+ "or a.groupid in (:groups)) "
+				+ "order by pid, type desc";
 
+		Query query = em.createNativeQuery(sql)
+				.setParameter("periodId", periodId)
+				.setParameter("userId", userId)
+				.setParameter("groups", groupIds);
+		List<Object[]> rows = getResultList(query); 
+		
+		HashMap<Long, PermissionType> permissions = new HashMap<Long, PermissionType>();
+		for(Object[] row: rows){
+			permissions.put(new Long(row[0].toString()), PermissionType.valueOf(row[1].toString()));
+		}
+		
+		return permissions;
+	}
 }

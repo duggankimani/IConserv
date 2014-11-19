@@ -28,10 +28,11 @@ import com.wira.pmgt.server.helper.session.SessionHelper;
 import com.wira.pmgt.shared.model.DataType;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.OrgEntity;
-import com.wira.pmgt.shared.model.ParticipantType;
+import com.wira.pmgt.shared.model.PermissionType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.StringValue;
 import com.wira.pmgt.shared.model.TaskInfo;
+import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.Value;
 import com.wira.pmgt.shared.model.form.Field;
 import com.wira.pmgt.shared.model.form.Form;
@@ -822,12 +823,12 @@ public class ProgramDaoHelper {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		ProgramDetail detail = dao.getProgramDetail(taskInfo.getActivityId());
 		
-		Map<ParticipantType, List<OrgEntity>> accessAllocations = taskInfo.getParticipants();
+		Map<PermissionType, List<OrgEntity>> accessAllocations = taskInfo.getParticipants();
 		
 		List<ProgramAccess> permissions = new ArrayList<>();
 		
 		if(accessAllocations!=null)
-		for(ParticipantType type: accessAllocations.keySet()){
+		for(PermissionType type: accessAllocations.keySet()){
 			List<OrgEntity> entities = accessAllocations.get(type);
 			for(OrgEntity entity: entities){
 				ProgramAccess access = new ProgramAccess();
@@ -853,7 +854,7 @@ public class ProgramDaoHelper {
 		Collection<ProgramAccess> permissions = detail.getProgramAccess();
 		if(permissions!=null)
 		for(ProgramAccess permission: permissions){
-			ParticipantType type = permission.getType();
+			PermissionType type = permission.getType();
 			OrgEntity entity = permission.getUserId()==null? 
 					LoginHelper.get().getGroupById(permission.getGroupId()):
 				LoginHelper.get().getUser(permission.getUserId());
@@ -1197,6 +1198,27 @@ public class ProgramDaoHelper {
 
 	public static void moveToOutcome(Long itemToMoveId, Long outcomeId) {
 		DB.getProgramDaoImpl().moveToOutcome(itemToMoveId,outcomeId);
+	}
+	
+	public static HashMap<Long, PermissionType> getUserPermissions(String userId, Long periodId){
+		if(userId==null){
+			userId = SessionHelper.getCurrentUser().getUserId();
+		}
+		
+		if(periodId==null){
+			Period period = DB.getProgramDaoImpl().getActivePeriod();
+			if(period!=null){
+				periodId = period.getId();
+			}
+		}
+		
+		List<UserGroup> groups  = LoginHelper.get().getGroupsForUser(userId); 
+		List<String> groupIds = new ArrayList<>();
+		for(UserGroup g: groups){
+			groupIds.add(g.getEntityId());
+		}
+		
+		return DB.getProgramDaoImpl().getPermissions(userId, groupIds, periodId);
 	}
 
 //	private static ProgramSummary getSummary(ProgramDetail detail) {

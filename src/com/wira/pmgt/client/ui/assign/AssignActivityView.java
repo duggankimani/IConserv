@@ -19,7 +19,7 @@ import com.wira.pmgt.client.ui.component.tabs.TabHeader;
 import com.wira.pmgt.client.ui.component.tabs.TabPanel;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.OrgEntity;
-import com.wira.pmgt.shared.model.ParticipantType;
+import com.wira.pmgt.shared.model.PermissionType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.TaskInfo;
 import com.wira.pmgt.shared.model.program.ProgramSummary;
@@ -130,15 +130,15 @@ public class AssignActivityView extends ViewImpl implements
 
 	@Override
 	public void setTaskInfo(TaskInfo taskInfo) {
-		Map<ParticipantType, List<OrgEntity>> participants = taskInfo
+		Map<PermissionType, List<OrgEntity>> participants = taskInfo
 				.getParticipants();
 		if (!participants.isEmpty()) {
-			for (ParticipantType type : participants.keySet()) {
+			for (PermissionType type : participants.keySet()) {
 				List<OrgEntity> entities = participants.get(type);
 				for (OrgEntity entity : entities) {
 					if (!assignWidget.getSelectedSet().contains(entity)) {
 						assignWidget.getSelectedSet().add(entity);
-						assignWidget.createTaskAllocation(entity, type);
+						assignWidget.createTaskAllocation(entity, type,true);
 					}
 
 				}

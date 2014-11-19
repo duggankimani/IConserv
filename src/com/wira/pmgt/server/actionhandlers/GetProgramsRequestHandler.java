@@ -23,7 +23,7 @@ public class GetProgramsRequestHandler extends
 	 * Programs can be loaded by Ids or program codes;
 	 * Program Codes are important when loading programs based on periods
 	 * <p>
-	 * Wildlife program 2013 and Wildlife Program in 2014 are two different 
+	 * i.e Wildlife program 2013 and Wildlife Program in 2014 are two different 
 	 * programs associated by code
 	 * 
 	 */

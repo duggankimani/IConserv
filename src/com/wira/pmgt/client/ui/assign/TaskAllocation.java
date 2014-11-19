@@ -17,7 +17,7 @@ import com.wira.pmgt.client.ui.component.Dropdown;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.OrgEntity;
-import com.wira.pmgt.shared.model.ParticipantType;
+import com.wira.pmgt.shared.model.PermissionType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
 
@@ -32,20 +32,20 @@ public class TaskAllocation extends Composite {
 	OrgEntity entity;
 	
 	@UiField Image divImage;
-	@UiField Dropdown<ParticipantType> participantDropdown;
+	@UiField Dropdown<PermissionType> participantDropdown;
 	@UiField Anchor aParticipant;
 	@UiField SpanElement spnName;
 	@UiField SpanElement spnEmail;
 	@UiField SpanElement spnText;
 	@UiField Anchor aRemove;
-	ParticipantType type;
+	PermissionType type;
 	
 	private TaskAllocation(){
 		initWidget(uiBinder.createAndBindUi(this));
-		participantDropdown.addValueChangeHandler(new ValueChangeHandler<ParticipantType>() {
+		participantDropdown.addValueChangeHandler(new ValueChangeHandler<PermissionType>() {
 			
 			@Override
-			public void onValueChange(ValueChangeEvent<ParticipantType> event) {
+			public void onValueChange(ValueChangeEvent<PermissionType> event) {
 				setParticipantType(event.getValue());
 			}
 		});
@@ -58,15 +58,19 @@ public class TaskAllocation extends Composite {
 			}
 		});
 	}
-	
-	public TaskAllocation(ProgramDetailType detailType,OrgEntity entity, ParticipantType type) {
-		this();
-		participantDropdown.setValues(ParticipantType.getTypes(detailType));
-		setEntity(entity);
-		setParticipantType(type);
+	public TaskAllocation(ProgramDetailType detailType,OrgEntity entity, PermissionType type){
+		this(detailType, entity,type, true);
 	}
 	
-	private void setParticipantType(ParticipantType type) {
+	public TaskAllocation(ProgramDetailType detailType,OrgEntity entity, PermissionType type, boolean isEditable) {
+		this();
+		participantDropdown.setValues(PermissionType.getTypes(detailType));
+		setEntity(entity);
+		setParticipantType(type);
+		participantDropdown.setEditable(isEditable);
+	}
+	
+	private void setParticipantType(PermissionType type) {
 		if(type!=null){
 			this.type=type;
 			spnText.setInnerText(type.getDisplayName());
@@ -103,7 +107,7 @@ public class TaskAllocation extends Composite {
 		return entity;
 	}
 	
-	public ParticipantType getParticipantType(){
+	public PermissionType getParticipantType(){
 		return type;
 	}
 
