@@ -258,7 +258,7 @@ public class ProgramsView extends ViewImpl implements
 
 	public void createDefaultTabs() {
 		listPanel.clear();
-		createTab("Goals", "#home;page=objectives", true);
+		createTab("Objectives", "#home;page=objectives", true);
 		createTab("Summary", 0, true);
 	}
 

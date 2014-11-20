@@ -846,7 +846,7 @@ public class ProgramsPresenter extends
 
 	protected void setPermissions(HashMap<Long, PermissionType> permissions) {
 		this.permissions = permissions;
-		//Window.alert("Permissions = "+permissions);
+		Window.alert("Permissions = "+permissions);
 	}
 
 	protected void setActivity(IsProgramDetail activity) {

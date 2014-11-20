@@ -204,7 +204,7 @@ public class CreateProgramView extends PopupViewImpl implements
 			}
 			
 			fund.setFund(model.get("donor")==null? null: (FundDTO)model.get("donor"));
-			fund.setAmount(model.get("amount")==null? null: (Double)model.get("amount"));
+			fund.setAmount(model.get("amount")==null?0:(Double)model.get("amount"));
 			fund.setId(model.getId());
 			return fund;
 		}

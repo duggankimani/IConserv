@@ -379,7 +379,7 @@ public class ProgramsTableRow extends RowWidget implements
 		if (activity.getType() == ProgramDetailType.OUTCOME) {
 			spnStatus.addClassName("hide");
 		}
-		
+
 		if (status == null) {
 			status = ProgramStatus.CREATED;
 		}
@@ -410,9 +410,9 @@ public class ProgramsTableRow extends RowWidget implements
 		}
 		spnStatus.addClassName("label-" + type);
 
-		if (activity.getType() == ProgramDetailType.OUTCOME) {	
+		if (activity.getType() == ProgramDetailType.OUTCOME) {
 			progressBar.addStyleName("hide");
-		}else if (activity.getProgress() != null) {
+		} else if (activity.getProgress() != null) {
 			progressBar.setValue(activity.getProgress().intValue());
 			progressBar.setText(activity.getProgress().intValue() + "%");
 		}
@@ -432,22 +432,22 @@ public class ProgramsTableRow extends RowWidget implements
 
 	private void setAssignment() {
 		ProgramDetailType type = activity.getType();
-		
+
 		if ((type == ProgramDetailType.OUTCOME)
 				|| (type == ProgramDetailType.OBJECTIVE)
 				|| !activity.isAssigned()) {
 			spnAssigned.addClassName("hide");
 			divRowStrip.getStyle().setPaddingRight(0.0, Unit.PX);
-		}else{
-			divRowStrip.setTitle(type.getDisplayName()+" has been assigned.");
+		} else {
+			divRowStrip.setTitle(type.getDisplayName() + " has been assigned.");
 		}
 
 	}
 
 	private void setPadding() {
 		switch (activity.getType()) {
-		
-		/*Set color for ProgramTypes*/
+
+		/* Set color for ProgramTypes */
 		case PROGRAM:
 			divRowStrip.addClassName("label-success");
 			break;
@@ -506,7 +506,9 @@ public class ProgramsTableRow extends RowWidget implements
 
 				Double allocation = activityFund.getAllocation();
 
-				if (allocation != null && allocation != 0.0) {
+				if (allocation != null && allocation != 0.0
+						&& activityFund.getAmount() != null) {
+					
 					Double diff = activityFund.getAmount() - allocation;
 					HTMLPanel allocationPanel = new HTMLPanel(
 							NUMBERFORMAT.format(diff));
@@ -588,7 +590,7 @@ public class ProgramsTableRow extends RowWidget implements
 		int childCount = activity.getChildren() == null ? 0 : activity
 				.getChildren().size();
 
-		ProgramDetailType activityType = activity.getType(); 
+		ProgramDetailType activityType = activity.getType();
 		if (activityType == ProgramDetailType.PROGRAM) {
 			// summary table
 			childCount = activity.getProgramOutcomes() == null ? 0 : activity
@@ -607,17 +609,22 @@ public class ProgramsTableRow extends RowWidget implements
 			Long childParentId = row.getActivity().getParentId();
 			Long childOutcomeId = row.getActivity().getActivityOutcomeId();
 			Long parentProgramId = row.getActivity().getProgramId();
-			
-			boolean toggle=false;
-			if(activityType.equals(ProgramDetailType.PROGRAM) && parentProgramId!=null && parentProgramId.equals(activity.getId())){
-				toggle=true;
-			}else if (activityType.equals(ProgramDetailType.OUTCOME) && childOutcomeId!=null && childOutcomeId.equals(activity.getId())) {
-				toggle=true;
-			}else if (childParentId!=null && childParentId.equals(activity.getId())){
-				toggle=true;
+
+			boolean toggle = false;
+			if (activityType.equals(ProgramDetailType.PROGRAM)
+					&& parentProgramId != null
+					&& parentProgramId.equals(activity.getId())) {
+				toggle = true;
+			} else if (activityType.equals(ProgramDetailType.OUTCOME)
+					&& childOutcomeId != null
+					&& childOutcomeId.equals(activity.getId())) {
+				toggle = true;
+			} else if (childParentId != null
+					&& childParentId.equals(activity.getId())) {
+				toggle = true;
 			}
-				
-			if(toggle){
+
+			if (toggle) {
 				childrenCollapsed++;
 				if (!showingChildren) {
 					// toggle children of children only when collapsing
@@ -682,20 +689,19 @@ public class ProgramsTableRow extends RowWidget implements
 
 			for (FundDTO programFund : donors) {
 				Widget widgetToRemove = row.getWidget(--count);
-				boolean removed= remove(widgetToRemove);
-				if(!removed){
-					Window.alert("Cannot remove Widget in index >> "+count
-							+"; Row.isAttached="+isAttached()
-							+";  WidgetToRemove >>"+widgetToRemove);
+				boolean removed = remove(widgetToRemove);
+				if (!removed) {
+					Window.alert("Cannot remove Widget in index >> " + count
+							+ "; Row.isAttached=" + isAttached()
+							+ ";  WidgetToRemove >>" + widgetToRemove);
 				}
-//				else{
-//					Window.alert("Removed Widget in index >> "+count
-//							+"; Row.isAttached="+isAttached()
-//							+"; RemovedWidget >>"+widgetToRemove);
-//				
-//				}
+				// else{
+				// Window.alert("Removed Widget in index >> "+count
+				// +"; Row.isAttached="+isAttached()
+				// +"; RemovedWidget >>"+widgetToRemove);
+				//
+				// }
 			}
-			
 
 			allocations.clear();
 
@@ -725,23 +731,22 @@ public class ProgramsTableRow extends RowWidget implements
 			removeFromParent();
 		}
 	}
-	
+
 	@Override
 	public void onMoveProgram(MoveProgramEvent event) {
 		Long previousParentId = event.getPreviousParentId();
 		Long newParentId = event.getNewParentId();
-		
-		if(activity.getId().equals(previousParentId)){
-			//we need to remove moved item from this parent
+
+		if (activity.getId().equals(previousParentId)) {
+			// we need to remove moved item from this parent
 			removeChild(event.getItemMoved());
 		}
-		
-		if(activity.getId().equals(newParentId)){
-			//we need to add moved item to this parent
+
+		if (activity.getId().equals(newParentId)) {
+			// we need to add moved item to this parent
 			addChild(event.getItemMoved());
 		}
-		
-		
+
 	}
 
 	private void addChild(IsProgramDetail newItem) {
@@ -762,8 +767,8 @@ public class ProgramsTableRow extends RowWidget implements
 
 		// insert this child at the end of the parent
 		FlowPanel parent = ((FlowPanel) this.getParent());
-		ProgramsTableRow newRow = new ProgramsTableRow(newItem,
-				donors, programId, false, false, level + 1);
+		ProgramsTableRow newRow = new ProgramsTableRow(newItem, donors,
+				programId, false, false, level + 1);
 		newRow.setSelectionChangeHandler(selectionHandler);
 
 		// Position the row below the parent
@@ -772,38 +777,39 @@ public class ProgramsTableRow extends RowWidget implements
 		// parents position+1
 
 		toggle(true);
-		//newRow.show(true);
+		// newRow.show(true);
 
 	}
 
 	private void removeChild(IsProgramDetail itemMoved) {
 		FlowPanel parent = ((FlowPanel) this.getParent());
 		int parentIdx = parent.getWidgetIndex(this);
-		
+
 		int idx = activity.getChildren().indexOf(itemMoved);
-		assert idx> -1;
-		//remove the item from activity
+		assert idx > -1;
+		// remove the item from activity
 		activity.getChildren().remove(idx);
-		
-		int childIndex = parentIdx+idx+1;
-		removeChild(childIndex, itemMoved);	
-		removeRecursive(childIndex,itemMoved.getChildren());
+
+		int childIndex = parentIdx + idx + 1;
+		removeChild(childIndex, itemMoved);
+		removeRecursive(childIndex, itemMoved.getChildren());
 	}
 
 	private void removeRecursive(int parentIdx, List<IsProgramDetail> children) {
-		if(children==null){
+		if (children == null) {
 			return;
 		}
-		
-		for(IsProgramDetail child:children){
-			removeChild(parentIdx,child);
+
+		for (IsProgramDetail child : children) {
+			removeChild(parentIdx, child);
 			removeRecursive(parentIdx, child.getChildren());
 		}
 	}
 
 	private void removeChild(int widgetIndex, IsProgramDetail child) {
 		FlowPanel parent = ((FlowPanel) this.getParent());
-		ProgramsTableRow childRow= (ProgramsTableRow)parent.getWidget(widgetIndex);
+		ProgramsTableRow childRow = (ProgramsTableRow) parent
+				.getWidget(widgetIndex);
 		childRow.removeFromParent();
 	}
 
