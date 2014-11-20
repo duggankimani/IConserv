@@ -257,6 +257,8 @@ public class HomePresenter extends
 		final String name = request.getParameter("type", null);
 		String processInstID = request.getParameter("pid", null);
 		String documentSearchID = request.getParameter("did", null);
+		String period = request.getParameter("period", null);
+		
 		if (processInstID != null) {
 			processInstanceId = Long.parseLong(processInstID);
 		}
@@ -296,6 +298,7 @@ public class HomePresenter extends
 			final Long programId = new Long(project);
 			final Long detailId = new Long(detail);
 			final Long outcomeId = new Long(outcome);
+			final Long periodId = period==null? null: new Long(period);
 			
 			Window.setTitle(page.equals("activities")?"Activities":"Objectives");
 			activitiesFactory.get(new ServiceCallback<ProgramsPresenter>() {
@@ -303,10 +306,11 @@ public class HomePresenter extends
 				public void processResult(ProgramsPresenter aResponse) {
 					aResponse.clear();
 					if(page.equals("activities")){
+						
 						if(!outcomeId.equals(0L)){
-							aResponse.loadActivitiesByOutcome(programId,outcomeId);
+							aResponse.loadActivitiesByOutcome(programId,outcomeId,periodId);
 						}else{
-							aResponse.loadData(programId, detailId);
+							aResponse.loadData(programId, detailId,periodId);
 						}
 						
 					}else{

@@ -10,7 +10,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent.Type;
-import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.PresenterWidget;
@@ -128,9 +127,9 @@ public class ProgramsPresenter extends
 
 		Dropdown<PeriodDTO> getPeriodDropDown();
 
-		void setActivePeriod(PeriodDTO period);
+		void setActivePeriod(Long period);
 
-		void selectTab(Long l);
+		//void selectTab(Long l);
 
 		void selectTab(String url);
 
@@ -175,7 +174,7 @@ public class ProgramsPresenter extends
 
 	ProgramDetailType programType = ProgramDetailType.PROGRAM; // last selected
 
-	PeriodDTO period;
+	Long periodId;
 
 	IsProgramDetail selected;
 
@@ -203,7 +202,7 @@ public class ProgramsPresenter extends
 					public void onValueChange(ValueChangeEvent<PeriodDTO> event) {
 						PeriodDTO period = event.getValue();
 						// period changed - reload all
-						ProgramsPresenter.this.period = period;
+						ProgramsPresenter.this.periodId = period.getId();
 						periodChanged();
 					}
 				});
@@ -661,8 +660,8 @@ public class ProgramsPresenter extends
 		loadData(programId, detailId, periodId, ProgramDetailType.PROGRAM);
 	}
 
-	public void loadActivitiesByOutcome(Long programId, Long outcomeId) {
-		loadData(programId, outcomeId, null, true, ProgramDetailType.PROGRAM);
+	public void loadActivitiesByOutcome(Long programId, Long outcomeId, Long periodId) {
+		loadData(programId, outcomeId, periodId, true, ProgramDetailType.PROGRAM);
 	}
 
 	/**
@@ -677,19 +676,31 @@ public class ProgramsPresenter extends
 		loadData(programId, detailId, periodId, false, typeToLoad);
 	}
 
-	public void loadData(Long parentProgramId, Long detailId, Long periodId,
+	public void loadData(Long parentProgramId, Long detailId, final Long periodId,
 			boolean searchByOutcome, final ProgramDetailType typeToLoad) {
 		fireEvent(new ProcessingEvent());
-
+		this.periodId = periodId;
+		this.programType = typeToLoad;
+		
+		//DRILL DOWN BY OUTCOME
+		//DRILL DOWN BY ACTIVITY
+		//DRILL DOWN BY TASK
 		this.programId = (parentProgramId == null || parentProgramId == 0L) ? null
 				: parentProgramId;
-		programDetailId = detailId == null ? null : detailId == 0 ? null
+//		Window.alert("Load >> ProgramId = "+parentProgramId);
+		this.programDetailId = detailId == null ? null : detailId == 0 ? null
 				: detailId;
 
-		getView().setDownloadUrl(programId, searchByOutcome?programDetailId:null, searchByOutcome?null:programDetailId, typeToLoad.name());
+		getView().setDownloadUrl(programId, 
+				searchByOutcome?programDetailId:null, 
+						searchByOutcome?null:programDetailId, typeToLoad.name());
 		
 		MultiRequestAction action = new MultiRequestAction();
 
+		// Get Periods
+		action.addRequest(new GetPeriodsRequest());
+
+		
 		if (typeToLoad.equals(ProgramDetailType.OBJECTIVE)) {
 			getView().setProgramId(this.programId, true);
 			GetProgramsRequest request = new GetProgramsRequest(
@@ -702,69 +713,82 @@ public class ProgramsPresenter extends
 		//Load Program Permissions
 		action.addRequest(new GetPermissionsRequest(AppContext.getUserId(), periodId));
 
+		
 		// List of Programs for tabs
 		{
 			// Within a given period
 			GetProgramsRequest request = new GetProgramsRequest(
 					ProgramDetailType.PROGRAM, false);
-			if (periodId != null) {
-				request.setPeriodId(periodId);
-			}
+			request.setPeriodId(periodId);
 			action.addRequest(request);
 		}
 
-		// Get Periods
-		action.addRequest(new GetPeriodsRequest());
 
 		// Get Funding Sources
 		action.addRequest(new GetFundsRequest());
 
-		if (this.programId != null) {
-			// Details of selected program
-			// this.programId = programId;
-
-			if (periodId != null) {
-				// Period is not current period
-				action.addRequest(new GetProgramsRequest(programCode, periodId,
-						programDetailId == null));
-			} else {
-				action.addRequest(new GetProgramsRequest(this.programId,
-						programDetailId == null));
-			}
-
-		}
-
-		if (programDetailId != null) {
-			if (searchByOutcome) {
-				if (periodId != null) {
-					assert programDetailCode != null;
-					action.addRequest(new GetProgramsRequest(programDetailCode,
-							periodId, this.programId != null));
+		
+		//PARENT PROGRAM - FOR INSTANCES WHERE WE ARE DRILLING DOWN A PROGRAM
+		if(typeToLoad!=ProgramDetailType.OBJECTIVE){
+			if (this.programId != null) {
+				// Details of selected program
+				// this.programId = programId;
+	
+				if (periodId != null && programCode!=null) {
+					// Period is not current period
+					action.addRequest(new GetProgramsRequest(programCode, periodId,
+							programDetailId == null));
 				} else {
 					action.addRequest(new GetProgramsRequest(this.programId,
-							programDetailId, this.programId != null));
+							programDetailId == null));
 				}
-			} else {
-				if (periodId != null) {
-					assert programDetailCode != null;
-					action.addRequest(new GetProgramsRequest(programDetailCode,
-							periodId, this.programId != null));
-				} else {
-					action.addRequest(new GetProgramsRequest(programDetailId,
-							this.programId != null));
-				}
+	
 			}
-
+	
+			//DetailId - FOR INSTANCES WHERE WE ARE DRILLING DOWN AN OUTCOME/ ACTIVITY OR TASK
+			if (programDetailId != null) {
+				if (searchByOutcome) {
+					//DRILLING DOWN AN OUTCOME
+					if (periodId != null && programCode!=null) {
+						assert programDetailCode != null;
+						action.addRequest(new GetProgramsRequest(programDetailCode,
+								periodId, this.programId != null));
+					} else {
+						action.addRequest(new GetProgramsRequest(this.programId,
+								programDetailId, this.programId != null));
+					}
+				} else {
+					//DRILLING DOWN AN ACTIVITY/ OR TASK
+					if (periodId != null && programCode!=null) {
+						assert programDetailCode != null;
+						action.addRequest(new GetProgramsRequest(programDetailCode,
+								periodId, this.programId != null));
+					} else {
+						action.addRequest(new GetProgramsRequest(programDetailId,
+								this.programId != null));
+					}
+				}
+	
+			}
 		}
 
 		requestHelper.execute(action,
 				new TaskServiceCallback<MultiRequestActionResult>() {
 					@Override
 					public void processResult(MultiRequestActionResult aResponse) {
+						
 						int i = 0;
+						// Periods
+						GetPeriodsResponse getPeriod = (GetPeriodsResponse) aResponse
+								.get(i++);
+						getView().setPeriods(getPeriod.getPeriods());
+						getView().setActivePeriod(periodId);
+						
+						
 						if (typeToLoad.equals(ProgramDetailType.OBJECTIVE)) {
 							GetProgramsResponse response = (GetProgramsResponse) aResponse
 									.get(i++);
+							//Window.alert("!!! Setting Objectives "+response.getPrograms());
 							getView().setData(response.getPrograms());
 						}
 						
@@ -777,11 +801,7 @@ public class ProgramsPresenter extends
 								.get(i++);
 						// System.err.println("Tabs >> "+response.getPrograms().size());
 						getView().createProgramTabs(response.getPrograms());
-
-						// Periods
-						GetPeriodsResponse getPeriod = (GetPeriodsResponse) aResponse
-								.get(i++);
-						getView().setPeriods(getPeriod.getPeriods());
+						
 
 						// Funds
 						GetFundsResponse getFundsReq = (GetFundsResponse) aResponse
@@ -798,8 +818,6 @@ public class ProgramsPresenter extends
 								// the specified period
 								programCode = response2.getSingleResult()
 										.getCode();
-								ProgramsPresenter.this.programId = response2
-										.getSingleResult().getId();
 								setActivity(response2.getSingleResult());
 							}
 
@@ -814,7 +832,8 @@ public class ProgramsPresenter extends
 							getView()
 									.selectTab(
 											typeToLoad == ProgramDetailType.OBJECTIVE ? "#home;page=objectives"
-													: "#home;page=activities;activity=" + 0);
+													: "#home;page=activities;activity=" + 0+
+													(periodId==null? "":";period="+periodId));
 							getView()
 									.setSelection(
 											typeToLoad == ProgramDetailType.OBJECTIVE ? ProgramDetailType.OBJECTIVE
@@ -836,8 +855,6 @@ public class ProgramsPresenter extends
 							}
 
 						}
-
-						getView().setActivePeriod(period);
 
 						fireEvent(new ProcessingCompletedEvent());
 					}
@@ -932,7 +949,7 @@ public class ProgramsPresenter extends
 	 * Programs from different years are related through a shared program code
 	 */
 	protected void periodChanged() {
-		loadData(programId, programDetailId, period.getId());
+		loadData(programId, programDetailId, periodId, programType);
 	}
 
 	/*

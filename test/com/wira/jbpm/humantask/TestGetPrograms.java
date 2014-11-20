@@ -36,8 +36,8 @@ public class TestGetPrograms {
 
 	@Ignore
 	public void createFunds(){
-		
-		List<IsProgramDetail> activities = ProgramDaoHelper.getProgramsByType(ProgramDetailType.PROGRAM,false);
+		Long periodId=1L;
+		List<IsProgramDetail> activities = ProgramDaoHelper.getProgramsByType(ProgramDetailType.PROGRAM, periodId,false);
 		
 		for(IsProgramDetail a: activities){
 			System.err.println(a.getName()+" >> "+a.getProgramOutcomes());

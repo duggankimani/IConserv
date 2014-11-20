@@ -133,6 +133,8 @@ public class ProgramsView extends ViewImpl implements
 
 	private boolean isCurrentPlaceObjectivesPage = false;
 
+	private Long periodId;
+
 	@Inject
 	public ProgramsView(final Binder binder) {
 		widget = binder.createAndBindUi(this);
@@ -263,7 +265,12 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	public void createTab(String text, long id, boolean active) {
-		createTab(text, "#home;page=activities;activity=" + id, active);
+		createTab(text, createUrl(id), active);
+	}
+
+	private String createUrl(long id) {
+		
+		return "#home;page=activities;activity=" + id+(periodId==null?"": ";period="+periodId);
 	}
 
 	public void createTab(String text, String url, boolean active) {
@@ -360,8 +367,6 @@ public class ProgramsView extends ViewImpl implements
 			// Set Funds
 			headerContainer.setFunding(singleResult.getBudgetAmount(),
 					singleResult.getActualAmount(), singleResult.getType());
-			
-			System.err.println(">>>>Funding called");
 
 			if (!tblView.isSummaryTable) {
 				// select tab
@@ -414,12 +419,12 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	public void selectTab(Long id) {
-		selectTab("#home;page=activities;activity=" + id);
+		selectTab(createUrl(id));
 	}
 
 	public void selectTab(String href) {
 		isCurrentPlaceObjectivesPage = href.equals("#home;page=objectives");
-
+		
 		int size = listPanel.getWidgetCount();
 		for (int i = 0; i < size; i++) {
 			BulletPanel li = (BulletPanel) listPanel.getWidget(i);
@@ -443,7 +448,7 @@ public class ProgramsView extends ViewImpl implements
 			BulletPanel li = (BulletPanel) listPanel.getWidget(i);
 
 			Anchor a = (Anchor) li.getWidget(0);
-			String href = "#home;page=activities;activity=" + id;
+			String href = createUrl(id);
 
 			if (a.getHref().endsWith(href)) {
 				// hide this
@@ -589,13 +594,6 @@ public class ProgramsView extends ViewImpl implements
 		this.lastUpdatedId = lastUpdatedId;
 	}
 
-	@Override
-	public void setProgramId(Long programId) {
-		this.programId = programId;
-		tblView.setProgramId(programId);
-		headerContainer.setProgramId(programId);
-	}
-
 	public HasClickHandlers getAddButton() {
 		return aProgram;
 	}
@@ -614,9 +612,11 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	@Override
-	public void setActivePeriod(PeriodDTO activePeriod) {
+	public void setActivePeriod(Long activePeriod) {
+		this.periodId=activePeriod;
+		
 		if (activePeriod == null) {
-			List<PeriodDTO> periods = headerContainer.getPeriodDropdown()
+			List<PeriodDTO> periods = getPeriodDropDown()
 					.getSelectionValues();
 
 			if (periods != null) {
@@ -630,7 +630,16 @@ public class ProgramsView extends ViewImpl implements
 				}
 			}
 		} else {
-			headerContainer.getPeriodDropdown().setValue(activePeriod);
+			if(getPeriodDropDown().getSelectionValues()!=null)
+			for(PeriodDTO dto: getPeriodDropDown().getSelectionValues()){
+				if(dto.getId().equals(activePeriod)){
+					headerContainer.getPeriodDropdown().setValue(dto);
+					headerContainer.setDates("(" + dto.getDescription()
+							+ ")");
+					break;
+				}
+			}
+			
 		}
 	}
 
@@ -648,7 +657,15 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	@Override
+	public void setProgramId(Long programId) {
+		this.programId = programId;
+		tblView.setProgramId(programId);
+		headerContainer.setProgramId(programId);
+	}
+	
+	@Override
 	public void setProgramId(Long programId, boolean isGoalsTable) {
+		setProgramId(programId);
 		tblView.setGoalsTable(isGoalsTable);
 		headerContainer.setProgramId(programId);
 	}
