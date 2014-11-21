@@ -196,7 +196,7 @@ public class ProgramHeader extends Composite {
 		}
 		spnActuals.setInnerText(NumberUtils.CURRENCYFORMAT.format(actualAmount));
 		
-		System.err.println(">>>> Funding is called...");
+//		System.err.println(">>>> Funding is called...");
 		
 		if(type!=ProgramDetailType.OBJECTIVE){
 			showBudgets(true);

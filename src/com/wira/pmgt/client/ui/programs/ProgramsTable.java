@@ -59,6 +59,8 @@ public class ProgramsTable extends Composite {
 
 	private void createRow(IsProgramDetail programDetail, int level) {
 		//System.err.println("Painting :: "+programDetail.getName());
+		if(programId!=null)
+		programDetail.setProgramId(programId);
 		
 		ProgramsTableRow row = new ProgramsTableRow(programDetail,funds,programId,isSummaryTable,isGoalsTable, level);
 		if(programDetail.getId()==lastUpdatedId){

@@ -118,8 +118,6 @@ public class ProgramsPresenter extends
 
 		void setProgramId(Long programId);
 
-		void setSelection(ProgramDetailType programType, boolean isRowData);
-
 		HasClickHandlers getAddButton();
 
 		HasClickHandlers getaAssign();
@@ -146,6 +144,12 @@ public class ProgramsPresenter extends
 				String programType);
 
 		HasClickHandlers getaMove();
+
+		void setPermissions(HashMap<Long, PermissionType> permissions);
+
+		void setSelection(ProgramDetailType type, boolean isRowData, boolean canEdit);
+
+		boolean canEdit(IsProgramDetail programActivity);
 	}
 
 	@Inject
@@ -818,7 +822,7 @@ public class ProgramsPresenter extends
 							getView()
 									.setSelection(
 											typeToLoad == ProgramDetailType.OBJECTIVE ? ProgramDetailType.OBJECTIVE
-													: null, false);
+													: null, false, true);
 						}
 
 						if (programDetailId != null) {
@@ -846,7 +850,9 @@ public class ProgramsPresenter extends
 
 	protected void setPermissions(HashMap<Long, PermissionType> permissions) {
 		this.permissions = permissions;
-		Window.alert("Permissions = "+permissions);
+		
+		getView().setPermissions(permissions);
+		//Window.alert("Permissions = "+permissions);
 	}
 
 	protected void setActivity(IsProgramDetail activity) {
@@ -880,14 +886,14 @@ public class ProgramsPresenter extends
 	public void onActivitySelectionChanged(ActivitySelectionChangedEvent event) {
 		if (event.isSelected()) {
 			this.selected = event.getProgramActivity();
-			getView().setSelection(event.getProgramActivity().getType(), true);
+			getView().setSelection(event.getProgramActivity().getType(), true,getView().canEdit(event.getProgramActivity()));
 		} else {
 			this.selected = null;
 			if (programId == null || programId == 0) {
 				// summary view
 				getView().setSelection(null);
 			} else {
-				getView().setSelection(programType, false);
+				getView().setSelection(programType, false,false);
 			}
 
 		}
@@ -1003,4 +1009,6 @@ public class ProgramsPresenter extends
 			}
 		});
 	}
+	
+	
 }

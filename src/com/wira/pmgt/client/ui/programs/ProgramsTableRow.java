@@ -679,6 +679,7 @@ public class ProgramsTableRow extends RowWidget implements
 						.getActivityOutcomeId() != null && updatedProgram
 						.getActivityOutcomeId().equals(activity.getId())))) {
 
+			updatedProgram.setProgramId(programId);
 			addChild(updatedProgram);
 			return;
 		}
@@ -686,7 +687,7 @@ public class ProgramsTableRow extends RowWidget implements
 		// exists
 		if (activity.getId().equals(updatedProgram.getId())) {
 			int count = row.getWidgetCount();
-
+			
 			for (FundDTO programFund : donors) {
 				Widget widgetToRemove = row.getWidget(--count);
 				boolean removed = remove(widgetToRemove);
@@ -706,6 +707,7 @@ public class ProgramsTableRow extends RowWidget implements
 			allocations.clear();
 
 			List<IsProgramDetail> children = this.activity.getChildren();
+			updatedProgram.setProgramId(programId);
 			this.activity = updatedProgram;
 			this.activity.setChildren(children);
 			init();
