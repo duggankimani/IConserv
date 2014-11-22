@@ -3,16 +3,12 @@ package com.wira.pmgt.server.dao;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.naming.NamingException;
-import javax.persistence.ColumnResult;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.transaction.SystemException;
 
 import org.apache.log4j.Logger;
 
@@ -22,14 +18,12 @@ import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
 import com.wira.pmgt.server.dao.biz.model.ProgramFund;
 import com.wira.pmgt.server.dao.biz.model.TargetAndOutcome;
 import com.wira.pmgt.server.dao.model.PO;
-import com.wira.pmgt.server.db.DB;
 import com.wira.pmgt.server.helper.auth.LoginHelper;
 import com.wira.pmgt.server.helper.session.SessionHelper;
 import com.wira.pmgt.shared.model.HTUser;
 import com.wira.pmgt.shared.model.PermissionType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.UserGroup;
-import com.wira.pmgt.shared.model.program.BasicProgramDetails;
 import com.wira.pmgt.shared.model.program.Metric;
 import com.wira.pmgt.shared.model.program.PerformanceModel;
 import com.wira.pmgt.shared.model.program.ProgramAnalysis;
@@ -178,6 +172,9 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 			.setParameter("type", type)
 			.setParameter("isActive", 1);
 		}else{
+			if(period==null){
+				return new ArrayList<>();
+			}
 			query=em.createNamedQuery("ProgramDetail.findByTypeAndPeriod")
 					.setParameter("isCurrentUserAdmin", groups.contains("ADMIN"))
 					.setParameter("userId", user)
@@ -209,6 +206,10 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 	public List<ProgramDetail> getProgramDetails(Period period, String user, List<String> groups) {
 		if(groups==null || groups.isEmpty()){
 			log.warn("Get Program Details- No Results Due To: User '"+user+"'has no groups");
+			return new ArrayList<>();
+		}
+		
+		if(period==null){
 			return new ArrayList<>();
 		}
 		
@@ -310,13 +311,19 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 			return new ArrayList<>();
 		}
 		
+		Period period = getActivePeriod();
+		
+		if(period==null){
+			return new ArrayList<>();
+		}
+		
 		Query query = em.createNamedQuery("ProgramDetail.findAllIds")
 		.setParameter("isCurrentUserAdmin", groups.contains("ADMIN"))
 		.setParameter("type", ProgramDetailType.PROGRAM)
 		.setParameter("userId", userId)
 		.setParameter("groupIds", groups)
 		.setParameter("isActive", 1)
-		.setParameter("period", getActivePeriod());
+		.setParameter("period", period);
 				
 		return getResultList(query);
 	}
@@ -625,7 +632,7 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 				+ "order by pid, type desc";
 
 		Query query = em.createNativeQuery(sql)
-				.setParameter("periodId", periodId)
+				.setParameter("periodId", periodId==null? -1L: periodId)
 				.setParameter("userId", userId)
 				.setParameter("groups", groupIds);
 		List<Object[]> rows = getResultList(query); 

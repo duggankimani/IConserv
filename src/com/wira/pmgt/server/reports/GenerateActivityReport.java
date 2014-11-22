@@ -76,7 +76,7 @@ public class GenerateActivityReport {
 		//Get Program to be the label
 		if(programDetailType.equals(ProgramDetailType.OBJECTIVE)){
 			label = "Objectives";
-			lst = ProgramDaoHelper.getProgramsByType(programDetailType, true);
+			lst = ProgramDaoHelper.getProgramsByType(programDetailType,periodId, true);
 		}else if (periodId != null && code!=null) {
 			// Period is not current period
 			IsProgramDetail program = ProgramDaoHelper.getProgramByCode(code, periodId,true);
@@ -89,10 +89,10 @@ public class GenerateActivityReport {
 			if(outcomeId!=null){
 				//get by outcome
 				program =ProgramDaoHelper.getProgramById(programId,false);
-				program.setProgramOutcomes(ProgramDaoHelper.loadById(programId,outcomeId,programDetailType,true));
+				program.setProgramOutcomes(ProgramDaoHelper.loadById(programId,outcomeId,programDetailType,periodId,true));
 			}else if(activityId!=null){
 				program =ProgramDaoHelper.getProgramById(programId,false);
-				program.setChildren(ProgramDaoHelper.loadById(activityId,null,programDetailType,true));
+				program.setChildren(ProgramDaoHelper.loadById(activityId,null,programDetailType,periodId,true));
 			}else{
 				 program =ProgramDaoHelper.getProgramById(programId,true);
 				 label = program.getName();				 

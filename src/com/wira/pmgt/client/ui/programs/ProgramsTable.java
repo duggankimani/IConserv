@@ -59,8 +59,9 @@ public class ProgramsTable extends Composite {
 
 	private void createRow(IsProgramDetail programDetail, int level) {
 		//System.err.println("Painting :: "+programDetail.getName());
-		if(programId!=null)
+		if(programId!=null){
 		programDetail.setProgramId(programId);
+		}
 		
 		ProgramsTableRow row = new ProgramsTableRow(programDetail,funds,programId,isSummaryTable,isGoalsTable, level);
 		if(programDetail.getId()==lastUpdatedId){
@@ -97,7 +98,8 @@ public class ProgramsTable extends Composite {
 
 	private void createGrid() {
 		List<TableHeader> th = new ArrayList<TableHeader>();
-
+		System.err.println("Goals Table"+isGoalsTable);
+		System.err.println("Summary Table"+isSummaryTable);
 		if (isSummaryTable) {
 			th.add(new TableHeader("TITLE", 40.0,"title"));
 			th.add(new TableHeader("TIMELINES", 10.0));

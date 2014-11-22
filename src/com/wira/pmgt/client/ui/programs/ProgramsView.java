@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.antlr.analysis.SemanticContext.OR;
-
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -136,8 +134,8 @@ public class ProgramsView extends ViewImpl implements
 	protected boolean isNotDisplayed;
 
 	private boolean isCurrentPlaceObjectivesPage = false;
-
 	private List<IsProgramDetail> activities;
+	private Long periodId;
 
 	@Inject
 	public ProgramsView(final Binder binder) {
@@ -270,7 +268,13 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	public void createTab(String text, long id, boolean active) {
-		createTab(text, "#home;page=activities;activity=" + id, active);
+		createTab(text, createUrl(id), active);
+	}
+
+	private String createUrl(long id) {
+
+		return "#home;page=activities;activity=" + id
+				+ (periodId == null ? "" : ";period=" + periodId);
 	}
 
 	public void createTab(String text, String url, boolean active) {
@@ -368,8 +372,6 @@ public class ProgramsView extends ViewImpl implements
 			headerContainer.setFunding(singleResult.getBudgetAmount(),
 					singleResult.getActualAmount(), singleResult.getType());
 
-			// System.err.println(">>>>Funding called");
-
 			if (!tblView.isSummaryTable) {
 				// select tab
 				selectTab(singleResult.getId());
@@ -421,7 +423,7 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	public void selectTab(Long id) {
-		selectTab("#home;page=activities;activity=" + id);
+		selectTab(createUrl(id));
 	}
 
 	public void selectTab(String href) {
@@ -450,7 +452,7 @@ public class ProgramsView extends ViewImpl implements
 			BulletPanel li = (BulletPanel) listPanel.getWidget(i);
 
 			Anchor a = (Anchor) li.getWidget(0);
-			String href = "#home;page=activities;activity=" + id;
+			String href = createUrl(id);
 
 			if (a.getHref().endsWith(href)) {
 				// hide this
@@ -496,7 +498,7 @@ public class ProgramsView extends ViewImpl implements
 	 */
 	public void setSelection(ProgramDetailType type, boolean isRowData,
 			boolean canEdit) {
-		System.err.println("Can Edit::" + canEdit);
+		// System.err.println("Can Edit::" + canEdit);
 		show(aProgram, false);
 		show(aNewOutcome, false);
 		show(aNewObjective,
@@ -515,7 +517,7 @@ public class ProgramsView extends ViewImpl implements
 			// or When A Program Tab e.g Wildlife Program is selected
 			show(aEdit, AppContext.isCurrentUserAdmin());
 			show(aDeleteProgram, AppContext.isCurrentUserAdmin());
-			show(aAssign, isRowData && canEdit);
+			show(aAssign, isRowData && AppContext.isCurrentUserAdmin());
 		} else if (type == ProgramDetailType.OBJECTIVE) {
 			show(aAssign, false);
 			show(aNewOutcome, AppContext.isCurrentUserAdmin() && isRowData);
@@ -534,7 +536,7 @@ public class ProgramsView extends ViewImpl implements
 			show(aAssign, false);
 			show(aMove, isRowData && canEdit);
 		} else if (type == ProgramDetailType.TASK) {
-			System.err.println(isRowData && canEdit);
+			// System.err.println(isRowData && canEdit);
 			show(aNewTask, isRowData && canEdit);
 			show(aAssign, isRowData && canEdit);
 			show(aMove, isRowData && canEdit);
@@ -599,13 +601,6 @@ public class ProgramsView extends ViewImpl implements
 		this.lastUpdatedId = lastUpdatedId;
 	}
 
-	@Override
-	public void setProgramId(Long programId) {
-		this.programId = programId;
-		tblView.setProgramId(programId);
-		headerContainer.setProgramId(programId);
-	}
-
 	public HasClickHandlers getAddButton() {
 		return aProgram;
 	}
@@ -624,10 +619,11 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	@Override
-	public void setActivePeriod(PeriodDTO activePeriod) {
+	public void setActivePeriod(Long activePeriod) {
+		this.periodId = activePeriod;
+
 		if (activePeriod == null) {
-			List<PeriodDTO> periods = headerContainer.getPeriodDropdown()
-					.getSelectionValues();
+			List<PeriodDTO> periods = getPeriodDropDown().getSelectionValues();
 
 			if (periods != null) {
 				for (PeriodDTO period : periods) {
@@ -640,7 +636,16 @@ public class ProgramsView extends ViewImpl implements
 				}
 			}
 		} else {
-			headerContainer.getPeriodDropdown().setValue(activePeriod);
+			if (getPeriodDropDown().getSelectionValues() != null)
+				for (PeriodDTO dto : getPeriodDropDown().getSelectionValues()) {
+					if (dto.getId().equals(activePeriod)) {
+						headerContainer.getPeriodDropdown().setValue(dto);
+						headerContainer.setDates("(" + dto.getDescription()
+								+ ")");
+						break;
+					}
+				}
+
 		}
 	}
 
@@ -658,9 +663,15 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	@Override
-	public void setProgramId(Long programId, boolean isGoalsTable) {
-		tblView.setGoalsTable(isGoalsTable);
+	public void setProgramId(Long programId) {
+		this.programId = programId;
+		tblView.setProgramId(programId);
 		headerContainer.setProgramId(programId);
+	}
+
+	@Override
+	public void setGoalsTable(boolean isGoalsTable) {
+		tblView.setGoalsTable(isGoalsTable);
 	}
 
 	String downloadUrl = null;
@@ -694,7 +705,7 @@ public class ProgramsView extends ViewImpl implements
 	@Override
 	public void setPermissions(HashMap<Long, PermissionType> permissions) {
 		this.permissions = permissions;
-		System.err.println("Permissions = " + permissions);
+		// System.err.println("Permissions = " + permissions);
 	}
 
 	@Override
@@ -706,38 +717,18 @@ public class ProgramsView extends ViewImpl implements
 		} else if ((type == ProgramDetailType.ACTIVITY)
 				|| (type == ProgramDetailType.TASK)) {
 			programId = isProgramDetail.getProgramId();
-		}else{
+		} else {
 			return false;
 		}
 
 		PermissionType permission = permissions.get(programId);
-		System.err.println("Program Id>>" + programId + "Permission>>"
-				+ permission);
+		// System.err.println("Program Id>>" + programId + "Permission>>"
+		// + permission);
 		if (permission == null || permission == PermissionType.CAN_VIEW) {
 			return false;
 		} else {
 			return true;
 		}
-	}
-
-	private Long getParentId(IsProgramDetail activity) {
-		Long programId = null;
-		ProgramDetailType type = activity.getType();
-		if (type != ProgramDetailType.ACTIVITY) {
-
-			// System.err.println("Activity Id:::"+ activity.get);
-
-			for (IsProgramDetail act : activities) {
-				System.err.println("Activity::" + act.getId());
-				if (act.getId() == activity.getParentId()) {
-					programId = getParentId(act);
-					System.err.println("Type::" + type + ":: ProgramId ::"
-							+ programId);
-				}
-			}
-		}
-
-		return programId;
 	}
 
 }

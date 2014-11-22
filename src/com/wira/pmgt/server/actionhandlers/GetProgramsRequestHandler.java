@@ -33,8 +33,9 @@ public class GetProgramsRequestHandler extends
 		GetProgramsResponse response = (GetProgramsResponse)actionResult;
 		List<IsProgramDetail> activities = new ArrayList<>();
 		
-		if(action.getCode()==null && action.getPeriodId()==null){
-			activities = ProgramDaoHelper.loadById(action.getProgramId(), action.getOutcomeId(),action.getType(), action.isLoadChildren());
+		if(action.getCode()==null){
+			activities = ProgramDaoHelper.loadById(action.getProgramId(),
+					action.getOutcomeId(),action.getType(),action.getPeriodId(), action.isLoadChildren());
 			//loadById(action,activities);
 		}else{
 			activities = ProgramDaoHelper.loadByCode(action.getCode(), action.getPeriodId(), action.getType(), action.isLoadChildren());

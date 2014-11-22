@@ -634,8 +634,8 @@ public class ProgramDaoHelper {
 	}
 
 	public static List<IsProgramDetail> getProgramsByType(ProgramDetailType type,
-			boolean loadChildren) {
-		return getProgramByTypeAndPeriod(type,null, loadChildren);
+			Long periodId,boolean loadChildren) {
+		return getProgramByTypeAndPeriod(type,periodId, loadChildren);
 	}
 	
 	public static List<IsProgramDetail> getProgramByTypeAndPeriod(ProgramDetailType type,
@@ -651,9 +651,7 @@ public class ProgramDaoHelper {
 		
 		List<ProgramDetail> details = new ArrayList<>();
 		
-		if(period!=null){
-			details = dao.getProgramDetails(type, period);
-		}		
+		details = dao.getProgramDetails(type, period);
 		
 		return getActivity(details, loadChildren);
 	}
@@ -1071,7 +1069,8 @@ public class ProgramDaoHelper {
 		return Arrays.asList(outcomeDTO);
 	}
 
-	public static List<IsProgramDetail> loadById(Long programId, Long outcomeId, ProgramDetailType programType, boolean isLoadChildren) {
+	public static List<IsProgramDetail> loadById(Long programId, Long outcomeId, 
+			ProgramDetailType programType, Long periodId,boolean isLoadChildren) {
 		List<IsProgramDetail> activities = new ArrayList<>();
 		if(programId!=null && outcomeId!=null){
 			activities.addAll(
@@ -1082,7 +1081,7 @@ public class ProgramDaoHelper {
 				activities.add(activity);
 			}
 		}else if(programType!=null){
-			activities.addAll(getProgramsByType(programType, isLoadChildren));
+			activities.addAll(getProgramsByType(programType,periodId, isLoadChildren));
 		}else{
 			activities.addAll(getPrograms(isLoadChildren));
 		}

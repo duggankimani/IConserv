@@ -168,7 +168,8 @@ public class TestProgramDaoImpl {
 	
 	@Ignore
 	public void load(){
-		List<IsProgramDetail> list = ProgramDaoHelper.getProgramsByType(ProgramDetailType.OBJECTIVE, true);
+		Long periodId=1L;
+		List<IsProgramDetail> list = ProgramDaoHelper.getProgramsByType(ProgramDetailType.OBJECTIVE,periodId, true);
 		System.err.println(">>> Test: "+list.size());		
 	}
 	

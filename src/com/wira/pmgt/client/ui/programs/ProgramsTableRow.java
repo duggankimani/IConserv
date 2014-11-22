@@ -322,7 +322,9 @@ public class ProgramsTableRow extends RowWidget implements
 
 			if (activity.getProgramId() != null) {
 				aName.setHref("#home;page=activities;activity="
-						+ activity.getProgramId() + "O" + activity.getId());
+						+ activity.getProgramId() + "O" + activity.getId()
+						+ (activity.getPeriod()!=null?
+								";period="+activity.getPeriod().getId():""));
 			} else {
 				aName.getElement().removeAttribute("href");
 				aName.addStyleName("no-link");
@@ -331,10 +333,14 @@ public class ProgramsTableRow extends RowWidget implements
 		} else if (isSummaryRow
 				&& activity.getType() == ProgramDetailType.PROGRAM) {
 			// Summary table
-			aName.setHref("#home;page=activities;activity=" + activity.getId());
+			aName.setHref("#home;page=activities;activity=" + activity.getId()
+					+ (activity.getPeriod()!=null?
+							";period="+activity.getPeriod().getId():""));
 		} else {
 			aName.setHref("#home;page=activities;activity=" + programId + "d"
-					+ activity.getId());
+					+ activity.getId()
+					+ (activity.getPeriod()!=null?
+							";period="+activity.getPeriod().getId():""));
 		}
 
 		if (activity.getType() == ProgramDetailType.OBJECTIVE) {
