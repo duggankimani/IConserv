@@ -942,8 +942,7 @@ public class ProgramsPresenter extends
 								false);
 					
 						fireEvent(new ActivitySavedEvent(
-								"You successfully assigned '"
-										+ allocatedPeople));
+								"Assignment was successfully saved "));
 
 					}
 				});
