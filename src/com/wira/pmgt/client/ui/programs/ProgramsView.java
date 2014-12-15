@@ -428,6 +428,10 @@ public class ProgramsView extends ViewImpl implements
 
 	public void selectTab(String href) {
 		isCurrentPlaceObjectivesPage = href.equals("#home;page=objectives");
+		
+		if(isCurrentPlaceObjectivesPage){
+			headerContainer.setText("Objectives");
+		}
 
 		int size = listPanel.getWidgetCount();
 		for (int i = 0; i < size; i++) {
@@ -601,7 +605,7 @@ public class ProgramsView extends ViewImpl implements
 		this.lastUpdatedId = lastUpdatedId;
 	}
 
-	public HasClickHandlers getAddButton() {
+	public HasClickHandlers getAddProgramButton() {
 		return aProgram;
 	}
 

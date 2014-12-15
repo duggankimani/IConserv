@@ -117,7 +117,7 @@ public class ProgramsPresenter extends
 
 		void setProgramId(Long programId);
 
-		HasClickHandlers getAddButton();
+		HasClickHandlers getAddProgramButton();
 
 		HasClickHandlers getaAssign();
 
@@ -295,7 +295,7 @@ public class ProgramsPresenter extends
 		});
 		
 		//Add Button
-		getView().getAddButton().addClickHandler(new ClickHandler() {
+		getView().getAddProgramButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				fireEvent(new CreateProgramEvent(null));
@@ -918,7 +918,7 @@ public class ProgramsPresenter extends
 
 	@Override
 	public void onProgramsReload(ProgramsReloadEvent event) {
-		loadData(programId, programDetailId);
+		loadData(programId, programDetailId,event.getPeriodId());
 	}
 
 	private void assignTask(final TaskInfo taskInfo) {

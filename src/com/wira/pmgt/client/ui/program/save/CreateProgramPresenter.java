@@ -16,27 +16,24 @@ import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.OptionControl;
 import com.wira.pmgt.client.ui.donor.save.DonorSaveView;
 import com.wira.pmgt.client.ui.events.ActivitySavedEvent;
+import com.wira.pmgt.client.ui.events.ProcessingEvent;
 import com.wira.pmgt.client.ui.events.ProgramsReloadEvent;
 import com.wira.pmgt.client.ui.period.save.PeriodSaveView;
 import com.wira.pmgt.shared.model.ProgramDetailType;
-import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.PeriodDTO;
 import com.wira.pmgt.shared.model.program.ProgramDTO;
-import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 import com.wira.pmgt.shared.requests.CreateDonorRequest;
 import com.wira.pmgt.shared.requests.CreatePeriodRequest;
 import com.wira.pmgt.shared.requests.CreateProgramRequest;
 import com.wira.pmgt.shared.requests.GetFundsRequest;
-import com.wira.pmgt.shared.requests.GetGroupsRequest;
 import com.wira.pmgt.shared.requests.GetPeriodsRequest;
 import com.wira.pmgt.shared.requests.GetProgramsRequest;
 import com.wira.pmgt.shared.requests.MultiRequestAction;
 import com.wira.pmgt.shared.responses.CreatePeriodResponse;
 import com.wira.pmgt.shared.responses.CreateProgramResponse;
 import com.wira.pmgt.shared.responses.GetFundsResponse;
-import com.wira.pmgt.shared.responses.GetGroupsResponse;
 import com.wira.pmgt.shared.responses.GetPeriodsResponse;
 import com.wira.pmgt.shared.responses.GetProgramsResponse;
 import com.wira.pmgt.shared.responses.MultiRequestActionResult;
@@ -199,6 +196,7 @@ public class CreateProgramPresenter extends
 			@Override
 			public void onClick(ClickEvent event) {
 				if (getView().isValid()) {
+					fireEvent(new ProcessingEvent("Saving Program.."));
 					IsProgramDetail newProgram = getView().getProgram();
 					newProgram.setId(programId);
 					requestHelper.execute(new CreateProgramRequest(newProgram),
@@ -207,17 +205,16 @@ public class CreateProgramPresenter extends
 								public void processResult(
 										CreateProgramResponse aResponse) {
 									getView().hide();
-
+									IsProgramDetail saved = aResponse.getProgram();
 									fireEvent(new ActivitySavedEvent(
 											"Program Successfully Changed"));
 									if (navigateOnSave) {
 										History.newItem(
 												"home;page=activities;activity="
-														+ aResponse
-																.getProgram()
-																.getId(), true);
+														+ saved.getId()+
+														";period="+saved.getPeriod().getId(), true);
 									} else {
-										fireEvent(new ProgramsReloadEvent());
+										fireEvent(new ProgramsReloadEvent(saved.getPeriod().getId()));
 									}
 								}
 							});

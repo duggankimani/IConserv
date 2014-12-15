@@ -60,10 +60,7 @@ public class HomeReportsView extends ViewImpl implements
 	PieChart pieChartTargets;
 
 	@UiField
-	ActionLink aProgramEdit;
-
-	@UiField
-	InlineLabel spnDates;
+	ActionLink spnDates;
 
 	@UiField
 	Dropdown<PeriodDTO> periodDropdown;
@@ -108,13 +105,13 @@ public class HomeReportsView extends ViewImpl implements
 			if(periodId!=null){
 				for (PeriodDTO period : periods) {
 					if (period.getId().equals(periodId)) {
-						setDates("(" + period.getDescription() + ")");
+						setDates( period.getDescription());
 					}
 				}
 			}else{
 				for (PeriodDTO period : periods) {
 					if (period.isCurrentPeriod()) {
-						setDates("(" + period.getDescription() + ")");
+						setDates(period.getDescription());
 					}
 				}
 			}
@@ -123,7 +120,7 @@ public class HomeReportsView extends ViewImpl implements
 	}
 
 	public void setDates(String text) {
-		spnDates.getElement().setInnerText(text);
+		spnDates.getElement().setInnerHTML(text+" <span class='caret'></span>");
 	}
 
 	InlineLabel getInlineLabel(String amount, String color) {

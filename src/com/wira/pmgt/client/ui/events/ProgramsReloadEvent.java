@@ -8,11 +8,16 @@ public class ProgramsReloadEvent extends
 		GwtEvent<ProgramsReloadEvent.ProgramsReloadHandler> {
 
 	public static Type<ProgramsReloadHandler> TYPE = new Type<ProgramsReloadHandler>();
+	private Long periodId;
 
 	public interface ProgramsReloadHandler extends EventHandler {
 		void onProgramsReload(ProgramsReloadEvent event);
 	}
 
+	public ProgramsReloadEvent(Long periodId) {
+		this.periodId = periodId;
+	}
+	
 	public ProgramsReloadEvent() {
 	}
 
@@ -32,5 +37,9 @@ public class ProgramsReloadEvent extends
 
 	public static void fire(HasHandlers source) {
 		source.fireEvent(new ProgramsReloadEvent());
+	}
+
+	public Long getPeriodId() {
+		return periodId;
 	}
 }
