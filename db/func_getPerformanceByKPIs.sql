@@ -1,6 +1,6 @@
-drop function if exists func_getPerformanceByKPIs();
+drop function if exists func_getPerformanceByKPIs(periodid int);
 
-CREATE FUNCTION func_getPerformanceByKPIs() 
+CREATE FUNCTION func_getPerformanceByKPIs(in p_periodid int)
 RETURNS table(
         name varchar(255),
 	description varchar(255),
@@ -24,7 +24,7 @@ DECLARE
   v_totalsuccessper double precision;
 BEGIN
 
-create temp table programcount on commit drop as select v.programId, count(*) count from vprogramtargets v group by v.programId;
+create temp table programcount on commit drop as select v.programId, count(*) count from vprogramtargets v where v.periodid=p_periodid group by v.programId;
 create temp table programstats(id bigint, countsuccess int, countfail int, countnodata int, percsuccess double precision,percfail double precision) on commit drop;
 
 v_totalsuccessper=0.0;
@@ -36,11 +36,11 @@ loop
   v_total = 0; 
   --RAISE INFO 'Executing  id = %, count=% ',arow.programId,arow.count;
 
-   select count(*) into v_successc  from vprogramtargets p where p.status='CLOSED' and p.actualoutcome is not null and p.actualoutcome!=0 and p.target<=p.actualoutcome and p.programId=arow.programId;
+   select count(*) into v_successc  from vprogramtargets p where p.status='CLOSED' and p.actualoutcome is not null and p.actualoutcome!=0 and p.target<=p.actualoutcome and p.programId=arow.programId and p.periodid=p_periodid;
 
-   select count(*) into v_failc  from vprogramtargets p where p.status='CLOSED' and p.actualoutcome is not null and p.actualoutcome!=0 and p.target>p.actualoutcome and p.programId=arow.programId;
+   select count(*) into v_failc  from vprogramtargets p where p.status='CLOSED' and p.actualoutcome is not null and p.actualoutcome!=0 and p.target>p.actualoutcome and p.programId=arow.programId and p.periodid=p_periodid;
 
-   select count(*) into v_nodatac  from vprogramtargets p where p.status='CLOSED' and (p.actualoutcome is null or p.actualoutcome=0) and p.programId=arow.programId;
+   select count(*) into v_nodatac  from vprogramtargets p where p.status='CLOSED' and (p.actualoutcome is null or p.actualoutcome=0) and p.programId=arow.programId and p.periodid=p_periodid;
   
   v_total = (v_successc+v_failc);
   if(v_total!=0) then

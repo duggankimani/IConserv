@@ -41,6 +41,7 @@ BEGIN
 	v_newactual=COALESCE(v_newactual,0.0);
 	v_previousactual = COALESCE(v_previousactual,0.0);
 	
+	--RAISE INFO 'parentstatus=%,programid=%, parenttargetid=%, actualoutcome=%, previousoutcome=% ',v_parentstatus,New.programid, v_parentoutcomentid, v_newactual, v_previousactual;
 	--only update targetsandoutcomes of programs that are still open (!closed)
 	IF((v_parentstatus is null or v_parentstatus!='CLOSED') and (v_parentoutcomentid is not null) and  (COALESCE(v_newactual,0) != COALESCE(v_previousactual,0))) THEN
 		--RAISE INFO 'parentoutcomeid=%, actual=%, previousactual=% ', v_parentoutcomentid, v_newactual, v_previousactual;
