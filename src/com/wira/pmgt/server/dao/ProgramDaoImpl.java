@@ -407,7 +407,7 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		return values;
 	}
 	
-	public List<PerformanceModel> getBudgetPerformanceData(Metric metric){
+	public List<PerformanceModel> getBudgetPerformanceData(Metric metric, Long periodId){
 		List<PerformanceModel> list = new ArrayList<>();
 		String analysis = null;
 		switch (metric) {

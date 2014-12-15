@@ -1109,8 +1109,8 @@ public class ProgramDaoHelper {
 		return activities;
 	}
 
-	public static List<PerformanceModel> getPerformanceData(Metric metric) {
-		return DB.getProgramDaoImpl().getBudgetPerformanceData(metric);
+	public static List<PerformanceModel> getPerformanceData(Metric metric, Long periodId) {
+		return DB.getProgramDaoImpl().getBudgetPerformanceData(metric, periodId);
 	}
 
 	public static List<ProgramTreeModel> getProgramTree(Long periodId,Long programId) {

@@ -69,7 +69,6 @@ public class HTUser implements Serializable, Listable, OrgEntity {
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return userId;
 	}
 
@@ -105,7 +104,6 @@ public class HTUser implements Serializable, Listable, OrgEntity {
 	}
 
 	public boolean hasGroup(String groupName) {
-		
 		for(UserGroup group:groups){
 			if(group.getName().equalsIgnoreCase(groupName)){
 				return true;
@@ -115,7 +113,6 @@ public class HTUser implements Serializable, Listable, OrgEntity {
 	}
 
 	public boolean isAdmin() {
-
 		return hasGroup("admin");
 	}
 	

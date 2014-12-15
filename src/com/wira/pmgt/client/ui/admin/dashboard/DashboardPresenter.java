@@ -1,5 +1,9 @@
 package com.wira.pmgt.client.ui.admin.dashboard;
 
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.GwtEvent.Type;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.gwtplatform.common.client.IndirectProvider;
 import com.gwtplatform.common.client.StandardProvider;
 import com.gwtplatform.dispatch.shared.DispatchAsync;
@@ -7,16 +11,11 @@ import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.ContentSlot;
 import com.gwtplatform.mvp.client.proxy.RevealContentHandler;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.GwtEvent.Type;
 import com.wira.pmgt.client.service.ServiceCallback;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.admin.dashboard.charts.PieChartPresenter;
 import com.wira.pmgt.client.ui.admin.dashboard.linegraph.LineGraphPresenter;
 import com.wira.pmgt.client.ui.admin.dashboard.table.TableDataPresenter;
-import com.wira.pmgt.shared.model.dashboard.ChartType;
 import com.wira.pmgt.shared.requests.GetDashBoardDataRequest;
 import com.wira.pmgt.shared.responses.GetDashBoardDataResponse;
 

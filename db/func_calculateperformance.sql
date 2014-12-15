@@ -1,6 +1,6 @@
 drop function if exists func_calculateperformance();
 
-CREATE FUNCTION func_calculateperformance() 
+CREATE FUNCTION func_calculateperformance(in p_periodid int) 
 RETURNS table(
         name varchar(255),
 	description varchar(255),

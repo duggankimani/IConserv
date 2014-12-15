@@ -17,7 +17,7 @@ BaseActionHandler<GetPerformanceDataRequest, GetPerformanceDataResponse>{
 	public void execute(GetPerformanceDataRequest action,
 			BaseResponse actionResult, ExecutionContext execContext)
 			throws ActionException {
-		List<PerformanceModel> list = ProgramDaoHelper.getPerformanceData(action.getMetric());
+		List<PerformanceModel> list = ProgramDaoHelper.getPerformanceData(action.getMetric(), action.getPeriodId());
 		((GetPerformanceDataResponse)actionResult).setData(list);
 	}
 
