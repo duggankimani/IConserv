@@ -295,6 +295,7 @@ public class CreateProgramView extends PopupViewImpl implements
 	
 	@Override
 	public void setObjectives(List<IsProgramDetail> objectives) {
+		System.err.println("List >> "+objectives);
 		if(objectives!=null){
 			autoComplete.setValues(objectives);
 		}

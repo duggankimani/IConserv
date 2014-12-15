@@ -164,9 +164,9 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		
 		Query query = null;
 		
-		if(type.equals(ProgramDetailType.OBJECTIVE)){
+		if(type.equals(ProgramDetailType.OBJECTIVE) || type.equals(ProgramDetailType.OUTCOME)){
 			query = em.createNamedQuery("ProgramDetail.findByType")
-			.setParameter("isCurrentUserAdmin", groups.contains("ADMIN"))
+			.setParameter("isCurrentUserAdmin", groups.contains("ADMIN") || type==ProgramDetailType.OUTCOME)
 			.setParameter("userId", user)
 			.setParameter("groupIds", groups)
 			.setParameter("type", type)
