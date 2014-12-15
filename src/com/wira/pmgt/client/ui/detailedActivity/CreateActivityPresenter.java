@@ -50,6 +50,8 @@ public class CreateActivityPresenter extends
 	private PeriodDTO period;
 
 	private Long outcomeId;
+
+	private Long periodId;
 		
 	@Inject
 	public CreateActivityPresenter(final EventBus eventBus, final MyView view) {
@@ -95,15 +97,17 @@ public class CreateActivityPresenter extends
 		
 		return viewactivity;
 	}
+	
 
-	public void load(Long parentId,Long outcomeId) {
+	public void load(Long parentId,Long outcomeId,Long periodId) {
 		
 		this.parentId = parentId;
 		this.outcomeId = outcomeId;
+		this.periodId = periodId;
 		
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetFundsRequest(parentId));
-		action.addRequest(new GetPeriodRequest());
+		action.addRequest(new GetPeriodRequest(periodId));
 		action.addRequest(new GetProgramsRequest(parentId, false));
 				
 		requestHelper.execute(action, new TaskServiceCallback<MultiRequestActionResult>() {
@@ -139,5 +143,5 @@ public class CreateActivityPresenter extends
 	public void setType(ProgramDetailType type) {
 		getView().setType(type);
 	}
-	
+
 }

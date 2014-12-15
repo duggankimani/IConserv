@@ -18,7 +18,7 @@ public class GetPeriodRequestHandler extends
 	@Override
 	public void execute(GetPeriodRequest action, BaseResponse actionResult,
 			ExecutionContext execContext) throws ActionException {
-		((GetPeriodResponse)actionResult).setPeriod(ProgramDaoHelper.getActivePeriod());
+		((GetPeriodResponse)actionResult).setPeriod(ProgramDaoHelper.getPeriod(action.getPeriodId()));
 	}
 
 	@Override

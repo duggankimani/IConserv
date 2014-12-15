@@ -171,7 +171,8 @@ public class HomePresenter extends
 				docProvider);
 		docViewFactory = new StandardProvider<GenericDocumentPresenter>(
 				docViewProvider);
-		reportFactory = new StandardProvider<HomeReportsPresenter>(reportsProvider);
+		reportFactory = new StandardProvider<HomeReportsPresenter>(
+				reportsProvider);
 		dateGroupFactory = new StandardProvider<DateGroupPresenter>(
 				dateGroupProvider);
 		newsFeedFactory = new StandardProvider<NewsFeedPresenter>(
@@ -258,7 +259,7 @@ public class HomePresenter extends
 		String processInstID = request.getParameter("pid", null);
 		String documentSearchID = request.getParameter("did", null);
 		String period = request.getParameter("period", null);
-		
+
 		if (processInstID != null) {
 			processInstanceId = Long.parseLong(processInstID);
 		}
@@ -278,18 +279,19 @@ public class HomePresenter extends
 				}
 			});
 
-		} else if (page != null && (page.equals("activities") || page.equals("objectives"))) {
+		} else if (page != null
+				&& (page.equals("activities") || page.equals("objectives"))) {
 			String program = request.getParameter("activity", "0");
 			String detail = "0";
 			String outcome = "0";
-			
+
 			if (program.contains("d")) {
 				String[] ids = program.split("d");
 				program = ids[0];
 				detail = ids[1];
 			}
-			
-			if(program.contains("O")){
+
+			if (program.contains("O")) {
 				String[] ids = program.split("O");
 				program = ids[0];
 				outcome = ids[1];
@@ -298,25 +300,27 @@ public class HomePresenter extends
 			final Long programId = new Long(program);
 			final Long detailId = new Long(detail);
 			final Long outcomeId = new Long(outcome);
-			final Long periodId = period==null? null: new Long(period);
-			
-			Window.setTitle(page.equals("activities")?"Activities":"Objectives");
+			final Long periodId = period == null ? null : new Long(period);
+
+			Window.setTitle(page.equals("activities") ? "Activities"
+					: "Objectives");
 			activitiesFactory.get(new ServiceCallback<ProgramsPresenter>() {
 				@Override
 				public void processResult(ProgramsPresenter aResponse) {
 					aResponse.clear();
-					if(page.equals("activities")){
-						
-						if(!outcomeId.equals(0L)){
-							aResponse.loadActivitiesByOutcome(programId,outcomeId,periodId);
-						}else{
-							aResponse.loadData(programId, detailId,periodId);
+					if (page.equals("activities")) {
+
+						if (!outcomeId.equals(0L)) {
+							aResponse.loadActivitiesByOutcome(programId,
+									outcomeId, periodId);
+						} else {
+							aResponse.loadData(programId, detailId, periodId);
 						}
-						
-					}else{
+
+					} else {
 						aResponse.loadObjectives();
 					}
-					
+
 					setInSlot(ACTIVITIES_SLOT, aResponse);
 					getView().setSelectedTab("Activities");
 				}
@@ -346,7 +350,7 @@ public class HomePresenter extends
 				public void processResult(HomeReportsPresenter reportResponse) {
 					setInSlot(ACTIVITIES_SLOT, reportResponse);
 					getView().setSelectedTab("Reports");
-					reportResponse.loadData();
+//					 reportResponse.loadData();
 				}
 			});
 

@@ -39,22 +39,23 @@ public class ProgramHeader extends Composite {
 	@UiField
 	InlineLabel spnDates;
 	@UiField
-	ActionLink aProgramEdit;
+	ActionLink aChangePeriod;
+
 	@UiField
 	FocusPanel panelTitle;
 	@UiField
 	HTMLPanel divPopup;
-	
+
 	@UiField
 	HTMLPanel divBudget;
-	
+
 	@UiField
 	HeadingElement spnTitle;
 	@UiField
 	Dropdown<PeriodDTO> periodDropdown;
 	@UiField
 	DivElement divHeader;
-	
+
 	private Long programId;
 
 	public ProgramHeader() {
@@ -69,19 +70,18 @@ public class ProgramHeader extends Composite {
 					}
 				});
 
-		spnDates.getElement().setAttribute("data-toggle", "dropdown");
 	}
-	
+
 	public void setDates(String text) {
 		spnDates.getElement().setInnerText(text);
 	}
-	
+
 	public void setTitle(String title) {
 		if (title != null) {
 			spnBudget.setTitle(title);
 		}
 	}
-	
+
 	public void setText(String text) {
 		if (text != null) {
 			spnTitle.setInnerText(text);
@@ -90,21 +90,20 @@ public class ProgramHeader extends Composite {
 		}
 	}
 
-	public void setBudget(String budget){
+	public void setBudget(String budget) {
 		spnBudget.setInnerHTML(budget);
 	}
-	
-	public void setPeriodDropdown(List<PeriodDTO> periods){
+
+	public void setPeriodDropdown(List<PeriodDTO> periods) {
 		periodDropdown.setValues(periods);
 	}
-	
+
 	public Dropdown<PeriodDTO> getPeriodDropdown() {
 		return periodDropdown;
 	}
-	
-	
 
-	private BreadCrumbItem createCrumb(String text, String title, Long id, Boolean isActive) {
+	private BreadCrumbItem createCrumb(String text, String title, Long id,
+			Boolean isActive) {
 		BreadCrumbItem crumb = new BreadCrumbItem();
 		if (text.equals("Home")) {
 			crumb.setHome(true);
@@ -122,24 +121,23 @@ public class ProgramHeader extends Composite {
 
 		return crumb;
 	}
-	
-	
+
 	public BulletListPanel setBreadCrumbs(List<ProgramSummary> summaries) {
-		BulletListPanel crumbContainer =  new BulletListPanel();
+		BulletListPanel crumbContainer = new BulletListPanel();
 		crumbContainer.setStyleName("breadcrumb");
 		crumbContainer.clear();
-		BreadCrumbItem crumb = createCrumb("Home", "Home", 0L, false );
+		BreadCrumbItem crumb = createCrumb("Home", "Home", 0L, false);
 		crumbContainer.add(crumb);
 		for (int i = summaries.size() - 1; i > -1; i--) {
 			ProgramSummary summary = summaries.get(i);
-			crumb=createCrumb(summary.getName(), summary.getDescription(),
+			crumb = createCrumb(summary.getName(), summary.getDescription(),
 					summary.getId(), i == 0);
 			crumbContainer.add(crumb);
 		}
-		
+
 		return crumbContainer;
 	}
-	
+
 	/*
 	 * Get href from Id
 	 */
@@ -159,56 +157,58 @@ public class ProgramHeader extends Composite {
 
 	public void setProgramId(Long programId) {
 		this.programId = programId;
-		if(programId==null || programId==0){
+		if (programId == null || programId == 0) {
 			setText(null);
+			aChangePeriod.removeStyleName("hide");
+			spnDates.getElement().setAttribute("data-toggle", "dropdown");
+			spnDates.addStyleName("text-info");
+			spnDates.removeStyleName("text-muted");
+		} else {
+			
+			spnDates.removeStyleName("text-info");
+			spnDates.addStyleName("text-muted");
+			aChangePeriod.addStyleName("hide");
+			spnDates.getElement().removeAttribute("data-toggle");
 		}
 	}
-	
+
 	public void setLeftMargin(Boolean status) {
-		if(status){
+		if (status) {
 			divHeader.removeClassName("no-margin-left");
-		}else{
+		} else {
 			divHeader.addClassName("no-margin-left");
 		}
 	}
 
-	public void setFunding(Double budget, Double actualAmount, ProgramDetailType type) {
+	public void setFunding(Double budget, Double actualAmount,
+			ProgramDetailType type) {
 		if (budget == null) {
-			budget=0.0;
+			budget = 0.0;
 		}
-		
+
 		setBudget(NumberUtils.CURRENCYFORMAT.format(budget));
-//		Double totalAllocated = 0.0;
-//		if(funding!=null){
-//			for(ProgramFundDTO dto: funding){
-//				Double allocation = dto.getAllocation();
-//				if(allocation==null){
-//					allocation=0.0;
-//				}
-//				totalAllocated=allocation+totalAllocated;
-//			}
-//		}
-		
+
 		if (actualAmount > budget) {
 			spnActuals.addClassName("text-error bold");
 		} else {
 			spnActuals.addClassName("text-success bold");
 		}
-		spnActuals.setInnerText(NumberUtils.CURRENCYFORMAT.format(actualAmount));
-		
-//		System.err.println(">>>> Funding is called...");
-		
-		if(type!=ProgramDetailType.OBJECTIVE){
+		spnActuals
+				.setInnerText(NumberUtils.CURRENCYFORMAT.format(actualAmount));
+
+		// System.err.println(">>>> Funding is called...");
+
+		if (type != ProgramDetailType.OBJECTIVE) {
 			showBudgets(true);
-		}else{
+		} else {
 			showBudgets(false);
 		}
 	}
-	
-	public void showBudgets(boolean show){
-		if(show){
+
+	public void showBudgets(boolean show) {
+		if (show) {
 			divBudget.removeStyleName("hide");
-		}else{
+		} else {
 			divBudget.addStyleName("hide");
 		}
 	}

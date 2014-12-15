@@ -37,7 +37,6 @@ import com.wira.pmgt.shared.model.Value;
 import com.wira.pmgt.shared.model.form.Field;
 import com.wira.pmgt.shared.model.form.Form;
 import com.wira.pmgt.shared.model.form.Property;
-import com.wira.pmgt.shared.model.program.BasicProgramDetails;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.Metric;
@@ -1234,19 +1233,12 @@ public class ProgramDaoHelper {
 		return DB.getProgramDaoImpl().getPermissions(userId, groupIds, periodId);
 	}
 
-//	private static ProgramSummary getSummary(ProgramDetail detail) {
-//		ProgramSummary summary = new ProgramSummary();
-//		summary.setId(detail.getId());
-//		summary.setName(detail.getName());
-//		summary.setDescription(detail.getDescription());
-//		summary.setStartDate(detail.getStartDate());
-//		summary.setEndDate(detail.getEndDate());
-//		summary.setStatus(detail.getStatus());
-//		if(detail.getParent()!=null){
-//			summary.setParentId(detail.getParent().getId());
-//		}
-//		
-//		summary.setType(detail.getType());
-//		return summary;
-//	}
+	public static PeriodDTO getPeriod(Long periodId) {
+		if(periodId==null){
+			return getActivePeriod();
+		}
+		
+		return get(DB.getProgramDaoImpl().getPeriod(periodId));
+	}
+
 }

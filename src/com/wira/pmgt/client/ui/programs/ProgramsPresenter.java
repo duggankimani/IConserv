@@ -399,12 +399,12 @@ public class ProgramsPresenter extends
 			if (edit) {
 				// we are editing the selected item
 				createTask.setActivity(activity);
-				createTask.load(activity.getParentId(), null);
+				createTask.load(activity.getParentId(), null,periodId);
 			} else {
 				// selected item is the parent - We are creating a new activity
 				// based on selected item
 				createTask.setActivity(null);
-				createTask.load(activity.getId(), null);
+				createTask.load(activity.getId(), null,periodId);
 			}
 
 			AppManager.showPopUp(edit ? "Edit Task" : "Create Task",
@@ -432,7 +432,7 @@ public class ProgramsPresenter extends
 				// we are editing the selected item
 				createActivity.setActivity(activity);
 				createActivity.load(activity.getParentId(),
-						activity.getActivityOutcomeId());
+						activity.getActivityOutcomeId(),periodId);
 			} else {
 				// selected item is the parent - We are creating a new activity
 				// based on selected item
@@ -443,7 +443,7 @@ public class ProgramsPresenter extends
 					the new activity; which results in incorrect data storage. This is why we have to
 					use programId at this point.
 					*/ 
-					createActivity.load(programId, selected.getId());
+					createActivity.load(programId, selected.getId(),periodId);
 				}
 
 			}
