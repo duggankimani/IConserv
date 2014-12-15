@@ -68,6 +68,8 @@ public class HomeReportsView extends ViewImpl implements
 	@UiField
 	Dropdown<PeriodDTO> periodDropdown;
 
+	private Long periodId;
+
 	@Inject
 	public HomeReportsView(final Binder binder) {
 
@@ -101,12 +103,22 @@ public class HomeReportsView extends ViewImpl implements
 		});
 		periodDropdown.setValues(periods);
 
-		if (periods != null) {
-			for (PeriodDTO period : periods) {
-				if (period.isCurrentPeriod()) {
-					setDates("(" + period.getDescription() + ")");
+		if (periods!=null) {
+			
+			if(periodId!=null){
+				for (PeriodDTO period : periods) {
+					if (period.getId().equals(periodId)) {
+						setDates("(" + period.getDescription() + ")");
+					}
+				}
+			}else{
+				for (PeriodDTO period : periods) {
+					if (period.isCurrentPeriod()) {
+						setDates("(" + period.getDescription() + ")");
+					}
 				}
 			}
+			
 		}
 	}
 
@@ -141,7 +153,13 @@ public class HomeReportsView extends ViewImpl implements
 		double totalLeft = 0.0;
 
 		for (ProgramAnalysis analysis : list) {
-			String href = "#home;page=activities;activity=" + analysis.getId();
+			String href =null;
+			if(periodId!=null){
+				href = "#home;page=activities;activity=" + analysis.getId()+";period="+periodId;
+			}else{
+				href = "#home;page=activities;activity=" + analysis.getId(); 
+			}
+			 
 
 			ActionLink link = new ActionLink(analysis.getName());
 			link.addStyleName("reports-program-link");
@@ -232,8 +250,15 @@ public class HomeReportsView extends ViewImpl implements
 
 			ActionLink aName = new ActionLink(model.getName() + " ("
 					+ (model.getTotalCount()) + ")");
-			aName.setHref("#home;page=activities;activity="
-					+ model.getProgramId());
+			
+			if(periodId!=null){
+				aName.setHref("#home;page=activities;activity="
+						+ model.getProgramId()+";period="+periodId);
+			}else{
+				aName.setHref("#home;page=activities;activity="
+						+ model.getProgramId());
+			}
+			
 			tableAnalysis.addRow(
 					aName,
 					new ColorWidget(model, budgetMeasureTip, budgetNoData),
@@ -300,4 +325,23 @@ public class HomeReportsView extends ViewImpl implements
 	public Dropdown<PeriodDTO> getPeriodDropdown() {
 		return periodDropdown;
 	}
+
+	@Override
+	public void clear() {
+		tableAnalysis.clearRows();
+		tblBudgetAnalysis.clearRows();
+		pieChartBudget.clear();
+		pieChartTargets.clear();
+		pieChartTimelines.clear();
+		
+		spnTotalFunding.setInnerText(format(0.0));
+		spnActual.setInnerText(format(0.0));
+		spnRemaining.setInnerText(format(0.0));
+	}
+
+	@Override
+	public void setPeriods(List<PeriodDTO> periods, Long periodId) {
+		this.periodId = periodId;
+		setPeriods(periods);
+	}	
 }

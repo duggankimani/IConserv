@@ -1110,6 +1110,12 @@ public class ProgramDaoHelper {
 	}
 
 	public static List<PerformanceModel> getPerformanceData(Metric metric, Long periodId) {
+		if(periodId==null){
+			Period period = DB.getProgramDaoImpl().getActivePeriod();
+			if(period!=null)
+				periodId = period.getId();
+		}
+		
 		return DB.getProgramDaoImpl().getBudgetPerformanceData(metric, periodId);
 	}
 

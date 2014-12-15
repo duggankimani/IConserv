@@ -3,6 +3,7 @@ package com.wira.pmgt.shared.model.program;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.wira.pmgt.client.ui.util.DateUtils;
 import com.wira.pmgt.shared.model.Listable;
 
 public class PeriodDTO implements Serializable, Listable{
@@ -106,7 +107,17 @@ public class PeriodDTO implements Serializable, Listable{
 	 * @return true if testDate is between startdate and endDate
 	 */
 	private boolean between(Date testDate, Date start, Date end) {
-		return startDate.before(testDate) && end.after(testDate);
+		//Below parsing is requred to ensure all  dates have the same formats
+		//GWT generated dates have timezones embedded while server side dates dont, creating an error in comparing dates
+		testDate = DateUtils.CREATEDFORMAT.parse(DateUtils.CREATEDFORMAT.format(testDate));
+		start = DateUtils.CREATEDFORMAT.parse(DateUtils.CREATEDFORMAT.format(start));
+		end = DateUtils.CREATEDFORMAT.parse(DateUtils.CREATEDFORMAT.format(end));
+		
+		boolean btw = start.before(testDate) && end.after(testDate);
+		if(btw){
+			System.out.println(""+testDate+" is between "+start+" && "+end);
+		}
+		return btw; 
 	}
 	
 	/**
@@ -116,6 +127,10 @@ public class PeriodDTO implements Serializable, Listable{
 	 * @return true if the two dates are equal
 	 */
 	private boolean equals(Date date1, Date date2){
-		return date1.equals(date2);
+		boolean equals = date1.equals(date2);
+		if(equals){
+			System.out.println(date1+" == "+date2);
+		}
+		return equals; 
 	}
 }

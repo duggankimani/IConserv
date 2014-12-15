@@ -11,6 +11,8 @@ import com.gwtplatform.dispatch.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.ContentSlot;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
+import com.gwtplatform.mvp.client.proxy.PlaceRequest;
 import com.gwtplatform.mvp.client.proxy.RevealContentHandler;
 import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.component.Dropdown;
@@ -39,9 +41,11 @@ public class HomeReportsPresenter extends
 				List<PerformanceModel> timelinesPerfomance,
 				List<PerformanceModel> throughputPerfomance);
 
-		void setPeriods(List<PeriodDTO> periods);
+		void setPeriods(List<PeriodDTO> periods, Long periodId);
 		
 		Dropdown<PeriodDTO> getPeriodDropdown();
+
+		void clear();
 	}
 	
 	@ContentSlot
@@ -51,6 +55,8 @@ public class HomeReportsPresenter extends
 	public static final Type<RevealContentHandler<?>> OVERALLTURNAROUND_SLOT = new Type<RevealContentHandler<?>>();
 	
 	@Inject DispatchAsync requestHelper;
+	
+	@Inject PlaceManager placeManager;
 	
 	@Inject
 	public HomeReportsPresenter(final EventBus eventBus, final MyView view) {
@@ -64,12 +70,19 @@ public class HomeReportsPresenter extends
 			
 			@Override
 			public void onValueChange(ValueChangeEvent<PeriodDTO> event) {
-				loadData(event.getValue().getId());
+				getView().clear();
+				PeriodDTO period = event.getValue();
+				PlaceRequest request = new PlaceRequest("home")
+				.with("page", "reports")
+				.with("period", period.getId()+"");
+				
+				placeManager.revealPlace(request);
+				
 			}
 		});
 	}
 	
-	public void loadData(Long periodId){
+	public void loadData(final Long periodId){
 		MultiRequestAction action = new MultiRequestAction();
 		action.addRequest(new GetPeriodsRequest());
 		action.addRequest(new GetAnalysisDataRequest(periodId));
@@ -78,14 +91,13 @@ public class HomeReportsPresenter extends
 		action.addRequest(new GetPerformanceDataRequest(Metric.TIMELINES,periodId));
 		action.addRequest(new GetPerformanceDataRequest(Metric.THROUGHPUT,periodId));
 		
-		
 		requestHelper.execute(action,
 				new TaskServiceCallback<MultiRequestActionResult>() {
 			@Override
 			public void processResult(MultiRequestActionResult aResponse) {
 				int i=0;
 				
-				getView().setPeriods(((GetPeriodsResponse)aResponse.getReponses().get(i++)).getPeriods());
+				getView().setPeriods(((GetPeriodsResponse)aResponse.getReponses().get(i++)).getPeriods(),periodId);
 				
 				List<ProgramAnalysis> list = ((GetAnalysisDataResponse)aResponse.get(i++)).getData();
 				generateViews(list);
