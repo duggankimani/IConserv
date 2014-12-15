@@ -110,15 +110,15 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 	
 	@NamedNativeQuery(name="ProgramDetail.getBudgetAnalysis",
 			resultSetMapping="ProgramDetail.performanceAnalysis",
-			query=("select * from func_calculateperformance()")),
+			query=("select * from func_calculateperformance(:periodid)")),
 	
 	@NamedNativeQuery(name="ProgramDetail.getPerfomanceByTimelines",
 			resultSetMapping="ProgramDetail.performanceAnalysis",
-			query=("select * from func_getPerformanceByTimelines()")),
+			query=("select * from func_getPerformanceByTimelines(:periodid)")),
 	
 	@NamedNativeQuery(name="ProgramDetail.getPerformanceByKPIs",
 		resultSetMapping="ProgramDetail.performanceAnalysis",
-		query=("select * from func_getPerformanceByKPIs()")),
+		query=("select * from func_getPerformanceByKPIs(:periodid)")),
 	
 	@NamedNativeQuery(name="ProgramDetail.getProgramTree",
 		resultSetMapping="ProgramDetail.programTreeMapping",
@@ -210,7 +210,7 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	private Set<TargetAndOutcome> targets = new HashSet<>();
 	
 	@ManyToOne
-	@JoinColumn(name="periodid", referencedColumnName="id", nullable=true)
+	@JoinColumn(name="periodid", referencedColumnName="id", nullable=true) //nullable coz of objectives/outcomes
 	private Period period;	//Calendar year within which this 
 	
 	//we manage this manually

@@ -408,6 +408,9 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 	}
 	
 	public List<PerformanceModel> getBudgetPerformanceData(Metric metric, Long periodId){
+		if(periodId==null){
+			return new ArrayList<>();
+		}
 		List<PerformanceModel> list = new ArrayList<>();
 		String analysis = null;
 		switch (metric) {
@@ -431,7 +434,7 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 			return list;
 		}
 		
-		Query query = em.createNamedQuery(analysis);	
+		Query query = em.createNamedQuery(analysis).setParameter("periodid", periodId.intValue());	
 		List<Object[]> rows = getResultList(query); 
 		
 		for(Object[] row: rows){

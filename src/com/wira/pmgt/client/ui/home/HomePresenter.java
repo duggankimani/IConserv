@@ -259,7 +259,8 @@ public class HomePresenter extends
 		String processInstID = request.getParameter("pid", null);
 		String documentSearchID = request.getParameter("did", null);
 		String period = request.getParameter("period", null);
-
+		final Long periodId = period==null? null: new Long(period);
+		
 		if (processInstID != null) {
 			processInstanceId = Long.parseLong(processInstID);
 		}
@@ -300,10 +301,7 @@ public class HomePresenter extends
 			final Long programId = new Long(program);
 			final Long detailId = new Long(detail);
 			final Long outcomeId = new Long(outcome);
-			final Long periodId = period == null ? null : new Long(period);
-
-			Window.setTitle(page.equals("activities") ? "Activities"
-					: "Objectives");
+			Window.setTitle(page.equals("activities")?"Activities":"Objectives");
 			activitiesFactory.get(new ServiceCallback<ProgramsPresenter>() {
 				@Override
 				public void processResult(ProgramsPresenter aResponse) {
@@ -350,7 +348,7 @@ public class HomePresenter extends
 				public void processResult(HomeReportsPresenter reportResponse) {
 					setInSlot(ACTIVITIES_SLOT, reportResponse);
 					getView().setSelectedTab("Reports");
-//					 reportResponse.loadData();
+					reportResponse.loadData(periodId);
 				}
 			});
 

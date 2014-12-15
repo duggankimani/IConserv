@@ -1,5 +1,6 @@
 package com.wira.pmgt.client.ui.charts;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -151,6 +152,7 @@ public class PieChart extends Composite{
 	}
 
 	public void setData(List<Data> data){
+		store.clear();
 		store.addAll(data);
 		chart.redrawChart();
 	}
@@ -163,6 +165,10 @@ public class PieChart extends Composite{
 	@Override
 	public Widget asWidget() {
 		return this;
+	}
+
+	public void clear() {
+		setData(new ArrayList<Data>());
 	}
 
 }
