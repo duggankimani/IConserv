@@ -149,6 +149,8 @@ public class ProgramsPresenter extends
 		void setSelection(ProgramDetailType type, boolean isRowData, boolean canEdit);
 
 		boolean canEdit(IsProgramDetail programActivity);
+
+		void showBudgets(boolean status);
 	}
 
 	@Inject
@@ -691,7 +693,7 @@ public class ProgramsPresenter extends
 		//DRILL DOWN BY TASK
 		this.programId = (parentProgramId == null || parentProgramId == 0L) ? null
 				: parentProgramId;
-//		Window.alert("Load >> ProgramId = "+parentProgramId);
+		
 		this.programDetailId = detailId == null ? null : detailId == 0 ? null
 				: detailId;
 
@@ -792,7 +794,7 @@ public class ProgramsPresenter extends
 						if (typeToLoad.equals(ProgramDetailType.OBJECTIVE)) {
 							GetProgramsResponse response = (GetProgramsResponse) aResponse
 									.get(i++);
-							//Window.alert("!!! Setting Objectives "+response.getPrograms());
+							getView().showBudgets(false);
 							getView().setData(response.getPrograms());
 						}
 						
@@ -830,6 +832,9 @@ public class ProgramsPresenter extends
 							if (programDetailId == null
 									&& typeToLoad == ProgramDetailType.PROGRAM) {
 								// This is a summary table with no program
+								
+								System.err.println("Summary Table");
+								getView().showBudgets(true);
 								getView().setData(response.getPrograms());
 							}
 

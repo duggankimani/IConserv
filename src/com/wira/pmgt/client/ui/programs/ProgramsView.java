@@ -296,11 +296,18 @@ public class ProgramsView extends ViewImpl implements
 	 */
 	@Override
 	public void setData(List<IsProgramDetail> activities) {
-		// panelCrumbs.clear();
-		// BulletListPanel breadCrumbs = headerContainer
-		// .setBreadCrumbs(Arrays.asList(new ProgramSummary("Summary",
-		// "Summary", 0L, 0L, null, null, null, null, null)));
-		// panelCrumbs.add(breadCrumbs);
+
+		System.err.println("Called setData");
+		if (programId == null) {
+			Double totalBudget = 0.0;
+			Double totalActual = 0.0;
+			for (IsProgramDetail activity : activities) {
+				totalBudget += activity.getBudgetAmount();
+				totalActual += activity.getActualAmount();
+			}
+			headerContainer.setFunding(totalBudget, totalActual,
+					ProgramDetailType.PROGRAM);
+		}
 
 		this.activities = activities;
 		tblView.setLastUpdatedId(lastUpdatedId);
@@ -350,7 +357,6 @@ public class ProgramsView extends ViewImpl implements
 		}
 
 		if (singleResult.getType() == ProgramDetailType.OBJECTIVE) {
-			headerContainer.showBudgets(false);
 			headerContainer.setText("Objectives & Goals");
 		}
 
@@ -368,12 +374,12 @@ public class ProgramsView extends ViewImpl implements
 			// Set Funds
 			headerContainer.setFunding(singleResult.getBudgetAmount(),
 					singleResult.getActualAmount(), singleResult.getType());
+			showBudgets(true);
 
 			if (!tblView.isSummaryTable) {
 				// select tab
 				selectTab(singleResult.getId());
 				headerContainer.setText(singleResult.getName());
-				headerContainer.showBudgets(true);
 
 				if (singleResult.getType() == ProgramDetailType.PROGRAM) {
 					Map<Long, IsProgramDetail> outcomeActivityMap = new HashMap<Long, IsProgramDetail>();
@@ -401,11 +407,13 @@ public class ProgramsView extends ViewImpl implements
 					setData(singleResult.getChildren());
 				}
 
+				// summary Table called here
 			} else {
 				setData(Arrays.asList(singleResult));
 			}
 
 		} else {
+
 			setData(Arrays.asList(singleResult));
 		}
 
@@ -522,14 +530,18 @@ public class ProgramsView extends ViewImpl implements
 		} else if (type == ProgramDetailType.OBJECTIVE) {
 			show(aAssign, false);
 			show(aNewOutcome, AppContext.isCurrentUserAdmin() && isRowData);
-			show(aEdit, isCurrentPlaceObjectivesPage && isRowData && AppContext.isCurrentUserAdmin());
+			show(aEdit,
+					isCurrentPlaceObjectivesPage && isRowData
+							&& AppContext.isCurrentUserAdmin());
 		} else if (type == ProgramDetailType.OUTCOME) {
 			show(aNewActivity, AppContext.isCurrentUserAdmin() && isRowData
 					&& !isCurrentPlaceObjectivesPage
 					&& !(programId == null || programId == 0));
 			show(aAssign, false);
 			show(aDetail, false);
-			show(aEdit, isCurrentPlaceObjectivesPage && isRowData && AppContext.isCurrentUserAdmin());
+			show(aEdit,
+					isCurrentPlaceObjectivesPage && isRowData
+							&& AppContext.isCurrentUserAdmin());
 			show(aDeleteProgram, isRowData && AppContext.isCurrentUserAdmin()
 					&& isCurrentPlaceObjectivesPage);
 		} else if (type == ProgramDetailType.ACTIVITY) {
@@ -725,11 +737,15 @@ public class ProgramsView extends ViewImpl implements
 		PermissionType permission = permissions.get(programId);
 		// System.err.println("Program Id>>" + programId + "Permission>>"
 		// + permission);
-		if ((permission == null || permission == PermissionType.CAN_VIEW) && 
-				(!AppContext.isCurrentUserAdmin())) {
+		if ((permission == null || permission == PermissionType.CAN_VIEW)
+				&& (!AppContext.isCurrentUserAdmin())) {
 			return false;
 		} else {
 			return true;
 		}
+	}
+
+	public void showBudgets(boolean status) {
+		headerContainer.showBudgets(status);
 	}
 }

@@ -24,7 +24,7 @@
 					</g:HTMLPanel>
 				</g:FocusPanel>
 			</div>
-			<g:HTMLPanel styleName="span3 budget" ui:field="divBudget">
+			<g:HTMLPanel styleName="span3 budget hide" ui:field="divBudget">
 				<div class="span6">
 					<div class="bold muted helper-font-small">BUDGET</div>
 					<div>

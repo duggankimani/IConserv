@@ -197,12 +197,6 @@ public class ProgramHeader extends Composite {
 				.setInnerText(NumberUtils.CURRENCYFORMAT.format(actualAmount));
 
 		// System.err.println(">>>> Funding is called...");
-
-		if (type == ProgramDetailType.OBJECTIVE) {
-			showBudgets(false);
-		} else {
-			showBudgets(true);
-		}
 	}
 
 	public void showBudgets(boolean show) {

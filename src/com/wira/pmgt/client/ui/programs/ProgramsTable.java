@@ -98,8 +98,6 @@ public class ProgramsTable extends Composite {
 
 	private void createGrid() {
 		List<TableHeader> th = new ArrayList<TableHeader>();
-		System.err.println("Goals Table"+isGoalsTable);
-		System.err.println("Summary Table"+isSummaryTable);
 		if (isSummaryTable) {
 			th.add(new TableHeader("TITLE", 40.0,"title"));
 			th.add(new TableHeader("TIMELINES", 10.0));
