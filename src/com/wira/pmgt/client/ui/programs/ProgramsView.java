@@ -298,7 +298,6 @@ public class ProgramsView extends ViewImpl implements
 	@Override
 	public void setData(List<IsProgramDetail> activities) {
 
-		System.err.println("Called setData");
 		if (programId == null) {
 			Double totalBudget = 0.0;
 			Double totalActual = 0.0;

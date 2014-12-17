@@ -34,7 +34,7 @@
 				<div class="span6">
 					<div class="bold muted helper-font-small">ACTUALS</div>
 					<div>
-						<span class="bold" ui:field="spnActuals" title="Remaining Amount"></span>
+						<span class="bold" ui:field="spnActuals" title="Actual Expenditure"></span>
 					</div>
 				</div>
 			</g:HTMLPanel>
