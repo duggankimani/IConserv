@@ -229,9 +229,6 @@ public class ProgramsView extends ViewImpl implements
 		int topHeight = divContentTop.getElement().getOffsetHeight();
 		int middleHeight = totalHeight - topHeight - 43;
 
-		// System.err.println("Total Height>>>" + totalHeight);
-		// System.err.println("Top Height>>>" + topHeight);
-
 		if (middleHeight > 0) {
 			divProgramsTable.setHeight(middleHeight + "px");
 		}
@@ -525,14 +522,14 @@ public class ProgramsView extends ViewImpl implements
 		} else if (type == ProgramDetailType.OBJECTIVE) {
 			show(aAssign, false);
 			show(aNewOutcome, AppContext.isCurrentUserAdmin() && isRowData);
-			show(aEdit, isCurrentPlaceObjectivesPage && isRowData);
+			show(aEdit, isCurrentPlaceObjectivesPage && isRowData && AppContext.isCurrentUserAdmin());
 		} else if (type == ProgramDetailType.OUTCOME) {
 			show(aNewActivity, AppContext.isCurrentUserAdmin() && isRowData
 					&& !isCurrentPlaceObjectivesPage
 					&& !(programId == null || programId == 0));
 			show(aAssign, false);
 			show(aDetail, false);
-			show(aEdit, isCurrentPlaceObjectivesPage && isRowData && canEdit);
+			show(aEdit, isCurrentPlaceObjectivesPage && isRowData && AppContext.isCurrentUserAdmin());
 			show(aDeleteProgram, isRowData && AppContext.isCurrentUserAdmin()
 					&& isCurrentPlaceObjectivesPage);
 		} else if (type == ProgramDetailType.ACTIVITY) {
