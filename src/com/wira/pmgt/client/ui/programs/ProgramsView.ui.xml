@@ -75,7 +75,7 @@
 						</div>
 
 						<div class="span3 hide">
-							<d:ActionLink ui:field="aDeleteProgram" styleName="btn btn-default"
+							<d:ActionLink ui:field="aDeleteProgram" styleName="btn btn-danger"
 								dataToggle="tooltip" dataPlacement="bottom" title="Delete">
 								<i class="icon-trash icon-button"></i>
 							</d:ActionLink>

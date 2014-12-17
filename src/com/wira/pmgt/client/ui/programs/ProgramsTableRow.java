@@ -320,11 +320,18 @@ public class ProgramsTableRow extends RowWidget implements
 			aName.addStyleName("no-link");
 		} else if (activity.getType() == ProgramDetailType.OUTCOME) {
 
+			if (activity.getDescription() != null) {
+				aName.setTitle(activity.getDescription());
+				divCheckbox.setTitle(activity.getDescription());
+			}
+
 			if (activity.getProgramId() != null) {
 				aName.setHref("#home;page=activities;activity="
-						+ activity.getProgramId() + "O" + activity.getId()
-						+ (activity.getPeriod()!=null?
-								";period="+activity.getPeriod().getId():""));
+						+ activity.getProgramId()
+						+ "O"
+						+ activity.getId()
+						+ (activity.getPeriod() != null ? ";period="
+								+ activity.getPeriod().getId() : ""));
 			} else {
 				aName.getElement().removeAttribute("href");
 				aName.addStyleName("no-link");
@@ -333,14 +340,17 @@ public class ProgramsTableRow extends RowWidget implements
 		} else if (isSummaryRow
 				&& activity.getType() == ProgramDetailType.PROGRAM) {
 			// Summary table
-			aName.setHref("#home;page=activities;activity=" + activity.getId()
-					+ (activity.getPeriod()!=null?
-							";period="+activity.getPeriod().getId():""));
-		} else {
-			aName.setHref("#home;page=activities;activity=" + programId + "d"
+			aName.setHref("#home;page=activities;activity="
 					+ activity.getId()
-					+ (activity.getPeriod()!=null?
-							";period="+activity.getPeriod().getId():""));
+					+ (activity.getPeriod() != null ? ";period="
+							+ activity.getPeriod().getId() : ""));
+		} else {
+			aName.setHref("#home;page=activities;activity="
+					+ programId
+					+ "d"
+					+ activity.getId()
+					+ (activity.getPeriod() != null ? ";period="
+							+ activity.getPeriod().getId() : ""));
 		}
 
 		if (activity.getType() == ProgramDetailType.OBJECTIVE) {
@@ -514,7 +524,7 @@ public class ProgramsTableRow extends RowWidget implements
 
 				if (allocation != null && allocation != 0.0
 						&& activityFund.getAmount() != null) {
-					
+
 					Double diff = activityFund.getAmount() - allocation;
 					HTMLPanel allocationPanel = new HTMLPanel(
 							NUMBERFORMAT.format(diff));
@@ -693,7 +703,7 @@ public class ProgramsTableRow extends RowWidget implements
 		// exists
 		if (activity.getId().equals(updatedProgram.getId())) {
 			int count = row.getWidgetCount();
-			
+
 			for (FundDTO programFund : donors) {
 				Widget widgetToRemove = row.getWidget(--count);
 				boolean removed = remove(widgetToRemove);

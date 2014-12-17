@@ -164,7 +164,7 @@ public class ProgramHeader extends Composite {
 			spnDates.addStyleName("text-info");
 			spnDates.removeStyleName("text-muted");
 		} else {
-			
+
 			spnDates.removeStyleName("text-info");
 			spnDates.addStyleName("text-muted");
 			aChangePeriod.addStyleName("hide");
@@ -182,12 +182,12 @@ public class ProgramHeader extends Composite {
 
 	public void setFunding(Double budget, Double actualAmount,
 			ProgramDetailType type) {
+		
 		if (budget == null) {
 			budget = 0.0;
 		}
-
 		setBudget(NumberUtils.CURRENCYFORMAT.format(budget));
-
+		
 		if (actualAmount > budget) {
 			spnActuals.addClassName("text-error bold");
 		} else {
@@ -198,10 +198,10 @@ public class ProgramHeader extends Composite {
 
 		// System.err.println(">>>> Funding is called...");
 
-		if (type != ProgramDetailType.OBJECTIVE) {
-			showBudgets(true);
-		} else {
+		if (type == ProgramDetailType.OBJECTIVE) {
 			showBudgets(false);
+		} else {
+			showBudgets(true);
 		}
 	}
 
