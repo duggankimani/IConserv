@@ -428,8 +428,8 @@ public class ProgramsView extends ViewImpl implements
 
 	public void selectTab(String href) {
 		isCurrentPlaceObjectivesPage = href.equals("#home;page=objectives");
-		
-		if(isCurrentPlaceObjectivesPage){
+
+		if (isCurrentPlaceObjectivesPage) {
 			headerContainer.setText("Objectives");
 		}
 
@@ -730,11 +730,11 @@ public class ProgramsView extends ViewImpl implements
 		PermissionType permission = permissions.get(programId);
 		// System.err.println("Program Id>>" + programId + "Permission>>"
 		// + permission);
-		if (permission == null || permission == PermissionType.CAN_VIEW) {
+		if ((permission == null || permission == PermissionType.CAN_VIEW) && 
+				(!AppContext.isCurrentUserAdmin())) {
 			return false;
 		} else {
 			return true;
 		}
 	}
-
 }
