@@ -189,4 +189,12 @@ public class HomeView extends ViewImpl implements HomePresenter.MyView {
 		spnUser.setInnerText(currentUser.getFullName());
 	}
 
+	@Override
+	public void showReportsTab(boolean currentUserAdmin) {
+		if(!currentUserAdmin){
+			liReports.addClassName("hide");
+		}
+		
+	}
+
 }

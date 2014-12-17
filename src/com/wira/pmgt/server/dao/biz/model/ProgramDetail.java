@@ -273,7 +273,7 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	@JoinColumn(name="outcomeid", referencedColumnName="id", nullable=true)
 	private ProgramDetail activityOutcome;
 	
-	@Column(length=20)
+	@Column(length=255)
 	private String budgetLine;
 	private Long processInstanceId;
 	

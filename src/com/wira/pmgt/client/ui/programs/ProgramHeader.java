@@ -57,6 +57,7 @@ public class ProgramHeader extends Composite {
 	DivElement divHeader;
 
 	private Long programId;
+	private Long activePeriod;
 
 	public ProgramHeader() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -144,13 +145,13 @@ public class ProgramHeader extends Composite {
 	private String getHref(Long id) {
 		String href = "";
 		if (id == null || id == 0) {
-			href = "#home;page=activities;activity=0";
+			href = "#home;page=activities;activity=0"+(activePeriod==null? "" : ";period="+activePeriod);
 		} else if (programId == null) {
-			href = "#home;page=activities;activity=0d" + id;
+			href = "#home;page=activities;activity=0d" + id+(activePeriod==null? "" : ";period="+activePeriod);
 		} else if (id != programId) {
-			href = "#home;page=activities;activity=" + programId + "d" + id;
+			href = "#home;page=activities;activity=" + programId + "d" + id+(activePeriod==null? "" : ";period="+activePeriod);
 		} else {
-			href = "#home;page=activities;activity=" + id;
+			href = "#home;page=activities;activity=" + id+(activePeriod==null? "" : ";period="+activePeriod);
 		}
 		return href;
 	}
@@ -205,6 +206,11 @@ public class ProgramHeader extends Composite {
 		} else {
 			divBudget.addStyleName("hide");
 		}
+	}
+
+	public void setActivePeriod(Long activePeriod) {
+		this.activePeriod = activePeriod;
+		
 	}
 
 }
