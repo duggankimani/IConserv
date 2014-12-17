@@ -251,7 +251,6 @@ public class HomePresenter extends
 	@Override
 	public void prepareFromRequest(PlaceRequest request) {
 		super.prepareFromRequest(request);
-		checkPermissions();
 
 		fireEvent(new LoadAlertsEvent());
 		clear();
@@ -592,6 +591,7 @@ public class HomePresenter extends
 
 	@Override
 	public void onContextLoaded(ContextLoadedEvent event) {
+		checkPermissions();
 		getView().showUserImg(event.getCurrentUser());
 	}
 

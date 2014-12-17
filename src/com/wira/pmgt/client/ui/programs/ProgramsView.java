@@ -290,7 +290,8 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	/**
-	 * Bind Table data Programs Summary binding [Only list of programs bound
+	 * Bind Table data 
+	 * Programs Summary binding [Only list of programs bound
 	 * here]
 	 * 
 	 */
@@ -521,7 +522,7 @@ public class ProgramsView extends ViewImpl implements
 			// Program can be selected from the SummaryTab == isRowData
 			// or When A Program Tab e.g Wildlife Program is selected
 			show(aEdit, AppContext.isCurrentUserAdmin());
-			show(aDeleteProgram, AppContext.isCurrentUserAdmin());
+			show(aDeleteProgram, isRowData && AppContext.isCurrentUserAdmin());
 			show(aAssign, isRowData && AppContext.isCurrentUserAdmin());
 		} else if (type == ProgramDetailType.OBJECTIVE) {
 			show(aAssign, false);
