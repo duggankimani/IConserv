@@ -814,6 +814,7 @@ public class ProgramsPresenter extends
 
 						// activities under a program
 						// && programDetailId==null
+						IsProgramDetail parentProgram = null;
 						if (ProgramsPresenter.this.programId != null) {
 							GetProgramsResponse response2 = (GetProgramsResponse) aResponse
 									.get(i++);
@@ -822,7 +823,8 @@ public class ProgramsPresenter extends
 								// the specified period
 								programCode = response2.getSingleResult()
 										.getCode();
-								setActivity(response2.getSingleResult());
+								
+								setActivity(parentProgram = response2.getSingleResult());
 							}
 
 						} else {
@@ -855,7 +857,12 @@ public class ProgramsPresenter extends
 										.getCode();
 								programDetailId = response2.getSingleResult()
 										.getId();
-								setActivity(response2.getSingleResult());
+								if(parentProgram!=null){
+									IsProgramDetail child = response2.getSingleResult();
+									child.setPeriod(parentProgram.getPeriod());
+									setActivity(child);
+								}
+								
 							}
 
 						}

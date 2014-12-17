@@ -260,7 +260,7 @@ public class ProgramsView extends ViewImpl implements
 
 	public void createDefaultTabs() {
 		listPanel.clear();
-		createTab("Objectives", "#home;page=objectives", true);
+		createTab("Objectives", (periodId==null? "#home;page=objectives":"#home;page=objectives;period="+periodId), true);
 		createTab("Summary", 0, true);
 	}
 
@@ -377,9 +377,12 @@ public class ProgramsView extends ViewImpl implements
 
 				if (singleResult.getType() == ProgramDetailType.PROGRAM) {
 					Map<Long, IsProgramDetail> outcomeActivityMap = new HashMap<Long, IsProgramDetail>();
+					//this is a list of outcomes under a program
 					if (singleResult.getProgramOutcomes() != null) {
 						for (IsProgramDetail outcome : singleResult
 								.getProgramOutcomes()) {
+							//Temporarily assign program period to outcome
+							outcome.setPeriod(singleResult.getPeriod());
 							outcomeActivityMap.put(outcome.getId(), outcome);
 						}
 
@@ -474,7 +477,7 @@ public class ProgramsView extends ViewImpl implements
 	}
 
 	/**
-	 * Programs, objectives, activities etc can be selected from the Activities
+	 * Programs, objectives, activities etc can be selected from the Programs
 	 * table (by ticking the checkbox beside them) or by drilling down on any of
 	 * them
 	 * 
@@ -482,6 +485,7 @@ public class ProgramsView extends ViewImpl implements
 	 * Some actions are available based on whether the element selected is
 	 * actually part of the details (rows of the table) or it is the parent
 	 * element whose details are displayed on the table.
+	 * 
 	 * <p>
 	 * e.g. Creation of Objectives is only provided when a program is selected
 	 * in the Summary Tab since the summary tab shows The program and its
@@ -622,7 +626,8 @@ public class ProgramsView extends ViewImpl implements
 	@Override
 	public void setActivePeriod(Long activePeriod) {
 		this.periodId = activePeriod;
-
+		headerContainer.setActivePeriod(activePeriod);
+		
 		if (activePeriod == null) {
 			List<PeriodDTO> periods = getPeriodDropDown().getSelectionValues();
 

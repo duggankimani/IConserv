@@ -292,7 +292,9 @@ public class ProgramDaoHelper {
 		//Program Outcomes
 		if(program.getProgramOutcomes()!=null){
 			for(ProgramDetail outcome: program.getProgramOutcomes()){
-				dto.addProgramOutcomes(get(outcome,false));
+				IsProgramDetail outcomeDto = get(outcome,false);
+				outcomeDto.setPeriod(dto.getPeriod());
+				dto.addProgramOutcomes(outcomeDto);
 			}
 		}
 		

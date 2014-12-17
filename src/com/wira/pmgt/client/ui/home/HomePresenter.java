@@ -98,6 +98,8 @@ public class HomePresenter extends
 		void showUserImg(HTUser currentUser);
 
 		void showActivitiesPanel(boolean show);
+
+		void showReportsTab(boolean currentUserAdmin);
 	}
 
 	@ProxyCodeSplit
@@ -249,6 +251,7 @@ public class HomePresenter extends
 	@Override
 	public void prepareFromRequest(PlaceRequest request) {
 		super.prepareFromRequest(request);
+		checkPermissions();
 
 		fireEvent(new LoadAlertsEvent());
 		clear();
@@ -341,7 +344,7 @@ public class HomePresenter extends
 				}
 			});
 
-		} else if (page != null && page.equals("reports")) {
+		} else if (page != null && page.equals("reports") && AppContext.isCurrentUserAdmin()) {
 			Window.setTitle("Reports Dashboard");
 			reportFactory.get(new ServiceCallback<HomeReportsPresenter>() {
 				@Override
@@ -370,6 +373,10 @@ public class HomePresenter extends
 			});
 		}
 
+	}
+
+	private void checkPermissions() {
+		getView().showReportsTab(AppContext.isCurrentUserAdmin());
 	}
 
 	private void clear() {
