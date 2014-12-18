@@ -62,7 +62,10 @@ public class TableView extends Composite {
 			th.addStyleName("th");
 
 			// Label
-			InlineLabel label = new InlineLabel(header.getTitleName());
+			InlineLabel label = new InlineLabel(header.getName());
+			if(header.getTitle()!=null){
+				th.setTitle(header.getTitle());
+			}
 			th.add(label);
 
 			// add to row

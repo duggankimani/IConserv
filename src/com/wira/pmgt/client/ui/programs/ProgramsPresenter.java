@@ -139,7 +139,7 @@ public class ProgramsPresenter extends
 
 		void createDefaultTabs();
 
-		void setDownloadUrl(Long programid, Long outcomeid, Long activityId,
+		void setDownloadUrl(Long programid, Long outcomeid, Long activityId,Long periodId,
 				String programType);
 
 		HasClickHandlers getaMove();
@@ -699,7 +699,9 @@ public class ProgramsPresenter extends
 
 		getView().setDownloadUrl(programId, 
 				searchByOutcome?programDetailId:null, 
-						searchByOutcome?null:programDetailId, typeToLoad.name());
+						searchByOutcome?null:programDetailId, 
+								periodId,
+								typeToLoad.name());
 		
 		MultiRequestAction action = new MultiRequestAction();
 

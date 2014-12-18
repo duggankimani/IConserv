@@ -63,6 +63,9 @@
 			<!-- span ui:field="spnProgress"></span -->
 		</g:HTMLPanel>
 
+		<g:HTMLPanel styleName="td" ui:field="divBudgetLine"
+			title="Budget Amount" width="10%"></g:HTMLPanel>
+			
 		<g:HTMLPanel styleName="td bold" ui:field="divBudget"
 			title="Budget Amount" width="10%"></g:HTMLPanel>
 	</g:HTMLPanel>

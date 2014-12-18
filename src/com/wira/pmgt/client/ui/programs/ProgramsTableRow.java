@@ -98,6 +98,9 @@ public class ProgramsTableRow extends RowWidget implements
 
 	@UiField
 	HTMLPanel divBudget;
+	
+	@UiField HTMLPanel divBudgetLine;
+	
 	@UiField
 	HTMLPanel divCheckbox;
 
@@ -152,7 +155,7 @@ public class ProgramsTableRow extends RowWidget implements
 
 		this.showingChildren = (level == 0);
 		// Show/ hide this details based on its level on load
-
+		
 		List<IsProgramDetail> children = activity.getChildren();
 		if (activity.getType() == ProgramDetailType.PROGRAM) {
 			children = activity.getProgramOutcomes();
@@ -190,6 +193,13 @@ public class ProgramsTableRow extends RowWidget implements
 
 		// Set Assignment
 		setAssignment();
+		
+		if(isSummaryRow || isGoalsTable){
+			show(divBudgetLine, false);
+		}else{
+			divBudgetLine.getElement().setInnerText(activity.getBudgetLine());
+		}
+		
 
 		// set widths for the tables
 		// setRowWidths();
@@ -197,12 +207,12 @@ public class ProgramsTableRow extends RowWidget implements
 		// Show different cols based on whether this is a program summary
 		// listing or program details
 		if (isSummaryRow) {
-			hide(divStatus, true);
+			show(divStatus, false);
 		} else if (isGoalsTable) {
-			hide(divStatus, true);
-			hide(divTimelines, true);
-			hide(divProgress, true);
-			hide(divBudget, true);
+			show(divStatus, false);
+			show(divTimelines, false);
+			show(divProgress, false);
+			show(divBudget, false);
 		} else {
 			if (activity.getChildren() == null
 					|| activity.getChildren().isEmpty()) {
@@ -241,13 +251,13 @@ public class ProgramsTableRow extends RowWidget implements
 		setFunding();
 	}
 
-	private void hide(HTMLPanel divPanel, boolean show) {
+	private void show(HTMLPanel divPanel, boolean show) {
 		if (show) {
-			divPanel.setStyleName("hide");
-			divPanel.setWidth("0%");
-		} else {
 			divPanel.removeStyleName("hide");
 			divPanel.setWidth("10%");
+		} else {
+			divPanel.setStyleName("hide");
+			divPanel.setWidth("0%");
 		}
 	}
 

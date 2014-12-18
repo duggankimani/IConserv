@@ -697,7 +697,7 @@ public class ProgramsView extends ViewImpl implements
 	private HashMap<Long, PermissionType> permissions;
 
 	@Override
-	public void setDownloadUrl(Long programid, Long outcomeid, Long activityId,
+	public void setDownloadUrl(Long programid, Long outcomeid, Long activityId,Long period,
 			String programType) {
 		final UploadContext context = new UploadContext(AppContext.getBaseURL()
 				+ "/getreport");
@@ -714,6 +714,10 @@ public class ProgramsView extends ViewImpl implements
 
 		if (programType != null) {
 			context.setContext("programType", programType);
+		}
+		
+		if(period!=null){
+			context.setContext("periodid", period+"");
 		}
 
 		downloadUrl = context.toUrl();
