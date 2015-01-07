@@ -92,7 +92,8 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 			//"cast(path_info as varchar(30)) path," +
 			"programId,id,parentid,type,startdate,enddate,status,name,description " +
 			"from programdetail_tree " +
-			"where (startDate is not null and endDate is not null) " +
+			"where type='TASK' and "
+			+ "(startDate is not null and endDate is not null) " +
 			"and (" +
 			"((status is null or status=:statusCreated) and startDate<(:currentDate)) " +
 			"or ((status is null or status!=:statusClosed) and endDate<:currentDate)" +

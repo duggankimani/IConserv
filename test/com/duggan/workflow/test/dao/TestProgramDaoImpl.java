@@ -44,7 +44,7 @@ public class TestProgramDaoImpl {
 		dao= DB.getProgramDaoImpl();
 	}
 	
-	@Test
+	@Ignore
 	public void test(){
 		Long id=209L;
 		List<FundDTO> funds = ProgramDaoHelper.getFunds(id);
@@ -253,7 +253,7 @@ public class TestProgramDaoImpl {
 		
 	}
 	
-	@Ignore
+	@Test
 	public void getCalendar(){
 		
 		List<ProgramSummary> details = dao.getProgramCalendar("Administrator");
