@@ -102,7 +102,7 @@ public class ProgramsTable extends Composite {
 			th.add(new TableHeader("TITLE", 40.0,"title"));
 			th.add(new TableHeader("TIMELINES", 10.0));
 			th.add(new TableHeader("PROGRESS", 10.0));
-			th.add(new TableHeader("BUDGET LINE","Total Budgetary Allocation", 10.0));
+			th.add(new TableHeader("BUDGET","Total Budgetary Allocation", 10.0));
 		} else if (isGoalsTable) {
 			th.add(new TableHeader("TITLE", 100.0));
 		} else {
@@ -110,7 +110,7 @@ public class ProgramsTable extends Composite {
 			th.add(new TableHeader("TIMELINES", 10.0));
 			th.add(new TableHeader("STATUS", 10.0));
 			th.add(new TableHeader("PROGRESS", 10.0));
-			th.add(new TableHeader("LINE","Budget Line", 10.0));
+			th.add(new TableHeader("BUDGET LINE","Budget Line", 10.0));
 			th.add(new TableHeader("BUDGET","Total Budgetary Allocation", 10.0));
 			
 		}
