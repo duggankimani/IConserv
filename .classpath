@@ -160,7 +160,7 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-17.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-gwt-17.0-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-gwt-17.0.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/poi-3.10-FINAL-20140208.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/poi-3.10-FINAL-20140208.jar" sourcepath="/home/duggan/.m2/repository/org/apache/poi/poi/3.10-FINAL/poi-3.10-FINAL-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/poi-ooxml-3.10-FINAL-20140208.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/poi-ooxml-schemas-3.10-FINAL-20140208.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/xmlbeans-2.3.0.jar"/>

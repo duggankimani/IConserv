@@ -43,7 +43,7 @@ import com.wira.pmgt.shared.requests.GetProgramsRequest;
 public class GenerateActivityReport {
 
 	private static final String[] titles = { "Overall LWF Goals", "Activity",
-			"Targets", "Indicator", "Funding", "Status", "Remarks",
+			"Targets", "Indicator", "Budget Line","Funding", "Status", "Remarks",
 			"Monitoring test" };
 
 	static Map<String, CellStyle> styles = null;
@@ -160,7 +160,7 @@ public class GenerateActivityReport {
 		setup();
 		Long programId=1L;
 		String code = null;
-		Long outcomeId=23L;
+		Long outcomeId=null;
 		Long activityId=null;
 		Long periodId=null;
 		String programType="PROGRAM";
@@ -298,13 +298,22 @@ public class GenerateActivityReport {
 				// sheet.autoSizeColumn(3);
 				break;
 			case 4: {
-				// "Funding"
-				styleName = "cell-currency";
-				if (!isHeader)
-					cell.setCellValue(detail.getBudgetAmount());
+				
+				//BudgetLine
+				styleName = isHeader ? "cell_b" : "cell_normal";
+				if(!isHeader){
+					cell.setCellValue(detail.getBudgetLine()==null?"" : detail.getBudgetLine());
+				}
 				break;
 			}
-			case 5: {
+			case 5:{ // "Funding"
+				styleName = isHeader? "cell_b":"cell_currency";
+				if (!isHeader){
+					cell.setCellValue(detail.getBudgetAmount());
+				}
+				break;
+			}
+			case 6: {
 				// "Status"
 				styleName = isHeader ? "cell_bg" : "cell_g";
 				if (!isHeader){
@@ -313,12 +322,12 @@ public class GenerateActivityReport {
 				}
 				break;
 			}
-			case 6: {
+			case 7: {
 				// "Remarks"
 				styleName = isHeader ? "cell_b" : "cell_normal";
 				break;
 			}
-			case 7: {
+			case 8: {
 				// "Monitoring test"
 				styleName = isHeader ? "cell_bg" : "cell_g";
 				break;
@@ -456,8 +465,8 @@ public class GenerateActivityReport {
 
 		style = createBorderedStyle(wb);
 		style.setAlignment(CellStyle.ALIGN_RIGHT);
-		// style.setFont(font1);
-		style.setDataFormat(df.getFormat("#,##0.00"));
+		style.setVerticalAlignment(CellStyle.VERTICAL_TOP);
+		style.setDataFormat(df.getFormat("#,##0.0")); //
 		styles.put("cell_currency", style);
 
 		style = createBorderedStyle(wb);
@@ -535,6 +544,7 @@ public class GenerateActivityReport {
 
 	private static CellStyle createBorderedStyle(Workbook wb) {
 		CellStyle style = wb.createCellStyle();
+		style.setVerticalAlignment(CellStyle.VERTICAL_TOP);
 		// style.setBorderRight(CellStyle.BORDER_THIN);
 		// style.setRightBorderColor(IndexedColors.BLACK.getIndex());
 		// style.setBorderBottom(CellStyle.BORDER_THIN);
