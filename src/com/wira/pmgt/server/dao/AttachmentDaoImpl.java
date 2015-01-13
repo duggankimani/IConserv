@@ -149,5 +149,13 @@ public class AttachmentDaoImpl extends BaseDaoImpl{
 		
 		return attachment;
 	}
+
+	public void deleteAttachments(Long id, String fieldName) {
+		em.createNativeQuery("delete from localattachment where documentId=:documentId "
+				+ "and fieldName=:fieldName")
+				.setParameter("documentId", id)
+				.setParameter("fieldName", fieldName)
+				.executeUpdate();
+	}
 	
 }

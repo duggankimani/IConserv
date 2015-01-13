@@ -18,6 +18,7 @@ import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -53,6 +54,7 @@ import com.wira.pmgt.client.ui.events.CompleteDocumentEvent;
 import com.wira.pmgt.client.ui.events.DeleteLineEvent;
 import com.wira.pmgt.client.ui.events.DeleteLineEvent.DeleteLineHandler;
 import com.wira.pmgt.client.ui.events.ExecTaskEvent;
+import com.wira.pmgt.client.ui.events.FileLoadEvent;
 import com.wira.pmgt.client.ui.events.LoadActivitiesEvent;
 import com.wira.pmgt.client.ui.events.LoadActivitiesEvent.LoadActivitiesHandler;
 import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent;
@@ -689,9 +691,9 @@ public class GenericDocumentPresenter extends
 		System.err.println("docID= "+documentId+"; taskId="+taskId);
 		requests.addRequest(new GetDocumentRequest(documentId, taskId));
 		requests.addRequest(new GetCommentsRequest(documentId));
-		requests.addRequest(new GetAttachmentsRequest(documentId));
 		requests.addRequest(new GetActivitiesRequest(documentId));
 		requests.addRequest(new GetFormModelRequest(FormModel.FORMMODEL,taskId,documentId));
+		requests.addRequest(new GetAttachmentsRequest(documentId));
 		
 		fireEvent(new ProcessingEvent());
 		if(documentId != null){
@@ -700,19 +702,17 @@ public class GenericDocumentPresenter extends
 				
 				public void processResult(MultiRequestActionResult results) {					
 					
-					GetDocumentResult result = (GetDocumentResult)results.get(0);
+					int i=0;
+					GetDocumentResult result = (GetDocumentResult)results.get(i);
 					bindDocumentResult(result);
 					
-					GetCommentsResponse commentsResult = (GetCommentsResponse)results.get(1);
+					GetCommentsResponse commentsResult = (GetCommentsResponse)results.get(++i);
 					bindCommentsResult(commentsResult);
 					
-					GetAttachmentsResponse attachmentsresponse = (GetAttachmentsResponse)results.get(2);
-					bindAttachments(attachmentsresponse);
-					
-					GetActivitiesResponse getActivities = (GetActivitiesResponse)results.get(3);
+					GetActivitiesResponse getActivities = (GetActivitiesResponse)results.get(++i);
 					bindActivities(getActivities);
 					
-					GetFormModelResponse response = (GetFormModelResponse)results.get(4);					
+					GetFormModelResponse response = (GetFormModelResponse)results.get(++i);					
 					
 					if(!response.getFormModel().isEmpty()){
 						bindForm((Form)response.getFormModel().get(0), result.getDoc());
@@ -720,6 +720,10 @@ public class GenericDocumentPresenter extends
 					}else{
 						getView().showDefaultFields(true);
 					}
+					
+					GetAttachmentsResponse attachmentsresponse = (GetAttachmentsResponse)results.get(++i);
+					bindAttachments(attachmentsresponse);
+					
 					
 					fireEvent(new ProcessingCompletedEvent());
 					
@@ -767,7 +771,9 @@ public class GenericDocumentPresenter extends
 		//System.err.println("Details >>>>> "+doc.getDetails().size());
 		for(Field field: form.getFields()){
 			String name = field.getName();
-			field.setDocId(doc.getId()+""); //Add DocId to all field
+			
+			
+			field.setDocId(((doc instanceof Document)? doc.getId() : ((HTSummary)doc).getDocumentRef())+""); //Add DocId to all field
 			
 			if(name==null || name.isEmpty()){
 				continue;
@@ -887,13 +893,17 @@ public class GenericDocumentPresenter extends
 		List<Attachment> attachments = attachmentsresponse.getAttachments();
 		
 		if(attachments.size()>0){
-			getView().showAttachmentPanel(false);
+			getView().getDivAttachment().removeClassName("hidden");
 			getView().getSpnAttachmentNo().setInnerText("Attachments (" + attachments.size() +")");
 			fireEvent(new AfterAttachmentReloadedEvent(documentId));
 		}
 		
 		setInSlot(ATTACHMENTS_SLOT, null);//clear
 		for(final Attachment attachment: attachments){
+			if(attachment.getFieldName()!=null){
+				fireEvent(new FileLoadEvent(attachment));
+				continue;
+			}
 			attachmentPresenterFactory.get(new ServiceCallback<AttachmentPresenter>() {
 				@Override
 				public void processResult(AttachmentPresenter result) {

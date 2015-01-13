@@ -12,6 +12,7 @@ import org.apache.commons.fileupload.FileItem;
 
 import com.wira.pmgt.server.dao.helper.AttachmentDaoHelper;
 import com.wira.pmgt.server.dao.model.LocalAttachment;
+import com.wira.pmgt.server.db.DB;
 
 public class DocumentAttachmentExecutor extends FileExecutor{
 
@@ -25,6 +26,10 @@ public class DocumentAttachmentExecutor extends FileExecutor{
 			if (false == item.isFormField()) {
 				try {					
 					String fieldName = item.getFieldName();
+					
+					//Name of the form field against which this file was uploaded 
+					String formFieldName= request.getParameter("formFieldName");
+					String overwrite = request.getParameter("overwrite");
 					String contentType=item.getContentType();					
 					String name = item.getName();
 					long size = item.getSize();
@@ -36,8 +41,9 @@ public class DocumentAttachmentExecutor extends FileExecutor{
 					attachment.setId(null);
 					attachment.setName(name);
 					attachment.setSize(size);
-					attachment.setAttachment(item.get());					
-					saveAttachment(attachment, request);
+					attachment.setAttachment(item.get());
+					attachment.setFieldName(formFieldName);
+					saveAttachment(attachment, request, overwrite==null? true : overwrite.equals("Y"));
 					
 					receivedFiles.put(fieldName, attachment.getId());
 				} catch (Exception e) {
@@ -53,12 +59,18 @@ public class DocumentAttachmentExecutor extends FileExecutor{
 	}
 	
 	private void saveAttachment(LocalAttachment attachment,
-			HttpServletRequest request) {
+			HttpServletRequest request, boolean overwriteIfExists) {
 		
 		String id = request.getParameter("documentId");
 		
 		if(id!=null){
-			AttachmentDaoHelper.saveDocument(Long.parseLong(id.toString()), attachment);
+			Long documentId = Long.parseLong(id.toString());
+			
+			if(overwriteIfExists){
+				DB.getAttachmentDao().deleteAttachments(documentId,attachment.getFieldName());
+			}
+			
+			AttachmentDaoHelper.saveDocument(documentId, attachment);
 		}
 	}
 

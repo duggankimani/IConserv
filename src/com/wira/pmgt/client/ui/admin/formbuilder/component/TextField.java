@@ -1,5 +1,7 @@
 package com.wira.pmgt.client.ui.admin.formbuilder.component;
 
+import com.google.common.base.CaseFormat;
+import com.google.common.base.Converter;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.SpanElement;
@@ -101,8 +103,6 @@ public class TextField extends FieldWidget {
 			}
 		});
 		
-		//For Form Fields only - shouldnt fire for form caption
-		if(property.getFieldId()!=null)
 		if(property.getName().equals(NAME)){
 			addRegisteredHandler(PropertyChangedEvent.TYPE,
 					new PropertyChangedEvent.PropertyChangedHandler(){
@@ -114,8 +114,10 @@ public class TextField extends FieldWidget {
 						if(propertyValue==null || propertyValue.isEmpty()){
 							return;
 						}
-						
-						txtComponent.setValue(StringUtils.camelCase(propertyValue));
+						propertyValue = propertyValue.replaceAll("\\s", "_");
+						Converter<String, String> converter = CaseFormat.UPPER_UNDERSCORE.converterTo(CaseFormat.LOWER_CAMEL);
+						propertyValue = converter.convert(propertyValue);
+						txtComponent.setValue(propertyValue);
 						Value value = property.getValue();
 						if(value==null){
 							value = new StringValue(null, NAME,propertyValue);
@@ -129,6 +131,7 @@ public class TextField extends FieldWidget {
 				}
 			});
 		}
+		
 		//name.equals()
 	}
 

@@ -40,6 +40,10 @@ public class LocalAttachment extends PO{
 	
 	private boolean archived;
 	
+	//Form Field Name; against which this file was uploaded
+	private String fieldName;
+		
+	
 	@ManyToOne
 	@JoinColumn(name="documentId",referencedColumnName="id")
 	private DocumentModel document;
@@ -153,6 +157,14 @@ public class LocalAttachment extends PO{
 
 	public void setSettingName(SETTINGNAME settingName) {
 		this.settingName = settingName;
+	}
+
+	public String getFieldName() {
+		return fieldName;
+	}
+
+	public void setFieldName(String fieldName) {
+		this.fieldName = fieldName;
 	}
 
 }

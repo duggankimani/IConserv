@@ -76,6 +76,7 @@ public class AttachmentDaoHelper{
 		attachment.setSizeStr(getSizeAsStr(model.getSize()));
 		attachment.setCreated(model.getCreated());
 		attachment.setCreatedBy(model.getCreatedBy());
+		attachment.setFieldName(model.getFieldName());
 		
 		return attachment;
 	}

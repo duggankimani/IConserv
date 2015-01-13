@@ -1,10 +1,14 @@
 package com.wira.pmgt.client.ui.admin.formbuilder.component;
 
+import gwtupload.client.IUploader;
+import gwtupload.client.IUploader.OnFinishUploaderHandler;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
@@ -39,6 +43,7 @@ public class FileUploadField extends FieldWidget implements FileLoadHandler{
 	@UiField HTMLPanel panelControls;
 	@UiField SpanElement spnMandatory;
 	@UiField HTMLPanel values;
+	String uploaderType=null;
 		
 	Uploader uploader = null;
 	
@@ -59,9 +64,9 @@ public class FileUploadField extends FieldWidget implements FileLoadHandler{
 
 	@Override
 	public void setField(Field field) {
-		String uploaderType = getPropertyValue(UPLOADERTYPE);
+		uploaderType = getPropertyValue(UPLOADERTYPE);
 		if(uploaderType==null){
-			uploaderType="multiupload";
+			uploaderType="singleupload";
 		}
 		
 		uploadContainer.clear();
@@ -83,10 +88,21 @@ public class FileUploadField extends FieldWidget implements FileLoadHandler{
 		context.setContext("formFieldName", field.getName());
 		context.setContext("documentId", field.getDocId());
 		context.setContext("ACTION", UPLOADACTION.UPLOADDOCFILE.name());
+		context.setContext("overwrite", uploaderType.equals("singleupload")? "Y":"N");
 		String accept = getPropertyValue(ACCEPT);
 		if(accept!=null)
 			context.setAccept(accept);
 		uploader.setContext(context);
+		
+		uploader.addOnFinishUploaderHandler(new OnFinishUploaderHandler() {
+			
+			@Override
+			public void onFinish(IUploader uploader) {
+				//String filename = uploader.getFileInput().getFilename();
+			
+			}
+		});
+		
 	}
 
 	@Override
@@ -157,6 +173,7 @@ public class FileUploadField extends FieldWidget implements FileLoadHandler{
 			return;
 		}
 				
+		
 		if(attachment.getFieldName().equals(fieldName) && 
 				docId.equals(attachment.getDocumentid().toString())){
 			
@@ -165,6 +182,7 @@ public class FileUploadField extends FieldWidget implements FileLoadHandler{
 	}
 
 	private void render(Attachment attachment) {
+		
 		//lblReadOnly.setText(attachment.getName());
 		UploadContext context = new UploadContext("getreport");
 		context.setContext("attachmentId", attachment.getId()+"");
