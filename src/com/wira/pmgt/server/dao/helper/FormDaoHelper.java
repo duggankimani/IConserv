@@ -369,6 +369,7 @@ public class FormDaoHelper {
 		
 		if(field.getId()!=null){
 			adfield = dao.getField(field.getId());
+			if(adfield!=null)
 			previous = adfield.getPosition()==null? -1 : adfield.getPosition();
 		}
 		

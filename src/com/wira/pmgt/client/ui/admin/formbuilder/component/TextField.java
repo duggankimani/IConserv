@@ -104,6 +104,8 @@ public class TextField extends FieldWidget {
 		});
 		
 		if(property.getName().equals(NAME)){
+			
+			if(property.getFieldId()!=null)
 			addRegisteredHandler(PropertyChangedEvent.TYPE,
 					new PropertyChangedEvent.PropertyChangedHandler(){
 				@Override

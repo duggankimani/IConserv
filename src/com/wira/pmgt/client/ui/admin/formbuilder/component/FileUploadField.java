@@ -6,11 +6,14 @@ import gwtupload.client.IUploader.OnFinishUploaderHandler;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
@@ -59,12 +62,12 @@ public class FileUploadField extends FieldWidget implements FileLoadHandler{
 		widget = uiBinder.createAndBindUi(this);
 		add(widget);
 		addRegisteredHandler(FileLoadEvent.TYPE, this);
-		
 	}
 
 	@Override
 	public void setField(Field field) {
-		uploaderType = getPropertyValue(UPLOADERTYPE);
+		uploaderType = field.getPropertyValue(UPLOADERTYPE);
+
 		if(uploaderType==null){
 			uploaderType="singleupload";
 		}
@@ -181,17 +184,35 @@ public class FileUploadField extends FieldWidget implements FileLoadHandler{
 		}
 	}
 
-	private void render(Attachment attachment) {
+	private void render(final Attachment attachment) {
 		
 		//lblReadOnly.setText(attachment.getName());
 		UploadContext context = new UploadContext("getreport");
 		context.setContext("attachmentId", attachment.getId()+"");
 		context.setContext("ACTION", "GETATTACHMENT");
-		String fullUrl = AppContext.getBaseURL()+"/"+context.toUrl();;
+		final String fullUrl = AppContext.getBaseURL()+"/"+context.toUrl();
 		
+		HTMLPanel panel = new HTMLPanel("");
+		String width="100px";
+		if(attachment.isImage()){
+			Image img = new Image(fullUrl.concat("&width="+width));
+			img.setWidth("100px");
+			img.addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					if(fullUrl!=null){
+						Window.open(fullUrl, attachment.getName(), null);
+					}
+				}
+			});
+			panel.add(img);
+		}
+	
 		Anchor anchor = new Anchor(attachment.getName(),fullUrl);
 		anchor.setTarget("_blank");
-		
-		values.add(anchor);
+		panel.add(anchor);
+	
+		values.add(panel);
 	}
 }

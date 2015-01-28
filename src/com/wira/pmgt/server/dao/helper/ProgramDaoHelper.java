@@ -36,6 +36,7 @@ import com.wira.pmgt.shared.model.UserGroup;
 import com.wira.pmgt.shared.model.Value;
 import com.wira.pmgt.shared.model.form.Field;
 import com.wira.pmgt.shared.model.form.Form;
+import com.wira.pmgt.shared.model.form.FormModel;
 import com.wira.pmgt.shared.model.form.Property;
 import com.wira.pmgt.shared.model.program.FundDTO;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
@@ -735,8 +736,10 @@ public class ProgramDaoHelper {
 //		String approvalTaskForm = "Task Approval Form - "+detail.getName(); 
 		
 		//Clone Default Form
-		Form model = (Form)FormDaoHelper.getFormByName("TASK_TEMPLATE_FORM");
-		if(model!=null){
+		FormModel frm = FormDaoHelper.getFormByName("TASK_TEMPLATE_FORM");
+		Form model =null;
+		if(frm!=null){
+			model = (Form)frm;
 			model = model.clone();
 			model.setCaption(taskFormCaption);
 			model.setName(taskName);
@@ -789,10 +792,13 @@ public class ProgramDaoHelper {
 	 * @param measure
 	 */
 	private static void addToForm(Form model, String key, String measure, DataType type) {
-		if(key==null){
+		if(key==null || model==null){
 			return;
 		}
 		List<Field> fields = model.getFields();
+		if(fields==null){
+			fields = new ArrayList<>();
+		}
 		
 		for(Field fld: fields){
 			if(fld.getName().equals(key)){

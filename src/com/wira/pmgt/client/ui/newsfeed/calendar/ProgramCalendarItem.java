@@ -40,9 +40,15 @@ public class ProgramCalendarItem extends Composite {
 			spnLabel.setInnerText(" Overdue");
 			spnDetail.setInnerText(program.getName());
 			spnDate.setInnerText(DateUtils.getTimeDifference(program.getEndDate()));
-		} else {
+		} else if(program.getStartDate().before(new Date())) {
 			spnLabel.addClassName("label-warning");
 			spnLabel.setInnerText(" Late");
+			spnDetail.setInnerText(program.getName());
+			spnDate.setInnerText(DateUtils.getTimeDifference(program.getStartDate()));
+		}else{
+			//Upcoming
+			spnLabel.addClassName("label-success");
+			spnLabel.setInnerText(" Upcoming");
 			spnDetail.setInnerText(program.getName());
 			spnDate.setInnerText(DateUtils.getTimeDifference(program.getStartDate()));
 		}

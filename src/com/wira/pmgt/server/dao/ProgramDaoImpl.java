@@ -3,6 +3,7 @@ package com.wira.pmgt.server.dao;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -260,6 +261,10 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 	}
 	
 	public List<ProgramSummary> getProgramCalendar(String userId){
+		return getProgramCalendar(userId, 7);
+	}
+	
+	public List<ProgramSummary> getProgramCalendar(String userId, int days){
 		List<Long> ids = getProgramIds(userId);
 		if(ids.isEmpty()){
 			log.warn("No ids found......... Cannot load calendar for current user");
@@ -268,11 +273,17 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		
 		log.debug("Ids found >> "+ids);
 		
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DATE, days);
+		
+		Date upcomingDate = calendar.getTime();
+		System.err.println(upcomingDate);
 		Query query = em.createNamedQuery("ProgramDetail.getCalendar")
 				.setParameter("parentIds", ids)
 				.setParameter("statusCreated", ProgramStatus.CREATED.name())
 				.setParameter("currentDate", new Date())
-				.setParameter("statusClosed", ProgramStatus.CLOSED.name());	
+				.setParameter("statusClosed", ProgramStatus.CLOSED.name())
+				.setParameter("upcomingDate", upcomingDate);	
 		
 		List<Object[]> rows = getResultList(query); 
 		

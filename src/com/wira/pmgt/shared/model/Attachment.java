@@ -92,4 +92,9 @@ public class Attachment implements Serializable {
 	public void setFieldName(String fieldName) {
 		this.fieldName = fieldName;
 	}
+	
+	public boolean isImage(){
+		return name.endsWith("png") || name.endsWith("jpg") || name.endsWith("html") || name.endsWith("htm") 
+				|| name.endsWith("svg") || name.endsWith("pdf");
+	}
 }

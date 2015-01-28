@@ -96,7 +96,8 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 			+ "(startDate is not null and endDate is not null) " +
 			"and (" +
 			"((status is null or status=:statusCreated) and startDate<(:currentDate)) " +
-			"or ((status is null or status!=:statusClosed) and endDate<:currentDate)" +
+			"or ((status is null or status!=:statusClosed) and endDate<:currentDate) "+
+			"or ((status is null or status!=:statusClosed) and startDate<(:upcomingDate))" +
 			") " +
 			"order by path_info "),
 			
