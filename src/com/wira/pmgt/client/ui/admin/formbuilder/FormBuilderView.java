@@ -14,6 +14,7 @@ import com.allen_sauer.gwt.dnd.client.util.DragClientBundle;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.LIElement;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -62,6 +63,7 @@ public class FormBuilderView extends ViewImpl implements
 	
 	@UiField Anchor aNewForm;
 	@UiField Anchor aCloneForm;
+	@UiField SpanElement spnClone;
 	@UiField Anchor aDeleteForm;
 	@UiField Anchor aInputtab;
 	@UiField Anchor aSelecttab;
@@ -113,6 +115,7 @@ public class FormBuilderView extends ViewImpl implements
 	protected Map<String, Property> props = new LinkedHashMap<String, Property>();
 	
 	Form form = new Form();
+	private boolean isTaskForm;
 	
 	@Inject
 	public FormBuilderView(final Binder binder) {
@@ -458,6 +461,16 @@ public class FormBuilderView extends ViewImpl implements
 			}
 		}
 		
+		this.isTaskForm = name==null? false :
+			(name.startsWith("Program-") && !name.endsWith("Approval"))? true: false;
+		
+		if(this.isTaskForm){
+			spnClone.setInnerText("Approval Form");
+			aCloneForm.setTitle("Generate Approval Form");
+		}else{
+			spnClone.setInnerText("Clone Form");
+			aCloneForm.setTitle("Clone Form");
+		}
 		formLabel.setText(caption);
 		
 		setFields(form.getFields());
@@ -593,5 +606,9 @@ public class FormBuilderView extends ViewImpl implements
 			return form.getCaption();
 		
 		return "Untitled";
+	}
+	
+	public boolean isTaskForm(){
+		return isTaskForm;
 	}
 }

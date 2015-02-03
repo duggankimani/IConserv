@@ -33,7 +33,7 @@
 					<g:Anchor ui:field="aCloneForm" styleName="btn btn-primary"
 						title="Clone Form">
 						<i class="icon-plus"></i>
-						Clone Form
+						<span ui:field="spnClone">Clone Form</span>
 					</g:Anchor>
 			   </div>
 			   

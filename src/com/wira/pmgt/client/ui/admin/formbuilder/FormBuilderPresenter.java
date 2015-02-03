@@ -1,5 +1,6 @@
 package com.wira.pmgt.client.ui.admin.formbuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -23,13 +24,19 @@ import com.wira.pmgt.client.service.TaskServiceCallback;
 import com.wira.pmgt.client.ui.AppManager;
 import com.wira.pmgt.client.ui.OnOptionSelected;
 import com.wira.pmgt.client.ui.admin.formbuilder.upload.FormImportView;
+import com.wira.pmgt.client.ui.events.ErrorEvent;
+import com.wira.pmgt.client.ui.events.ProcessingCompletedEvent;
 import com.wira.pmgt.client.ui.events.PropertyChangedEvent;
 import com.wira.pmgt.client.ui.events.PropertyChangedEvent.PropertyChangedHandler;
 import com.wira.pmgt.client.ui.events.SaveFormDesignEvent;
 import com.wira.pmgt.client.ui.events.SaveFormDesignEvent.SaveFormDesignHandler;
 import com.wira.pmgt.client.ui.events.SavePropertiesEvent;
 import com.wira.pmgt.client.ui.events.SavePropertiesEvent.SavePropertiesHandler;
+import com.wira.pmgt.client.util.AppContext;
+import com.wira.pmgt.shared.model.StringValue;
+import com.wira.pmgt.shared.model.form.Field;
 import com.wira.pmgt.shared.model.form.Form;
+import com.wira.pmgt.shared.model.form.Property;
 import com.wira.pmgt.shared.requests.CreateFormRequest;
 import com.wira.pmgt.shared.requests.DeleteFormModelRequest;
 import com.wira.pmgt.shared.requests.ExportFormRequest;
@@ -62,12 +69,15 @@ public class FormBuilderPresenter extends
 		void registerInputDrag();
 		void clear();
 		String getFormName();
+		boolean isTaskForm();
 	}
 
 	@Inject
 	DispatchAsync dispatcher;
 
 	Long formId=null;
+
+	private List<Form> forms;
 	
 	@Inject
 	public FormBuilderPresenter(final EventBus eventBus,
@@ -143,9 +153,66 @@ public class FormBuilderPresenter extends
 			public void onClick(ClickEvent event) {
 				
 				final Form form = getView().getForm();				
-				Form clone = form.clone();
+				Form formClone = form.clone();
+				
+				if(getView().isTaskForm()){
+					
+					List<Property> properties  = form.getProperties();
+					List<Property> cloneProps = new ArrayList<Property>();
+					if(properties!=null){
+						for(Property prop: properties){
+							Property clone = prop.clone(false);
+							if(prop.getName()!=null && prop.getName().equals("NAME")){
+								//name property
+								if(prop.getValue()!=null && prop.getValue().getValue()!=null){
+									String approvalName= prop.getValue().getValue().toString()+"-Approval";
+									clone.setValue(new StringValue(approvalName));
+									formClone.setName(approvalName);
+								}
+							}else if(prop.getName()!=null && prop.getName().equals("CAPTION")){
+								if(prop.getValue()!=null && prop.getValue().getValue()!=null){
+									String approvalCaption = "Approval Form "
+								+(prop.getValue().getValue().toString()).replace("Task Form", "");
+									clone.setValue(new StringValue(approvalCaption));
+									formClone.setCaption(approvalCaption);
+								}
+							}
+							cloneProps.add(clone);
+						}
+						
+						if(forms!=null){
+							for(Form aform: forms){
+								if(aform.getName().equals(formClone.getName())){
+									fireEvent(new ErrorEvent("Form '"+formClone.getName()+"' already exists."
+											+ "If you are generating an approval form, please check "
+											+ "that it does not exist. Delete any previously generated "
+											+ "approval form and try again. "
+											+ "Hint- Go back to task assignment to see the forms already generated."
+											+ "", 0L));
+									return;
+								}
+							
+							}
+						}
+					}
+					
+					formClone.setProperties(cloneProps);
+					Field submit = null;
+					for(Field field: formClone.getFields()){
+						if(field.getName()!=null && field.getName().equals("submit")){
+							submit = field;
+							break;
+						}
+					}
+					
+					if(submit!=null){
+						formClone.getFields().remove(submit);
+					}
+				}
+								
 				//System.err.println(">>>>> :: "+clone+" \n["+clone.getFields()+"] \n"+clone.getProperties());
-				saveForm(clone);
+				
+				saveForm(formClone);
 			}
 		});
 		
@@ -230,7 +297,7 @@ public class FormBuilderPresenter extends
 						getView().setForm(new Form());
 						
 						GetFormsResponse resp = (GetFormsResponse)result.get(1);
-						getView().setForms(resp.getForms());
+						setForms(resp.getForms());
 					}
 				});
 	}
@@ -266,7 +333,7 @@ public class FormBuilderPresenter extends
 						getView().setForm(form);
 						
 						GetFormsResponse response = (GetFormsResponse)result.get(1);
-						getView().setForms(response.getForms());
+						setForms(response.getForms());
 					}
 				});
 	}
@@ -290,7 +357,7 @@ public class FormBuilderPresenter extends
 		dispatcher.execute(action, new TaskServiceCallback<MultiRequestActionResult>() {
 			@Override
 			public void processResult(MultiRequestActionResult results) {
-				getView().setForms(((GetFormsResponse)results.get(0)).getForms());
+				setForms(((GetFormsResponse)results.get(0)).getForms());
 				
 				if(results.getReponses().size()>1){
 					GetFormModelResponse response = (GetFormModelResponse)results.get(1);
@@ -299,6 +366,11 @@ public class FormBuilderPresenter extends
 				}
 			}
 		});
+	}
+	
+	void setForms(List<Form> forms){
+		this.forms = forms;
+		getView().setForms(forms);
 	}
 	
 	@Override
