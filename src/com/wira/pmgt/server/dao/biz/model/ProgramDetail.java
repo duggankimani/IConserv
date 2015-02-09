@@ -307,6 +307,9 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	
 	private Date dateCompleted;
 	
+	@Column(length=500)
+	private String remarks;
+	
 	public ProgramDetail() {
 	}
 	
@@ -550,6 +553,14 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 
 	public void setDateCompleted(Date dateCompleted) {
 		this.dateCompleted = dateCompleted;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 	
 }

@@ -152,7 +152,7 @@ public class MainPageView extends ViewImpl implements MainPagePresenter.MyView {
 	@Override
 	public void setAlertVisible(String message) {
 		divAlert.removeClassName("hidden");
-		spnAlertContent.setInnerText(message);
+		spnAlertContent.setInnerHTML(message);
 		timer.cancel();
 		timer.schedule(5000);
 	}

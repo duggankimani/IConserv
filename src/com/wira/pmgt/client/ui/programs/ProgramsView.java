@@ -17,6 +17,8 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.History;
@@ -32,8 +34,11 @@ import com.wira.pmgt.client.model.UploadContext.UPLOADACTION;
 import com.wira.pmgt.client.ui.component.ActionLink;
 import com.wira.pmgt.client.ui.component.BulletListPanel;
 import com.wira.pmgt.client.ui.component.BulletPanel;
+import com.wira.pmgt.client.ui.component.DropDownList;
 import com.wira.pmgt.client.ui.component.Dropdown;
 import com.wira.pmgt.client.ui.component.MyHTMLPanel;
+import com.wira.pmgt.client.ui.events.ActivitySavedEvent;
+import com.wira.pmgt.client.ui.events.AnalysisChangedEvent;
 import com.wira.pmgt.client.util.AppContext;
 import com.wira.pmgt.shared.model.PermissionType;
 import com.wira.pmgt.shared.model.ProgramDetailType;
@@ -116,6 +121,9 @@ public class ProgramsView extends ViewImpl implements
 	Long lastUpdatedId;
 
 	List<IsProgramDetail> programs = null;
+	
+	@UiField
+	DropDownList<AnalysisType> analysisDropdown;
 
 	public interface Binder extends UiBinder<Widget, ProgramsView> {
 	}
@@ -134,7 +142,6 @@ public class ProgramsView extends ViewImpl implements
 	protected boolean isNotDisplayed;
 
 	private boolean isCurrentPlaceObjectivesPage = false;
-	private List<IsProgramDetail> activities;
 	private Long periodId;
 
 	@Inject
@@ -143,7 +150,25 @@ public class ProgramsView extends ViewImpl implements
 
 		listPanel.setId("mytab");
 		// imgExport.setResource(ICONS.INSTANCE.excel());
-
+		
+		analysisDropdown.setItems(Arrays.asList(AnalysisType.BUDGET,AnalysisType.ACTUAL));
+		analysisDropdown.setValue(AnalysisType.BUDGET);
+		analysisDropdown.addValueChangeHandler(new ValueChangeHandler<AnalysisType>() {
+			@Override
+			public void onValueChange(ValueChangeEvent<AnalysisType> event) {
+				AnalysisType value = event.getValue()== null ? AnalysisType.BUDGET : event.getValue();
+				analysisDropdown.setValue(value);
+				
+				AppContext.fireEvent(new ActivitySavedEvent("The figures shown are the remaining amounts "
+						+ "after <u>"+
+						(value.equals(AnalysisType.BUDGET)? "Budget Allocation." :
+							"Actual expenditure.")
+							+"</u>"
+						));
+				AppContext.fireEvent(new AnalysisChangedEvent(value));
+			}
+		});
+		
 		// registerEditFocus()
 		MouseDownHandler downHandler = new MouseDownHandler() {
 			@Override
@@ -309,7 +334,6 @@ public class ProgramsView extends ViewImpl implements
 					ProgramDetailType.PROGRAM);
 		}
 
-		this.activities = activities;
 		tblView.setLastUpdatedId(lastUpdatedId);
 		tblView.setData(activities);
 		lastUpdatedId = null;
@@ -689,6 +713,7 @@ public class ProgramsView extends ViewImpl implements
 
 	@Override
 	public void setGoalsTable(boolean isGoalsTable) {
+		analysisDropdown.setVisible(!isGoalsTable);
 		tblView.setGoalsTable(isGoalsTable);
 	}
 

@@ -4,23 +4,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.DataFormat;
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.PrintSetup;
@@ -31,19 +26,17 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.wira.pmgt.server.dao.biz.model.ProgramDetail;
 import com.wira.pmgt.server.dao.helper.ProgramDaoHelper;
 import com.wira.pmgt.server.db.DB;
 import com.wira.pmgt.server.db.DBTrxProvider;
 import com.wira.pmgt.shared.model.ProgramDetailType;
 import com.wira.pmgt.shared.model.program.IsProgramDetail;
 import com.wira.pmgt.shared.model.program.TargetAndOutcomeDTO;
-import com.wira.pmgt.shared.requests.GetProgramsRequest;
 
 public class GenerateActivityReport {
 
-	private static final String[] titles = { "Overall LWF Goals", "Activity",
-			"Targets", "Indicator", "Budget Line","Funding", "Status", "Remarks",
+	private static final String[] titles = { "Overall LWF Goals", "Activity","Tasks",
+			"Targets", "Indicator", "Budget Line","Estimate","Actual", "Status", "Remarks",
 			"Monitoring test" };
 
 	static Map<String, CellStyle> styles = null;
@@ -213,13 +206,15 @@ public class GenerateActivityReport {
 		paintRows(data, rownum, helper,sheet);
 
 		sheet.setColumnWidth(0, 256 * 20);
-		sheet.setColumnWidth(1, 256 * 60);
-		sheet.setColumnWidth(2, 256 * 35);
+		sheet.setColumnWidth(1, 256 * 40);
+		sheet.setColumnWidth(2, 256 * 40);
 		sheet.setColumnWidth(3, 256 * 35);
-		sheet.setColumnWidth(4, 256 * 10);// Funding
-		sheet.setColumnWidth(5, 256 * 10);// Status
-		sheet.setColumnWidth(6, 256 * 15);// Remarks
-		sheet.setColumnWidth(7, 256 * 10);// Monitoring test
+		sheet.setColumnWidth(4, 256 * 35);
+		sheet.setColumnWidth(5, 256 * 10);// Funding/ Estimate
+		sheet.setColumnWidth(6, 256 * 10);// Actual
+		sheet.setColumnWidth(7, 256 * 10);// Status
+		sheet.setColumnWidth(8, 256 * 15);// Remarks
+		sheet.setColumnWidth(9, 256 * 10);// Monitoring test
 		sheet.setZoom(3, 4);
 
 	}
@@ -269,17 +264,32 @@ public class GenerateActivityReport {
 				}
 				break;
 			case 1:
-				// "Activity"
-				if (isHeader) {
-					// styleName = i == 0 ? "cell_h" : "cell_bb";
-					styleName = "cell_h_sub";
-				} else {
-					styleName = "cell_normal";
+				if(!(detail.getType()==ProgramDetailType.TASK)){
+					// "Activity"
+					if (isHeader) {
+						// styleName = i == 0 ? "cell_h" : "cell_bb";
+						styleName = "cell_h_sub";
+					} else {
+						styleName = "cell_normal";
+					}
+					cell.setCellValue(detail.getDescription());
 				}
-				cell.setCellValue(detail.getDescription());
 				// sheet.autoSizeColumn(1);
 				break;
 			case 2:
+				if(detail.getType()==ProgramDetailType.TASK){
+					// "Activity"
+					if (isHeader) {
+						// styleName = i == 0 ? "cell_h" : "cell_bb";
+						styleName = "cell_h_sub";
+					} else {
+						styleName = "cell_normal";
+					}
+					cell.setCellValue(detail.getDescription());
+				}
+				// sheet.autoSizeColumn(1);
+				break;
+			case 3:
 				// "Targets"
 				styleName = isHeader ? "cell_b" : "cell_normal";
 				if (!isHeader) {
@@ -288,7 +298,7 @@ public class GenerateActivityReport {
 				}
 				// sheet.autoSizeColumn(2);
 				break;
-			case 3:
+			case 4:
 				// "Indicator"
 				styleName = isHeader ? "cell_b" : "cell_normal";
 				if (!isHeader) {
@@ -297,7 +307,7 @@ public class GenerateActivityReport {
 				}
 				// sheet.autoSizeColumn(3);
 				break;
-			case 4: {
+			case 5: {
 				
 				//BudgetLine
 				styleName = isHeader ? "cell_b" : "cell_normal";
@@ -306,14 +316,21 @@ public class GenerateActivityReport {
 				}
 				break;
 			}
-			case 5:{ // "Funding"
+			case 6:{ // "Funding"
 				styleName = isHeader? "cell_b":"cell_currency";
 				if (!isHeader){
 					cell.setCellValue(detail.getBudgetAmount());
 				}
 				break;
 			}
-			case 6: {
+			case 7:{ // "Funding"
+				styleName = isHeader? "cell_b":"cell_currency";
+				if (!isHeader){
+					cell.setCellValue(detail.getActualAmount());
+				}
+				break;
+			}
+			case 8: {
 				// "Status"
 				styleName = isHeader ? "cell_bg" : "cell_g";
 				if (!isHeader){
@@ -322,12 +339,15 @@ public class GenerateActivityReport {
 				}
 				break;
 			}
-			case 7: {
+			case 9: {
 				// "Remarks"
 				styleName = isHeader ? "cell_b" : "cell_normal";
+				if(!isHeader){
+					cell.setCellValue(detail.getRemarks()==null? "": detail.getRemarks());
+				}
 				break;
 			}
-			case 8: {
+			case 10: {
 				// "Monitoring test"
 				styleName = isHeader ? "cell_bg" : "cell_g";
 				break;

@@ -27,6 +27,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.wira.pmgt.client.ui.component.ProgressBar;
 import com.wira.pmgt.client.ui.component.RowWidget;
 import com.wira.pmgt.client.ui.events.ActivitySelectionChangedEvent;
+import com.wira.pmgt.client.ui.events.AnalysisChangedEvent;
+import com.wira.pmgt.client.ui.events.AnalysisChangedEvent.AnalysisChangedHandler;
 import com.wira.pmgt.client.ui.events.MoveProgramEvent;
 import com.wira.pmgt.client.ui.events.MoveProgramEvent.MoveProgramHandler;
 import com.wira.pmgt.client.ui.events.ProgramDeletedEvent;
@@ -42,7 +44,7 @@ import com.wira.pmgt.shared.model.program.ProgramFundDTO;
 import com.wira.pmgt.shared.model.program.ProgramStatus;
 
 public class ProgramsTableRow extends RowWidget implements
-		ProgramDetailSavedHandler, ProgramDeletedHandler, MoveProgramHandler {
+		ProgramDetailSavedHandler, ProgramDeletedHandler, MoveProgramHandler, AnalysisChangedHandler {
 
 	private static ActivitiesTableRowUiBinder uiBinder = GWT
 			.create(ActivitiesTableRowUiBinder.class);
@@ -140,6 +142,10 @@ public class ProgramsTableRow extends RowWidget implements
 	};
 
 	private boolean isGoalsTable;
+
+	ValueChangeHandler<Boolean> selectionHandler;
+
+	private AnalysisType type;
 
 	public ProgramsTableRow(IsProgramDetail activity,
 			List<FundDTO> sortedListOfFunding, Long programId,
@@ -390,8 +396,6 @@ public class ProgramsTableRow extends RowWidget implements
 		return activity;
 	}
 
-	ValueChangeHandler<Boolean> selectionHandler;
-
 	public void setSelectionChangeHandler(ValueChangeHandler<Boolean> handler) {
 		this.selectionHandler = handler;
 		chkSelect.addValueChangeHandler(handler);
@@ -526,24 +530,43 @@ public class ProgramsTableRow extends RowWidget implements
 			} else {
 				ProgramFundDTO activityFund = activityFunding.get(idx);
 				HTMLPanel amounts = new HTMLPanel("");
-				String amount = activityFund.getAmount() == null ? ""
-						: NUMBERFORMAT.format(activityFund.getAmount());
+				
+				//Budget Amount
+				Double budgetAmount = activityFund.getAmount(); 
+				String amount = budgetAmount == null ? ""
+						: NUMBERFORMAT.format(budgetAmount);
 				amounts.add(new InlineLabel(amount));
 
-				Double allocation = activityFund.getAllocation();
-
-				if (allocation != null && allocation != 0.0
+				//Allocation Or Actual Amount
+				Double allocationOrActual = null;
+				
+				if(type==AnalysisType.ACTUAL){
+					allocationOrActual = activityFund.getActual();
+				}else{
+					allocationOrActual = activityFund.getAllocation();
+				}
+				
+				if (allocationOrActual != null && allocationOrActual != 0.0
 						&& activityFund.getAmount() != null) {
 
-					Double diff = activityFund.getAmount() - allocation;
+					Double diff = budgetAmount - allocationOrActual;
+					if(diff!=null && diff.intValue()==0){
+						diff=0.0;
+					}
+					
 					HTMLPanel allocationPanel = new HTMLPanel(
 							NUMBERFORMAT.format(diff));
-					allocationPanel.setTitle("Remaining amount");
+					if(type==AnalysisType.ACTUAL){
+						allocationPanel.setTitle("Remaining amount after actual expenditure");
+					}else{
+						allocationPanel.setTitle("Unallocated budget amount");
+					}
+					
 					allocationPanel.getElement().getStyle()
 							.setFontSize(0.8, Unit.EM);
 
 					// allocationPanel.addStyleName("underline");
-					if (allocation > activityFund.getAmount()) {
+					if (allocationOrActual > budgetAmount) {
 						allocationPanel.addStyleName("text-error bold");
 					} else {
 						allocationPanel.addStyleName("text-success bold");
@@ -552,7 +575,8 @@ public class ProgramsTableRow extends RowWidget implements
 							.setFontSize(0.8, Unit.EM);
 					amounts.add(allocationPanel);
 					allocations.add(allocationPanel);
-					allocationPanel.setVisible(showingChildren || isSummaryRow);
+					//allocationPanel.setVisible(isSummaryRow);
+					//allocationPanel.setVisible(showingChildren || isSummaryRow);
 				}
 				// Add to table td
 				createTd(amounts, "10%");
@@ -581,6 +605,7 @@ public class ProgramsTableRow extends RowWidget implements
 		addRegisteredHandler(ProgramDetailSavedEvent.TYPE, this);
 		addRegisteredHandler(ProgramDeletedEvent.TYPE, this);
 		addRegisteredHandler(MoveProgramEvent.TYPE, this);
+		addRegisteredHandler(AnalysisChangedEvent.TYPE, this);
 		aRowCaret.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -601,8 +626,8 @@ public class ProgramsTableRow extends RowWidget implements
 			aRowCaret.addStyleName("icon-caret-right");
 		}
 
-		if (level != 0)
-			showAllocations(hasChildren);
+//		if (level != 0)
+//			showAllocations(hasChildren);
 	}
 
 	// default toggle
@@ -712,26 +737,7 @@ public class ProgramsTableRow extends RowWidget implements
 
 		// exists
 		if (activity.getId().equals(updatedProgram.getId())) {
-			int count = row.getWidgetCount();
-
-			for (FundDTO programFund : donors) {
-				Widget widgetToRemove = row.getWidget(--count);
-				boolean removed = remove(widgetToRemove);
-				if (!removed) {
-					Window.alert("Cannot remove Widget in index >> " + count
-							+ "; Row.isAttached=" + isAttached()
-							+ ";  WidgetToRemove >>" + widgetToRemove);
-				}
-				// else{
-				// Window.alert("Removed Widget in index >> "+count
-				// +"; Row.isAttached="+isAttached()
-				// +"; RemovedWidget >>"+widgetToRemove);
-				//
-				// }
-			}
-
-			allocations.clear();
-
+			clearFunds();
 			List<IsProgramDetail> children = this.activity.getChildren();
 			updatedProgram.setProgramId(programId);
 			this.activity = updatedProgram;
@@ -743,6 +749,27 @@ public class ProgramsTableRow extends RowWidget implements
 						updatedProgram, true));
 			}
 		}
+	}
+
+	private void clearFunds() {
+		int count = row.getWidgetCount();
+		for (FundDTO programFund : donors) {
+			Widget widgetToRemove = row.getWidget(--count);
+			boolean removed = remove(widgetToRemove);
+			if (!removed) {
+				Window.alert("Cannot remove Widget in index >> " + count
+						+ "; Row.isAttached=" + isAttached()
+						+ ";  WidgetToRemove >>" + widgetToRemove);
+			}
+			// else{
+			// Window.alert("Removed Widget in index >> "+count
+			// +"; Row.isAttached="+isAttached()
+			// +"; RemovedWidget >>"+widgetToRemove);
+			//
+			// }
+		}
+
+		allocations.clear();
 	}
 
 	@Override
@@ -839,6 +866,18 @@ public class ProgramsTableRow extends RowWidget implements
 		ProgramsTableRow childRow = (ProgramsTableRow) parent
 				.getWidget(widgetIndex);
 		childRow.removeFromParent();
+	}
+
+	@Override
+	public void onAnalysisChanged(AnalysisChangedEvent event) {
+		type = event.getAnalysisType();
+		if(activity.getType().equals(ProgramDetailType.OUTCOME)
+				|| activity.getType().equals(ProgramDetailType.OBJECTIVE)){
+			return;
+		}
+		
+		clearFunds();
+		init();
 	}
 
 }

@@ -312,3 +312,10 @@ span.underline{
 div.text-right{
 	text-align:right;
 }
+
+.drop-down-tiny select{
+	width:84px;
+	padding: 2px 8px;
+	height:23px;
+	margin-top:3px;
+}

@@ -34,6 +34,7 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 	private Double rating;
 	private Long activityOutcomeId;
 	private boolean isAssigned;
+	private String remarks;
 	
 	public Long getDocumentId() {
 		return documentId;
@@ -229,5 +230,13 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 
 	public void setAssigned(boolean isAssigned) {
 		this.isAssigned = isAssigned;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 }

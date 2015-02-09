@@ -80,7 +80,7 @@
 								<i class="icon-trash icon-button"></i>
 							</d:ActionLink>
 						</div>
-						
+
 						<div class="span3 hide">
 							<d:ActionLink ui:field="aMove" styleName="btn btn-default"
 								dataToggle="tooltip" dataPlacement="bottom" title="Move">
@@ -126,7 +126,18 @@
 				</div>
 
 				<!-- BreadCrumb Panel -->
-				<g:HTMLPanel styleName="row-fluid" ui:field="panelCrumbs">
+				<g:HTMLPanel styleName="row-fluid">
+					<g:HTMLPanel styleName="span9" ui:field="panelCrumbs">
+					</g:HTMLPanel>
+					
+					<g:HTMLPanel styleName="span3">
+						<div class="span6 pull-right drop-down-tiny">
+							<d:DropDownList ui:field="analysisDropdown" styleName="input-small"
+							title="Select to show remaining amounts after either actual expenditure or budget allocation.">
+							</d:DropDownList>
+						</div>
+						<div class="span6"></div>
+					</g:HTMLPanel>
 				</g:HTMLPanel>
 			</g:HTMLPanel>
 

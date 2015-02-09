@@ -128,4 +128,9 @@ public class DropDownList<T extends Listable> extends Composite implements HasVa
 		setValue(value);
 	}
 	
+	@Override
+	public void setStyleName(String style) {
+		listBox.setStyleName(style);
+	}
+	
 }

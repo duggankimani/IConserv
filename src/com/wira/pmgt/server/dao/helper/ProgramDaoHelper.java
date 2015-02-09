@@ -281,7 +281,8 @@ public class ProgramDaoHelper {
 		//dto.setTargetsAndOutcomes(List<TargetAndOutcomeDTO>);
 		dto.setType(program.getType());
 		dto.setBudgetLine(program.getBudgetLine());
-		dto.setActualAmount(program.getActualAmount());
+		dto.setRemarks(program.getRemarks());
+		//dto.setActualAmount(program.getActualAmount());
 		dto.setCommitedAmount(program.getCommitedAmount());
 		
 		dto.setAssigned(DB.getProgramDaoImpl().isProgramAssigned(dto.getId()));
@@ -924,6 +925,11 @@ public class ProgramDaoHelper {
 		if(targetsAndOutcomes==null || targetsAndOutcomes.isEmpty()){
 			log.debug("ProgramDaoHelper#updateTargetAndOutcome No Targets or Outcomes found for ["+detail.getName()+"]");
 			return;
+		}
+		
+		Value remarks = values.get("remarks");
+		if(remarks!=null && remarks.getValue()!=null){
+			detail.setRemarks(remarks.getValue().toString());
 		}
 		
 		for(TargetAndOutcome tao: targetsAndOutcomes){
