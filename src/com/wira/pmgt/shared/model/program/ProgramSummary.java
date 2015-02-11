@@ -21,12 +21,13 @@ public class ProgramSummary implements Serializable {
 	private Date startDate;
 	private Date endDate; 
 	protected Long programId; //Main Parent Program ID
+	private Date dateCompleted;
 	
 	public ProgramSummary(){}
 	
 	public ProgramSummary(String name, String description, Long programId,
 			Long id, Long parentid, ProgramDetailType type, Date startDate,
-			Date endDate, ProgramStatus status) {
+			Date endDate, ProgramStatus status, Date dateCompleted) {
 		this.name = name;
 		this.description=description;
 		this.programId = programId;
@@ -36,6 +37,7 @@ public class ProgramSummary implements Serializable {
 		this.startDate=startDate;
 		this.endDate = endDate;
 		this.status = status;
+		this.dateCompleted = dateCompleted;
 	}
 
 	public Long getId() {
@@ -102,7 +104,7 @@ public class ProgramSummary implements Serializable {
 	}
 	
 	public boolean isOverdue(){
-		return endDate!=null && status!=ProgramStatus.COMPLETED && endDate.before(new Date());
+		return endDate!=null && (status!=ProgramStatus.COMPLETED && status!=ProgramStatus.CLOSED) && endDate.before(new Date());
 	}
 	
 	public boolean isNotStarted(){
@@ -113,8 +115,25 @@ public class ProgramSummary implements Serializable {
 		return startDate!=null && new Date().before(startDate) && status==ProgramStatus.CREATED;
 	}
 	
+	public boolean isOnGoing(){
+		return startDate!=null && (status==ProgramStatus.OPENED || status==ProgramStatus.REOPENED) 
+				&& startDate.before(new Date()) && endDate.after(new Date());
+	}
+	
+	public boolean isCompleted(){
+		return status==ProgramStatus.CLOSED || status==ProgramStatus.COMPLETED;
+	}
+	
 	public void setProgramId(Long programId) {
 		this.programId = programId;
+	}
+
+	public Date getDateCompleted() {
+		return dateCompleted;
+	}
+
+	public void setDateCompleted(Date dateCompleted) {
+		this.dateCompleted = dateCompleted;
 	}
 
 }

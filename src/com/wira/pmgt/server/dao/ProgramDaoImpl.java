@@ -264,7 +264,7 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		return getProgramCalendar(userId, 7);
 	}
 	
-	public List<ProgramSummary> getProgramCalendar(String userId, int days){
+	public List<ProgramSummary> getProgramCalendar(String userId, int noOfDays){
 		List<Long> ids = getProgramIds(userId);
 		if(ids.isEmpty()){
 			log.warn("No ids found......... Cannot load calendar for current user");
@@ -274,16 +274,22 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 		log.debug("Ids found >> "+ids);
 		
 		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.DATE, days);
+		calendar.add(Calendar.DATE, noOfDays);
+		Date nextNDaysDate = calendar.getTime();
 		
-		Date upcomingDate = calendar.getTime();
-		System.err.println(upcomingDate);
+		Calendar prev = Calendar.getInstance();
+		prev.roll(Calendar.DATE, -noOfDays);
+		Date pastNDaysDate = prev.getTime();
+		
 		Query query = em.createNamedQuery("ProgramDetail.getCalendar")
 				.setParameter("parentIds", ids)
 				.setParameter("statusCreated", ProgramStatus.CREATED.name())
 				.setParameter("currentDate", new Date())
 				.setParameter("statusClosed", ProgramStatus.CLOSED.name())
-				.setParameter("upcomingDate", upcomingDate);	
+				.setParameter("upcomingDate", nextNDaysDate)
+				.setParameter("prevDate", pastNDaysDate)
+				.setParameter("statusOpened", ProgramStatus.OPENED.name())
+				.setParameter("statusReopened", ProgramStatus.REOPENED.name());	
 		
 		List<Object[]> rows = getResultList(query); 
 		
@@ -301,10 +307,11 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 			String status=(value=row[i++])==null? ProgramStatus.CREATED.name(): value.toString();
 			String name = (value=row[i++])==null? null: value.toString();
 			String description=(value=row[i++])==null? null: value.toString();
+			Date dateCompleted=(value=row[i++])==null? null: (Date)value;
 			
 			ProgramSummary summary = new ProgramSummary(name,description,
 					programId,id,parentid,ProgramDetailType.valueOf(type),startdate,enddate,
-					ProgramStatus.valueOf(status));
+					ProgramStatus.valueOf(status), dateCompleted);
 			
 			summaries.add(summary);
 		}
@@ -314,7 +321,7 @@ public class ProgramDaoImpl extends BaseDaoImpl{
 	/**
 	 * 
 	 * @param userId
-	 * @return
+	 * @return ProgramIds for which userId has access to [can view/ can write program access)
 	 */
 	public List<Long> getProgramIds(String userId) {
 		List<String> groups = getCurrentUserGroups(userId);

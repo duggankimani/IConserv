@@ -1,25 +1,20 @@
 package com.duggan.workflow.test;
 
-import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.junit.Test;
-
-import com.wira.pmgt.shared.model.Comment;
 
 public class TestABC {
 
 	static Integer y;
 	@Test
 	public void comment(){
-		Serializable c = new Comment();
-		Integer x = 10;
-	
-		long d;
-	
-		//c = new Document();
-		System.err.println(y);
-	}
-	private void callX(long docId) {
+		int noOfDays = 7;
+		Calendar prev = Calendar.getInstance();
+		prev.roll(Calendar.DATE, -noOfDays);
+		Date pastNDaysDate = prev.getTime();
 		
+		System.err.println(pastNDaysDate);
 	}
 }

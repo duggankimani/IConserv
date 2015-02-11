@@ -319,3 +319,13 @@ div.text-right{
 	height:23px;
 	margin-top:3px;
 }
+
+.news-feed .activities-box .nfheader {
+    background: none repeat scroll 0 0 #DADADA;
+    margin-bottom: 10px;
+    
+}
+
+.news-feed .activities-box .nfheader div {
+	padding:5px;
+}

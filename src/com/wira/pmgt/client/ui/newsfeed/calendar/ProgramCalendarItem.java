@@ -35,22 +35,31 @@ public class ProgramCalendarItem extends Composite {
 	public ProgramCalendarItem(ProgramSummary program) {
 		initWidget(uiBinder.createAndBindUi(this));
 
-		if (program.getEndDate().before(new Date())) {
+		if(program.isOverdue()){
 			spnLabel.addClassName("label-danger");
 			spnLabel.setInnerText(" Overdue");
 			spnDetail.setInnerText(program.getName());
 			spnDate.setInnerText(DateUtils.getTimeDifference(program.getEndDate()));
-		} else if(program.getStartDate().before(new Date())) {
+		}else if(program.isNotStarted()){
 			spnLabel.addClassName("label-warning");
 			spnLabel.setInnerText(" Late");
 			spnDetail.setInnerText(program.getName());
 			spnDate.setInnerText(DateUtils.getTimeDifference(program.getStartDate()));
-		}else{
-			//Upcoming
+		}else if(program.isUpcoming()){
 			spnLabel.addClassName("label-success");
 			spnLabel.setInnerText(" Upcoming");
 			spnDetail.setInnerText(program.getName());
 			spnDate.setInnerText(DateUtils.getTimeDifference(program.getStartDate()));
+		}else if(program.isOnGoing()){
+			spnLabel.addClassName("label-primary");
+			spnLabel.setInnerText(" OnGoing");
+			spnDetail.setInnerText(program.getName());
+			spnDate.setInnerText(DateUtils.getTimeDifference(program.getStartDate()));
+		}else if(program.isCompleted()){
+			spnLabel.addClassName("label-success");
+			spnLabel.setInnerText("Completed");
+			spnDetail.setInnerText(program.getName());
+			spnDate.setInnerText(DateUtils.getTimeDifference(program.getDateCompleted()));
 		}
 
 		aProgram.setHref("#home;page=activities;activity="

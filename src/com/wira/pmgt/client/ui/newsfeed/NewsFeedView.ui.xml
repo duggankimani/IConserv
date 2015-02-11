@@ -109,22 +109,62 @@
 					<g:HTMLPanel styleName="portlet-content overflow-y"
 						ui:field="panelUpcomingActivities">
 						<g:HTMLPanel styleName="row-fluid">
-							<div class="row-fluid">
+							<!-- div class="row-fluid">
 								<div class="group-header bold">Overdue</div>
+							</div -->
+							<div class="nfheader span12">
+								<div class="bold span10">Overdue <span ui:field="spnOverdue" class="badge"></span></div>
+								<div class="bold span2">
+									<g:Anchor ui:field="aOverdue" styleName="icon-chevron-up"></g:Anchor>
+								</div>
 							</div>
 							<g:HTMLPanel ui:field="divOverdue">
 							</g:HTMLPanel>
 						</g:HTMLPanel>
 						<g:HTMLPanel styleName="row-fluid">
-							<div class="group-header bold">Not Started</div>
+							<!-- div class="group-nfheader bold">Not Started</div-->
+							<div class="nfheader span12">
+								<div class="bold span10">Not Started <span ui:field="spnNotStarted" class="badge"></span></div>
+								<div class="bold span2">
+									<g:Anchor ui:field="aNotStarted" styleName="icon-chevron-up"></g:Anchor>
+								</div>
+							</div>
 							<g:HTMLPanel ui:field="divNotStarted">
 							</g:HTMLPanel>
 						</g:HTMLPanel>
 						<g:HTMLPanel styleName="row-fluid">
-							<div class="group-header bold">Upcoming</div>
+							<!-- div class="group-header bold">Upcoming (Next 7 days)</div-->
+							<div class="nfheader span12">
+								<div class="bold span10">Upcoming <span ui:field="spnUpComing" class="badge"></span> (Next 7 days)</div>
+								<div class="bold span2">
+									<g:Anchor ui:field="aUpComing" styleName="icon-chevron-up"></g:Anchor>
+								</div>
+							</div>
 							<g:HTMLPanel ui:field="divUpcoming" styleName="up-coming">
 							</g:HTMLPanel>
 						</g:HTMLPanel>
+						<g:HTMLPanel styleName="row-fluid">
+							<!-- div class="group-header bold">OnGoing</div-->
+							<div class="nfheader span12">
+								<div class="bold span10">OnGoing <span ui:field="spnOnGoing" class="badge"></span></div>
+								<div class="bold span2">
+									<g:Anchor ui:field="aOnGoing" styleName="icon-chevron-up"></g:Anchor>
+								</div>
+							</div>
+							<g:HTMLPanel ui:field="divOnGoing" styleName="up-coming">
+							</g:HTMLPanel>
+						</g:HTMLPanel>
+						<g:HTMLPanel styleName="row-fluid">
+							<div class="nfheader span12">
+								<div class="bold span10">Completed <span ui:field="spnCompleted" class="badge"></span> (Last 7 Days)</div>
+								<div class="bold span2">
+									<g:Anchor ui:field="aCompleted" styleName="icon-chevron-up"></g:Anchor>
+								</div>
+							</div>
+							<g:HTMLPanel ui:field="divCompleted" styleName="up-coming">
+							</g:HTMLPanel>
+						</g:HTMLPanel>
+						
 					</g:HTMLPanel>
 				</div>
 			</div>

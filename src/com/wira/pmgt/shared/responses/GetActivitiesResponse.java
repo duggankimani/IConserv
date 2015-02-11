@@ -12,6 +12,7 @@ public class GetActivitiesResponse extends BaseResponse {
 	public GetActivitiesResponse() {
 	}
 
+	//parent with child activities
 	public Map<Activity, List<Activity>> getActivityMap() {
 		return activityMap;
 	}

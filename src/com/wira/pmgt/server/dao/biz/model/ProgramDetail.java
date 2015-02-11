@@ -80,24 +80,28 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 	@NamedNativeQuery(name="ProgramDetail.getCalendar",
 			resultSetMapping="ProgramDetail.calendarMappings",
 			query="with recursive programdetail_tree as ( "+
-			"select id as programId,id, parentid,type,startdate,enddate,status,name,description, array[id] as path_info "+
+			"select id as programId,id, parentid,type,startdate,enddate,status,name,description,"
+			+ "datecompleted, array[id] as path_info "+
 			"from ProgramDetail where id in (:parentIds) and type!='OBJECTIVE' and isActive=1 " +
-			"and (status is null or status!=:statusClosed) "+
 			"union all "+
-			"select path_info[1] as programId,c.id,c.parentid,c.type,c.startdate,c.enddate,c.status,c.name,c.description, p.path_info||c.id "+
+			"select path_info[1] as programId,c.id,c.parentid,c.type,c.startdate,c.enddate,c.status,c.name,c.description,"
+			+ "c.datecompleted, p.path_info||c.id "+
 			"from ProgramDetail c join programdetail_tree p on c.parentid=p.id " +
-			"where (c.status is null or c.status!=:statusClosed) " +
 			") "+
 			"select " +
 			//"cast(path_info as varchar(30)) path," +
-			"programId,id,parentid,type,startdate,enddate,status,name,description " +
+			"programId,id,parentid,type,startdate,enddate,status,name,description,datecompleted " +
 			"from programdetail_tree " +
 			"where type='TASK' and "
 			+ "(startDate is not null and endDate is not null) " +
 			"and (" +
-			"((status is null or status=:statusCreated) and startDate<(:currentDate)) " +
-			"or ((status is null or status!=:statusClosed) and endDate<:currentDate) "+
-			"or ((status is null or status!=:statusClosed) and startDate<(:upcomingDate))" +
+			"((status is null or status=:statusCreated) and startDate<(:currentDate)) " + //Not started
+			"or ((status is null or status!=:statusClosed) and endDate<:currentDate) "+ //Overdue
+			"or ((status is null or status!=:statusClosed) and startDate<(:upcomingDate)) " //Starting in the next 7 days
+			+ "or (status is not null and status=:statusClosed and "
+			+ "dateCompleted is not null and dateCompleted>:prevDate )" //completed last 7 days
+			+ "or (status is not null and (status=:statusOpened or status=:statusReopened) "
+			+ "and endDate>:currentDate )" + //OnGoing
 			") " +
 			"order by path_info "),
 			
@@ -146,7 +150,8 @@ import com.wira.pmgt.shared.model.program.ProgramStatus;
 		@ColumnResult(name="enddate"),
 		@ColumnResult(name="status"),
 		@ColumnResult(name="name"),
-		@ColumnResult(name="description")
+		@ColumnResult(name="description"),
+		@ColumnResult(name="datecompleted")
 		}
 	),
 	@SqlResultSetMapping(name="ProgramDetail.taskFormsMapping",
@@ -305,6 +310,7 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 	@Transient
 	private Long programId;
 	
+	//Update by trigger >> See proc_updatestatus.sql
 	private Date dateCompleted;
 	
 	@Column(length=500)
@@ -549,10 +555,6 @@ public class ProgramDetail 	extends ProgramBasicDetail{
 
 	public Date getDateCompleted() {
 		return dateCompleted;
-	}
-
-	public void setDateCompleted(Date dateCompleted) {
-		this.dateCompleted = dateCompleted;
 	}
 
 	public String getRemarks() {

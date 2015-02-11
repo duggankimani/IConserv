@@ -35,7 +35,7 @@ import com.wira.pmgt.shared.model.program.TargetAndOutcomeDTO;
 
 public class GenerateActivityReport {
 
-	private static final String[] titles = { "Overall LWF Goals", "Activity","Tasks",
+	private static final String[] titles = { "Overall LWF Goals", "Activity","Sub-Activity",
 			"Targets", "Indicator", "Budget Line","Estimate","Actual", "Status", "Remarks",
 			"Monitoring test" };
 

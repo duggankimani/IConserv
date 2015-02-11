@@ -148,7 +148,9 @@ public class SendMailWorkItemHandler implements WorkItemHandler {
 		}
 		
 		params.put("title", body);
-		params.put("subject", subject);
+		params.put("subject", subject + 
+				(workItem.getParameter("Description")==null?"":
+					workItem.getParameter("Description").toString()));
 		
 		sendMail(doc,owner, params);
 		manager.completeWorkItem(workItem.getId(), workItem.getParameters());

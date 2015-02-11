@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.LIElement;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -13,6 +14,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
@@ -80,6 +82,24 @@ public class NewsFeedView extends ViewImpl implements
 	HTMLPanel divNotStarted;
 	@UiField
 	HTMLPanel divUpcoming;
+	@UiField
+	HTMLPanel divOnGoing;
+	@UiField
+	HTMLPanel divCompleted;
+	
+	
+	@UiField(provided=true) Anchor aOverdue;
+	@UiField(provided=true) Anchor aNotStarted;
+	@UiField(provided=true) Anchor aUpComing;
+	@UiField(provided=true) Anchor aOnGoing;
+	@UiField(provided=true) Anchor aCompleted;
+	
+	@UiField SpanElement spnOverdue;
+	@UiField SpanElement spnNotStarted;
+	@UiField SpanElement spnUpComing;
+	@UiField SpanElement spnOnGoing;
+	@UiField SpanElement spnCompleted;
+	
 	
 	@UiField
 	UserWidget divUserContainer;
@@ -90,8 +110,95 @@ public class NewsFeedView extends ViewImpl implements
 
 	@Inject
 	public NewsFeedView(final Binder binder) {
+		aOverdue = new ToggleAnchor();
+		aNotStarted = new ToggleAnchor();
+		aUpComing = new ToggleAnchor();
+		aOnGoing = new ToggleAnchor();
+		aCompleted = new ToggleAnchor();
+		
 		widget = binder.createAndBindUi(this);
+		
+		aOverdue.addClickHandler(new ToggleHandler(divOverdue));
+		aNotStarted.addClickHandler(new ToggleHandler(divNotStarted));
+		aUpComing.addClickHandler(new ToggleHandler(divUpcoming));
+		aOnGoing.addClickHandler(new ToggleHandler(divOnGoing, false));
+		aCompleted.addClickHandler(new ToggleHandler(divCompleted, false));
+		
 	}
+	
+	protected void show(HTMLPanel div, boolean open) {
+		if(open){
+			div.removeStyleName("hide");
+		}else{
+			div.addStyleName("hide");
+		}
+	}
+	
+	/**
+	 * Click Handler
+	 * @author duggan
+	 *
+	 */
+	class ToggleHandler implements ClickHandler{
+		
+		private boolean isOpen = true;
+		private HTMLPanel div;
+		
+		public ToggleHandler(HTMLPanel div) {
+			this.div = div;
+		}
+		
+		public ToggleHandler(HTMLPanel div, boolean isOpen) {
+			this.div = div;
+			this.isOpen = isOpen;
+		}
+		
+		@Override
+		public void onClick(ClickEvent event) {
+			ToggleAnchor anchor = (ToggleAnchor)event.getSource();
+			toggle(isOpen = !isOpen, anchor,true);
+		}
+		
+		void toggle(Anchor anchor, boolean scroll){
+			toggle(isOpen, anchor, scroll);
+		}
+		
+		void toggle(boolean open, Anchor anchor, boolean scroll){
+			show(div, open);
+			if(open){
+				anchor.removeStyleName("icon-chevron-down");
+				anchor.addStyleName("icon-chevron-up");
+				if(scroll)div.getElement().scrollIntoView();
+				
+			}else{
+				anchor.addStyleName("icon-chevron-down");
+				anchor.removeStyleName("icon-chevron-up");
+			}
+		}
+		
+	}
+
+	/**
+	 * Anchor
+	 * @author duggan
+	 *
+	 */
+	class ToggleAnchor extends Anchor{
+		
+		public ToggleAnchor() {
+		}
+		
+		@Override
+		public HandlerRegistration addClickHandler(ClickHandler aHandler) {
+			if(aHandler instanceof ToggleHandler){
+				ToggleHandler handler = (ToggleHandler)aHandler;
+				handler.toggle(this, false);
+			}
+			return super.addClickHandler(aHandler);
+		}
+	
+	}
+	
 	
 	@Override
 	public Widget asWidget() {
@@ -287,29 +394,64 @@ public class NewsFeedView extends ViewImpl implements
 		divNotStarted.clear();
 		divOverdue.clear();
 		
+		boolean hasOverdue=false,hasNotStarted=false,hasUpcoming=false, hasOnGoing=false, hasCompleted=false;
+		int overdue=0,notStarted=0,upcoming=0, onGoing=0, completed=0;
+		
 		for(ProgramSummary program: summaries){
 			if(program.isOverdue()){
 				addOverdueItem(program);
+				hasOverdue=true;
+				++overdue;
 			}else if(program.isNotStarted()){
 				addNotStartedItem(program);
+				hasNotStarted=true;
+				++notStarted;
 			}else if(program.isUpcoming()){
 				addUpcomingItem(program);
+				hasUpcoming=true;
+				++upcoming;
+			}else if(program.isOnGoing()){
+				addOnGoingItem(program);
+				hasOnGoing=true;
+				++onGoing;
+			}else if(program.isCompleted()){
+				addCompletedItem(program);
+				hasCompleted=true;
+				++completed;
 			}
 		}
 		
+
+		spnOverdue.setInnerText(overdue+"");
+		spnNotStarted.setInnerText(notStarted+"");
+		spnUpComing.setInnerText(upcoming+"");
+		spnOnGoing.setInnerText(onGoing+"");
+		spnCompleted.setInnerText(completed+"");
+		
+		aOverdue.setVisible(hasOverdue);
+		aNotStarted.setVisible(hasNotStarted);
+		aUpComing.setVisible(hasUpcoming);
+		aOnGoing.setVisible(hasOnGoing);
+		aCompleted.setVisible(hasCompleted);
+		
 	}
+	private void addCompletedItem(ProgramSummary program) {
+		divCompleted.add(new ProgramCalendarItem(program));
+	}
+
+	private void addOnGoingItem(ProgramSummary program) {
+		divOnGoing.add(new ProgramCalendarItem(program));
+	}
+
 	private void addOverdueItem(ProgramSummary program) {
-		divOverdue.removeStyleName("hide");
 		divOverdue.add(new ProgramCalendarItem(program));
 	}
 	
 	private void addUpcomingItem(ProgramSummary program) {
-		divUpcoming.removeStyleName("hide");
 		divUpcoming.add(new ProgramCalendarItem(program));
 	}
 
 	private void addNotStartedItem(ProgramSummary program) {
-		divNotStarted.removeStyleName("hide");
 		divNotStarted.add(new ProgramCalendarItem(program));
 	}
 
