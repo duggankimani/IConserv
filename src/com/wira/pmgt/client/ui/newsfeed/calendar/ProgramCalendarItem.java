@@ -51,13 +51,13 @@ public class ProgramCalendarItem extends Composite {
 			spnDetail.setInnerText(program.getName());
 			spnDate.setInnerText(DateUtils.getTimeDifference(program.getStartDate()));
 		}else if(program.isOnGoing()){
-			spnLabel.addClassName("label-primary");
+			spnLabel.addClassName("label-info");
 			spnLabel.setInnerText(" OnGoing");
 			spnDetail.setInnerText(program.getName());
 			spnDate.setInnerText(DateUtils.getTimeDifference(program.getStartDate()));
 		}else if(program.isCompleted()){
 			spnLabel.addClassName("label-success");
-			spnLabel.setInnerText("Completed");
+			spnLabel.setInnerText(" Completed");
 			spnDetail.setInnerText(program.getName());
 			spnDate.setInnerText(DateUtils.getTimeDifference(program.getDateCompleted()));
 		}

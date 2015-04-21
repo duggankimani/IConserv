@@ -65,7 +65,7 @@ public class UserGroupDaoImpl extends BaseDaoImpl{
 
 	@SuppressWarnings("unchecked")
 	public List<User> getAllUsers() {
-		Query query = em.createQuery("FROM BUser u order by u.lastName, u.firstName");		
+		Query query = em.createQuery("FROM BUser u where u.isActive=1 order by u.lastName, u.firstName");		
 		return query.getResultList();
 	}
 

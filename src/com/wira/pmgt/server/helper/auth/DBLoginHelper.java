@@ -54,7 +54,6 @@ public class DBLoginHelper implements LoginIntf{
 		//htuser.setPassword(user.getPassword());
 		htuser.setSurname(user.getLastName());
 		htuser.setId(user.getId());
-		
 		if(loadGroups)
 			htuser.setGroups(getFromDb(user.getGroups()));	
 		
@@ -179,8 +178,10 @@ public class DBLoginHelper implements LoginIntf{
 		
 		User user = DB.getUserGroupDao().getUser(htuser.getId());
 		
-		DB.getUserGroupDao().delete(user);
-		
+		user.setArchived(true);
+		user.setIsActive(0);
+		//DB.getUserGroupDao().delete(user);
+		DB.getUserGroupDao().save(user);
 		return true;
 	}
 

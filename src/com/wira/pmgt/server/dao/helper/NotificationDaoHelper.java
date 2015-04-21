@@ -122,6 +122,9 @@ public class NotificationDaoHelper {
 		String owner = modelFrom.getOwner();
 		HTUser htOwner = LoginHelper.get().getUser(owner);
 		notificationTo.setOwner(htOwner);
+		if(htOwner==null){
+			notificationTo.setOwner(new HTUser(owner));
+		}
 		notificationTo.setNotificationType(modelFrom.getNotificationType());
 		notificationTo.setRead(modelFrom.IsRead());	
 		notificationTo.setSubject(modelFrom.getSubject());
@@ -137,6 +140,9 @@ public class NotificationDaoHelper {
 		String createdBy = modelFrom.getCreatedBy();
 		HTUser user = LoginHelper.get().getUser(createdBy);
 		notificationTo.setCreatedBy(user);
+		if(user==null){
+			notificationTo.setCreatedBy(new HTUser(createdBy));
+		}
 		notificationTo.setId(modelFrom.getId());
 		
 //		ADDocType documentType = DB.getDocumentDao().getDocumentTypeByDocumentId(modelFrom.getDocumentId());

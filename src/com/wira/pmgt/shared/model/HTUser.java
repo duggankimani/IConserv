@@ -17,7 +17,7 @@ public class HTUser implements Serializable, Listable, OrgEntity {
 	
 	public HTUser() {
 	}
-
+	
 	public HTUser(String id) {
 		this.userId = id;
 	}
@@ -48,6 +48,10 @@ public class HTUser implements Serializable, Listable, OrgEntity {
 	}
 
 	public String getSurname() {
+		if(surname==null){
+			return userId;
+		}
+		
 		return surname;
 	}
 
@@ -64,6 +68,10 @@ public class HTUser implements Serializable, Listable, OrgEntity {
 	}
 	
 	public String getFullName(){
+		if(surname==null ||name==null){
+			return userId;
+		}
+		
 		return surname+" "+name;
 	}
 	

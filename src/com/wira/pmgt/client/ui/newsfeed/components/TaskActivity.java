@@ -79,13 +79,13 @@ public class TaskActivity extends Composite {
 			action = approverAction.getAction();
 		}
 		
-		String owner = ownerObj.getSurname();
+		String owner = ownerObj.getFullName();
 		
 		if(AppContext.isCurrentUser(ownerObj.getUserId())){
 			owner = "You";
 		}
 		
-		String approver = createdBy.getSurname();
+		String approver = createdBy.getFullName();
 		if(AppContext.isCurrentUser(createdBy.getUserId())){
 			approver="You";
 		}
@@ -93,7 +93,7 @@ public class TaskActivity extends Composite {
 		String target = null;
 		
 		if(targetUser!=null){
-			target =targetUser.getSurname();
+			target =targetUser.getFullName();
 			if(AppContext.isCurrentUser(targetUser.getUserId())){
 				target="You";
 			}

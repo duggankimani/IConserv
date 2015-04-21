@@ -241,7 +241,7 @@ public class ProgramDaoHelper {
 					}
 				}
 				
-				ProgramFund fund = get(dto);
+				ProgramFund fund = get(programDTO.getType(),dto);
 				log.debug("Saving "+fund);
 				if(previousStatus!=null && previousStatus.equals(ProgramStatus.CLOSED)){
 					if(programDTO.getStatus()==null || !programDTO.getStatus().equals(ProgramStatus.CLOSED)){
@@ -494,7 +494,7 @@ public class ProgramDaoHelper {
 	 * @param fundingDtos
 	 * @return
 	 */
-	private static Set<ProgramFund> get(List<ProgramFundDTO> fundingDtos) {
+	private static Set<ProgramFund> get(ProgramDetailType type,List<ProgramFundDTO> fundingDtos) {
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		Set<ProgramFund> funding = new HashSet<>();
 		
@@ -513,13 +513,13 @@ public class ProgramDaoHelper {
 			}
 
 			
-			ProgramFund programFund = get(dto);
+			ProgramFund programFund = get(type,dto);
 			funding.add(programFund);
 		}
 		return funding;
 	}
 
-	private static ProgramFund get(ProgramFundDTO dto) {
+	private static ProgramFund get(ProgramDetailType type,ProgramFundDTO dto) {
 		
 		ProgramDaoImpl dao = DB.getProgramDaoImpl();
 		ProgramFund programFund = new ProgramFund();
@@ -534,7 +534,13 @@ public class ProgramDaoHelper {
 		}
 		
 		//programFund.setFund(get(dto.getFund()));
-		programFund.setActualAmount(dto.getActual());
+		/**
+		 * Programs Actuals are never keyed in, they are calculated; therefor cannot be set here.
+		 */
+		if(!(type==ProgramDetailType.PROGRAM)){
+			programFund.setActualAmount(dto.getActual());
+		}
+		
 		return programFund;
 	}
 
@@ -927,6 +933,14 @@ public class ProgramDaoHelper {
 			return;
 		}
 		
+		log.debug("##Approved Form Values to Map::");
+		for(String k: values.keySet()){
+			Value v = values.get(k);
+			Object o = v==null? null: v.getValue();
+			log.debug("{"+k+":"+o+"}");
+		}
+		log.debug("##Done Printing Form Values");
+		
 		Value remarks = values.get("remarks");
 		if(remarks!=null && remarks.getValue()!=null){
 			detail.setRemarks(remarks.getValue().toString());
@@ -980,7 +994,7 @@ public class ProgramDaoHelper {
 				
 				Value value = values.get(key);
 				if(value==null){
-					log.warn("ProgramDaoHelper#updateTargetAndOutcome No form data for target key "+key);
+					log.debug("ProgramDaoHelper#updateTargetAndOutcome No form data for target key "+key);
 					continue;
 				}
 				
@@ -995,7 +1009,7 @@ public class ProgramDaoHelper {
 					}
 					
 					if(!(val instanceof Number)){
-						log.warn("ProgramDaoHelper#updateTargetAndOutcome " +
+						log.debug("ProgramDaoHelper#updateTargetAndOutcome " +
 								"Only quantitative values expected "+"[key=" +value.getKey()+", value="+
 									value.getValue()+", type="+value.getDataType()+" ] ");
 						continue;

@@ -48,7 +48,7 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 	}
 
 	public Double getBudgetAmount() {
-		return budgetAmount;
+		return budgetAmount==null? 0.0: budgetAmount;
 	}
 
 	public void setBudgetAmount(Double budgetAmount) {
@@ -56,7 +56,7 @@ public abstract class IsProgramDetail extends ProgramSummary implements Listable
 	}
 
 	public Double getActualAmount() {
-		return actualAmount;
+		return actualAmount==null? 0.0: actualAmount;
 	}
 
 	public void setActualAmount(Double actualAmount) {

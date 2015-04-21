@@ -327,6 +327,7 @@ public class ProgramsView extends ViewImpl implements
 			Double totalBudget = 0.0;
 			Double totalActual = 0.0;
 			for (IsProgramDetail activity : activities) {
+				assert activity!=null;
 				totalBudget += activity.getBudgetAmount();
 				totalActual += activity.getActualAmount();
 			}

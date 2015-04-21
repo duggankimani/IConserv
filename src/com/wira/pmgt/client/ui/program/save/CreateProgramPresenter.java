@@ -197,8 +197,10 @@ public class CreateProgramPresenter extends
 			public void onClick(ClickEvent event) {
 				if (getView().isValid()) {
 					fireEvent(new ProcessingEvent("Saving Program.."));
+					
 					IsProgramDetail newProgram = getView().getProgram();
 					newProgram.setId(programId);
+					
 					requestHelper.execute(new CreateProgramRequest(newProgram),
 							new TaskServiceCallback<CreateProgramResponse>() {
 								@Override
